@@ -3,6 +3,7 @@ PODS:
   - FearlessUtils (0.1.0):
     - BigInt (~> 5.0)
     - IrohaCrypto/sr25519 (~> 0.4.0)
+    - xxHash-Swift (~> 1.0.0)
   - IrohaCrypto/BIP39 (0.4.3):
     - IrohaCrypto/Common
   - IrohaCrypto/blake2 (0.4.3)
@@ -11,6 +12,7 @@ PODS:
     - IrohaCrypto/BIP39
     - IrohaCrypto/blake2
     - IrohaCrypto/Common
+  - xxHash-Swift (1.0.13)
 
 DEPENDENCIES:
   - FearlessUtils (from `../`)
@@ -19,6 +21,7 @@ SPEC REPOS:
   trunk:
     - BigInt
     - IrohaCrypto
+    - xxHash-Swift
 
 EXTERNAL SOURCES:
   FearlessUtils:
@@ -26,8 +29,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
-  FearlessUtils: 58a574cf727db20bde817672506d4cc38a1e70d7
+  FearlessUtils: aef3e364c3767287e5302cedff888d3e13dddcdd
   IrohaCrypto: cfdfe162065705d1055bed4e37345abcbf5184de
+  xxHash-Swift: 30bd6a7507b3b7348a277c49b1cb6346c2905ec7
 
 PODFILE CHECKSUM: 002fb4b06641c82f822cb8ddc9d08ba3f79755d6
 
