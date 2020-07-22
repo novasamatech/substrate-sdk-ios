@@ -12,6 +12,7 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
+		845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */; };
 		84DA3B3C24C8CE5900B5E27F /* ScaleUInt32Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3224C8CE5900B5E27F /* ScaleUInt32Tests.swift */; };
 		84DA3B3D24C8CE5900B5E27F /* ScaleCompactIntTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3324C8CE5900B5E27F /* ScaleCompactIntTests.swift */; };
 		84DA3B3E24C8CE5900B5E27F /* ScaleInt64Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3424C8CE5900B5E27F /* ScaleInt64Tests.swift */; };
@@ -48,6 +49,7 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* FearlessUtils_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FearlessUtils_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BCE5EB68B0A48835979E64A /* Pods-FearlessUtils_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Tests.debug.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Tests/Pods-FearlessUtils_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedFactoryTests.swift; sourceTree = "<group>"; };
 		84DA3B3224C8CE5900B5E27F /* ScaleUInt32Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleUInt32Tests.swift; sourceTree = "<group>"; };
 		84DA3B3324C8CE5900B5E27F /* ScaleCompactIntTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleCompactIntTests.swift; sourceTree = "<group>"; };
 		84DA3B3424C8CE5900B5E27F /* ScaleInt64Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleInt64Tests.swift; sourceTree = "<group>"; };
@@ -140,9 +142,18 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
+		845D80EB24C8D8F500EC2540 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		84DA3B3024C8CE5900B5E27F /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				845D80EB24C8D8F500EC2540 /* Common */,
 				84DA3B4824C8CEEF00B5E27F /* Info.plist */,
 				84DA3B3124C8CE5900B5E27F /* Scale */,
 			);
@@ -380,6 +391,7 @@
 				84DA3B4324C8CE5A00B5E27F /* ScaleStringTests.swift in Sources */,
 				84DA3B4224C8CE5A00B5E27F /* ScaleUInt64Tests.swift in Sources */,
 				84DA3B4124C8CE5A00B5E27F /* ScaleInt32Tests.swift in Sources */,
+				845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */,
 				84DA3B3C24C8CE5900B5E27F /* ScaleUInt32Tests.swift in Sources */,
 				84DA3B3F24C8CE5900B5E27F /* ScaleUInt16Tests.swift in Sources */,
 			);
