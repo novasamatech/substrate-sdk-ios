@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'FearlessUtils_Example' do
+  pod 'FearlessUtils', :path => '../'
+
+  target 'FearlessUtils_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

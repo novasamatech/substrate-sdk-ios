@@ -1,0 +1,34 @@
+PODS:
+  - BigInt (5.0.0)
+  - FearlessUtils (0.1.0):
+    - BigInt (~> 5.0)
+    - IrohaCrypto/sr25519 (~> 0.4.0)
+  - IrohaCrypto/BIP39 (0.4.3):
+    - IrohaCrypto/Common
+  - IrohaCrypto/blake2 (0.4.3)
+  - IrohaCrypto/Common (0.4.3)
+  - IrohaCrypto/sr25519 (0.4.3):
+    - IrohaCrypto/BIP39
+    - IrohaCrypto/blake2
+    - IrohaCrypto/Common
+
+DEPENDENCIES:
+  - FearlessUtils (from `../`)
+
+SPEC REPOS:
+  trunk:
+    - BigInt
+    - IrohaCrypto
+
+EXTERNAL SOURCES:
+  FearlessUtils:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
+  FearlessUtils: 58a574cf727db20bde817672506d4cc38a1e70d7
+  IrohaCrypto: cfdfe162065705d1055bed4e37345abcbf5184de
+
+PODFILE CHECKSUM: 002fb4b06641c82f822cb8ddc9d08ba3f79755d6
+
+COCOAPODS: 1.9.3
