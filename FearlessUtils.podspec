@@ -21,6 +21,7 @@ Pod::Spec.new do |s|
   s.source_files = 'FearlessUtils/Classes/**/*'
   s.dependency 'IrohaCrypto/sr25519', '~> 0.4.0'
   s.dependency 'BigInt', '~> 5.0'
+  s.dependency 'xxHash-Swift', '~> 1.0.0'
   
   s.test_spec do |ts|
       ts.source_files = 'Tests/**/*.swift'
