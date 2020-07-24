@@ -12,6 +12,9 @@
 		607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 607FACD91AFB9204008FA782 /* Main.storyboard */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
+		842D1E2324C98CEA00C30A7A /* StorageKeyFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842D1E2224C98CEA00C30A7A /* StorageKeyFactoryTests.swift */; };
+		842D1E2524C9AC5D00C30A7A /* ScaleBoolOptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842D1E2424C9AC5D00C30A7A /* ScaleBoolOptionTests.swift */; };
+		842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842D1E2624C9B63300C30A7A /* ScaleOptionTests.swift */; };
 		845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */; };
 		84DA3B3C24C8CE5900B5E27F /* ScaleUInt32Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3224C8CE5900B5E27F /* ScaleUInt32Tests.swift */; };
 		84DA3B3D24C8CE5900B5E27F /* ScaleCompactIntTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3324C8CE5900B5E27F /* ScaleCompactIntTests.swift */; };
@@ -49,6 +52,9 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* FearlessUtils_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FearlessUtils_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BCE5EB68B0A48835979E64A /* Pods-FearlessUtils_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Tests.debug.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Tests/Pods-FearlessUtils_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		842D1E2224C98CEA00C30A7A /* StorageKeyFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageKeyFactoryTests.swift; sourceTree = "<group>"; };
+		842D1E2424C9AC5D00C30A7A /* ScaleBoolOptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleBoolOptionTests.swift; sourceTree = "<group>"; };
+		842D1E2624C9B63300C30A7A /* ScaleOptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleOptionTests.swift; sourceTree = "<group>"; };
 		845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedFactoryTests.swift; sourceTree = "<group>"; };
 		84DA3B3224C8CE5900B5E27F /* ScaleUInt32Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleUInt32Tests.swift; sourceTree = "<group>"; };
 		84DA3B3324C8CE5900B5E27F /* ScaleCompactIntTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleCompactIntTests.swift; sourceTree = "<group>"; };
@@ -146,6 +152,7 @@
 			isa = PBXGroup;
 			children = (
 				845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */,
+				842D1E2224C98CEA00C30A7A /* StorageKeyFactoryTests.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -174,6 +181,8 @@
 				84DA3B3924C8CE5900B5E27F /* ScaleStringTests.swift */,
 				84DA3B3A24C8CE5900B5E27F /* ScaleInt16Tests.swift */,
 				84DA3B3B24C8CE5900B5E27F /* ScaleUInt8Tests.swift */,
+				842D1E2424C9AC5D00C30A7A /* ScaleBoolOptionTests.swift */,
+				842D1E2624C9B63300C30A7A /* ScaleOptionTests.swift */,
 			);
 			path = Scale;
 			sourceTree = "<group>";
@@ -393,6 +402,9 @@
 				84DA3B4324C8CE5A00B5E27F /* ScaleStringTests.swift in Sources */,
 				84DA3B4224C8CE5A00B5E27F /* ScaleUInt64Tests.swift in Sources */,
 				84DA3B4124C8CE5A00B5E27F /* ScaleInt32Tests.swift in Sources */,
+				842D1E2324C98CEA00C30A7A /* StorageKeyFactoryTests.swift in Sources */,
+				842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */,
+				842D1E2524C9AC5D00C30A7A /* ScaleBoolOptionTests.swift in Sources */,
 				845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */,
 				84DA3B3C24C8CE5900B5E27F /* ScaleUInt32Tests.swift in Sources */,
 				84DA3B3F24C8CE5900B5E27F /* ScaleUInt16Tests.swift in Sources */,

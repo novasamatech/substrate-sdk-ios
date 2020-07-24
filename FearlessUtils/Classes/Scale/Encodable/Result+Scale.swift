@@ -24,7 +24,7 @@ extension Result: ScaleCodable where Success: ScaleCodable, Failure: ScaleCodabl
             let error = try Failure.init(scaleDecoder: scaleDecoder)
             self = .failure(error)
         default:
-            throw ScaleOptionalDecodingError.invalidPrefix
+            throw ScaleOptionDecodingError.invalidPrefix
         }
     }
 }
