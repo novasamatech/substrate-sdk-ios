@@ -1,6 +1,6 @@
 import Foundation
 
-public enum ScaleBoolOptional {
+public enum ScaleBoolOption: CaseIterable {
     case none
     case valueTrue
     case valueFalse
@@ -29,7 +29,7 @@ public enum ScaleBoolOptionalDecodingError: Error {
     case invalidPrefix
 }
 
-extension ScaleBoolOptional: ScaleEncodable {
+extension ScaleBoolOption: ScaleEncodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
         switch self {
         case .none:
@@ -42,7 +42,7 @@ extension ScaleBoolOptional: ScaleEncodable {
     }
 }
 
-extension ScaleBoolOptional: ScaleDecodable {
+extension ScaleBoolOption: ScaleDecodable {
     public init(scaleDecoder: ScaleDecoding) throws {
         let mode = try scaleDecoder.read(count: 1)[0]
         try scaleDecoder.confirm(count: 1)
@@ -55,7 +55,7 @@ extension ScaleBoolOptional: ScaleDecodable {
         case 2:
             self = .valueTrue
         default:
-            throw ScaleOptionalDecodingError.invalidPrefix
+            throw ScaleOptionDecodingError.invalidPrefix
         }
     }
 }
