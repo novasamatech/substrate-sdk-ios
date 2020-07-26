@@ -22,4 +22,8 @@ public extension Data {
         var hash1Value = XXH64.digest(self, seed: 0)
         return Data(bytes: &hash1Value, count: MemoryLayout<UInt64>.size) + self
     }
+
+    func blake2b32() throws -> Data {
+        try (self as NSData).blake2b(32)
+    }
 }
