@@ -5,7 +5,12 @@ public enum ChaincodeType {
     case hard
 }
 
-public struct Chaincode {
-    let data: Data
-    let type: ChaincodeType
+public struct Chaincode: Equatable {
+    public let data: Data
+    public let type: ChaincodeType
+
+    public init(data: Data, type: ChaincodeType) {
+        self.data = data
+        self.type = type
+    }
 }
