@@ -2,13 +2,19 @@ PODS:
   - BigInt (5.0.0)
   - FearlessUtils (0.1.0):
     - BigInt (~> 5.0)
-    - IrohaCrypto/sr25519 (~> 0.4.0)
+    - IrohaCrypto/ed25519 (~> 0.5.0)
+    - IrohaCrypto/secp256k1 (~> 0.5.0)
+    - IrohaCrypto/sr25519 (~> 0.5.0)
     - xxHash-Swift (~> 1.0.0)
-  - IrohaCrypto/BIP39 (0.4.3):
+  - IrohaCrypto/BIP39 (0.5.0):
     - IrohaCrypto/Common
-  - IrohaCrypto/blake2 (0.4.3)
-  - IrohaCrypto/Common (0.4.3)
-  - IrohaCrypto/sr25519 (0.4.3):
+  - IrohaCrypto/blake2 (0.5.0)
+  - IrohaCrypto/Common (0.5.0)
+  - IrohaCrypto/ed25519 (0.5.0):
+    - IrohaCrypto/Common
+  - IrohaCrypto/secp256k1 (0.5.0):
+    - IrohaCrypto/Common
+  - IrohaCrypto/sr25519 (0.5.0):
     - IrohaCrypto/BIP39
     - IrohaCrypto/blake2
     - IrohaCrypto/Common
@@ -29,8 +35,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
-  FearlessUtils: aef3e364c3767287e5302cedff888d3e13dddcdd
-  IrohaCrypto: cfdfe162065705d1055bed4e37345abcbf5184de
+  FearlessUtils: 37c584adc4efc91b419614a50cadb4130579cfff
+  IrohaCrypto: 7c5a8973d473e97e6de34447eb22298c41cd3470
   xxHash-Swift: 30bd6a7507b3b7348a277c49b1cb6346c2905ec7
 
 PODFILE CHECKSUM: 002fb4b06641c82f822cb8ddc9d08ba3f79755d6

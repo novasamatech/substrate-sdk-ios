@@ -19,7 +19,9 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '11.0'
 
   s.source_files = 'FearlessUtils/Classes/**/*'
-  s.dependency 'IrohaCrypto/sr25519', '~> 0.4.0'
+  s.dependency 'IrohaCrypto/sr25519', '~> 0.5.0'
+  s.dependency 'IrohaCrypto/ed25519', '~> 0.5.0'
+  s.dependency 'IrohaCrypto/secp256k1', '~> 0.5.0'
   s.dependency 'BigInt', '~> 5.0'
   s.dependency 'xxHash-Swift', '~> 1.0.0'
   
