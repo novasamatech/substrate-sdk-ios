@@ -2,7 +2,11 @@ import Foundation
 import IrohaCrypto
 
 public struct Ed25519KeypairFactory: KeypairFactoryProtocol {
+    static let hdkdPrefix = "Ed25519HDKD"
+
     let internalFactory = EDKeyFactory()
+
+    public init() {}
 
     public func createKeypairFromSeed(_ seed: Data,
                                       chaincodeList: [Chaincode]) throws -> IRCryptoKeypairProtocol {
@@ -13,7 +17,7 @@ public struct Ed25519KeypairFactory: KeypairFactoryProtocol {
         }
 
         let scaleEncoder = ScaleEncoder()
-        try "Ed25519HDKD".encode(scaleEncoder: scaleEncoder)
+        try Self.hdkdPrefix.encode(scaleEncoder: scaleEncoder)
         let prefix = scaleEncoder.encode()
 
         return try chaincodeList.reduce(keypair) { (keypair, chaincode) in
