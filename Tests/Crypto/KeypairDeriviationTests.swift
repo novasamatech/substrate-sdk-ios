@@ -4,7 +4,8 @@ import FearlessUtils
 class KeypairDeriviationTests: XCTestCase {
 
     func testSr25519FromTestVectors() throws {
-        guard let url = Bundle(for: Self.self).url(forResource: "sr25519HDKD", withExtension: "json") else {
+        guard let url = Bundle(for: KeypairDeriviationTests.self)
+            .url(forResource: "sr25519HDKD", withExtension: "json") else {
             XCTFail("Can't find resource")
             return
         }

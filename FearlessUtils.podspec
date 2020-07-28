@@ -27,5 +27,6 @@ Pod::Spec.new do |s|
   
   s.test_spec do |ts|
       ts.source_files = 'Tests/**/*.swift'
+      ts.resources = ['Tests/**/*.json']
   end
 end
