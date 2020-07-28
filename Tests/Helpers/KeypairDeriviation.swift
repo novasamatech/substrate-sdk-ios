@@ -1,7 +1,13 @@
 import Foundation
 
-struct KeypairDeriviation {
+struct KeypairDeriviation: Decodable {
+    enum CodingKeys: String, CodingKey {
+        case publicKey = "pk"
+        case path
+        case mnemonic
+    }
+
     let mnemonic: String
-    let publicKey: Data
+    let publicKey: String
     let path: String
 }

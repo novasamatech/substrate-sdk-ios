@@ -4,12 +4,20 @@ import FearlessUtils
 class KeypairDeriviationTests: XCTestCase {
 
     func testSr25519FromTestVectors() throws {
-        let factory = SR25519KeypairFactory()
-        let junctionFactory = JunctionFactory()
-        let seedFactory = SeedFactory()
+        guard let url = Bundle(for: Self.self).url(forResource: "sr25519HDKD", withExtension: "json") else {
+            XCTFail("Can't find resource")
+            return
+        }
 
-        for item in sr25519Deriviation {
-            do {
+        do {
+            let testData = try Data(contentsOf: url)
+            let items = try JSONDecoder().decode([KeypairDeriviation].self, from: testData)
+
+            let factory = SR25519KeypairFactory()
+            let junctionFactory = JunctionFactory()
+            let seedFactory = SeedFactory()
+
+            for item in items {
                 let result: JunctionResult
 
                 if !item.path.isEmpty {
@@ -25,12 +33,14 @@ class KeypairDeriviationTests: XCTestCase {
 
                 let publicKey = keypair.publicKey().rawData()
 
-                if publicKey != item.publicKey {
+                let expectedPublicKey = try Data(hexString: item.publicKey)
+
+                if publicKey != expectedPublicKey {
                     XCTFail("Failed for path: \(item.path)")
                 }
-            } catch {
-                XCTFail("Unexpected error for path \(item.path) \(error)")
             }
+        } catch {
+            XCTFail("Unexpected error \(error)")
         }
     }
 }
