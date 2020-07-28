@@ -6,6 +6,8 @@ public struct Ed25519KeypairFactory: KeypairFactoryProtocol {
 
     let internalFactory = EDKeyFactory()
 
+    public init() {}
+
     public func createKeypairFromSeed(_ seed: Data,
                                       chaincodeList: [Chaincode]) throws -> IRCryptoKeypairProtocol {
         let keypair = try internalFactory.derive(fromSeed: seed)

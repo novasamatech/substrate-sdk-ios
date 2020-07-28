@@ -4,6 +4,8 @@ import IrohaCrypto
 public struct SR25519KeypairFactory: KeypairFactoryProtocol {
     let internalFactory = SNKeyFactory()
 
+    public init() {}
+
     public func createKeypairFromSeed(_ seed: Data,
                                       chaincodeList: [Chaincode]) throws -> IRCryptoKeypairProtocol {
         let masterKeypair = try internalFactory.createKeypair(fromSeed: seed)

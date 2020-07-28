@@ -5,6 +5,11 @@ import IrohaCrypto
 public struct JunctionResult {
     public let chaincodes: [Chaincode]
     public let password: String?
+
+    public init(chaincodes: [Chaincode], password: String?) {
+        self.chaincodes = chaincodes
+        self.password = password
+    }
 }
 
 public protocol JunctionFactoryProtocol {
@@ -28,6 +33,10 @@ public struct JunctionFactory: JunctionFactoryProtocol {
     public init() {}
 
     public func parse(path: String) throws -> JunctionResult {
+        guard path.hasPrefix(Self.softSeparator) else {
+            throw JunctionFactoryError.invalidStart
+        }
+
         let passwordIncludedComponents = path.components(separatedBy: Self.passwordSeparator)
 
         guard let junctionsPath = passwordIncludedComponents.first else {
@@ -56,10 +65,6 @@ public struct JunctionFactory: JunctionFactoryProtocol {
     }
 
     private func parseChaincodesFromJunctionPath(_ junctionsPath: String) throws -> [Chaincode] {
-        guard junctionsPath.hasPrefix(Self.softSeparator) else {
-            throw JunctionFactoryError.invalidStart
-        }
-
         return try junctionsPath
                 .components(separatedBy: Self.hardSeparator)
                 .map { component in

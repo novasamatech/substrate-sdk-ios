@@ -6,6 +6,8 @@ public struct EcdsaKeypairFactory: KeypairFactoryProtocol {
 
     let internalFactory = SECKeyFactory()
 
+    public init() {}
+
     public func createKeypairFromSeed(_ seed: Data,
                                       chaincodeList: [Chaincode]) throws -> IRCryptoKeypairProtocol {
         let privateKey = try SECPrivateKey(rawData: seed)
