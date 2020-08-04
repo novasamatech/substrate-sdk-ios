@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'FearlessUtils'
-  s.version          = '0.2.0'
+  s.version          = '0.3.0'
   s.summary          = 'Utility library that implements clients specific logic to interact with substrate based networks'
 
   s.homepage         = 'https://github.com/soramitsu/fearless-utils-iOS'
@@ -19,9 +19,9 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '11.0'
 
   s.source_files = 'FearlessUtils/Classes/**/*'
-  s.dependency 'IrohaCrypto/sr25519', '~> 0.5.0'
-  s.dependency 'IrohaCrypto/ed25519', '~> 0.5.0'
-  s.dependency 'IrohaCrypto/secp256k1', '~> 0.5.0'
+  s.dependency 'IrohaCrypto/sr25519', '~> 0.6.0'
+  s.dependency 'IrohaCrypto/ed25519', '~> 0.6.0'
+  s.dependency 'IrohaCrypto/secp256k1', '~> 0.6.0'
   s.dependency 'BigInt', '~> 5.0'
   s.dependency 'xxHash-Swift', '~> 1.0.0'
   
