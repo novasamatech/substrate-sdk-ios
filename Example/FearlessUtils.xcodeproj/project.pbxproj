@@ -20,6 +20,10 @@
 		842D1E7324CFF4EC00C30A7A /* KeypairDeriviationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842D1E7224CFF4EC00C30A7A /* KeypairDeriviationTests.swift */; };
 		842D1E7624D0069000C30A7A /* sr25519HDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 842D1E7524D0069000C30A7A /* sr25519HDKD.json */; };
 		845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */; };
+		84A0DE3124DBF49400F436A8 /* keystore-ed25519.json in Resources */ = {isa = PBXBuildFile; fileRef = 84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */; };
+		84A0DE3224DBF49700F436A8 /* keystore-ecdsa.json in Resources */ = {isa = PBXBuildFile; fileRef = 84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */; };
+		84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB472324DBE82C00837E11 /* KeystoreExtractorTests.swift */; };
+		84CB472524DBE98500837E11 /* keystore-sr25519.json in Resources */ = {isa = PBXBuildFile; fileRef = 84CB472024DBE7E100837E11 /* keystore-sr25519.json */; };
 		84DA3B3C24C8CE5900B5E27F /* ScaleUInt32Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3224C8CE5900B5E27F /* ScaleUInt32Tests.swift */; };
 		84DA3B3D24C8CE5900B5E27F /* ScaleCompactIntTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3324C8CE5900B5E27F /* ScaleCompactIntTests.swift */; };
 		84DA3B3E24C8CE5900B5E27F /* ScaleInt64Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3424C8CE5900B5E27F /* ScaleInt64Tests.swift */; };
@@ -64,6 +68,10 @@
 		842D1E7224CFF4EC00C30A7A /* KeypairDeriviationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypairDeriviationTests.swift; sourceTree = "<group>"; };
 		842D1E7524D0069000C30A7A /* sr25519HDKD.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sr25519HDKD.json; sourceTree = "<group>"; };
 		845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedFactoryTests.swift; sourceTree = "<group>"; };
+		84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ed25519.json"; sourceTree = "<group>"; };
+		84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ecdsa.json"; sourceTree = "<group>"; };
+		84CB472024DBE7E100837E11 /* keystore-sr25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-sr25519.json"; sourceTree = "<group>"; };
+		84CB472324DBE82C00837E11 /* KeystoreExtractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeystoreExtractorTests.swift; sourceTree = "<group>"; };
 		84DA3B3224C8CE5900B5E27F /* ScaleUInt32Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleUInt32Tests.swift; sourceTree = "<group>"; };
 		84DA3B3324C8CE5900B5E27F /* ScaleCompactIntTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleCompactIntTests.swift; sourceTree = "<group>"; };
 		84DA3B3424C8CE5900B5E27F /* ScaleInt64Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleInt64Tests.swift; sourceTree = "<group>"; };
@@ -177,6 +185,7 @@
 		842D1E7424D0066100C30A7A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				84CB471F24DBE7BD00837E11 /* Keystore */,
 				842D1E7524D0069000C30A7A /* sr25519HDKD.json */,
 			);
 			path = Resources;
@@ -190,9 +199,28 @@
 			path = Common;
 			sourceTree = "<group>";
 		};
+		84CB471F24DBE7BD00837E11 /* Keystore */ = {
+			isa = PBXGroup;
+			children = (
+				84CB472024DBE7E100837E11 /* keystore-sr25519.json */,
+				84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */,
+				84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */,
+			);
+			path = Keystore;
+			sourceTree = "<group>";
+		};
+		84CB472224DBE81100837E11 /* Keystore */ = {
+			isa = PBXGroup;
+			children = (
+				84CB472324DBE82C00837E11 /* KeystoreExtractorTests.swift */,
+			);
+			path = Keystore;
+			sourceTree = "<group>";
+		};
 		84DA3B3024C8CE5900B5E27F /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				84CB472224DBE81100837E11 /* Keystore */,
 				842D1E7424D0066100C30A7A /* Resources */,
 				842D1E6E24CFF2DC00C30A7A /* Helpers */,
 				842D1E6824CF7FC500C30A7A /* Crypto */,
@@ -341,6 +369,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				842D1E7624D0069000C30A7A /* sr25519HDKD.json in Resources */,
+				84A0DE3124DBF49400F436A8 /* keystore-ed25519.json in Resources */,
+				84A0DE3224DBF49700F436A8 /* keystore-ecdsa.json in Resources */,
+				84CB472524DBE98500837E11 /* keystore-sr25519.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -357,6 +388,8 @@
 				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
 				"${BUILT_PRODUCTS_DIR}/FearlessUtils/FearlessUtils.framework",
 				"${BUILT_PRODUCTS_DIR}/IrohaCrypto/IrohaCrypto.framework",
+				"${BUILT_PRODUCTS_DIR}/TweetNacl/TweetNacl.framework",
+				"${BUILT_PRODUCTS_DIR}/scrypt.c/scrypt.framework",
 				"${BUILT_PRODUCTS_DIR}/xxHash-Swift/xxHash_Swift.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -364,6 +397,8 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FearlessUtils.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IrohaCrypto.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TweetNacl.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/scrypt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/xxHash_Swift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -443,6 +478,7 @@
 				842D1E2324C98CEA00C30A7A /* StorageKeyFactoryTests.swift in Sources */,
 				842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */,
 				842D1E7324CFF4EC00C30A7A /* KeypairDeriviationTests.swift in Sources */,
+				84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */,
 				842D1E7124CFF31800C30A7A /* KeypairDeriviation.swift in Sources */,
 				842D1E2524C9AC5D00C30A7A /* ScaleBoolOptionTests.swift in Sources */,
 				845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */,
