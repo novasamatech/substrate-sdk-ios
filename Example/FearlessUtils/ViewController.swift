@@ -7,18 +7,47 @@
 //
 
 import UIKit
+import FearlessUtils
 
 class ViewController: UIViewController {
+    private struct Constants {
+        static let address = "Fewyw2YrQgjtnuRsYQXfeHoTMoazKJKkfKkT8hc1WLjPsUP"
+        static let radius: CGFloat = 128.0
+    }
+
+    private var iconView: PolkadotIconView = PolkadotIconView()
+
+    override func loadView() {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+
+        iconView.backgroundColor = .clear
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+        iconView.fillColor = UIColor.white.withAlphaComponent(0.5)
+
+        view.addSubview(iconView)
+
+        iconView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        iconView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        iconView.widthAnchor.constraint(equalToConstant: 2.0 * Constants.radius).isActive = true
+        iconView.heightAnchor.constraint(equalToConstant: 2.0 * Constants.radius).isActive = true
+
+        self.view = view
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+        loadIcon()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    private func loadIcon() {
+        do {
+            let icon = try PolkadotIconGenerator().generateFromAddress(Constants.address)
+            iconView.bind(icon: icon)
+        } catch {
+            print("Unexpected error: \(error)")
+        }
     }
-
 }
 
