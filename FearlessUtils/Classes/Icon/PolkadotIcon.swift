@@ -1,6 +1,6 @@
 import UIKit
 
-public struct KusamaIcon {
+public struct PolkadotIcon {
     public struct Circle: Equatable {
         public let origin: CGPoint
         public let color: UIColor
@@ -22,7 +22,7 @@ public struct KusamaIcon {
     }
 }
 
-extension KusamaIcon: DrawableIcon {
+extension PolkadotIcon: DrawableIcon {
     public func drawInContext(_ context: CGContext, fillColor: UIColor, size: CGSize) {
         let targetRadius = min(size.width, size.height) / 2.0
 

@@ -39,12 +39,12 @@ extension Scheme {
     ]
 }
 
-enum KusamaIconGeneratorError: Error {
+enum PolkadotIconGeneratorError: Error {
     case unrecognizedAddress
     case noSchemeFound
 }
 
-public class KusamaIconGenerator: IconGenerating {
+public class PolkadotIconGenerator: IconGenerating {
     static let diameter: CGFloat = 64.0
     static let circleRadius: CGFloat = 5.0
 
@@ -66,13 +66,13 @@ public class KusamaIconGenerator: IconGenerating {
         let centers = generateCircleCenters()
 
         let circles = (0..<centers.count).map { index in
-            KusamaIcon.Circle(origin: centers[index],
+            PolkadotIcon.Circle(origin: centers[index],
                               color: colors[index],
                               radius: Self.circleRadius)
         }
 
-        return KusamaIcon(radius: Self.diameter / 2.0,
-                          circles: circles)
+        return PolkadotIcon(radius: Self.diameter / 2.0,
+                            circles: circles)
     }
 
 
@@ -84,7 +84,7 @@ public class KusamaIconGenerator: IconGenerating {
         let typeValue = try addressFactory.type(fromAddress: address)
 
         guard let addressType = SNAddressType(rawValue: typeValue.uint8Value) else {
-            throw KusamaIconGeneratorError.unrecognizedAddress
+            throw PolkadotIconGeneratorError.unrecognizedAddress
         }
 
         let accountId = try addressFactory.accountId(fromAddress: address, type: addressType)
@@ -150,7 +150,7 @@ public class KusamaIconGenerator: IconGenerating {
             }
         }
 
-        throw KusamaIconGeneratorError.noSchemeFound
+        throw PolkadotIconGeneratorError.noSchemeFound
     }
 
     private func generateCircleCenters() -> [CGPoint] {

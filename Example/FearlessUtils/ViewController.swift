@@ -15,7 +15,7 @@ class ViewController: UIViewController {
         static let radius: CGFloat = 128.0
     }
 
-    private var iconView: KusamaIconView = KusamaIconView()
+    private var iconView: PolkadotIconView = PolkadotIconView()
 
     override func loadView() {
         let view = UIView()
@@ -43,7 +43,7 @@ class ViewController: UIViewController {
 
     private func loadIcon() {
         do {
-            let icon = try KusamaIconGenerator().generateFromAddress(Constants.address)
+            let icon = try PolkadotIconGenerator().generateFromAddress(Constants.address)
             iconView.bind(icon: icon)
         } catch {
             print("Unexpected error: \(error)")

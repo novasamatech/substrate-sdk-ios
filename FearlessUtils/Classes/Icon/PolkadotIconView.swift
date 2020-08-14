@@ -1,6 +1,6 @@
 import UIKit
 
-public final class KusamaIconView: UIView {
+public final class PolkadotIconView: UIView {
     private(set) var icon: DrawableIcon?
 
     public var fillColor: UIColor = .white {
