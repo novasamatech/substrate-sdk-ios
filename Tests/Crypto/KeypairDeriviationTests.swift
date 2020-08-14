@@ -1,11 +1,24 @@
 import XCTest
 import FearlessUtils
+import IrohaCrypto
 
 class KeypairDeriviationTests: XCTestCase {
 
     func testSr25519FromTestVectors() throws {
+        try performTest(filename: "sr25519HDKD", keypairFactory: SR25519KeypairFactory())
+    }
+
+    func testEd25519DerivationPath() throws {
+        try performTest(filename: "ed25519HDKD", keypairFactory: Ed25519KeypairFactory())
+    }
+
+    func testEcdsaDerivationPath() throws {
+        try performTest(filename: "ecdsaHDKD", keypairFactory: EcdsaKeypairFactory())
+    }
+
+    private func performTest(filename: String, keypairFactory: KeypairFactoryProtocol) throws {
         guard let url = Bundle(for: KeypairDeriviationTests.self)
-            .url(forResource: "sr25519HDKD", withExtension: "json") else {
+            .url(forResource: filename, withExtension: "json") else {
             XCTFail("Can't find resource")
             return
         }
@@ -14,7 +27,6 @@ class KeypairDeriviationTests: XCTestCase {
             let testData = try Data(contentsOf: url)
             let items = try JSONDecoder().decode([KeypairDeriviation].self, from: testData)
 
-            let factory = SR25519KeypairFactory()
             let junctionFactory = JunctionFactory()
             let seedFactory = SeedFactory()
 
@@ -29,8 +41,8 @@ class KeypairDeriviationTests: XCTestCase {
 
                 let seedResult = try seedFactory.deriveSeed(from: item.mnemonic,
                                                             password: result.password ?? "")
-                let keypair = try factory.createKeypairFromSeed(seedResult.seed,
-                                                                chaincodeList: result.chaincodes)
+                let keypair = try keypairFactory.createKeypairFromSeed(seedResult.seed,
+                                                                       chaincodeList: result.chaincodes)
 
                 let publicKey = keypair.publicKey().rawData()
 
