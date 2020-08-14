@@ -72,8 +72,7 @@ public class KusamaIconGenerator: IconGenerating {
         }
 
         return KusamaIcon(radius: Self.diameter / 2.0,
-                          circles: circles,
-                          backgroundColor: UIColor(white: 238.0 / 255.0, alpha: 1.0))
+                          circles: circles)
     }
 
 

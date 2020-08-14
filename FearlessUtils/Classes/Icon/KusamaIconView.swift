@@ -3,6 +3,12 @@ import UIKit
 public final class KusamaIconView: UIView {
     private(set) var icon: DrawableIcon?
 
+    public var fillColor: UIColor = .white {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+
     public func bind(icon: DrawableIcon) {
         self.icon = icon
 
@@ -13,7 +19,7 @@ public final class KusamaIconView: UIView {
         super.draw(rect)
 
         if let context = UIGraphicsGetCurrentContext() {
-            icon?.drawInContext(context, size: rect.size)
+            icon?.drawInContext(context, fillColor: fillColor, size: rect.size)
         }
     }
 }

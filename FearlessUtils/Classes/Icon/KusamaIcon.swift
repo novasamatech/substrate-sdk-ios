@@ -15,17 +15,15 @@ public struct KusamaIcon {
 
     public let circles: [Circle]
     public let radius: CGFloat
-    public let backgroundColor: UIColor
 
-    public init(radius: CGFloat, circles: [Circle], backgroundColor: UIColor) {
+    public init(radius: CGFloat, circles: [Circle]) {
         self.radius = radius
         self.circles = circles
-        self.backgroundColor = backgroundColor
     }
 }
 
 extension KusamaIcon: DrawableIcon {
-    public func drawInContext(_ context: CGContext, size: CGSize) {
+    public func drawInContext(_ context: CGContext, fillColor: UIColor, size: CGSize) {
         let targetRadius = min(size.width, size.height) / 2.0
 
         let scale = targetRadius / radius
@@ -41,12 +39,12 @@ extension KusamaIcon: DrawableIcon {
         }
 
         context.addArc(center: CGPoint(x: size.width / 2.0, y: size.height / 2.0),
-                       radius: radius,
+                       radius: targetRadius,
                        startAngle:  0.0,
                        endAngle: 2.0 * CGFloat.pi,
                        clockwise: true)
 
-        context.setFillColor(backgroundColor.cgColor)
+        context.setFillColor(fillColor.cgColor)
 
         context.fillPath()
 

@@ -11,8 +11,8 @@ import FearlessUtils
 
 class ViewController: UIViewController {
     private struct Constants {
-        static let address = "Dm1RyxRu8bKvVUsQpGx5e1miNbUkzSBsThhVCWdHyAjuTGR"
-        static let radius: CGFloat = 32.0
+        static let address = "Fewyw2YrQgjtnuRsYQXfeHoTMoazKJKkfKkT8hc1WLjPsUP"
+        static let radius: CGFloat = 128.0
     }
 
     private var iconView: KusamaIconView = KusamaIconView()
@@ -23,6 +23,7 @@ class ViewController: UIViewController {
 
         iconView.backgroundColor = .clear
         iconView.translatesAutoresizingMaskIntoConstraints = false
+        iconView.fillColor = UIColor.white.withAlphaComponent(0.5)
 
         view.addSubview(iconView)
 

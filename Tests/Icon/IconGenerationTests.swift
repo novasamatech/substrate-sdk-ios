@@ -74,8 +74,7 @@ class IconGenerationTests: XCTestCase {
         }
 
         let expectedIcon = KusamaIcon(radius: 32.0,
-                                      circles: expectedCircles,
-                                      backgroundColor: .white)
+                                      circles: expectedCircles)
 
         // when
 
