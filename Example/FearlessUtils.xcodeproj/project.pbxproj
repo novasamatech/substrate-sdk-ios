@@ -20,6 +20,8 @@
 		842D1E7324CFF4EC00C30A7A /* KeypairDeriviationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842D1E7224CFF4EC00C30A7A /* KeypairDeriviationTests.swift */; };
 		842D1E7624D0069000C30A7A /* sr25519HDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 842D1E7524D0069000C30A7A /* sr25519HDKD.json */; };
 		845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */; };
+		8467FD1424E677C2005D486C /* ed25519HDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 8467FD1124E675D0005D486C /* ed25519HDKD.json */; };
+		8467FD1524E677C6005D486C /* ecdsaHDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 8467FD1024E675D0005D486C /* ecdsaHDKD.json */; };
 		84A0DE3124DBF49400F436A8 /* keystore-ed25519.json in Resources */ = {isa = PBXBuildFile; fileRef = 84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */; };
 		84A0DE3224DBF49700F436A8 /* keystore-ecdsa.json in Resources */ = {isa = PBXBuildFile; fileRef = 84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */; };
 		84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB472324DBE82C00837E11 /* KeystoreExtractorTests.swift */; };
@@ -68,6 +70,8 @@
 		842D1E7224CFF4EC00C30A7A /* KeypairDeriviationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypairDeriviationTests.swift; sourceTree = "<group>"; };
 		842D1E7524D0069000C30A7A /* sr25519HDKD.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sr25519HDKD.json; sourceTree = "<group>"; };
 		845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedFactoryTests.swift; sourceTree = "<group>"; };
+		8467FD1024E675D0005D486C /* ecdsaHDKD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ecdsaHDKD.json; sourceTree = "<group>"; };
+		8467FD1124E675D0005D486C /* ed25519HDKD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ed25519HDKD.json; sourceTree = "<group>"; };
 		84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ed25519.json"; sourceTree = "<group>"; };
 		84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ecdsa.json"; sourceTree = "<group>"; };
 		84CB472024DBE7E100837E11 /* keystore-sr25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-sr25519.json"; sourceTree = "<group>"; };
@@ -185,6 +189,8 @@
 		842D1E7424D0066100C30A7A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8467FD1124E675D0005D486C /* ed25519HDKD.json */,
+				8467FD1024E675D0005D486C /* ecdsaHDKD.json */,
 				84CB471F24DBE7BD00837E11 /* Keystore */,
 				842D1E7524D0069000C30A7A /* sr25519HDKD.json */,
 			);
@@ -368,7 +374,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8467FD1424E677C2005D486C /* ed25519HDKD.json in Resources */,
 				842D1E7624D0069000C30A7A /* sr25519HDKD.json in Resources */,
+				8467FD1524E677C6005D486C /* ecdsaHDKD.json in Resources */,
 				84A0DE3124DBF49400F436A8 /* keystore-ed25519.json in Resources */,
 				84A0DE3224DBF49700F436A8 /* keystore-ecdsa.json in Resources */,
 				84CB472524DBE98500837E11 /* keystore-sr25519.json in Resources */,
