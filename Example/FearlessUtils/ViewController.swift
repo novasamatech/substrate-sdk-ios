@@ -7,18 +7,46 @@
 //
 
 import UIKit
+import FearlessUtils
 
 class ViewController: UIViewController {
+    private struct Constants {
+        static let address = "Dm1RyxRu8bKvVUsQpGx5e1miNbUkzSBsThhVCWdHyAjuTGR"
+        static let radius: CGFloat = 32.0
+    }
+
+    private var iconView: KusamaIconView = KusamaIconView()
+
+    override func loadView() {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+
+        iconView.backgroundColor = .clear
+        iconView.translatesAutoresizingMaskIntoConstraints = false
+
+        view.addSubview(iconView)
+
+        iconView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        iconView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        iconView.widthAnchor.constraint(equalToConstant: 2.0 * Constants.radius).isActive = true
+        iconView.heightAnchor.constraint(equalToConstant: 2.0 * Constants.radius).isActive = true
+
+        self.view = view
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+
+        loadIcon()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    private func loadIcon() {
+        do {
+            let icon = try KusamaIconGenerator().generateFromAddress(Constants.address)
+            iconView.bind(icon: icon)
+        } catch {
+            print("Unexpected error: \(error)")
+        }
     }
-
 }
 
