@@ -9,8 +9,6 @@ public protocol SeedFactoryProtocol {
 }
 
 public struct SeedFactory: SeedFactoryProtocol {
-    private static let seedLength: Int = 32
-
     private let seedFactory: SNBIP39SeedCreatorProtocol = SNBIP39SeedCreator()
     private let mnemonicCreator: IRMnemonicCreatorProtocol
 
@@ -23,7 +21,7 @@ public struct SeedFactory: SeedFactoryProtocol {
         let mnemonic = try mnemonicCreator.randomMnemonic(strength)
         let seed = try seedFactory.deriveSeed(from: mnemonic.entropy(), passphrase: password)
 
-        return SeedFactoryResult(seed: seed.prefix(Self.seedLength), mnemonic: mnemonic)
+        return SeedFactoryResult(seed: seed, mnemonic: mnemonic)
     }
 
     public func deriveSeed(from mnemonicWords: String,
@@ -31,6 +29,6 @@ public struct SeedFactory: SeedFactoryProtocol {
         let mnemonic = try mnemonicCreator.mnemonic(fromList: mnemonicWords)
         let seed = try seedFactory.deriveSeed(from: mnemonic.entropy(), passphrase: password)
 
-        return SeedFactoryResult(seed: seed.prefix(Self.seedLength), mnemonic: mnemonic)
+        return SeedFactoryResult(seed: seed, mnemonic: mnemonic)
     }
 }
