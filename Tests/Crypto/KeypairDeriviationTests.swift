@@ -41,7 +41,7 @@ class KeypairDeriviationTests: XCTestCase {
 
                 let seedResult = try seedFactory.deriveSeed(from: item.mnemonic,
                                                             password: result.password ?? "")
-                let keypair = try keypairFactory.createKeypairFromSeed(seedResult.seed,
+                let keypair = try keypairFactory.createKeypairFromSeed(seedResult.seed.miniSeed,
                                                                        chaincodeList: result.chaincodes)
 
                 let publicKey = keypair.publicKey().rawData()
