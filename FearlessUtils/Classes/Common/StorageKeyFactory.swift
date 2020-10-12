@@ -1,6 +1,7 @@
 import Foundation
 
 public protocol StorageKeyFactoryProtocol {
+    func createStorageKey(moduleName: String, serviceName: String) throws -> Data
     func createStorageKey(moduleName: String, serviceName: String, identifier: Data) throws -> Data
 }
 
@@ -11,7 +12,7 @@ public enum StorageKeyFactoryError: Error {
 public struct StorageKeyFactory: StorageKeyFactoryProtocol {
     public init() {}
 
-    public func createStorageKey(moduleName: String, serviceName: String, identifier: Data) throws -> Data {
+    public func createStorageKey(moduleName: String, serviceName: String) throws -> Data {
         guard let moduleKey = moduleName.data(using: .utf8) else {
             throw StorageKeyFactoryError.badSerialization
         }
@@ -20,11 +21,14 @@ public struct StorageKeyFactory: StorageKeyFactoryProtocol {
             throw StorageKeyFactoryError.badSerialization
         }
 
-        let moduleKeyHash = moduleKey.xxh128()
-        let serviceKeyHash = serviceKey.xxh128()
+        return moduleKey.xxh128() + serviceKey.xxh128()
+    }
+
+    public func createStorageKey(moduleName: String, serviceName: String, identifier: Data) throws -> Data {
+        let subkey = try createStorageKey(moduleName: moduleName, serviceName: serviceName)
 
         let identifierHash = try identifier.blake128Concat()
 
-        return moduleKeyHash + serviceKeyHash + identifierHash
+        return subkey + identifierHash
     }
 }
