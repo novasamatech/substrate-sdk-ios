@@ -37,6 +37,8 @@
 		84DA3B4324C8CE5A00B5E27F /* ScaleStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3924C8CE5900B5E27F /* ScaleStringTests.swift */; };
 		84DA3B4424C8CE5A00B5E27F /* ScaleInt16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3A24C8CE5900B5E27F /* ScaleInt16Tests.swift */; };
 		84DA3B4524C8CE5A00B5E27F /* ScaleUInt8Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3B24C8CE5900B5E27F /* ScaleUInt8Tests.swift */; };
+		84ED7256254A001A006102DF /* SubstrateQREncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED7255254A001A006102DF /* SubstrateQREncoderTests.swift */; };
+		84ED725C254A0233006102DF /* SubstrateQRDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED725B254A0233006102DF /* SubstrateQRDecoderTests.swift */; };
 		A0FDCFB5B61F738FEE34A5E6 /* Pods_FearlessUtils_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D2E77D7010BEBF43DFE08E /* Pods_FearlessUtils_Tests.framework */; };
 		B2BF1BE136637C8404B79450 /* Pods_FearlessUtils_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9A63E44DBCDCE738F798358 /* Pods_FearlessUtils_Example.framework */; };
 /* End PBXBuildFile section */
@@ -89,6 +91,8 @@
 		84DA3B3A24C8CE5900B5E27F /* ScaleInt16Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleInt16Tests.swift; sourceTree = "<group>"; };
 		84DA3B3B24C8CE5900B5E27F /* ScaleUInt8Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleUInt8Tests.swift; sourceTree = "<group>"; };
 		84DA3B4824C8CEEF00B5E27F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Tests/Info.plist; sourceTree = SOURCE_ROOT; };
+		84ED7255254A001A006102DF /* SubstrateQREncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstrateQREncoderTests.swift; sourceTree = "<group>"; };
+		84ED725B254A0233006102DF /* SubstrateQRDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstrateQRDecoderTests.swift; sourceTree = "<group>"; };
 		93F24F5EEC204E4B0F918C39 /* Pods-FearlessUtils_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Example.debug.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Example/Pods-FearlessUtils_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B82F3EE26AAEE44C6E7F9962 /* Pods-FearlessUtils_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Tests.release.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Tests/Pods-FearlessUtils_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		B9A63E44DBCDCE738F798358 /* Pods_FearlessUtils_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FearlessUtils_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -236,6 +240,7 @@
 		84DA3B3024C8CE5900B5E27F /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				84ED7254254A0006006102DF /* QR */,
 				8467FD2324E71A0E005D486C /* Icon */,
 				84CB472224DBE81100837E11 /* Keystore */,
 				842D1E7424D0066100C30A7A /* Resources */,
@@ -266,6 +271,15 @@
 				842D1E2624C9B63300C30A7A /* ScaleOptionTests.swift */,
 			);
 			path = Scale;
+			sourceTree = "<group>";
+		};
+		84ED7254254A0006006102DF /* QR */ = {
+			isa = PBXGroup;
+			children = (
+				84ED7255254A001A006102DF /* SubstrateQREncoderTests.swift */,
+				84ED725B254A0233006102DF /* SubstrateQRDecoderTests.swift */,
+			);
+			path = QR;
 			sourceTree = "<group>";
 		};
 		A78EB2A0158FDFCA62F39CAC /* Pods */ = {
@@ -499,6 +513,8 @@
 				842D1E2324C98CEA00C30A7A /* StorageKeyFactoryTests.swift in Sources */,
 				8467FD2824E72CCD005D486C /* HSLColorTests.swift in Sources */,
 				842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */,
+				84ED725C254A0233006102DF /* SubstrateQRDecoderTests.swift in Sources */,
+				84ED7256254A001A006102DF /* SubstrateQREncoderTests.swift in Sources */,
 				842D1E7324CFF4EC00C30A7A /* KeypairDeriviationTests.swift in Sources */,
 				84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */,
 				842D1E7124CFF31800C30A7A /* KeypairDeriviation.swift in Sources */,
@@ -636,6 +652,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = FearlessUtils/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -652,6 +669,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = FearlessUtils/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
@@ -667,6 +685,7 @@
 			baseConfigurationReference = 7BCE5EB68B0A48835979E64A /* Pods-FearlessUtils_Tests.debug.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -690,6 +709,7 @@
 			baseConfigurationReference = B82F3EE26AAEE44C6E7F9962 /* Pods-FearlessUtils_Tests.release.xcconfig */;
 			buildSettings = {
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",

@@ -8,15 +8,19 @@
 
 Pod::Spec.new do |s|
   s.name             = 'FearlessUtils'
-  s.version          = '0.7.0'
+  s.version          = '0.8.0'
   s.summary          = 'Utility library that implements clients specific logic to interact with substrate based networks'
 
   s.homepage         = 'https://github.com/soramitsu/fearless-utils-iOS'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'ERussel' => 'rezin@soramitsu.co.jp' }
   s.source           = { :git => 'https://github.com/soramitsu/fearless-utils-iOS.git', :tag => s.version.to_s }
+  s.swift_version    = '5.0'
 
   s.ios.deployment_target = '11.0'
+
+  s.user_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64'}
+  s.pod_target_xcconfig = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
 
   s.source_files = 'FearlessUtils/Classes/**/*'
   s.dependency 'IrohaCrypto/sr25519', '~> 0.7.0'
