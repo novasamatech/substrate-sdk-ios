@@ -1,15 +1,38 @@
 import Foundation
 
-public protocol StorageKeyFactoryProtocol {
+public protocol StorageKeyFactoryProtocol: class {
     func createStorageKey(moduleName: String, serviceName: String) throws -> Data
-    func createStorageKey(moduleName: String, serviceName: String, identifier: Data) throws -> Data
+    func createStorageKey(moduleName: String,
+                          serviceName: String,
+                          identifier: Data,
+                          hasher: StorageKeyHasher) throws -> Data
 }
 
 public enum StorageKeyFactoryError: Error {
     case badSerialization
 }
 
-public struct StorageKeyFactory: StorageKeyFactoryProtocol {
+public protocol StorageKeyHasher: class {
+    func hash(data: Data) throws -> Data
+}
+
+public final class Blake128Concat: StorageKeyHasher {
+    public init() {}
+
+    public func hash(data: Data) throws -> Data {
+        try data.blake128Concat()
+    }
+}
+
+public final class Twox64Concat: StorageKeyHasher {
+    public init() {}
+
+    public func hash(data: Data) throws -> Data {
+        data.twox64Concat()
+    }
+}
+
+public final class StorageKeyFactory: StorageKeyFactoryProtocol {
     public init() {}
 
     public func createStorageKey(moduleName: String, serviceName: String) throws -> Data {
@@ -24,10 +47,13 @@ public struct StorageKeyFactory: StorageKeyFactoryProtocol {
         return moduleKey.xxh128() + serviceKey.xxh128()
     }
 
-    public func createStorageKey(moduleName: String, serviceName: String, identifier: Data) throws -> Data {
+    public func createStorageKey(moduleName: String,
+                                 serviceName: String,
+                                 identifier: Data,
+                                 hasher: StorageKeyHasher) throws -> Data {
         let subkey = try createStorageKey(moduleName: moduleName, serviceName: serviceName)
 
-        let identifierHash = try identifier.blake128Concat()
+        let identifierHash: Data = try hasher.hash(data: identifier)
 
         return subkey + identifierHash
     }
