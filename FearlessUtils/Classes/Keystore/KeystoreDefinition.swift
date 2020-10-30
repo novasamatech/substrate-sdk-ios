@@ -4,7 +4,7 @@ public struct KeystoreDefinition: Codable {
     public let address: String
     public let encoded: String
     public let encoding: KeystoreEncoding
-    public let meta: KeystoreMeta
+    public let meta: KeystoreMeta?
 
     public init(address: String,
                 encoded: String,
@@ -32,9 +32,9 @@ public struct KeystoreEncoding: Codable {
 public struct KeystoreMeta: Codable {
     enum CodingKeys: String, CodingKey {
         case name
-        case created = "whenCreated"
+        case createdAt = "whenCreated"
     }
 
-    public let name: String
-    public let created: Int64
+    public let name: String?
+    public let createdAt: Int64?
 }

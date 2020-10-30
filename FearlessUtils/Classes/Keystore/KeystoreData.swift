@@ -1,6 +1,6 @@
 import Foundation
 
-public struct KeystoreData {
+public struct KeystoreData: Equatable {
     public let address: String
     public let secretKeyData: Data
     public let publicKeyData: Data
