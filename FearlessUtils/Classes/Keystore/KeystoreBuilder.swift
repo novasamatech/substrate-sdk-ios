@@ -5,6 +5,7 @@ import TweetNacl
 public class KeystoreBuilder {
     private var name: String?
     private var creationDate = Date()
+    private var genesisHash: String?
 
     public init() {}
 }
@@ -17,6 +18,11 @@ extension KeystoreBuilder: KeystoreBuilding {
 
     public func with(creationDate: Date) -> Self {
         self.creationDate = creationDate
+        return self
+    }
+
+    public func with(genesisHash: String) -> Self {
+        self.genesisHash = genesisHash
         return self
     }
 
@@ -66,7 +72,10 @@ extension KeystoreBuilder: KeystoreBuilding {
                                                 type: encodingType,
                                                 version: String(KeystoreConstants.version))
 
-        let meta = KeystoreMeta(name: name, createdAt: Int64(creationDate.timeIntervalSince1970))
+        let meta = KeystoreMeta(name: name,
+                                createdAt: Int64(creationDate.timeIntervalSince1970),
+                                genesisHash: genesisHash)
+
         return KeystoreDefinition(address: data.address,
                                   encoded: encoded.base64EncodedString(),
                                   encoding: keystoreEncoding,

@@ -33,8 +33,10 @@ public struct KeystoreMeta: Codable {
     enum CodingKeys: String, CodingKey {
         case name
         case createdAt = "whenCreated"
+        case genesisHash
     }
 
     public let name: String?
     public let createdAt: Int64?
+    public let genesisHash: String?
 }

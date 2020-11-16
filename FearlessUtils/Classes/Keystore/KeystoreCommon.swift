@@ -8,6 +8,7 @@ public protocol KeystoreExtracting {
 public protocol KeystoreBuilding {
     func with(name: String) -> Self
     func with(creationDate: Date) -> Self
+    func with(genesisHash: String) -> Self
 
     func build(from data: KeystoreData, password: String?) throws -> KeystoreDefinition
 }
