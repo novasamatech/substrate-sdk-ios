@@ -57,15 +57,12 @@ public class KeystoreExtractor: KeystoreExtracting {
     }
 
     private func decodePkcs8(data: Data, definition: KeystoreDefinition) throws -> KeystoreData {
+        let info = try KeystoreInfoFactory().createInfo(from: definition)
+
         let contentType = definition.encoding.content.count > 0 ? definition.encoding.content[0] : nil
-        let cryptoTypeValue = definition.encoding.content.count > 1 ? definition.encoding.content[1] : nil
 
         guard contentType == KeystoreEncodingContent.pkcs8.rawValue else {
             throw KeystoreExtractorError.unsupportedContent
-        }
-
-        guard let value = cryptoTypeValue, let cryptoType = CryptoType(rawValue: value) else {
-            throw KeystoreExtractorError.unsupportedCryptoType
         }
 
         guard data.starts(with: KeystoreConstants.pkcs8Header) else {
@@ -82,7 +79,7 @@ public class KeystoreExtractor: KeystoreExtracting {
         let importedSecretData = Data(data[secretStart..<secretEnd])
 
         let secretKeyData: Data
-        switch cryptoType {
+        switch info.cryptoType {
         case .sr25519:
             secretKeyData = try SNPrivateKey(fromEd25519: importedSecretData).rawData()
         case .ed25519:
@@ -97,6 +94,6 @@ public class KeystoreExtractor: KeystoreExtracting {
         return KeystoreData(address: definition.address,
                             secretKeyData: secretKeyData,
                             publicKeyData: publicKeyData,
-                            cryptoType: cryptoType)
+                            cryptoType: info.cryptoType)
     }
 }
