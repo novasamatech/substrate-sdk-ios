@@ -11,6 +11,8 @@ public enum KeystoreInfoFactoryError: Error {
 }
 
 public final class KeystoreInfoFactory: KeystoreInfoFactoryProtocol {
+    public init() {}
+
     public func createInfo(from definition: KeystoreDefinition) throws -> KeystoreInfo {
         let cryptoTypeValue = definition.encoding.content.count > 1 ? definition.encoding.content[1] : nil
 
