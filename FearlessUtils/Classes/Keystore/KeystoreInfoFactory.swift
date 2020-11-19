@@ -22,7 +22,8 @@ public final class KeystoreInfoFactory: KeystoreInfoFactoryProtocol {
 
         let addressType: SNAddressType?
 
-        if let addressTypeValue = try? SS58AddressFactory().type(fromAddress: definition.address) {
+        if let address = definition.address,
+           let addressTypeValue = try? SS58AddressFactory().type(fromAddress: address) {
             addressType = SNAddressType(rawValue: addressTypeValue.uint8Value)
         } else {
             addressType = nil
