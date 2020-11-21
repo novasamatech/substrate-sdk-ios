@@ -39,6 +39,7 @@
 		84DA3B4524C8CE5A00B5E27F /* ScaleUInt8Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3B24C8CE5900B5E27F /* ScaleUInt8Tests.swift */; };
 		84ED7256254A001A006102DF /* SubstrateQREncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED7255254A001A006102DF /* SubstrateQREncoderTests.swift */; };
 		84ED725C254A0233006102DF /* SubstrateQRDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED725B254A0233006102DF /* SubstrateQRDecoderTests.swift */; };
+		84F4A847254CAD73000CF0A3 /* KeystoreBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4A846254CAD73000CF0A3 /* KeystoreBuilderTests.swift */; };
 		A0FDCFB5B61F738FEE34A5E6 /* Pods_FearlessUtils_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D2E77D7010BEBF43DFE08E /* Pods_FearlessUtils_Tests.framework */; };
 		B2BF1BE136637C8404B79450 /* Pods_FearlessUtils_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9A63E44DBCDCE738F798358 /* Pods_FearlessUtils_Example.framework */; };
 /* End PBXBuildFile section */
@@ -93,6 +94,7 @@
 		84DA3B4824C8CEEF00B5E27F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Tests/Info.plist; sourceTree = SOURCE_ROOT; };
 		84ED7255254A001A006102DF /* SubstrateQREncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstrateQREncoderTests.swift; sourceTree = "<group>"; };
 		84ED725B254A0233006102DF /* SubstrateQRDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstrateQRDecoderTests.swift; sourceTree = "<group>"; };
+		84F4A846254CAD73000CF0A3 /* KeystoreBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeystoreBuilderTests.swift; sourceTree = "<group>"; };
 		93F24F5EEC204E4B0F918C39 /* Pods-FearlessUtils_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Example.debug.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Example/Pods-FearlessUtils_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B82F3EE26AAEE44C6E7F9962 /* Pods-FearlessUtils_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Tests.release.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Tests/Pods-FearlessUtils_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		B9A63E44DBCDCE738F798358 /* Pods_FearlessUtils_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FearlessUtils_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -233,6 +235,7 @@
 			isa = PBXGroup;
 			children = (
 				84CB472324DBE82C00837E11 /* KeystoreExtractorTests.swift */,
+				84F4A846254CAD73000CF0A3 /* KeystoreBuilderTests.swift */,
 			);
 			path = Keystore;
 			sourceTree = "<group>";
@@ -517,6 +520,7 @@
 				84ED7256254A001A006102DF /* SubstrateQREncoderTests.swift in Sources */,
 				842D1E7324CFF4EC00C30A7A /* KeypairDeriviationTests.swift in Sources */,
 				84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */,
+				84F4A847254CAD73000CF0A3 /* KeystoreBuilderTests.swift in Sources */,
 				842D1E7124CFF31800C30A7A /* KeypairDeriviation.swift in Sources */,
 				842D1E2524C9AC5D00C30A7A /* ScaleBoolOptionTests.swift in Sources */,
 				845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */,
