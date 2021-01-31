@@ -11,6 +11,15 @@
 		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
 		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
 		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
+		841D528A25C4A11900DFA15B /* RegexParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D528925C4A11900DFA15B /* RegexParserTests.swift */; };
+		841D52B425C6BAE600DFA15B /* ComponentsParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D52B325C6BAE600DFA15B /* ComponentsParserTests.swift */; };
+		841D52E625C6DD1E00DFA15B /* TypeMappingParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D52E525C6DD1E00DFA15B /* TypeMappingParserTests.swift */; };
+		841D52EA25C6DDF800DFA15B /* JSONHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D52E925C6DDF800DFA15B /* JSONHelpers.swift */; };
+		8429C7FD25C432FF0086D7F6 /* TypeRegistryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C7FC25C432FF0086D7F6 /* TypeRegistryTests.swift */; };
+		8429C81825C434E40086D7F6 /* default.json in Resources */ = {isa = PBXBuildFile; fileRef = 8429C80F25C434DA0086D7F6 /* default.json */; };
+		8429C81D25C434E70086D7F6 /* kusama.json in Resources */ = {isa = PBXBuildFile; fileRef = 8429C80E25C434DA0086D7F6 /* kusama.json */; };
+		8429C82225C434EA0086D7F6 /* polkadot.json in Resources */ = {isa = PBXBuildFile; fileRef = 8429C80D25C434DA0086D7F6 /* polkadot.json */; };
+		8429C82725C434ED0086D7F6 /* westend.json in Resources */ = {isa = PBXBuildFile; fileRef = 8429C80C25C434DA0086D7F6 /* westend.json */; };
 		842D1E2324C98CEA00C30A7A /* StorageKeyFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842D1E2224C98CEA00C30A7A /* StorageKeyFactoryTests.swift */; };
 		842D1E2524C9AC5D00C30A7A /* ScaleBoolOptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842D1E2424C9AC5D00C30A7A /* ScaleBoolOptionTests.swift */; };
 		842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842D1E2624C9B63300C30A7A /* ScaleOptionTests.swift */; };
@@ -65,6 +74,15 @@
 		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		607FACE51AFB9204008FA782 /* FearlessUtils_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FearlessUtils_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7BCE5EB68B0A48835979E64A /* Pods-FearlessUtils_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Tests.debug.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Tests/Pods-FearlessUtils_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		841D528925C4A11900DFA15B /* RegexParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegexParserTests.swift; sourceTree = "<group>"; };
+		841D52B325C6BAE600DFA15B /* ComponentsParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentsParserTests.swift; sourceTree = "<group>"; };
+		841D52E525C6DD1E00DFA15B /* TypeMappingParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeMappingParserTests.swift; sourceTree = "<group>"; };
+		841D52E925C6DDF800DFA15B /* JSONHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONHelpers.swift; sourceTree = "<group>"; };
+		8429C7FC25C432FF0086D7F6 /* TypeRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeRegistryTests.swift; sourceTree = "<group>"; };
+		8429C80C25C434DA0086D7F6 /* westend.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = westend.json; sourceTree = "<group>"; };
+		8429C80D25C434DA0086D7F6 /* polkadot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = polkadot.json; sourceTree = "<group>"; };
+		8429C80E25C434DA0086D7F6 /* kusama.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = kusama.json; sourceTree = "<group>"; };
+		8429C80F25C434DA0086D7F6 /* default.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = default.json; sourceTree = "<group>"; };
 		842D1E2224C98CEA00C30A7A /* StorageKeyFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageKeyFactoryTests.swift; sourceTree = "<group>"; };
 		842D1E2424C9AC5D00C30A7A /* ScaleBoolOptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleBoolOptionTests.swift; sourceTree = "<group>"; };
 		842D1E2624C9B63300C30A7A /* ScaleOptionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleOptionTests.swift; sourceTree = "<group>"; };
@@ -175,6 +193,36 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
+		841D527E25C49AD900DFA15B /* Parser */ = {
+			isa = PBXGroup;
+			children = (
+				841D528925C4A11900DFA15B /* RegexParserTests.swift */,
+				841D52B325C6BAE600DFA15B /* ComponentsParserTests.swift */,
+				841D52E525C6DD1E00DFA15B /* TypeMappingParserTests.swift */,
+			);
+			path = Parser;
+			sourceTree = "<group>";
+		};
+		8429C7FA25C432CC0086D7F6 /* Runtime */ = {
+			isa = PBXGroup;
+			children = (
+				841D527E25C49AD900DFA15B /* Parser */,
+				8429C7FC25C432FF0086D7F6 /* TypeRegistryTests.swift */,
+			);
+			path = Runtime;
+			sourceTree = "<group>";
+		};
+		8429C7FB25C432DA0086D7F6 /* Runtime */ = {
+			isa = PBXGroup;
+			children = (
+				8429C80F25C434DA0086D7F6 /* default.json */,
+				8429C80E25C434DA0086D7F6 /* kusama.json */,
+				8429C80D25C434DA0086D7F6 /* polkadot.json */,
+				8429C80C25C434DA0086D7F6 /* westend.json */,
+			);
+			path = Runtime;
+			sourceTree = "<group>";
+		};
 		842D1E6824CF7FC500C30A7A /* Crypto */ = {
 			isa = PBXGroup;
 			children = (
@@ -189,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				842D1E6F24CFF2FB00C30A7A /* KeypairDeriviation.swift */,
+				841D52E925C6DDF800DFA15B /* JSONHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -196,6 +245,7 @@
 		842D1E7424D0066100C30A7A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				8429C7FB25C432DA0086D7F6 /* Runtime */,
 				8467FD1124E675D0005D486C /* ed25519HDKD.json */,
 				8467FD1024E675D0005D486C /* ecdsaHDKD.json */,
 				84CB471F24DBE7BD00837E11 /* Keystore */,
@@ -243,6 +293,7 @@
 		84DA3B3024C8CE5900B5E27F /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				8429C7FA25C432CC0086D7F6 /* Runtime */,
 				84ED7254254A0006006102DF /* QR */,
 				8467FD2324E71A0E005D486C /* Icon */,
 				84CB472224DBE81100837E11 /* Keystore */,
@@ -405,10 +456,14 @@
 			files = (
 				8467FD1424E677C2005D486C /* ed25519HDKD.json in Resources */,
 				842D1E7624D0069000C30A7A /* sr25519HDKD.json in Resources */,
+				8429C81825C434E40086D7F6 /* default.json in Resources */,
 				8467FD1524E677C6005D486C /* ecdsaHDKD.json in Resources */,
+				8429C82725C434ED0086D7F6 /* westend.json in Resources */,
 				84A0DE3124DBF49400F436A8 /* keystore-ed25519.json in Resources */,
+				8429C81D25C434E70086D7F6 /* kusama.json in Resources */,
 				84A0DE3224DBF49700F436A8 /* keystore-ecdsa.json in Resources */,
 				84CB472524DBE98500837E11 /* keystore-sr25519.json in Resources */,
+				8429C82225C434EA0086D7F6 /* polkadot.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -511,6 +566,8 @@
 				84DA3B4324C8CE5A00B5E27F /* ScaleStringTests.swift in Sources */,
 				84DA3B4224C8CE5A00B5E27F /* ScaleUInt64Tests.swift in Sources */,
 				842D1E6A24CF800400C30A7A /* JunctionFactoryTests.swift in Sources */,
+				8429C7FD25C432FF0086D7F6 /* TypeRegistryTests.swift in Sources */,
+				841D52EA25C6DDF800DFA15B /* JSONHelpers.swift in Sources */,
 				84DA3B4124C8CE5A00B5E27F /* ScaleInt32Tests.swift in Sources */,
 				8467FD2624E71A37005D486C /* IconGenerationTests.swift in Sources */,
 				842D1E2324C98CEA00C30A7A /* StorageKeyFactoryTests.swift in Sources */,
@@ -518,11 +575,14 @@
 				842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */,
 				84ED725C254A0233006102DF /* SubstrateQRDecoderTests.swift in Sources */,
 				84ED7256254A001A006102DF /* SubstrateQREncoderTests.swift in Sources */,
+				841D52B425C6BAE600DFA15B /* ComponentsParserTests.swift in Sources */,
 				842D1E7324CFF4EC00C30A7A /* KeypairDeriviationTests.swift in Sources */,
 				84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */,
 				84F4A847254CAD73000CF0A3 /* KeystoreBuilderTests.swift in Sources */,
 				842D1E7124CFF31800C30A7A /* KeypairDeriviation.swift in Sources */,
+				841D528A25C4A11900DFA15B /* RegexParserTests.swift in Sources */,
 				842D1E2524C9AC5D00C30A7A /* ScaleBoolOptionTests.swift in Sources */,
+				841D52E625C6DD1E00DFA15B /* TypeMappingParserTests.swift in Sources */,
 				845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */,
 				84DA3B3C24C8CE5900B5E27F /* ScaleUInt32Tests.swift in Sources */,
 				84DA3B3F24C8CE5900B5E27F /* ScaleUInt16Tests.swift in Sources */,

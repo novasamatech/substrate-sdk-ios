@@ -1,6 +1,6 @@
 PODS:
   - BigInt (5.0.0)
-  - FearlessUtils (0.8.0):
+  - FearlessUtils (0.9.0):
     - BigInt (~> 5.0)
     - IrohaCrypto/ed25519 (~> 0.7.0)
     - IrohaCrypto/Scrypt (~> 0.7.0)
@@ -44,7 +44,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
-  FearlessUtils: 979e4d4f7fce0432217588b6d693cb86166545e5
+  FearlessUtils: ac16885b717f0a91e2f99fc631030e2289d6561b
   IrohaCrypto: bddf15865c4df189b9c5273ba9c675afae8b7f4c
   scrypt.c: b42ae06183251329d2b2c620c226fb541a4a3592
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
