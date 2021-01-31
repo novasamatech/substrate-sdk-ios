@@ -18,7 +18,8 @@ public struct JSONCodingKey: CodingKey {
 
 @dynamicMemberLookup
 public enum JSON {
-    case intValue(Int)
+    case unsignedIntValue(UInt64)
+    case signedIntValue(Int64)
     case stringValue(String)
     case arrayValue([JSON])
     case dictionaryValue([String: JSON])
@@ -47,8 +48,16 @@ public enum JSON {
         return nil
     }
 
-    public var intValue: Int? {
-        if case .intValue(let value) = self {
+    public var unsignedIntValue: UInt64? {
+        if case .unsignedIntValue(let value) = self {
+            return value
+        }
+
+        return nil
+    }
+
+    public var signedIntValue: Int64? {
+        if case .signedIntValue(let value) = self {
             return value
         }
 
@@ -83,8 +92,10 @@ public enum JSONError: Error {
 
 extension JSON: Codable {
     public init(from decoder: Decoder) throws {
-        if let intValue = try? Int(from: decoder) {
-            self = .intValue(intValue)
+        if let unsignedIntValue = try? UInt64(from: decoder) {
+            self = .unsignedIntValue(unsignedIntValue)
+        } else if let signedIntValue = try? Int64(from: decoder) {
+            self = .signedIntValue(signedIntValue)
         } else if let stringValue = try? String(from: decoder) {
             self = .stringValue(stringValue)
         } else if let node = try? [String: JSON](from: decoder) {
@@ -98,7 +109,9 @@ extension JSON: Codable {
 
     public func encode(to encoder: Encoder) throws {
         switch self {
-        case .intValue(let value):
+        case .unsignedIntValue(let value):
+            try value.encode(to: encoder)
+        case .signedIntValue(let value):
             try value.encode(to: encoder)
         case .stringValue(let value):
             try value.encode(to: encoder)

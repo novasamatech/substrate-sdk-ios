@@ -11,6 +11,19 @@ class TypeRegistryTests: XCTestCase {
 
             let data = try Data(contentsOf: defaultUrl)
             let registry = try TypeRegistry.createFromTypesDefinition(data: data)
+
+            let genericTypeNames: [String] = registry.registeredTypes.compactMap { node in
+                guard node is SetNode else {
+                    return nil
+                }
+
+                return node.typeName
+            }
+
+            for name in genericTypeNames {
+                print(name)
+            }
+
         } catch {
             XCTFail("Unexpected error \(error)")
         }
