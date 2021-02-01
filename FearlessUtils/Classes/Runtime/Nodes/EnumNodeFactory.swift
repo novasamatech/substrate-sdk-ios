@@ -16,11 +16,12 @@ class EnumNodeFactory: TypeNodeFactoryProtocol {
             guard let nameAndValueType = child.arrayValue,
                   nameAndValueType.count == 2,
                   let name = nameAndValueType.first?.stringValue,
-                  let value = nameAndValueType.last else {
+                  let value = nameAndValueType.last,
+                  let valueTypeName = value.stringValue else {
                 throw TypeNodeFactoryError.unexpectedParsingResult(typeName: typeName)
             }
 
-            let node = mediator.register(typeName: name, json: value)
+            let node = mediator.register(typeName: valueTypeName, json: value)
 
             return NameNode(name: name, node: node)
         }

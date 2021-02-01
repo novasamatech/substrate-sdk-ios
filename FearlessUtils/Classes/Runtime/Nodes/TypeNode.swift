@@ -67,21 +67,54 @@ public struct SetNode: Node {
 
 public struct OptionNode: Node {
     public let typeName: String
-    let underlying: Node
+    public let underlying: Node
+
+    public init(typeName: String, underlying: Node) {
+        self.typeName = typeName
+        self.underlying = underlying
+    }
 }
 
 public struct CompactNode: Node {
     public let typeName: String
+    public let underlying: Node
+
+    public init(typeName: String, underlying: Node) {
+        self.typeName = typeName
+        self.underlying = underlying
+    }
 }
 
 public struct VectorNode: Node {
     public let typeName: String
-    let underlying: Node
+    public let underlying: Node
+
+    public init(typeName: String, underlying: Node) {
+        self.typeName = typeName
+        self.underlying = underlying
+    }
 }
 
 public struct TupleNode: Node {
     public let typeName: String
-    let innerNodes: [Node]
+    public let innerNodes: [Node]
+
+    public init(typeName: String, innerNodes: [Node]) {
+        self.typeName = typeName
+        self.innerNodes = innerNodes
+    }
+}
+
+public struct FixedArrayNode: Node {
+    public let typeName: String
+    public let elementType: Node
+    public let length: UInt64
+
+    public init(typeName: String, elementType: Node, length: UInt64) {
+        self.typeName = typeName
+        self.elementType = elementType
+        self.length = length
+    }
 }
 
 public protocol NodeResolver: class {

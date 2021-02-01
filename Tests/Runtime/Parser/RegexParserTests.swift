@@ -63,33 +63,7 @@ class RegexParserTests: XCTestCase {
         performCompactTest(for: "Compact<a", expectedResult: nil)
         performCompactTest(for: "Compacta>", expectedResult: nil)
     }
-
-    func testMatchingFixedArray() {
-        performFixedArrayTest(for: "[u8;32]", expectedResult: ["u8","32"])
-        performFixedArrayTest(for: "[U16;32]", expectedResult: ["U16","32"])
-        performFixedArrayTest(for: "[u16; 32]", expectedResult: ["u16","32"])
-        performFixedArrayTest(for: "[ U16 ; 32]", expectedResult: ["U16","32"])
-        performFixedArrayTest(for: "[ U16 ; 32 ]", expectedResult: ["U16","32"])
-    }
-
-    func testNotMatchingFixedArray() {
-        performFixedArrayTest(for: "[u8,32]", expectedResult: nil)
-        performFixedArrayTest(for: "[u8.32]", expectedResult: nil)
-        performFixedArrayTest(for: "[b8;32]", expectedResult: nil)
-        performFixedArrayTest(for: "[u8;032]", expectedResult: nil)
-        performFixedArrayTest(for: "[u8;0]", expectedResult: nil)
-        performFixedArrayTest(for: "[u8;32;]", expectedResult: nil)
-        performFixedArrayTest(for: "[]", expectedResult: nil)
-        performFixedArrayTest(for: "[u8]", expectedResult: nil)
-    }
-
     // MARK: Private
-
-    private func performFixedArrayTest(for type: String, expectedResult: [String]?) {
-        performRegexTest(for: RegexParser.fixedArray(),
-                         type: type,
-                         expectedResult: expectedResult)
-    }
 
     private func performVectorTest(for type: String, expectedResult: String?) {
         performRegexTest(for: RegexParser.vector(),

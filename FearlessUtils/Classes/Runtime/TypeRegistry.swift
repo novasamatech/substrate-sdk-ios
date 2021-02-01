@@ -65,7 +65,13 @@ public extension TypeRegistry {
             StructNodeFactory(parser: TypeMappingParser.structure()),
             EnumNodeFactory(parser: TypeMappingParser.enumeration()),
             EnumValuesNodeFactory(parser: TypeValuesParser.enumeration()),
-            NumericSetNodeFactory(parser: TypeSetParser.generic())
+            NumericSetNodeFactory(parser: TypeSetParser.generic()),
+            TupleNodeFactory(parser: ComponentsParser.tuple()),
+            FixedArrayNodeFactory(parser: FixedArrayParser.generic()),
+            VectorNodeFactory(parser: RegexParser.vector()),
+            OptionNodeFactory(parser: RegexParser.option()),
+            CompactNodeFactory(parser: RegexParser.compact()),
+            AliasNodeFactory(parser: TermParser.generic())
         ]
 
         return try TypeRegistry(json: types,

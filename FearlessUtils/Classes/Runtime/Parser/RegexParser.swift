@@ -26,7 +26,13 @@ public class RegexParser: TypeParser {
             let range = NSMakeRange(0, nsValue.length)
 
             if let result = expression.firstMatch(in: stringValue, options: [], range: range), result.numberOfRanges > 1 {
-                let jsons: [JSON] = (1..<result.numberOfRanges).map { index in
+                let jsons: [JSON] = (1..<result.numberOfRanges).compactMap { index in
+                    let range = result.range(at: index)
+
+                    guard range.location != NSNotFound else {
+                        return nil
+                    }
+
                     let value = nsValue.substring(with: result.range(at: index))
                     return .stringValue(value)
                 }
@@ -60,14 +66,6 @@ public extension RegexParser {
     static func compact() -> RegexParser {
         let trimProcessor = TrimProcessor(charset: .whitespaces)
         return RegexParser(pattern: "^Compact<(.+)>$",
-                           preprocessor: trimProcessor,
-                           postprocessor: trimProcessor)
-    }
-
-    static func fixedArray() -> RegexParser {
-        let trimProcessor = TrimProcessor(charset: .whitespaces)
-        let pattern = "^\\[\\s*((?:u|U)(?:8|16|32|64))\\s*;\\s*([1-9]\\d*)\\s*\\]$"
-        return RegexParser(pattern: pattern,
                            preprocessor: trimProcessor,
                            postprocessor: trimProcessor)
     }

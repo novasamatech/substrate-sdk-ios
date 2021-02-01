@@ -13,7 +13,7 @@ class TypeRegistryTests: XCTestCase {
             let registry = try TypeRegistry.createFromTypesDefinition(data: data)
 
             let genericTypeNames: [String] = registry.registeredTypes.compactMap { node in
-                guard node is SetNode else {
+                guard node is GenericNode else {
                     return nil
                 }
 

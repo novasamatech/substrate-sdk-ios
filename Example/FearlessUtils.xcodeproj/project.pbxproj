@@ -36,6 +36,7 @@
 		8467FD1524E677C6005D486C /* ecdsaHDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 8467FD1024E675D0005D486C /* ecdsaHDKD.json */; };
 		8467FD2624E71A37005D486C /* IconGenerationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467FD2524E71A37005D486C /* IconGenerationTests.swift */; };
 		8467FD2824E72CCD005D486C /* HSLColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467FD2724E72CCD005D486C /* HSLColorTests.swift */; };
+		849E0A2125C81DB500B33506 /* FixedArrayParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */; };
 		84A0DE3124DBF49400F436A8 /* keystore-ed25519.json in Resources */ = {isa = PBXBuildFile; fileRef = 84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */; };
 		84A0DE3224DBF49700F436A8 /* keystore-ecdsa.json in Resources */ = {isa = PBXBuildFile; fileRef = 84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */; };
 		84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB472324DBE82C00837E11 /* KeystoreExtractorTests.swift */; };
@@ -103,6 +104,7 @@
 		8467FD1124E675D0005D486C /* ed25519HDKD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ed25519HDKD.json; sourceTree = "<group>"; };
 		8467FD2524E71A37005D486C /* IconGenerationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconGenerationTests.swift; sourceTree = "<group>"; };
 		8467FD2724E72CCD005D486C /* HSLColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HSLColorTests.swift; sourceTree = "<group>"; };
+		849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedArrayParserTests.swift; sourceTree = "<group>"; };
 		84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ed25519.json"; sourceTree = "<group>"; };
 		84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ecdsa.json"; sourceTree = "<group>"; };
 		84CB472024DBE7E100837E11 /* keystore-sr25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-sr25519.json"; sourceTree = "<group>"; };
@@ -210,6 +212,7 @@
 				841D530725C6E75300DFA15B /* TypeValuesParserTests.swift */,
 				841D531525C6F70500DFA15B /* TypeSetParserTests.swift */,
 				841D532325C727FC00DFA15B /* TermParserTests.swift */,
+				849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */,
 			);
 			path = Parser;
 			sourceTree = "<group>";
@@ -583,6 +586,7 @@
 				84DA3B4024C8CE5900B5E27F /* ScaleInt8Tests.swift in Sources */,
 				84DA3B4524C8CE5A00B5E27F /* ScaleUInt8Tests.swift in Sources */,
 				84DA3B3D24C8CE5900B5E27F /* ScaleCompactIntTests.swift in Sources */,
+				849E0A2125C81DB500B33506 /* FixedArrayParserTests.swift in Sources */,
 				84DA3B4324C8CE5A00B5E27F /* ScaleStringTests.swift in Sources */,
 				84DA3B4224C8CE5A00B5E27F /* ScaleUInt64Tests.swift in Sources */,
 				842D1E6A24CF800400C30A7A /* JunctionFactoryTests.swift in Sources */,
