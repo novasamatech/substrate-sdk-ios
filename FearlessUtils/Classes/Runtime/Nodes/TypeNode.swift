@@ -49,16 +49,21 @@ public struct EnumValuesNode: Node {
 }
 
 public struct SetNode: Node {
-    public struct Item {
-        let name: String
-        let value: UInt64
+    public struct Item: Hashable, Equatable {
+        public let name: String
+        public let value: UInt64
+
+        public init(name: String, value: UInt64) {
+            self.name = name
+            self.value = value
+        }
     }
 
     public let typeName: String
-    public let bitVector: [Item]
+    public let bitVector: Set<Item>
     public let itemType: Node
 
-    init(typeName: String, bitVector: [Item], itemType: Node) {
+    init(typeName: String, bitVector: Set<Item>, itemType: Node) {
         self.typeName = typeName
         self.bitVector = bitVector
         self.itemType = itemType

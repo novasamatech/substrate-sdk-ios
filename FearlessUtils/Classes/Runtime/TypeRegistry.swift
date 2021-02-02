@@ -43,6 +43,8 @@ public class TypeRegistry {
         try parse(json: json)
     }
 
+    public func node(for key: String) -> Node? { graph[key] }
+
     private func parse(json: JSON) throws {
         guard let dict = json.dictValue else {
             throw TypeRegistryError.unexpectedJson

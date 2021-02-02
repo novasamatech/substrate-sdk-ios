@@ -37,6 +37,10 @@
 		8467FD2624E71A37005D486C /* IconGenerationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467FD2524E71A37005D486C /* IconGenerationTests.swift */; };
 		8467FD2824E72CCD005D486C /* HSLColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467FD2724E72CCD005D486C /* HSLColorTests.swift */; };
 		849E0A2125C81DB500B33506 /* FixedArrayParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */; };
+		849E0A7425C9458F00B33506 /* StructNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A7325C9458F00B33506 /* StructNodeFactoryTests.swift */; };
+		849E0A7A25C94E3F00B33506 /* EnumMappingFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A7925C94E3F00B33506 /* EnumMappingFactoryTests.swift */; };
+		849E0A7E25C95C7F00B33506 /* EnumValuesFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A7D25C95C7F00B33506 /* EnumValuesFactoryTests.swift */; };
+		849E0A8225C95E2700B33506 /* NumericSetFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A8125C95E2700B33506 /* NumericSetFactoryTests.swift */; };
 		84A0DE3124DBF49400F436A8 /* keystore-ed25519.json in Resources */ = {isa = PBXBuildFile; fileRef = 84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */; };
 		84A0DE3224DBF49700F436A8 /* keystore-ecdsa.json in Resources */ = {isa = PBXBuildFile; fileRef = 84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */; };
 		84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB472324DBE82C00837E11 /* KeystoreExtractorTests.swift */; };
@@ -105,6 +109,10 @@
 		8467FD2524E71A37005D486C /* IconGenerationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconGenerationTests.swift; sourceTree = "<group>"; };
 		8467FD2724E72CCD005D486C /* HSLColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HSLColorTests.swift; sourceTree = "<group>"; };
 		849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedArrayParserTests.swift; sourceTree = "<group>"; };
+		849E0A7325C9458F00B33506 /* StructNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructNodeFactoryTests.swift; sourceTree = "<group>"; };
+		849E0A7925C94E3F00B33506 /* EnumMappingFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumMappingFactoryTests.swift; sourceTree = "<group>"; };
+		849E0A7D25C95C7F00B33506 /* EnumValuesFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumValuesFactoryTests.swift; sourceTree = "<group>"; };
+		849E0A8125C95E2700B33506 /* NumericSetFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericSetFactoryTests.swift; sourceTree = "<group>"; };
 		84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ed25519.json"; sourceTree = "<group>"; };
 		84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ecdsa.json"; sourceTree = "<group>"; };
 		84CB472024DBE7E100837E11 /* keystore-sr25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-sr25519.json"; sourceTree = "<group>"; };
@@ -228,6 +236,7 @@
 		8429C7FA25C432CC0086D7F6 /* Runtime */ = {
 			isa = PBXGroup;
 			children = (
+				849E0A7225C9455600B33506 /* NodeFactory */,
 				841D527E25C49AD900DFA15B /* Parser */,
 				8429C7FC25C432FF0086D7F6 /* TypeRegistryTests.swift */,
 			);
@@ -291,6 +300,17 @@
 				8467FD2524E71A37005D486C /* IconGenerationTests.swift */,
 			);
 			path = Icon;
+			sourceTree = "<group>";
+		};
+		849E0A7225C9455600B33506 /* NodeFactory */ = {
+			isa = PBXGroup;
+			children = (
+				849E0A7325C9458F00B33506 /* StructNodeFactoryTests.swift */,
+				849E0A7925C94E3F00B33506 /* EnumMappingFactoryTests.swift */,
+				849E0A7D25C95C7F00B33506 /* EnumValuesFactoryTests.swift */,
+				849E0A8125C95E2700B33506 /* NumericSetFactoryTests.swift */,
+			);
+			path = NodeFactory;
 			sourceTree = "<group>";
 		};
 		84CB471F24DBE7BD00837E11 /* Keystore */ = {
@@ -586,14 +606,18 @@
 				84DA3B4024C8CE5900B5E27F /* ScaleInt8Tests.swift in Sources */,
 				84DA3B4524C8CE5A00B5E27F /* ScaleUInt8Tests.swift in Sources */,
 				84DA3B3D24C8CE5900B5E27F /* ScaleCompactIntTests.swift in Sources */,
+				849E0A7425C9458F00B33506 /* StructNodeFactoryTests.swift in Sources */,
 				849E0A2125C81DB500B33506 /* FixedArrayParserTests.swift in Sources */,
 				84DA3B4324C8CE5A00B5E27F /* ScaleStringTests.swift in Sources */,
 				84DA3B4224C8CE5A00B5E27F /* ScaleUInt64Tests.swift in Sources */,
+				849E0A7A25C94E3F00B33506 /* EnumMappingFactoryTests.swift in Sources */,
 				842D1E6A24CF800400C30A7A /* JunctionFactoryTests.swift in Sources */,
 				8429C7FD25C432FF0086D7F6 /* TypeRegistryTests.swift in Sources */,
 				841D52EA25C6DDF800DFA15B /* JSONHelpers.swift in Sources */,
+				849E0A8225C95E2700B33506 /* NumericSetFactoryTests.swift in Sources */,
 				84DA3B4124C8CE5A00B5E27F /* ScaleInt32Tests.swift in Sources */,
 				8467FD2624E71A37005D486C /* IconGenerationTests.swift in Sources */,
+				849E0A7E25C95C7F00B33506 /* EnumValuesFactoryTests.swift in Sources */,
 				842D1E2324C98CEA00C30A7A /* StorageKeyFactoryTests.swift in Sources */,
 				8467FD2824E72CCD005D486C /* HSLColorTests.swift in Sources */,
 				842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */,
