@@ -32,6 +32,7 @@ class NumericSetFactoryTests: XCTestCase {
         XCTAssertEqual(typeName, setNode.typeName)
         XCTAssertEqual(expectedBitVector, setNode.bitVector.sorted(by: { $0.value < $1.value }))
         XCTAssertEqual(itemTypeName, setNode.itemType.typeName)
+        XCTAssertNotNil(registry.node(for: itemTypeName))
     }
 
     func testInvalidSetValuesResultsIntoGenericNode() throws {
@@ -52,12 +53,12 @@ class NumericSetFactoryTests: XCTestCase {
 
             let registry = try TypeRegistry.createFromTypesDefinition(data: data)
 
-            guard let structNode = registry.node(for: type) else {
+            guard let node = registry.node(for: type) else {
                 XCTFail("Unexpected empty node")
                 return
             }
 
-            XCTAssertTrue(structNode is GenericNode)
+            XCTAssertTrue(node is GenericNode)
         }
     }
 }
