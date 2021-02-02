@@ -17,4 +17,26 @@ class TypeRegistryTests: XCTestCase {
             XCTFail("Unexpected error \(error)")
         }
     }
+
+    func testCaseInsensitiveResolutionApplied() throws {
+        // given
+
+        let typeName = "IdentityFields"
+        let subtypeName = "AccountInfo<Index>"
+        let recursiveName = "OptionCall"
+
+        let searchingTypeName = "Accountinfo<Index>"
+
+        let json = "{\"types\":{\"\(typeName)\": \"\(subtypeName)\", \"\(recursiveName)\": \"\(recursiveName)\"}}"
+
+        let data = json.data(using: .utf8)!
+
+        // when
+
+        let registry = try TypeRegistry.createFromTypesDefinition(data: data)
+
+        // then
+
+        XCTAssertNotNil(registry.node(for: searchingTypeName))
+    }
 }
