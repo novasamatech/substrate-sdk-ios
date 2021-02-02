@@ -14,6 +14,7 @@ protocol TypeRegistering {
  *  and described by a json. The implementation parses the json and
  *  tries to construct a graph. Each node of the graph is identified by type's name
  *  and describes type's specifics such as which fields are there and on which types it depends on.
+ *  Each node is create by a corresponding factory which uses specific parser to process type definitions.
  *
  *  Currently the following types are supported:
  *  - Structure (an ordered collection of fields)
