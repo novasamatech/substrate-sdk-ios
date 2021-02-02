@@ -2,7 +2,7 @@ import XCTest
 import FearlessUtils
 
 class TypeRegistryTests: XCTestCase {
-    func testTypeRegistryCreation() throws {
+    func testTypeRegistryBuildSuccess() throws {
         do {
             guard let defaultUrl = Bundle(for: type(of: self)).url(forResource: "default", withExtension: "json") else {
                 XCTFail("Can't find default.json")
@@ -12,18 +12,7 @@ class TypeRegistryTests: XCTestCase {
             let data = try Data(contentsOf: defaultUrl)
             let registry = try TypeRegistry.createFromTypesDefinition(data: data)
 
-            let genericTypeNames: [String] = registry.registeredTypes.compactMap { node in
-                guard node is GenericNode else {
-                    return nil
-                }
-
-                return node.typeName
-            }
-
-            for name in genericTypeNames {
-                print(name)
-            }
-
+            XCTAssertTrue(!registry.registeredTypes.isEmpty)
         } catch {
             XCTFail("Unexpected error \(error)")
         }

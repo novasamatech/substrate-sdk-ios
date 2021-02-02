@@ -9,6 +9,27 @@ protocol TypeRegistering {
     func register(typeName: String, json: JSON) -> Node
 }
 
+/**
+ *  Class is designed to store types definitions used in Substrate Runtime
+ *  and described by a json. The implementation parses the json and
+ *  tries to construct a graph. Each node of the graph is identified by type's name
+ *  and describes type's specifics such as which fields are there and on which types it depends on.
+ *
+ *  Currently the following types are supported:
+ *  - Structure (an ordered collection of fields)
+ *  - Enum mapping (custom type with named set of values)
+ *  - Enum collection (custom type with a list of values)
+ *  - Numeric set (a name set represented by a bit vector)
+ *  - Vector (unbounded list of values)
+ *  - Option (optional value)
+ *  - Compact (special type for compact representation of the integer)
+ *  - Fixed array (a list of values with a given length)
+ *  - Alias (just a term that represents an alias to other type)
+ *
+ *  The main purpose of the registry is to support SCALE coding/decoding in the runtime
+ *  with ability to allow type definitions updates.
+ */
+
 public class TypeRegistry {
     private var graph: [String: Node] = [:]
     private var nodeFactory: TypeNodeFactoryProtocol
@@ -20,8 +41,6 @@ public class TypeRegistry {
 
         try parse(json: json)
     }
-
-    // MARK: Private
 
     private func parse(json: JSON) throws {
         guard let dict = json.dictValue else {
