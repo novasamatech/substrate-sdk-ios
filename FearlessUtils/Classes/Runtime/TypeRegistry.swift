@@ -34,14 +34,31 @@ protocol TypeRegistering {
 public class TypeRegistry {
     private var graph: [String: Node] = [:]
     private var nodeFactory: TypeNodeFactoryProtocol
+    private var typeResolver: TypeResolving
 
     public var registeredTypes: [Node] { graph.keys.compactMap { graph[$0] } }
 
-    init(json: JSON, nodeFactory: TypeNodeFactoryProtocol) throws {
+    init(json: JSON, nodeFactory: TypeNodeFactoryProtocol, typeResolver: TypeResolving) throws {
         self.nodeFactory = nodeFactory
+        self.typeResolver = typeResolver
 
         try parse(json: json)
+        resolveGenerics()
     }
+
+    public func node(for key: String) -> Node? {
+        if let node = graph[key] {
+            return node
+        }
+
+        if let resolvedKey = typeResolver.resolve(typeName: key, using: Set(graph.keys)) {
+            return graph[resolvedKey]
+        }
+
+        return nil
+    }
+
+    // MARK: Private
 
     private func parse(json: JSON) throws {
         guard let dict = json.dictValue else {
@@ -70,6 +87,19 @@ public class TypeRegistry {
             }
         }
     }
+
+    private func resolveGenerics() {
+        let allTypeNames = Set(graph.keys)
+
+        let genericTypeNames = allTypeNames.filter { graph[$0] is GenericNode }
+
+        for genericTypeName in genericTypeNames {
+            if let resolvedKey = typeResolver.resolve(typeName: genericTypeName,
+                                                      using: allTypeNames.subtracting([genericTypeName])) {
+                graph[genericTypeName] = ProxyNode(typeName: resolvedKey, resolver: self)
+            }
+        }
+    }
 }
 
 public extension TypeRegistry {
@@ -94,8 +124,13 @@ public extension TypeRegistry {
             AliasNodeFactory(parser: TermParser.generic())
         ]
 
+        let resolvers: [TypeResolving] = [
+            CaseInsensitiveResolver()
+        ]
+
         return try TypeRegistry(json: types,
-                                nodeFactory: OneOfTypeNodeFactory(children: factories))
+                                nodeFactory: OneOfTypeNodeFactory(children: factories),
+                                typeResolver: OneOfTypeResolver(children: resolvers))
     }
 }
 

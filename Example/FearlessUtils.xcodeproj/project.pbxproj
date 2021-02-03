@@ -37,6 +37,17 @@
 		8467FD2624E71A37005D486C /* IconGenerationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467FD2524E71A37005D486C /* IconGenerationTests.swift */; };
 		8467FD2824E72CCD005D486C /* HSLColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467FD2724E72CCD005D486C /* HSLColorTests.swift */; };
 		849E0A2125C81DB500B33506 /* FixedArrayParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */; };
+		849E0A7425C9458F00B33506 /* StructNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A7325C9458F00B33506 /* StructNodeFactoryTests.swift */; };
+		849E0A7A25C94E3F00B33506 /* EnumMappingFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A7925C94E3F00B33506 /* EnumMappingFactoryTests.swift */; };
+		849E0A7E25C95C7F00B33506 /* EnumValuesFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A7D25C95C7F00B33506 /* EnumValuesFactoryTests.swift */; };
+		849E0A8225C95E2700B33506 /* NumericSetFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A8125C95E2700B33506 /* NumericSetFactoryTests.swift */; };
+		849E0AA025C9684800B33506 /* VectorNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A9F25C9684800B33506 /* VectorNodeFactoryTests.swift */; };
+		849E0AA425C96A6400B33506 /* OptionNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0AA325C96A6400B33506 /* OptionNodeFactoryTests.swift */; };
+		849E0AA825C96AD600B33506 /* CompactNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0AA725C96AD600B33506 /* CompactNodeFactoryTests.swift */; };
+		849E0AAC25C96C7800B33506 /* TupleNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0AAB25C96C7800B33506 /* TupleNodeFactoryTests.swift */; };
+		849E0AB025C96DD500B33506 /* FixedArrayNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0AAF25C96DD500B33506 /* FixedArrayNodeFactoryTests.swift */; };
+		849E0AB425C96EED00B33506 /* AliasNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0AB325C96EED00B33506 /* AliasNodeFactoryTests.swift */; };
+		849E0AEA25C992F800B33506 /* CaseInsensitiveResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0AE925C992F800B33506 /* CaseInsensitiveResolverTests.swift */; };
 		84A0DE3124DBF49400F436A8 /* keystore-ed25519.json in Resources */ = {isa = PBXBuildFile; fileRef = 84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */; };
 		84A0DE3224DBF49700F436A8 /* keystore-ecdsa.json in Resources */ = {isa = PBXBuildFile; fileRef = 84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */; };
 		84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB472324DBE82C00837E11 /* KeystoreExtractorTests.swift */; };
@@ -105,6 +116,17 @@
 		8467FD2524E71A37005D486C /* IconGenerationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconGenerationTests.swift; sourceTree = "<group>"; };
 		8467FD2724E72CCD005D486C /* HSLColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HSLColorTests.swift; sourceTree = "<group>"; };
 		849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedArrayParserTests.swift; sourceTree = "<group>"; };
+		849E0A7325C9458F00B33506 /* StructNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructNodeFactoryTests.swift; sourceTree = "<group>"; };
+		849E0A7925C94E3F00B33506 /* EnumMappingFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumMappingFactoryTests.swift; sourceTree = "<group>"; };
+		849E0A7D25C95C7F00B33506 /* EnumValuesFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumValuesFactoryTests.swift; sourceTree = "<group>"; };
+		849E0A8125C95E2700B33506 /* NumericSetFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumericSetFactoryTests.swift; sourceTree = "<group>"; };
+		849E0A9F25C9684800B33506 /* VectorNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VectorNodeFactoryTests.swift; sourceTree = "<group>"; };
+		849E0AA325C96A6400B33506 /* OptionNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionNodeFactoryTests.swift; sourceTree = "<group>"; };
+		849E0AA725C96AD600B33506 /* CompactNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactNodeFactoryTests.swift; sourceTree = "<group>"; };
+		849E0AAB25C96C7800B33506 /* TupleNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TupleNodeFactoryTests.swift; sourceTree = "<group>"; };
+		849E0AAF25C96DD500B33506 /* FixedArrayNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedArrayNodeFactoryTests.swift; sourceTree = "<group>"; };
+		849E0AB325C96EED00B33506 /* AliasNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliasNodeFactoryTests.swift; sourceTree = "<group>"; };
+		849E0AE925C992F800B33506 /* CaseInsensitiveResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseInsensitiveResolverTests.swift; sourceTree = "<group>"; };
 		84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ed25519.json"; sourceTree = "<group>"; };
 		84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ecdsa.json"; sourceTree = "<group>"; };
 		84CB472024DBE7E100837E11 /* keystore-sr25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-sr25519.json"; sourceTree = "<group>"; };
@@ -228,6 +250,8 @@
 		8429C7FA25C432CC0086D7F6 /* Runtime */ = {
 			isa = PBXGroup;
 			children = (
+				849E0AE825C992D200B33506 /* TypeResolution */,
+				849E0A7225C9455600B33506 /* NodeFactory */,
 				841D527E25C49AD900DFA15B /* Parser */,
 				8429C7FC25C432FF0086D7F6 /* TypeRegistryTests.swift */,
 			);
@@ -291,6 +315,31 @@
 				8467FD2524E71A37005D486C /* IconGenerationTests.swift */,
 			);
 			path = Icon;
+			sourceTree = "<group>";
+		};
+		849E0A7225C9455600B33506 /* NodeFactory */ = {
+			isa = PBXGroup;
+			children = (
+				849E0A7325C9458F00B33506 /* StructNodeFactoryTests.swift */,
+				849E0A7925C94E3F00B33506 /* EnumMappingFactoryTests.swift */,
+				849E0A7D25C95C7F00B33506 /* EnumValuesFactoryTests.swift */,
+				849E0A8125C95E2700B33506 /* NumericSetFactoryTests.swift */,
+				849E0A9F25C9684800B33506 /* VectorNodeFactoryTests.swift */,
+				849E0AA325C96A6400B33506 /* OptionNodeFactoryTests.swift */,
+				849E0AA725C96AD600B33506 /* CompactNodeFactoryTests.swift */,
+				849E0AAB25C96C7800B33506 /* TupleNodeFactoryTests.swift */,
+				849E0AAF25C96DD500B33506 /* FixedArrayNodeFactoryTests.swift */,
+				849E0AB325C96EED00B33506 /* AliasNodeFactoryTests.swift */,
+			);
+			path = NodeFactory;
+			sourceTree = "<group>";
+		};
+		849E0AE825C992D200B33506 /* TypeResolution */ = {
+			isa = PBXGroup;
+			children = (
+				849E0AE925C992F800B33506 /* CaseInsensitiveResolverTests.swift */,
+			);
+			path = TypeResolution;
 			sourceTree = "<group>";
 		};
 		84CB471F24DBE7BD00837E11 /* Keystore */ = {
@@ -581,19 +630,28 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				849E0AB425C96EED00B33506 /* AliasNodeFactoryTests.swift in Sources */,
 				84DA3B4424C8CE5A00B5E27F /* ScaleInt16Tests.swift in Sources */,
+				849E0AA025C9684800B33506 /* VectorNodeFactoryTests.swift in Sources */,
+				849E0AEA25C992F800B33506 /* CaseInsensitiveResolverTests.swift in Sources */,
 				84DA3B3E24C8CE5900B5E27F /* ScaleInt64Tests.swift in Sources */,
 				84DA3B4024C8CE5900B5E27F /* ScaleInt8Tests.swift in Sources */,
 				84DA3B4524C8CE5A00B5E27F /* ScaleUInt8Tests.swift in Sources */,
 				84DA3B3D24C8CE5900B5E27F /* ScaleCompactIntTests.swift in Sources */,
+				849E0A7425C9458F00B33506 /* StructNodeFactoryTests.swift in Sources */,
 				849E0A2125C81DB500B33506 /* FixedArrayParserTests.swift in Sources */,
+				849E0AA825C96AD600B33506 /* CompactNodeFactoryTests.swift in Sources */,
 				84DA3B4324C8CE5A00B5E27F /* ScaleStringTests.swift in Sources */,
 				84DA3B4224C8CE5A00B5E27F /* ScaleUInt64Tests.swift in Sources */,
+				849E0A7A25C94E3F00B33506 /* EnumMappingFactoryTests.swift in Sources */,
 				842D1E6A24CF800400C30A7A /* JunctionFactoryTests.swift in Sources */,
 				8429C7FD25C432FF0086D7F6 /* TypeRegistryTests.swift in Sources */,
 				841D52EA25C6DDF800DFA15B /* JSONHelpers.swift in Sources */,
+				849E0AAC25C96C7800B33506 /* TupleNodeFactoryTests.swift in Sources */,
+				849E0A8225C95E2700B33506 /* NumericSetFactoryTests.swift in Sources */,
 				84DA3B4124C8CE5A00B5E27F /* ScaleInt32Tests.swift in Sources */,
 				8467FD2624E71A37005D486C /* IconGenerationTests.swift in Sources */,
+				849E0A7E25C95C7F00B33506 /* EnumValuesFactoryTests.swift in Sources */,
 				842D1E2324C98CEA00C30A7A /* StorageKeyFactoryTests.swift in Sources */,
 				8467FD2824E72CCD005D486C /* HSLColorTests.swift in Sources */,
 				842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */,
@@ -601,6 +659,8 @@
 				84ED7256254A001A006102DF /* SubstrateQREncoderTests.swift in Sources */,
 				841D52B425C6BAE600DFA15B /* ComponentsParserTests.swift in Sources */,
 				842D1E7324CFF4EC00C30A7A /* KeypairDeriviationTests.swift in Sources */,
+				849E0AA425C96A6400B33506 /* OptionNodeFactoryTests.swift in Sources */,
+				849E0AB025C96DD500B33506 /* FixedArrayNodeFactoryTests.swift in Sources */,
 				841D531625C6F70500DFA15B /* TypeSetParserTests.swift in Sources */,
 				84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */,
 				84F4A847254CAD73000CF0A3 /* KeystoreBuilderTests.swift in Sources */,
