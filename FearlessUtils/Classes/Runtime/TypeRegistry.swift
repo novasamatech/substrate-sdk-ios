@@ -37,6 +37,7 @@ public class TypeRegistry {
     private var typeResolver: TypeResolving
 
     public var registeredTypes: [Node] { graph.keys.compactMap { graph[$0] } }
+    public var registeredTypeNames: Set<String> { Set(graph.keys) }
 
     init(json: JSON, nodeFactory: TypeNodeFactoryProtocol, typeResolver: TypeResolving) throws {
         self.nodeFactory = nodeFactory
@@ -107,6 +108,10 @@ public extension TypeRegistry {
         let jsonDecoder = JSONDecoder()
         let json = try jsonDecoder.decode(JSON.self, from: data)
 
+        return try createFromTypesDefinition(json: json)
+    }
+
+    static func createFromTypesDefinition(json: JSON) throws -> TypeRegistry {
         guard let types = json.types else {
             throw TypeRegistryError.unexpectedJson
         }
