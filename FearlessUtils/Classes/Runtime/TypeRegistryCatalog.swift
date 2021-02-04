@@ -5,6 +5,11 @@ enum TypeRegistryCatalogError: Error {
     case duplicatedVersioning
 }
 
+/**
+ *  Class is designed to provide an interface to access different versions of the type
+ *  definition graphs.
+ */
+
 public class TypeRegistryCatalog {
     public let baseRegistry: TypeRegistry
     public let versionedRegistries: [UInt64: TypeRegistry]
