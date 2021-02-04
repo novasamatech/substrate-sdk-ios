@@ -5,6 +5,10 @@ public enum TypeRegistryError: Error {
     case invalidKey(String)
 }
 
+public protocol TypeRegistryProtocol {
+    func node(for key: String) -> Node?
+}
+
 protocol TypeRegistering {
     func register(typeName: String, json: JSON) -> Node
 }
@@ -31,7 +35,7 @@ protocol TypeRegistering {
  *  with ability to allow type definitions updates.
  */
 
-public class TypeRegistry {
+public class TypeRegistry: TypeRegistryProtocol {
     private var graph: [String: Node] = [:]
     private var nodeFactory: TypeNodeFactoryProtocol
     private var typeResolver: TypeResolving
@@ -39,11 +43,15 @@ public class TypeRegistry {
     public var registeredTypes: [Node] { graph.keys.compactMap { graph[$0] } }
     public var registeredTypeNames: Set<String> { Set(graph.keys) }
 
-    init(json: JSON, nodeFactory: TypeNodeFactoryProtocol, typeResolver: TypeResolving) throws {
+    init(json: JSON,
+         nodeFactory: TypeNodeFactoryProtocol,
+         typeResolver: TypeResolving,
+         additionalNodes: [Node]) throws {
         self.nodeFactory = nodeFactory
         self.typeResolver = typeResolver
 
         try parse(json: json)
+        override(nodes: additionalNodes)
         resolveGenerics()
     }
 
@@ -60,6 +68,12 @@ public class TypeRegistry {
     }
 
     // MARK: Private
+
+    private func override(nodes: [Node]) {
+        for node in nodes {
+            graph[node.typeName] = node
+        }
+    }
 
     private func parse(json: JSON) throws {
         guard let dict = json.dictValue else {
@@ -105,13 +119,26 @@ public class TypeRegistry {
 
 public extension TypeRegistry {
     static func createFromTypesDefinition(data: Data) throws -> TypeRegistry {
+        return try createFromTypesDefinition(data: data,
+                                             additionalNodes: supportedBaseNodes() + supportedGenericNodes())
+    }
+
+    static func createFromTypesDefinition(data: Data,
+                                          additionalNodes: [Node]) throws -> TypeRegistry {
         let jsonDecoder = JSONDecoder()
         let json = try jsonDecoder.decode(JSON.self, from: data)
 
-        return try createFromTypesDefinition(json: json)
+        return try createFromTypesDefinition(json: json,
+                                             additionalNodes: additionalNodes)
     }
 
     static func createFromTypesDefinition(json: JSON) throws -> TypeRegistry {
+        try createFromTypesDefinition(json: json,
+                                      additionalNodes: supportedBaseNodes() + supportedGenericNodes())
+    }
+
+    static func createFromTypesDefinition(json: JSON,
+                                          additionalNodes: [Node]) throws -> TypeRegistry {
         guard let types = json.types else {
             throw TypeRegistryError.unexpectedJson
         }
@@ -135,7 +162,50 @@ public extension TypeRegistry {
 
         return try TypeRegistry(json: types,
                                 nodeFactory: OneOfTypeNodeFactory(children: factories),
-                                typeResolver: OneOfTypeResolver(children: resolvers))
+                                typeResolver: OneOfTypeResolver(children: resolvers),
+                                additionalNodes: additionalNodes)
+    }
+
+    static func supportedBaseNodes() -> [Node] {
+        [
+            U8Node(),
+            U16Node(),
+            U32Node(),
+            U64Node(),
+            U128Node(),
+            U256Node(),
+            BoolNode(),
+            StringNode()
+        ]
+    }
+
+    static func supportedGenericNodes() -> [Node] {
+        [
+            GenericAccountIdNode(),
+            NullNode(),
+            GenericBlockNode(),
+            GenericCallNode(),
+            GenericVoteNode(),
+            H160Node(),
+            H256Node(),
+            H512Node(),
+            BytesNode(),
+            BitVecNode(),
+            ExtrinsicsDecoderNode(),
+            CallBytesNode(),
+            EraNode(),
+            DataNode(),
+            BoxProposalNode(),
+            GenericConsensusEngineIdNode(),
+            SessionKeysSubstrateNode(),
+            GenericMultiAddressNode(),
+            OpaqueCallNode(),
+            GenericAccountIdNode(),
+            GenericAccountIndexNode(),
+            GenericEventNode(),
+            EventRecordNode(),
+            AccountIdAddressNode()
+        ]
     }
 }
 
