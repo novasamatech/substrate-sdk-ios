@@ -1,5 +1,13 @@
 import Foundation
 
+public struct GenericNode: Node {
+    public let typeName: String
+
+    public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
+        throw DynamicScaleEncoderError.unresolverType(name: typeName)
+    }
+}
+
 public struct GenericAccountIdNode: Node {
     public var typeName: String { "GenericAccountId" }
 

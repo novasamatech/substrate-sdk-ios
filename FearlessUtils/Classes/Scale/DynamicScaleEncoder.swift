@@ -1,17 +1,6 @@
 import Foundation
 import BigInt
 
-public enum DynamicScaleEncoderError: Error {
-    case unresolverType(name: String)
-    case arrayExpected(json: JSON)
-    case unexpectedNull
-    case hexExpected(json: JSON)
-    case expectedStringForCompact(json: JSON)
-    case expectedStringForInt(json: JSON)
-    case expectedStringForBool(json: JSON)
-    case missingOptionModifier
-}
-
 public final class DynamicScaleEncoder {
     enum Modifiers {
         case compact
