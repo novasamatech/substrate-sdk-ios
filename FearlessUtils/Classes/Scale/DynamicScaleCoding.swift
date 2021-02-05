@@ -15,7 +15,6 @@ public protocol DynamicScaleEncoding {
     func appendU128(json: JSON) throws
     func appendU256(json: JSON) throws
     func appendBool(json: JSON) throws
-    func appendNull() throws
 
     func encode() throws -> Data
 }
@@ -29,7 +28,7 @@ public protocol DynamicScaleDecoding {
     func readOption(type: String) throws -> JSON
     func readVector(type: String) throws -> JSON
     func readCompact(type: String) throws -> JSON
-    func readFixedArray(type: String, length: Int) throws -> JSON
+    func readFixedArray(type: String, length: UInt64) throws -> JSON
     func readBytes(length: Int) throws -> JSON
     func readString() throws -> JSON
     func readU8() throws -> JSON
@@ -46,3 +45,8 @@ public protocol DynamicScaleDecodable {
 }
 
 public typealias DynamicScaleCodable = DynamicScaleEncodable & DynamicScaleDecodable
+
+enum ScaleCodingModifier {
+    case compact
+    case option
+}

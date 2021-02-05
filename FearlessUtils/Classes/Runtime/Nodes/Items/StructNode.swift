@@ -24,4 +24,13 @@ public struct StructNode: Node {
             try encoder.append(json: fieldValues[index], type: typeMapping[index].node.typeName)
         }
     }
+
+    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+        let jsons = try typeMapping.reduce([JSON]()) { (result, item) in
+            let json = try decoder.read(type: item.node.typeName)
+            return result + [json]
+        }
+
+        return .arrayValue(jsons)
+    }
 }

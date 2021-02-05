@@ -4,68 +4,12 @@ public struct GenericNode: Node {
     public let typeName: String
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
-        throw DynamicScaleEncoderError.unresolverType(name: typeName)
+        throw DynamicScaleCoderError.unresolverType(name: typeName)
     }
-}
 
-public struct GenericAccountIdNode: Node {
-    public var typeName: String { "GenericAccountId" }
-
-    public init() {}
-}
-
-public struct NullNode: Node {
-    public var typeName: String { "Null" }
-
-    public init() {}
-}
-
-public struct GenericBlockNode: Node {
-    public var typeName: String { "GenericBlock" }
-
-    public init() {}
-}
-
-public struct GenericCallNode: Node {
-    public var typeName: String { "GenericCall" }
-
-    public init() {}
-}
-
-public struct H160Node: Node {
-    public var typeName: String { "H160" }
-
-    public init() {}
-}
-
-public struct H256Node: Node {
-    public var typeName: String { "H256" }
-
-    public init() {}
-}
-
-public struct H512Node: Node {
-    public var typeName: String { "H512" }
-
-    public init() {}
-}
-
-public struct GenericVoteNode: Node {
-    public var typeName: String { "GenericVote" }
-
-    public init() {}
-}
-
-public struct BytesNode: Node {
-    public var typeName: String { "Bytes" }
-
-    public init() {}
-}
-
-public struct BitVecNode: Node {
-    public var typeName: String { "BitVec" }
-
-    public init() {}
+    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+        throw DynamicScaleCoderError.unresolverType(name: typeName)
+    }
 }
 
 public struct ExtrinsicsDecoderNode: Node {

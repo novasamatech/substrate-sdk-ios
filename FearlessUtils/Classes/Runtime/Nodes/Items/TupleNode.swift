@@ -23,4 +23,13 @@ public struct TupleNode: Node {
             try encoder.append(json: components[index], type: innerNodes[index].typeName)
         }
     }
+
+    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+        let jsons = try innerNodes.reduce([JSON]()) { (result, item) in
+            let json = try decoder.read(type: item.typeName)
+            return result + [json]
+        }
+
+        return .arrayValue(jsons)
+    }
 }

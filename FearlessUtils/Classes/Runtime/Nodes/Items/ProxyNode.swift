@@ -15,9 +15,17 @@ public struct ProxyNode: Node {
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
         guard let undelyingNode = resolver?.resolve(for: typeName) else {
-            throw DynamicScaleEncoderError.unresolverType(name: typeName)
+            throw DynamicScaleCoderError.unresolverType(name: typeName)
         }
 
        try undelyingNode.accept(encoder: encoder, value: value)
+    }
+
+    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+        guard let undelyingNode = resolver?.resolve(for: typeName) else {
+            throw DynamicScaleCoderError.unresolverType(name: typeName)
+        }
+
+        return try undelyingNode.accept(decoder: decoder)
     }
 }

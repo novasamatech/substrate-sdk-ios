@@ -12,4 +12,8 @@ public struct OptionNode: Node {
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
         try encoder.appendOption(json: value, type: underlying.typeName)
     }
+
+    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+        try decoder.readOption(type: underlying.typeName)
+    }
 }

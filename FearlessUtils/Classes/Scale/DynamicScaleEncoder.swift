@@ -2,14 +2,9 @@ import Foundation
 import BigInt
 
 public final class DynamicScaleEncoder {
-    enum Modifiers {
-        case compact
-        case option
-    }
-
     private var encoder: ScaleEncoder = ScaleEncoder()
 
-    private var modifiers: [Modifiers] = []
+    private var modifiers: [ScaleCodingModifier] = []
 
     public let registry: TypeRegistryCatalogProtocol
     public let version: UInt64
@@ -79,7 +74,7 @@ public final class DynamicScaleEncoder {
 extension DynamicScaleEncoder: DynamicScaleEncoding {
     public func append(json: JSON, type: String) throws {
         guard let node = registry.node(for: type, version: version) else {
-            throw DynamicScaleEncoderError.unresolverType(name: type)
+            throw DynamicScaleCoderError.unresolverType(name: type)
         }
 
         try node.accept(encoder: self, value: json)
@@ -87,7 +82,7 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
 
     public func appendOption(json: JSON, type: String) throws {
         guard let node = registry.node(for: type, version: version) else {
-            throw DynamicScaleEncoderError.unresolverType(name: type)
+            throw DynamicScaleCoderError.unresolverType(name: type)
         }
 
         modifiers.append(.option)
@@ -101,7 +96,7 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
         }
 
         guard let node = registry.node(for: type, version: version) else {
-            throw DynamicScaleEncoderError.unresolverType(name: type)
+            throw DynamicScaleCoderError.unresolverType(name: type)
         }
 
         guard let items = json.arrayValue else {
@@ -121,7 +116,7 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
         }
 
         guard let node = registry.node(for: type, version: version) else {
-            throw DynamicScaleEncoderError.unresolverType(name: type)
+            throw DynamicScaleCoderError.unresolverType(name: type)
         }
 
         modifiers.append(.compact)
@@ -135,7 +130,7 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
         }
 
         guard let node = registry.node(for: type, version: version) else {
-            throw DynamicScaleEncoderError.unresolverType(name: type)
+            throw DynamicScaleCoderError.unresolverType(name: type)
         }
 
         guard let items = json.arrayValue else {
@@ -207,16 +202,6 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
         } else {
             try value.encode(scaleEncoder: encoder)
         }
-    }
-
-    public func appendNull() throws {
-        guard modifiers.last == .option else {
-            throw DynamicScaleEncoderError.missingOptionModifier
-        }
-
-        modifiers.removeLast()
-
-        encoder.appendRaw(data: Data([0]))
     }
 
     public func encode() throws -> Data {

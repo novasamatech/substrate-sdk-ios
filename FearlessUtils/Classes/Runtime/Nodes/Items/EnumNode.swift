@@ -25,4 +25,19 @@ public struct EnumNode: Node {
         try encoder.appendU8(json: .stringValue(String(caseValue)))
         try encoder.append(json: assocValue, type: typeMapping[Int(caseValue)].node.typeName)
     }
+
+    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+        guard let caseValueStr = try decoder.readU8().stringValue,
+              let caseValue = Int(caseValueStr) else {
+            throw DynamicScaleDecoderError.unexpectedEnumCase
+        }
+
+        guard caseValue < typeMapping.count else {
+            throw DynamicScaleDecoderError.invalidEnumCase(value: caseValue, count: typeMapping.count)
+        }
+
+        let json = try decoder.read(type: typeMapping[caseValue].node.typeName)
+
+        return .arrayValue([.unsignedIntValue(UInt64(caseValue)), json])
+    }
 }

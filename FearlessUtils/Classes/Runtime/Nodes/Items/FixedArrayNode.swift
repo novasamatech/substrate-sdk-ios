@@ -14,4 +14,8 @@ public struct FixedArrayNode: Node {
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
         try encoder.appendFixedArray(json: value, type: elementType.typeName)
     }
+
+    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+        try decoder.readFixedArray(type: elementType.typeName, length: length)
+    }
 }

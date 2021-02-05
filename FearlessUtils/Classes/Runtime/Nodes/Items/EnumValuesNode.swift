@@ -20,4 +20,13 @@ public struct EnumValuesNode: Node {
 
         try encoder.appendU8(json: .stringValue(String(caseValue)))
     }
+
+    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+        guard let caseValueStr = try decoder.readU8().stringValue,
+              let caseValue = Int(caseValueStr) else {
+            throw DynamicScaleDecoderError.unexpectedEnumCase
+        }
+
+        return .unsignedIntValue(UInt64(caseValue))
+    }
 }
