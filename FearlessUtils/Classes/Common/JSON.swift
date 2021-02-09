@@ -23,6 +23,7 @@ public enum JSON {
     case stringValue(String)
     case arrayValue([JSON])
     case dictionaryValue([String: JSON])
+    case boolValue(Bool)
     case null
 
     public var stringValue: String? {
@@ -64,6 +65,14 @@ public enum JSON {
         return nil
     }
 
+    public var boolValue: Bool? {
+        if case .boolValue(let value) = self {
+            return value
+        }
+
+        return nil
+    }
+
     public subscript(index: Int) -> JSON? {
         if let arr = arrayValue {
             return index < arr.count ? arr[index] : nil
@@ -96,6 +105,8 @@ extension JSON: Codable {
             self = .unsignedIntValue(unsignedIntValue)
         } else if let signedIntValue = try? Int64(from: decoder) {
             self = .signedIntValue(signedIntValue)
+        } else if let boolValue = try? Bool(from: decoder) {
+            self = .boolValue(boolValue)
         } else if let stringValue = try? String(from: decoder) {
             self = .stringValue(stringValue)
         } else if let node = try? [String: JSON](from: decoder) {
@@ -113,6 +124,8 @@ extension JSON: Codable {
             try value.encode(to: encoder)
         case .signedIntValue(let value):
             try value.encode(to: encoder)
+        case .boolValue(let value):
+            try value.encode(to: encoder)
         case .stringValue(let value):
             try value.encode(to: encoder)
         case .dictionaryValue(let value):
@@ -124,3 +137,5 @@ extension JSON: Codable {
         }
     }
 }
+
+extension JSON: Equatable {}

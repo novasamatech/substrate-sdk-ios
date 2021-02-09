@@ -13,6 +13,7 @@ class TypeRegistryTests: XCTestCase {
             let registry = try TypeRegistry.createFromTypesDefinition(data: data)
 
             XCTAssertTrue(!registry.registeredTypes.isEmpty)
+            XCTAssertTrue(registry.registeredTypes.allSatisfy( { !($0 is GenericNode) }))
         } catch {
             XCTFail("Unexpected error \(error)")
         }

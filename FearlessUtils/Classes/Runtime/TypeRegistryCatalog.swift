@@ -5,12 +5,16 @@ enum TypeRegistryCatalogError: Error {
     case duplicatedVersioning
 }
 
+public protocol TypeRegistryCatalogProtocol {
+    func node(for typeName: String, version: UInt64) -> Node?
+}
+
 /**
  *  Class is designed to provide an interface to access different versions of the type
  *  definition graphs.
  */
 
-public class TypeRegistryCatalog {
+public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
     public let baseRegistry: TypeRegistry
     public let versionedRegistries: [UInt64: TypeRegistry]
     public let versionedTypes: [String: [UInt64]]
@@ -40,7 +44,7 @@ public class TypeRegistryCatalog {
         }
     }
 
-    public func getNode(for typeName: String, version: UInt64) -> Node? {
+    public func node(for typeName: String, version: UInt64) -> Node? {
         let registry = getRegistry(for: typeName, version: version)
         return registry.node(for: typeName)
     }
@@ -94,7 +98,9 @@ public extension TypeRegistryCatalog {
         }
 
         let baseRegistry = try TypeRegistry.createFromTypesDefinition(data: networkDefinitionData)
-        let versionedRegistries = try versionedJsons.mapValues { try TypeRegistry.createFromTypesDefinition(json: $0) }
+        let versionedRegistries = try versionedJsons.mapValues {
+            try TypeRegistry.createFromTypesDefinition(json: $0, additionalNodes: [])
+        }
 
         let typeResolver = OneOfTypeResolver(children: [
             CaseInsensitiveResolver()
