@@ -204,6 +204,20 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
         }
     }
 
+    public func append<T: ScaleCodable>(encodable: T) throws {
+        let modifier: ScaleCodingModifier? = !modifiers.isEmpty ? modifiers.last : nil
+
+        if modifier != nil {
+            modifiers.removeLast()
+        }
+
+        if modifier == .option {
+            try ScaleOption(value: encodable).encode(scaleEncoder: encoder)
+        } else {
+            try encodable.encode(scaleEncoder: encoder)
+        }
+    }
+
     public func encode() throws -> Data {
         encoder.encode()
     }

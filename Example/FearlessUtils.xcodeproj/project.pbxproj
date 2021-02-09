@@ -31,6 +31,10 @@
 		842D1E7124CFF31800C30A7A /* KeypairDeriviation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842D1E6F24CFF2FB00C30A7A /* KeypairDeriviation.swift */; };
 		842D1E7324CFF4EC00C30A7A /* KeypairDeriviationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 842D1E7224CFF4EC00C30A7A /* KeypairDeriviationTests.swift */; };
 		842D1E7624D0069000C30A7A /* sr25519HDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 842D1E7524D0069000C30A7A /* sr25519HDKD.json */; };
+		84452A7C25D156A000F47EC5 /* BitVecNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84452A7B25D156A000F47EC5 /* BitVecNodeTests.swift */; };
+		84452A8225D1577100F47EC5 /* RuntimeHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84452A8125D1577100F47EC5 /* RuntimeHelpers.swift */; };
+		84452ACD25D1E4C300F47EC5 /* EraNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84452ACC25D1E4C300F47EC5 /* EraNodeTests.swift */; };
+		84452B0325D27BDB00F47EC5 /* DataNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84452B0225D27BDB00F47EC5 /* DataNodeTests.swift */; };
 		845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */; };
 		8467FD1424E677C2005D486C /* ed25519HDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 8467FD1124E675D0005D486C /* ed25519HDKD.json */; };
 		8467FD1524E677C6005D486C /* ecdsaHDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 8467FD1024E675D0005D486C /* ecdsaHDKD.json */; };
@@ -111,6 +115,10 @@
 		842D1E6F24CFF2FB00C30A7A /* KeypairDeriviation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypairDeriviation.swift; sourceTree = "<group>"; };
 		842D1E7224CFF4EC00C30A7A /* KeypairDeriviationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeypairDeriviationTests.swift; sourceTree = "<group>"; };
 		842D1E7524D0069000C30A7A /* sr25519HDKD.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = sr25519HDKD.json; sourceTree = "<group>"; };
+		84452A7B25D156A000F47EC5 /* BitVecNodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BitVecNodeTests.swift; sourceTree = "<group>"; };
+		84452A8125D1577100F47EC5 /* RuntimeHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeHelpers.swift; sourceTree = "<group>"; };
+		84452ACC25D1E4C300F47EC5 /* EraNodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraNodeTests.swift; sourceTree = "<group>"; };
+		84452B0225D27BDB00F47EC5 /* DataNodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataNodeTests.swift; sourceTree = "<group>"; };
 		845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedFactoryTests.swift; sourceTree = "<group>"; };
 		8467FD1024E675D0005D486C /* ecdsaHDKD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ecdsaHDKD.json; sourceTree = "<group>"; };
 		8467FD1124E675D0005D486C /* ed25519HDKD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ed25519HDKD.json; sourceTree = "<group>"; };
@@ -252,6 +260,7 @@
 		8429C7FA25C432CC0086D7F6 /* Runtime */ = {
 			isa = PBXGroup;
 			children = (
+				84452A7A25D1563D00F47EC5 /* Generic */,
 				849E0AE825C992D200B33506 /* TypeResolution */,
 				849E0A7225C9455600B33506 /* NodeFactory */,
 				841D527E25C49AD900DFA15B /* Parser */,
@@ -287,6 +296,7 @@
 			children = (
 				842D1E6F24CFF2FB00C30A7A /* KeypairDeriviation.swift */,
 				841D52E925C6DDF800DFA15B /* JSONHelpers.swift */,
+				84452A8125D1577100F47EC5 /* RuntimeHelpers.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -301,6 +311,16 @@
 				842D1E7524D0069000C30A7A /* sr25519HDKD.json */,
 			);
 			path = Resources;
+			sourceTree = "<group>";
+		};
+		84452A7A25D1563D00F47EC5 /* Generic */ = {
+			isa = PBXGroup;
+			children = (
+				84452A7B25D156A000F47EC5 /* BitVecNodeTests.swift */,
+				84452ACC25D1E4C300F47EC5 /* EraNodeTests.swift */,
+				84452B0225D27BDB00F47EC5 /* DataNodeTests.swift */,
+			);
+			path = Generic;
 			sourceTree = "<group>";
 		};
 		845D80EB24C8D8F500EC2540 /* Common */ = {
@@ -648,6 +668,7 @@
 				84DA3B4324C8CE5A00B5E27F /* ScaleStringTests.swift in Sources */,
 				84DA3B4224C8CE5A00B5E27F /* ScaleUInt64Tests.swift in Sources */,
 				849E0A7A25C94E3F00B33506 /* EnumMappingFactoryTests.swift in Sources */,
+				84452B0325D27BDB00F47EC5 /* DataNodeTests.swift in Sources */,
 				842D1E6A24CF800400C30A7A /* JunctionFactoryTests.swift in Sources */,
 				8429C7FD25C432FF0086D7F6 /* TypeRegistryTests.swift in Sources */,
 				841D52EA25C6DDF800DFA15B /* JSONHelpers.swift in Sources */,
@@ -661,7 +682,10 @@
 				842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */,
 				84ED725C254A0233006102DF /* SubstrateQRDecoderTests.swift in Sources */,
 				84ED7256254A001A006102DF /* SubstrateQREncoderTests.swift in Sources */,
+				84452A7C25D156A000F47EC5 /* BitVecNodeTests.swift in Sources */,
 				841D52B425C6BAE600DFA15B /* ComponentsParserTests.swift in Sources */,
+				84452ACD25D1E4C300F47EC5 /* EraNodeTests.swift in Sources */,
+				84452A8225D1577100F47EC5 /* RuntimeHelpers.swift in Sources */,
 				842D1E7324CFF4EC00C30A7A /* KeypairDeriviationTests.swift in Sources */,
 				849E0AA425C96A6400B33506 /* OptionNodeFactoryTests.swift in Sources */,
 				849E0AB025C96DD500B33506 /* FixedArrayNodeFactoryTests.swift in Sources */,

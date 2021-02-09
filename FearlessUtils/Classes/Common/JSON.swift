@@ -137,3 +137,5 @@ extension JSON: Codable {
         }
     }
 }
+
+extension JSON: Equatable {}

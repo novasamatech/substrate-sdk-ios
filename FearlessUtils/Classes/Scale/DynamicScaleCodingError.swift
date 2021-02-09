@@ -2,10 +2,12 @@ import Foundation
 
 public enum DynamicScaleCoderError: Error {
     case unresolverType(name: String)
+    case notImplemented
 }
 
 public enum DynamicScaleEncoderError: Error {
     case arrayExpected(json: JSON)
+    case unsignedIntExpected(json: JSON)
     case unexpectedNull
     case hexExpected(json: JSON)
     case expectedStringForCompact(json: JSON)

@@ -56,6 +56,8 @@ public class DynamicScaleDecoder {
 }
 
 extension DynamicScaleDecoder: DynamicScaleDecoding {
+    public var remained: Int { decoder.remained }
+
     public func read(type: String) throws -> JSON {
         guard let node = registry.node(for: type, version: version) else {
             throw DynamicScaleCoderError.unresolverType(name: type)
@@ -201,6 +203,20 @@ extension DynamicScaleDecoder: DynamicScaleDecoding {
         } else {
             let value = try Bool(scaleDecoder: decoder)
             return .stringValue(String(value))
+        }
+    }
+
+    public func read<T: ScaleCodable>() throws -> T? {
+        let modifier: ScaleCodingModifier? = !modifiers.isEmpty ? modifiers.last : nil
+
+        if modifier != nil {
+            modifiers.removeLast()
+        }
+
+        if modifier == .option {
+            return try ScaleOption<T>(scaleDecoder: decoder).value
+        } else {
+            return try T(scaleDecoder: decoder)
         }
     }
 }

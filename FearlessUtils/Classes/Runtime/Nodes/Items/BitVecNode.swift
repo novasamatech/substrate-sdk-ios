@@ -27,7 +27,7 @@ public struct BitVecNode: Node {
 
         let length = bits.count
 
-        try encoder.appendCompact(json: .stringValue(String(length)), type: "u32")
+        try encoder.append(encodable: BigUInt(length))
 
         let value = bits.enumerated().reduce(BigUInt(0)) { (result, item) in
             if item.element {
