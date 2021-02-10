@@ -118,9 +118,11 @@ public class TypeRegistry: TypeRegistryProtocol {
 }
 
 public extension TypeRegistry {
-    static func createFromTypesDefinition(data: Data) throws -> TypeRegistry {
+    static func createFromTypesDefinition(data: Data,
+                                          runtimeMetadata: RuntimeMetadata)
+    throws -> TypeRegistry {
         return try createFromTypesDefinition(data: data,
-                                             additionalNodes: supportedBaseNodes() + supportedGenericNodes())
+                                             additionalNodes: supportedBaseNodes() + supportedGenericNodes(for: runtimeMetadata))
     }
 
     static func createFromTypesDefinition(data: Data,
@@ -132,9 +134,12 @@ public extension TypeRegistry {
                                              additionalNodes: additionalNodes)
     }
 
-    static func createFromTypesDefinition(json: JSON) throws -> TypeRegistry {
-        try createFromTypesDefinition(json: json,
-                                      additionalNodes: supportedBaseNodes() + supportedGenericNodes())
+    static func createFromTypesDefinition(json: JSON, runtimeMetadata: RuntimeMetadata)
+    throws -> TypeRegistry {
+        let nodes = supportedBaseNodes() + supportedGenericNodes(for: runtimeMetadata)
+
+        return try createFromTypesDefinition(json: json,
+                                             additionalNodes: nodes)
     }
 
     static func createFromTypesDefinition(json: JSON,
@@ -179,12 +184,12 @@ public extension TypeRegistry {
         ]
     }
 
-    static func supportedGenericNodes() -> [Node] {
+    static func supportedGenericNodes(for runtimeMetadata: RuntimeMetadata) -> [Node] {
         [
             GenericAccountIdNode(),
             NullNode(),
             GenericBlockNode(),
-            GenericCallNode(),
+            GenericCallNode(runtimeMetadata: runtimeMetadata),
             GenericVoteNode(),
             H160Node(),
             H256Node(),
@@ -195,15 +200,15 @@ public extension TypeRegistry {
             CallBytesNode(),
             EraNode(),
             DataNode(),
-            BoxProposalNode(),
+            BoxProposalNode(runtimeMetadata: runtimeMetadata),
             GenericConsensusEngineIdNode(),
             SessionKeysSubstrateNode(),
             GenericMultiAddressNode(),
-            OpaqueCallNode(),
+            OpaqueCallNode(runtimeMetadata: runtimeMetadata),
             GenericAccountIdNode(),
             GenericAccountIndexNode(),
-            GenericEventNode(),
-            EventRecordNode(),
+            GenericEventNode(runtimeMetadata: runtimeMetadata),
+            EventRecordNode(runtimeMetadata: runtimeMetadata),
             AccountIdAddressNode()
         ]
     }

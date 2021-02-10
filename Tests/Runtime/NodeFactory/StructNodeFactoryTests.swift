@@ -13,7 +13,8 @@ class StructNodeFactoryTests: XCTestCase {
 
         let data = json.data(using: .utf8)!
 
-        let registry = try TypeRegistry.createFromTypesDefinition(data: data)
+        let registry = try TypeRegistry
+            .createFromTypesDefinition(data: data, additionalNodes: [])
 
         guard let structNode = registry.node(for: typeName) as? StructNode else {
             XCTFail("Unexpected empty node")
@@ -41,7 +42,8 @@ class StructNodeFactoryTests: XCTestCase {
         for json in [json1, json2, json3] {
             let data = json.data(using: .utf8)!
 
-            let registry = try TypeRegistry.createFromTypesDefinition(data: data)
+            let registry = try TypeRegistry
+                .createFromTypesDefinition(data: data, additionalNodes: [])
 
             guard let node = registry.node(for: type) else {
                 XCTFail("Unexpected empty node")

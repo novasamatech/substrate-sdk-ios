@@ -9,8 +9,11 @@ class TypeRegistryTests: XCTestCase {
                 return
             }
 
+            let runtimeMetadata = try RuntimeHelper.createRuntimeMetadata("westend-metadata")
+
             let data = try Data(contentsOf: defaultUrl)
-            let registry = try TypeRegistry.createFromTypesDefinition(data: data)
+            let registry = try TypeRegistry
+                .createFromTypesDefinition(data: data, runtimeMetadata: runtimeMetadata)
 
             XCTAssertTrue(!registry.registeredTypes.isEmpty)
             XCTAssertTrue(registry.registeredTypes.allSatisfy( { !($0 is GenericNode) }))
@@ -34,7 +37,8 @@ class TypeRegistryTests: XCTestCase {
 
         // when
 
-        let registry = try TypeRegistry.createFromTypesDefinition(data: data)
+        let registry = try TypeRegistry
+            .createFromTypesDefinition(data: data, additionalNodes: [])
 
         // then
 

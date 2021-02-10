@@ -73,7 +73,10 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
 
 public extension TypeRegistryCatalog {
     static func createFromBaseTypeDefinition(_ baseDefinitionData: Data,
-                                      networkDefinitionData: Data) throws -> TypeRegistryCatalog {
+                                             networkDefinitionData: Data,
+                                             runtimeMetadata: RuntimeMetadata,
+                                             version: UInt64)
+    throws -> TypeRegistryCatalog {
         let versionedDefinitionJson = try JSONDecoder().decode(JSON.self, from: networkDefinitionData)
 
         guard let versioning = versionedDefinitionJson.versioning?.arrayValue else {
@@ -97,7 +100,9 @@ public extension TypeRegistryCatalog {
             }
         }
 
-        let baseRegistry = try TypeRegistry.createFromTypesDefinition(data: networkDefinitionData)
+        let baseRegistry = try TypeRegistry
+            .createFromTypesDefinition(data: networkDefinitionData,
+                                       runtimeMetadata: runtimeMetadata)
         let versionedRegistries = try versionedJsons.mapValues {
             try TypeRegistry.createFromTypesDefinition(json: $0, additionalNodes: [])
         }
