@@ -166,6 +166,7 @@ public extension TypeRegistry {
 
         let resolvers: [TypeResolving] = [
             CaseInsensitiveResolver(),
+            TableResolver.noise(),
             RegexReplaceResolver.noise()
         ]
 
@@ -258,7 +259,16 @@ public extension TypeRegistry {
             GenericAccountIndexNode(),
             GenericEventNode(runtimeMetadata: runtimeMetadata),
             EventRecordNode(runtimeMetadata: runtimeMetadata),
-            AccountIdAddressNode()
+            AccountIdAddressNode(),
+            ExtrinsicNode(),
+            ExtrinsicSignatureNode(runtimeMetadata: runtimeMetadata),
+            ChargeTransactionPaymentNode(),
+            CheckGenesisNode(),
+            CheckMortalityNode(),
+            CheckNonceNode(),
+            CheckSpecVersionNode(),
+            CheckTxVersionNode(),
+            CheckWeightNode()
         ]
     }
 }

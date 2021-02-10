@@ -218,6 +218,10 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
         }
     }
 
+    public func newEncoder() -> DynamicScaleEncoding {
+        DynamicScaleEncoder(registry: registry, version: version)
+    }
+
     public func encode() throws -> Data {
         encoder.encode()
     }

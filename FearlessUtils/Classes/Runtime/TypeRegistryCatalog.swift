@@ -123,6 +123,7 @@ public extension TypeRegistryCatalog {
 
         let typeResolver = OneOfTypeResolver(children: [
             CaseInsensitiveResolver(),
+            TableResolver.noise(),
             RegexReplaceResolver.noise()
         ])
 

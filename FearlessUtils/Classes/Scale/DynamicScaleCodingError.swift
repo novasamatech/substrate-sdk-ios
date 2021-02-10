@@ -3,6 +3,7 @@ import Foundation
 public enum DynamicScaleCoderError: Error {
     case unresolverType(name: String)
     case notImplemented
+    case invalidParams
 }
 
 public enum DynamicScaleEncoderError: Error {
