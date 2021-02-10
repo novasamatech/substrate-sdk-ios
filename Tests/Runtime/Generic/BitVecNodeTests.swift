@@ -3,7 +3,6 @@ import FearlessUtils
 
 class BitVecNodeTests: XCTestCase {
     func testEncodingDecoding() throws {
-        // given
         let typeRegistry = try RuntimeHelper
             .createTypeRegistryCatalog(from: "default",
                                        networkName: "westend",

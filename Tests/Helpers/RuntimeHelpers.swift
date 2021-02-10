@@ -26,6 +26,17 @@ final class RuntimeHelper {
                                           networkName: String,
                                           runtimeMetadataName: String)
     throws -> TypeRegistryCatalogProtocol {
+        let runtimeMetadata = try Self.createRuntimeMetadata(runtimeMetadataName)
+
+        return try createTypeRegistryCatalog(from: baseName,
+                                             networkName: networkName,
+                                             runtimeMetadata: runtimeMetadata)
+    }
+
+    static func createTypeRegistryCatalog(from baseName: String,
+                                          networkName: String,
+                                          runtimeMetadata: RuntimeMetadata)
+    throws -> TypeRegistryCatalogProtocol {
         guard let baseUrl = Bundle(for: self).url(forResource: baseName, withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogBaseName
         }
@@ -38,8 +49,6 @@ final class RuntimeHelper {
         let baseData = try Data(contentsOf: baseUrl)
         let networdData = try Data(contentsOf: networkUrl)
 
-        let runtimeMetadata = try Self.createRuntimeMetadata(runtimeMetadataName)
-
         let registry = try TypeRegistryCatalog
             .createFromBaseTypeDefinition(baseData,
                                           networkDefinitionData: networdData,
@@ -48,4 +57,30 @@ final class RuntimeHelper {
 
         return registry
     }
+
+    static let dummyRuntimeMetadata: RuntimeMetadata = {
+        RuntimeMetadata(metaReserved: 1,
+                        runtimeMetadataVersion: 1,
+                        modules: [
+                            ModuleMetadata(name: "A",
+                                           storage: StorageMetadata(prefix: "_A", entries: []),
+                                           calls: [
+                                            FunctionMetadata(name: "B",
+                                                             arguments: [
+                                                                FunctionArgumentMetadata(name: "arg1", type: "bool"),
+                                                                FunctionArgumentMetadata(name: "arg2", type: "u8")
+                                                             ], documentation: [])
+                                           ],
+                                           events: [
+                                            EventMetadata(name: "A",
+                                                          arguments: ["bool", "u8"],
+                                                          documentation: [])
+                                           ],
+                                           constants: [],
+                                           errors: [],
+                                           index: 1)
+                        ],
+                        extrinsic: ExtrinsicMetadata(version: 1,
+                                                     signedExtensions: []))
+    }()
 }

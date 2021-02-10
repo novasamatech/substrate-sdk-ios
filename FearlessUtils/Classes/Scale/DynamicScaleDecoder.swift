@@ -195,14 +195,14 @@ extension DynamicScaleDecoder: DynamicScaleDecoding {
             case .none:
                 return .null
             case .valueTrue:
-                return .stringValue(String(true))
+                return .boolValue(true)
             case .valueFalse:
-                return .stringValue(String(false))
+                return .boolValue(false)
             }
 
         } else {
             let value = try Bool(scaleDecoder: decoder)
-            return .stringValue(String(value))
+            return .boolValue(value)
         }
     }
 

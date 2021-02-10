@@ -69,4 +69,13 @@ public extension RegexParser {
                            preprocessor: trimProcessor,
                            postprocessor: trimProcessor)
     }
+
+    static func noiseFilter() -> RegexParser {
+        let trimProcessor = TrimProcessor(charset: .whitespaces)
+        let pattern = "(T::)|(<T>)|(<T as Trait>::)|(<T as Trait<I>>::)" +
+            "|(<T as Config>::)|(\n)|((?:grandpa|session|slashing|schedule)::)"
+        return RegexParser(pattern: pattern,
+                           preprocessor: trimProcessor,
+                           postprocessor: trimProcessor)
+    }
 }
