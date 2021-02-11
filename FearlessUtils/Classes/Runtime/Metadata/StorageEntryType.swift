@@ -108,16 +108,6 @@ extension DoubleMapEntry: ScaleCodable {
     }
 }
 
-public enum StorageHasher: UInt8 {
-    case blake2_128
-    case blake2_256
-    case blake2_128Concat
-    case twox128
-    case Twox256
-    case twox64Concat
-    case identity
-}
-
 extension StorageHasher: ScaleCodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
         try rawValue.encode(scaleEncoder: scaleEncoder)
