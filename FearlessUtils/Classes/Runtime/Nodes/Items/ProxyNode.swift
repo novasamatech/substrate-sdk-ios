@@ -18,7 +18,11 @@ public struct ProxyNode: Node {
             throw DynamicScaleCoderError.unresolverType(name: typeName)
         }
 
-       try undelyingNode.accept(encoder: encoder, value: value)
+        if undelyingNode is GenericNode {
+            try encoder.append(json: value, type: typeName)
+        } else {
+            try undelyingNode.accept(encoder: encoder, value: value)
+        }
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
@@ -26,6 +30,10 @@ public struct ProxyNode: Node {
             throw DynamicScaleCoderError.unresolverType(name: typeName)
         }
 
-        return try undelyingNode.accept(decoder: decoder)
+        if undelyingNode is GenericNode {
+            return try decoder.read(type: typeName)
+        } else {
+            return try undelyingNode.accept(decoder: decoder)
+        }
     }
 }

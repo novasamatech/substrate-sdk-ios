@@ -191,7 +191,7 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
     }
 
     public func appendBool(json: JSON) throws {
-        guard let str = json.stringValue, let value = Bool(str) else {
+        guard let value = json.boolValue else {
             throw DynamicScaleEncoderError.expectedStringForBool(json: json)
         }
 
@@ -216,6 +216,10 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
         } else {
             try encodable.encode(scaleEncoder: encoder)
         }
+    }
+
+    public func newEncoder() -> DynamicScaleEncoding {
+        DynamicScaleEncoder(registry: registry, version: version)
     }
 
     public func encode() throws -> Data {

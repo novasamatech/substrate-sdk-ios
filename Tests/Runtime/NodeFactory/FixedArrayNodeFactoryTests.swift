@@ -15,7 +15,8 @@ class FixedArrayNodeFactoryTests: XCTestCase {
 
         // when
 
-        let registry = try TypeRegistry.createFromTypesDefinition(data: data)
+        let registry = try TypeRegistry
+            .createFromTypesDefinition(data: data, additionalNodes: [])
 
         // then
 
@@ -42,7 +43,8 @@ class FixedArrayNodeFactoryTests: XCTestCase {
         for json in [json1, json2, json3] {
             let data = json.data(using: .utf8)!
 
-            let registry = try TypeRegistry.createFromTypesDefinition(data: data)
+            let registry = try TypeRegistry
+                .createFromTypesDefinition(data: data, additionalNodes: [])
 
             guard let node = registry.node(for: type) else {
                 XCTFail("Unexpected empty node")

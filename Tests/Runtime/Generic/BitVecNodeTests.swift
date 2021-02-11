@@ -3,8 +3,10 @@ import FearlessUtils
 
 class BitVecNodeTests: XCTestCase {
     func testEncodingDecoding() throws {
-        // given
-        let typeRegistry = try RuntimeHelper.createTypeRegistryCatalog(from: "default", networkName: "westend")
+        let typeRegistry = try RuntimeHelper
+            .createTypeRegistryCatalog(from: "default",
+                                       networkName: "westend",
+                                       runtimeMetadataName: "westend-metadata")
         let encoder = DynamicScaleEncoder(registry: typeRegistry, version: 45)
         let bits = (0..<10).map { JSON.boolValue($0 % 2 == 0) }
         let expected = JSON.arrayValue(bits)
@@ -95,7 +97,10 @@ class BitVecNodeTests: XCTestCase {
     private func performDecodingTest(data: Data, expected: JSON) throws {
         // given
 
-        let typeRegistry = try RuntimeHelper.createTypeRegistryCatalog(from: "default", networkName: "westend")
+        let typeRegistry = try RuntimeHelper
+            .createTypeRegistryCatalog(from: "default",
+                                       networkName: "westend",
+                                       runtimeMetadataName: "westend-metadata")
         let decoder = try DynamicScaleDecoder(data: data, registry: typeRegistry, version: 45)
 
         // when
@@ -111,7 +116,10 @@ class BitVecNodeTests: XCTestCase {
     private func performEncodingTest(value: JSON, expected: Data) throws {
         // given
 
-        let typeRegistry = try RuntimeHelper.createTypeRegistryCatalog(from: "default", networkName: "westend")
+        let typeRegistry = try RuntimeHelper
+            .createTypeRegistryCatalog(from: "default",
+                                       networkName: "westend",
+                                       runtimeMetadataName: "westend-metadata")
         let encoder = DynamicScaleEncoder(registry: typeRegistry, version: 45)
 
         // when

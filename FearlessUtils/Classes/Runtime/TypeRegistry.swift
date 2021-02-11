@@ -6,6 +6,9 @@ public enum TypeRegistryError: Error {
 }
 
 public protocol TypeRegistryProtocol {
+    var registeredTypes: [Node] { get }
+    var registeredTypeNames: Set<String> { get }
+
     func node(for key: String) -> Node?
 }
 
@@ -118,9 +121,11 @@ public class TypeRegistry: TypeRegistryProtocol {
 }
 
 public extension TypeRegistry {
-    static func createFromTypesDefinition(data: Data) throws -> TypeRegistry {
+    static func createFromTypesDefinition(data: Data,
+                                          runtimeMetadata: RuntimeMetadata)
+    throws -> TypeRegistry {
         return try createFromTypesDefinition(data: data,
-                                             additionalNodes: supportedBaseNodes() + supportedGenericNodes())
+                                             additionalNodes: supportedBaseNodes() + supportedGenericNodes(for: runtimeMetadata))
     }
 
     static func createFromTypesDefinition(data: Data,
@@ -132,9 +137,12 @@ public extension TypeRegistry {
                                              additionalNodes: additionalNodes)
     }
 
-    static func createFromTypesDefinition(json: JSON) throws -> TypeRegistry {
-        try createFromTypesDefinition(json: json,
-                                      additionalNodes: supportedBaseNodes() + supportedGenericNodes())
+    static func createFromTypesDefinition(json: JSON, runtimeMetadata: RuntimeMetadata)
+    throws -> TypeRegistry {
+        let nodes = supportedBaseNodes() + supportedGenericNodes(for: runtimeMetadata)
+
+        return try createFromTypesDefinition(json: json,
+                                             additionalNodes: nodes)
     }
 
     static func createFromTypesDefinition(json: JSON,
@@ -157,13 +165,60 @@ public extension TypeRegistry {
         ]
 
         let resolvers: [TypeResolving] = [
-            CaseInsensitiveResolver()
+            CaseInsensitiveResolver(),
+            TableResolver.noise(),
+            RegexReplaceResolver.noise()
         ]
 
         return try TypeRegistry(json: types,
                                 nodeFactory: OneOfTypeNodeFactory(children: factories),
                                 typeResolver: OneOfTypeResolver(children: resolvers),
                                 additionalNodes: additionalNodes)
+    }
+
+    static func createFromRuntimeMetadata(_ runtimeMetadata: RuntimeMetadata)
+    throws -> TypeRegistry {
+        var allTypes: Set<String> = []
+
+        for module in runtimeMetadata.modules {
+            if let storage = module.storage {
+                for storageEntry in storage.entries {
+                    switch storageEntry.type {
+                    case .plain(let value):
+                        allTypes.insert(value)
+                    case .map(let map):
+                        allTypes.insert(map.key)
+                        allTypes.insert(map.value)
+                    case .doubleMap(let map):
+                        allTypes.insert(map.key1)
+                        allTypes.insert(map.key2)
+                        allTypes.insert(map.value)
+                    }
+                }
+            }
+
+            if let calls = module.calls {
+                let callTypes = calls.flatMap { $0.arguments.map { $0.type }}
+                allTypes.formUnion(callTypes)
+            }
+
+            if let events = module.events {
+                let eventTypes = events.flatMap { $0.arguments }
+                allTypes.formUnion(eventTypes)
+            }
+
+            let constantTypes = module.constants.map { $0.type }
+            allTypes.formUnion(constantTypes)
+        }
+
+        let jsonDic: [String: JSON] = allTypes.reduce(into: [String: JSON]()) { (result, item) in
+            result[item] = .stringValue(item)
+        }
+
+        let json = JSON.dictionaryValue(["types": .dictionaryValue(jsonDic)])
+
+        return try TypeRegistry.createFromTypesDefinition(json: json,
+                                                          additionalNodes: [])
     }
 
     static func supportedBaseNodes() -> [Node] {
@@ -179,12 +234,12 @@ public extension TypeRegistry {
         ]
     }
 
-    static func supportedGenericNodes() -> [Node] {
+    static func supportedGenericNodes(for runtimeMetadata: RuntimeMetadata) -> [Node] {
         [
             GenericAccountIdNode(),
             NullNode(),
             GenericBlockNode(),
-            GenericCallNode(),
+            GenericCallNode(runtimeMetadata: runtimeMetadata),
             GenericVoteNode(),
             H160Node(),
             H256Node(),
@@ -195,16 +250,25 @@ public extension TypeRegistry {
             CallBytesNode(),
             EraNode(),
             DataNode(),
-            BoxProposalNode(),
+            BoxProposalNode(runtimeMetadata: runtimeMetadata),
             GenericConsensusEngineIdNode(),
             SessionKeysSubstrateNode(),
             GenericMultiAddressNode(),
-            OpaqueCallNode(),
+            OpaqueCallNode(runtimeMetadata: runtimeMetadata),
             GenericAccountIdNode(),
             GenericAccountIndexNode(),
-            GenericEventNode(),
-            EventRecordNode(),
-            AccountIdAddressNode()
+            GenericEventNode(runtimeMetadata: runtimeMetadata),
+            EventRecordNode(runtimeMetadata: runtimeMetadata),
+            AccountIdAddressNode(),
+            ExtrinsicNode(),
+            ExtrinsicSignatureNode(runtimeMetadata: runtimeMetadata),
+            ChargeTransactionPaymentNode(),
+            CheckGenesisNode(),
+            CheckMortalityNode(),
+            CheckNonceNode(),
+            CheckSpecVersionNode(),
+            CheckTxVersionNode(),
+            CheckWeightNode()
         ]
     }
 }

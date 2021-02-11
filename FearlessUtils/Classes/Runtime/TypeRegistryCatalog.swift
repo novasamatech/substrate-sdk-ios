@@ -15,14 +15,19 @@ public protocol TypeRegistryCatalogProtocol {
  */
 
 public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
-    public let baseRegistry: TypeRegistry
-    public let versionedRegistries: [UInt64: TypeRegistry]
+    public let runtimeMetadataRegistry: TypeRegistryProtocol
+    public let baseRegistry: TypeRegistryProtocol
+    public let versionedRegistries: [UInt64: TypeRegistryProtocol]
     public let versionedTypes: [String: [UInt64]]
     public let typeResolver: TypeResolving
 
-    public init(baseRegistry: TypeRegistry, versionedRegistries: [UInt64: TypeRegistry], typeResolver: TypeResolving) {
+    public init(baseRegistry: TypeRegistryProtocol,
+                versionedRegistries: [UInt64: TypeRegistryProtocol],
+                runtimeMetadataRegistry: TypeRegistryProtocol,
+                typeResolver: TypeResolving) {
         self.baseRegistry = baseRegistry
         self.versionedRegistries = versionedRegistries
+        self.runtimeMetadataRegistry = runtimeMetadataRegistry
         self.typeResolver = typeResolver
 
         let allVersions = versionedRegistries.keys.sorted()
@@ -46,12 +51,12 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
 
     public func node(for typeName: String, version: UInt64) -> Node? {
         let registry = getRegistry(for: typeName, version: version)
-        return registry.node(for: typeName)
+        return fallbackToRuntimeMetadataIfNeeded(from: registry, for: typeName)
     }
 
     // MARK: Private
 
-    func getRegistry(for typeName: String, version: UInt64) -> TypeRegistry {
+    private func getRegistry(for typeName: String, version: UInt64) -> TypeRegistryProtocol {
 
         let versions: [UInt64]
 
@@ -69,11 +74,23 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
 
         return versionedRegistries[minVersion] ?? baseRegistry
     }
+
+    private func fallbackToRuntimeMetadataIfNeeded(from registry: TypeRegistryProtocol,
+                                                   for typeName: String) -> Node? {
+        if let node = registry.node(for: typeName) {
+            return node
+        }
+
+        return runtimeMetadataRegistry.node(for: typeName)
+    }
 }
 
 public extension TypeRegistryCatalog {
     static func createFromBaseTypeDefinition(_ baseDefinitionData: Data,
-                                      networkDefinitionData: Data) throws -> TypeRegistryCatalog {
+                                             networkDefinitionData: Data,
+                                             runtimeMetadata: RuntimeMetadata,
+                                             version: UInt64)
+    throws -> TypeRegistryCatalog {
         let versionedDefinitionJson = try JSONDecoder().decode(JSON.self, from: networkDefinitionData)
 
         guard let versioning = versionedDefinitionJson.versioning?.arrayValue else {
@@ -97,17 +114,24 @@ public extension TypeRegistryCatalog {
             }
         }
 
-        let baseRegistry = try TypeRegistry.createFromTypesDefinition(data: networkDefinitionData)
+        let baseRegistry = try TypeRegistry
+            .createFromTypesDefinition(data: baseDefinitionData,
+                                       runtimeMetadata: runtimeMetadata)
         let versionedRegistries = try versionedJsons.mapValues {
             try TypeRegistry.createFromTypesDefinition(json: $0, additionalNodes: [])
         }
 
         let typeResolver = OneOfTypeResolver(children: [
-            CaseInsensitiveResolver()
+            CaseInsensitiveResolver(),
+            TableResolver.noise(),
+            RegexReplaceResolver.noise()
         ])
+
+        let runtimeMetadataRegistry = try TypeRegistry.createFromRuntimeMetadata(runtimeMetadata)
 
         return TypeRegistryCatalog(baseRegistry: baseRegistry,
                                    versionedRegistries: versionedRegistries,
+                                   runtimeMetadataRegistry: runtimeMetadataRegistry,
                                    typeResolver: typeResolver)
     }
 }

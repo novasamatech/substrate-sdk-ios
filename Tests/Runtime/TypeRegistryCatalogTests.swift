@@ -13,9 +13,15 @@ class TypeRegistryCatalogTests: XCTestCase {
             return
         }
 
-        measure {
-            performTestNetworkCatalog(for: baseUrl, networkURL: westendUrl)
+        guard let metadataUrl = Bundle(for: type(of: self))
+                .url(forResource: "westend-metadata", withExtension: "") else {
+            XCTFail("Can't find metadata file")
+            return
         }
+
+        performTestNetworkCatalog(for: baseUrl,
+                                  networkURL: westendUrl,
+                                  metadataURL: metadataUrl)
     }
 
     func testKusamaCatalog() throws {
@@ -29,9 +35,15 @@ class TypeRegistryCatalogTests: XCTestCase {
             return
         }
 
-        measure {
-            performTestNetworkCatalog(for: baseUrl, networkURL: kusamaUrl)
+        guard let metadataUrl = Bundle(for: type(of: self))
+                .url(forResource: "kusama-metadata", withExtension: "") else {
+            XCTFail("Can't find metadata file")
+            return
         }
+
+        performTestNetworkCatalog(for: baseUrl,
+                                  networkURL: kusamaUrl,
+                                  metadataURL: metadataUrl)
     }
 
     func testPolkadotCatalog() throws {
@@ -45,19 +57,38 @@ class TypeRegistryCatalogTests: XCTestCase {
             return
         }
 
-        measure {
-            performTestNetworkCatalog(for: baseUrl, networkURL: polkadotUrl)
+        guard let metadataUrl = Bundle(for: type(of: self))
+                .url(forResource: "polkadot-metadata", withExtension: "") else {
+            XCTFail("Can't find metadata file")
+            return
         }
+
+        performTestNetworkCatalog(for: baseUrl,
+                                  networkURL: polkadotUrl,
+                                  metadataURL: metadataUrl)
     }
 
     // MARK: Private
 
-    func performTestNetworkCatalog(for baseUrl: URL, networkURL: URL) {
+    func performTestNetworkCatalog(for baseURL: URL,
+                                   networkURL: URL,
+                                   metadataURL: URL) {
         do {
-            let baseData = try Data(contentsOf: baseUrl)
+            let baseData = try Data(contentsOf: baseURL)
             let networdData = try Data(contentsOf: networkURL)
-            let registry = try TypeRegistryCatalog.createFromBaseTypeDefinition(baseData,
-                                                                                networkDefinitionData: networdData)
+
+            let hex = try String(contentsOf: metadataURL)
+                .trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
+            let expectedData = try Data(hexString: hex)
+
+            let decoder = try ScaleDecoder(data: expectedData)
+            let runtimeMetadata = try RuntimeMetadata(scaleDecoder: decoder)
+
+            let registry = try TypeRegistryCatalog
+                .createFromBaseTypeDefinition(baseData,
+                                              networkDefinitionData: networdData,
+                                              runtimeMetadata: runtimeMetadata,
+                                              version: 45)
 
             XCTAssertTrue(!registry.baseRegistry.registeredTypes.isEmpty)
             XCTAssertTrue(!registry.versionedRegistries.isEmpty)
