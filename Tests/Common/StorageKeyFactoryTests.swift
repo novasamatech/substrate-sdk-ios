@@ -47,4 +47,25 @@ class StorageKeyFactoryTests: XCTestCase {
 
         XCTAssertEqual(storageKey, expectedKey)
     }
+
+    func testDoubleKeyCreation() throws {
+        let factory = StorageKeyFactory()
+
+        let encoder = ScaleEncoder()
+        try UInt32(252).encode(scaleEncoder: encoder)
+        let key1 = encoder.encode()
+
+        let key2  = try Data(hexString: "0x00b03b23766d70d0445943b290606521acaefee7660d521950faf2801c79d428")
+
+        let expectedKey = try Data(hexString: "0x5f3e4907f716ac89b6347d15ececedca42982b9d6c7acc99faa9094c912372c2103610acfced6316fc000000c95148239528546600b03b23766d70d0445943b290606521acaefee7660d521950faf2801c79d428")
+
+        let storageKey = try factory.createStorageKey(moduleName: "Staking",
+                                                      storageName: "ErasStakersClipped",
+                                                      key1: key1,
+                                                      hasher1: .twox64Concat,
+                                                      key2: key2,
+                                                      hasher2: .twox64Concat)
+
+        XCTAssertEqual(storageKey, expectedKey)
+    }
 }
