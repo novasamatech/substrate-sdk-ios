@@ -7,6 +7,7 @@ enum TypeRegistryCatalogError: Error {
 
 public protocol TypeRegistryCatalogProtocol {
     func node(for typeName: String, version: UInt64) -> Node?
+    func replacingRuntimeMetadata(_ newMetadata: RuntimeMetadata) throws -> TypeRegistryCatalogProtocol
 }
 
 /**
@@ -54,6 +55,16 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
         return fallbackToRuntimeMetadataIfNeeded(from: registry, for: typeName)
     }
 
+    public func replacingRuntimeMetadata(_ newMetadata: RuntimeMetadata) throws
+    -> TypeRegistryCatalogProtocol {
+        let newRuntimeRegistry = try TypeRegistry.createFromRuntimeMetadata(newMetadata)
+
+        return TypeRegistryCatalog(baseRegistry: baseRegistry,
+                                   versionedRegistries: versionedRegistries,
+                                   runtimeMetadataRegistry: newRuntimeRegistry,
+                                   typeResolver: typeResolver)
+    }
+
     // MARK: Private
 
     private func getRegistry(for typeName: String, version: UInt64) -> TypeRegistryProtocol {
@@ -88,8 +99,7 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
 public extension TypeRegistryCatalog {
     static func createFromBaseTypeDefinition(_ baseDefinitionData: Data,
                                              networkDefinitionData: Data,
-                                             runtimeMetadata: RuntimeMetadata,
-                                             version: UInt64)
+                                             runtimeMetadata: RuntimeMetadata)
     throws -> TypeRegistryCatalog {
         let versionedDefinitionJson = try JSONDecoder().decode(JSON.self, from: networkDefinitionData)
 
@@ -115,8 +125,8 @@ public extension TypeRegistryCatalog {
         }
 
         let baseRegistry = try TypeRegistry
-            .createFromTypesDefinition(data: baseDefinitionData,
-                                       runtimeMetadata: runtimeMetadata)
+            .createFromTypesDefinition(data: baseDefinitionData, runtimeMetadata: runtimeMetadata)
+
         let versionedRegistries = try versionedJsons.mapValues {
             try TypeRegistry.createFromTypesDefinition(json: $0, additionalNodes: [])
         }

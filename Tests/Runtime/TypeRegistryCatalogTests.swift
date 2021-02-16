@@ -3,92 +3,69 @@ import FearlessUtils
 
 class TypeRegistryCatalogTests: XCTestCase {
     func testWestendCatalog() throws {
-        guard let baseUrl = Bundle(for: type(of: self)).url(forResource: "default", withExtension: "json") else {
-            XCTFail("Can't find default.json")
-            return
-        }
-
-        guard let westendUrl = Bundle(for: type(of: self)).url(forResource: "westend", withExtension: "json") else {
-            XCTFail("Can't find westend.json")
-            return
-        }
-
-        guard let metadataUrl = Bundle(for: type(of: self))
-                .url(forResource: "westend-metadata", withExtension: "") else {
-            XCTFail("Can't find metadata file")
-            return
-        }
-
-        performTestNetworkCatalog(for: baseUrl,
-                                  networkURL: westendUrl,
-                                  metadataURL: metadataUrl)
+        performTestNetworkCatalog(for: "default",
+                                  networkName: "westend",
+                                  metadataName: "westend-metadata")
     }
 
     func testKusamaCatalog() throws {
-        guard let baseUrl = Bundle(for: type(of: self)).url(forResource: "default", withExtension: "json") else {
-            XCTFail("Can't find default.json")
-            return
-        }
-
-        guard let kusamaUrl = Bundle(for: type(of: self)).url(forResource: "kusama", withExtension: "json") else {
-            XCTFail("Can't find westend.json")
-            return
-        }
-
-        guard let metadataUrl = Bundle(for: type(of: self))
-                .url(forResource: "kusama-metadata", withExtension: "") else {
-            XCTFail("Can't find metadata file")
-            return
-        }
-
-        performTestNetworkCatalog(for: baseUrl,
-                                  networkURL: kusamaUrl,
-                                  metadataURL: metadataUrl)
+        performTestNetworkCatalog(for: "default",
+                                  networkName: "kusama",
+                                  metadataName: "kusama-metadata")
     }
 
     func testPolkadotCatalog() throws {
-        guard let baseUrl = Bundle(for: type(of: self)).url(forResource: "default", withExtension: "json") else {
-            XCTFail("Can't find default.json")
+        performTestNetworkCatalog(for: "default",
+                                  networkName: "polkadot",
+                                  metadataName: "polkadot-metadata")
+    }
+
+    func testRuntimeMetadataReplcement() throws {
+        // given
+
+        let initialCatalog = try RuntimeHelper
+            .createTypeRegistryCatalog(from: "default",
+                                       networkName: "polkadot",
+                                       runtimeMetadataName: "test-metadata")
+
+        let expectedCatalog = try RuntimeHelper
+            .createTypeRegistryCatalog(from: "default",
+                                       networkName: "polkadot",
+                                       runtimeMetadataName: "polkadot-metadata")
+
+        // when
+
+        let newRuntimeMetadata = try RuntimeHelper.createRuntimeMetadata("polkadot-metadata")
+
+        guard
+            let actualCatalog = try initialCatalog.replacingRuntimeMetadata(newRuntimeMetadata)
+                as? TypeRegistryCatalog else {
+            XCTFail("Unexpected catalog")
             return
         }
 
-        guard let polkadotUrl = Bundle(for: type(of: self)).url(forResource: "kusama", withExtension: "json") else {
-            XCTFail("Can't find westend.json")
-            return
-        }
+        // then
 
-        guard let metadataUrl = Bundle(for: type(of: self))
-                .url(forResource: "polkadot-metadata", withExtension: "") else {
-            XCTFail("Can't find metadata file")
-            return
-        }
+        XCTAssertEqual(expectedCatalog.baseRegistry.registeredTypeNames,
+                       actualCatalog.baseRegistry.registeredTypeNames)
 
-        performTestNetworkCatalog(for: baseUrl,
-                                  networkURL: polkadotUrl,
-                                  metadataURL: metadataUrl)
+        XCTAssertEqual(expectedCatalog.versionedRegistries.mapValues({ $0.registeredTypeNames }),
+                       actualCatalog.versionedRegistries.mapValues({ $0.registeredTypeNames }))
+
+        XCTAssertEqual(expectedCatalog.versionedTypes, actualCatalog.versionedTypes)
+
+        XCTAssertEqual(expectedCatalog.runtimeMetadataRegistry.registeredTypeNames,
+                       expectedCatalog.runtimeMetadataRegistry.registeredTypeNames)
     }
 
     // MARK: Private
 
-    func performTestNetworkCatalog(for baseURL: URL,
-                                   networkURL: URL,
-                                   metadataURL: URL) {
+    func performTestNetworkCatalog(for baseName: String,
+                                   networkName: String,
+                                   metadataName: String) {
         do {
-            let baseData = try Data(contentsOf: baseURL)
-            let networdData = try Data(contentsOf: networkURL)
-
-            let hex = try String(contentsOf: metadataURL)
-                .trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-            let expectedData = try Data(hexString: hex)
-
-            let decoder = try ScaleDecoder(data: expectedData)
-            let runtimeMetadata = try RuntimeMetadata(scaleDecoder: decoder)
-
-            let registry = try TypeRegistryCatalog
-                .createFromBaseTypeDefinition(baseData,
-                                              networkDefinitionData: networdData,
-                                              runtimeMetadata: runtimeMetadata,
-                                              version: 45)
+            let registry = try RuntimeHelper.createTypeRegistryCatalog(from: baseName,
+                                                                       networkName: networkName, runtimeMetadataName: metadataName)
 
             XCTAssertTrue(!registry.baseRegistry.registeredTypes.isEmpty)
             XCTAssertTrue(!registry.versionedRegistries.isEmpty)
