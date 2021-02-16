@@ -2,76 +2,52 @@ import XCTest
 import FearlessUtils
 
 class TypeRegistryCatalogTests: XCTestCase {
-    func testWestendCatalog() throws {
-        performTestNetworkCatalog(for: "default",
-                                  networkName: "westend",
-                                  metadataName: "westend-metadata")
-    }
 
-    func testKusamaCatalog() throws {
-        performTestNetworkCatalog(for: "default",
-                                  networkName: "kusama",
-                                  metadataName: "kusama-metadata")
-    }
-
-    func testPolkadotCatalog() throws {
-        performTestNetworkCatalog(for: "default",
-                                  networkName: "polkadot",
-                                  metadataName: "polkadot-metadata")
-    }
-
-    func testRuntimeMetadataReplcement() throws {
+    func testTypeExtractedOnLastVersion() throws {
         // given
 
-        let initialCatalog = try RuntimeHelper
-            .createTypeRegistryCatalog(from: "default",
-                                       networkName: "polkadot",
-                                       runtimeMetadataName: "test-metadata")
-
-        let expectedCatalog = try RuntimeHelper
-            .createTypeRegistryCatalog(from: "default",
-                                       networkName: "polkadot",
-                                       runtimeMetadataName: "polkadot-metadata")
+        let catalog = try RuntimeHelper.createTypeRegistryCatalog(from: "default",
+                                                                  networkName: "kusama",
+                                                                  runtimeMetadataName: "kusama-metadata")
 
         // when
 
-        let newRuntimeMetadata = try RuntimeHelper.createRuntimeMetadata("polkadot-metadata")
-
-        guard
-            let actualCatalog = try initialCatalog.replacingRuntimeMetadata(newRuntimeMetadata)
-                as? TypeRegistryCatalog else {
-            XCTFail("Unexpected catalog")
-            return
-        }
+        let node = catalog.node(for: "CompactAssignments", version: 2027)
 
         // then
 
-        XCTAssertEqual(expectedCatalog.baseRegistry.registeredTypeNames,
-                       actualCatalog.baseRegistry.registeredTypeNames)
-
-        XCTAssertEqual(expectedCatalog.versionedRegistries.mapValues({ $0.registeredTypeNames }),
-                       actualCatalog.versionedRegistries.mapValues({ $0.registeredTypeNames }))
-
-        XCTAssertEqual(expectedCatalog.versionedTypes, actualCatalog.versionedTypes)
-
-        XCTAssertEqual(expectedCatalog.runtimeMetadataRegistry.registeredTypeNames,
-                       expectedCatalog.runtimeMetadataRegistry.registeredTypeNames)
+        XCTAssertEqual(node?.typeName, "CompactAssignmentsFrom258")
     }
 
-    // MARK: Private
+    func testTypeExtractedFromProperVersion() throws {
+        // given
 
-    func performTestNetworkCatalog(for baseName: String,
-                                   networkName: String,
-                                   metadataName: String) {
-        do {
-            let registry = try RuntimeHelper.createTypeRegistryCatalog(from: baseName,
-                                                                       networkName: networkName, runtimeMetadataName: metadataName)
+        let catalog = try RuntimeHelper.createTypeRegistryCatalog(from: "default",
+                                                                  networkName: "kusama",
+                                                                  runtimeMetadataName: "kusama-metadata")
 
-            XCTAssertTrue(!registry.baseRegistry.registeredTypes.isEmpty)
-            XCTAssertTrue(!registry.versionedRegistries.isEmpty)
-            XCTAssertTrue(!registry.versionedTypes.isEmpty)
-        } catch {
-            XCTFail("Unexpected error \(error)")
-        }
+        // when
+
+        let node = catalog.node(for: "CompactAssignments", version: 2022)
+
+        // then
+
+        XCTAssertEqual(node?.typeName, "CompactAssignmentsTo257")
+    }
+
+    func testMetadataFallback() throws {
+        // given
+
+        let catalog = try RuntimeHelper.createTypeRegistryCatalog(from: "default",
+                                                                  networkName: "kusama",
+                                                                  runtimeMetadataName: "kusama-metadata")
+
+        // when
+
+        let node = catalog.node(for: "<Moment as hasCompact>::Type", version: 2022)
+
+        // then
+
+        XCTAssertEqual(node?.typeName, "Compact<Moment>")
     }
 }

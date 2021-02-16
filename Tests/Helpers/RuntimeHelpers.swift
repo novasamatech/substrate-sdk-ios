@@ -22,6 +22,23 @@ final class RuntimeHelper {
         return try RuntimeMetadata(scaleDecoder: decoder)
     }
 
+    static func createTypeRegistry(from name: String, runtimeMetadataName: String) throws
+    -> TypeRegistry {
+        guard let url = Bundle(for: self).url(forResource: name, withExtension: "json") else {
+            throw RuntimeHelperError.invalidCatalogBaseName
+        }
+
+        let runtimeMetadata = try Self.createRuntimeMetadata(runtimeMetadataName)
+
+        let data = try Data(contentsOf: url)
+        let basisNodes = BasisNodes.allNodes(for: runtimeMetadata)
+        let registry = try TypeRegistry
+            .createFromTypesDefinition(data: data,
+                                       additionalNodes: basisNodes)
+
+        return registry
+    }
+
     static func createTypeRegistryCatalog(from baseName: String,
                                           networkName: String,
                                           runtimeMetadataName: String)

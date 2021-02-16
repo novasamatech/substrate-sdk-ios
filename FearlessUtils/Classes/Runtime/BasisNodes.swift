@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SubstrateBasisNodes {
+public struct BasisNodes {
     public static func allNodes(for runtimeMetadata: RuntimeMetadata) -> [Node] {
         supportedBaseNodes() + supportedGenericNodes(for: runtimeMetadata)
     }

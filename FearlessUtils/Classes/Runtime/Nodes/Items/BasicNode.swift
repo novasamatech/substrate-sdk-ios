@@ -1,7 +1,7 @@
 import Foundation
 
 public struct U8Node: Node {
-    public var typeName: String { "u8" }
+    public var typeName: String { PrimitiveType.u8.name }
 
     public init() {}
 
@@ -15,7 +15,7 @@ public struct U8Node: Node {
 }
 
 public struct U16Node: Node {
-    public var typeName: String { "u16" }
+    public var typeName: String { PrimitiveType.u16.name }
 
     public init() {}
 
@@ -29,7 +29,7 @@ public struct U16Node: Node {
 }
 
 public struct U32Node: Node {
-    public var typeName: String { "u32" }
+    public var typeName: String { PrimitiveType.u32.name }
 
     public init() {}
 
@@ -43,7 +43,7 @@ public struct U32Node: Node {
 }
 
 public struct U64Node: Node {
-    public var typeName: String { "u64" }
+    public var typeName: String { PrimitiveType.u64.name }
 
     public init() {}
 
@@ -57,7 +57,7 @@ public struct U64Node: Node {
 }
 
 public struct U128Node: Node {
-    public var typeName: String { "u128" }
+    public var typeName: String { PrimitiveType.u128.name }
 
     public init() {}
 
@@ -71,7 +71,7 @@ public struct U128Node: Node {
 }
 
 public struct U256Node: Node {
-    public var typeName: String { "u256" }
+    public var typeName: String { PrimitiveType.u256.name }
 
     public init() {}
 
@@ -85,7 +85,7 @@ public struct U256Node: Node {
 }
 
 public struct BoolNode: Node {
-    public var typeName: String { "bool" }
+    public var typeName: String { PrimitiveType.bool.name }
 
     public init() {}
 
@@ -99,7 +99,7 @@ public struct BoolNode: Node {
 }
 
 public struct StringNode: Node {
-    public var typeName: String { "string" }
+    public var typeName: String { PrimitiveType.string.name }
 
     public init() {}
 

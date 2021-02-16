@@ -2,25 +2,176 @@ import XCTest
 import FearlessUtils
 
 class TypeRegistryTests: XCTestCase {
-    func testTypeRegistryBuildSuccess() throws {
-        do {
-            guard let defaultUrl = Bundle(for: type(of: self)).url(forResource: "default", withExtension: "json") else {
-                XCTFail("Can't find default.json")
-                return
-            }
+    func testShouldResolveStruct() throws {
+        // given
 
-            let runtimeMetadata = try RuntimeHelper.createRuntimeMetadata("westend-metadata")
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
 
-            let data = try Data(contentsOf: defaultUrl)
-            let basisNodes = SubstrateBasisNodes.allNodes(for: runtimeMetadata)
-            let registry = try TypeRegistry
-                .createFromTypesDefinition(data: data, additionalNodes: basisNodes)
+        // when
 
-            XCTAssertTrue(!registry.registeredTypes.isEmpty)
-            XCTAssertTrue(registry.registeredTypes.allSatisfy( { !($0 is GenericNode) }))
-        } catch {
-            XCTFail("Unexpected error \(error)")
+        let node = registry.node(for: "DefunctVoter")
+
+        // then
+
+        XCTAssertTrue(node is StructNode)
+    }
+
+    func testShouldResolveEnum() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "SiTypeDef")
+
+        // then
+
+        XCTAssertTrue(node is EnumNode)
+    }
+
+    func testShouldResolveEnumValues() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "AllowedSlots")
+
+        // then
+
+        XCTAssertTrue(node is EnumValuesNode)
+    }
+
+    func testShouldResolveSet() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "IdentityFields")
+
+        // then
+
+        XCTAssertTrue(node is SetNode)
+    }
+
+    func testShouldResolveTuple() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "(AccountId, RewardPoint)")
+
+        // then
+
+        XCTAssertTrue(node is TupleNode)
+    }
+
+    func testShouldResolveFixedArray() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "[CompactScoreCompact; 2]")
+
+        // then
+
+        XCTAssertTrue(node is FixedArrayNode)
+    }
+
+    func testShouldResolveNull() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "Null")
+
+        // then
+
+        XCTAssertTrue(node is NullNode)
+    }
+
+    func testShouldResolveNullAlias() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "()")
+
+        // then
+
+        guard
+            let proxy = node as? ProxyNode,
+            let nullNode = proxy.resolver?.resolve(for: proxy.typeName) else {
+            XCTFail("Expected proxy to null")
+            return
         }
+
+        XCTAssertTrue(nullNode is NullNode)
+    }
+
+    func testShouldResolveCompact() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "Compact<Perbill>")
+
+        // then
+
+        XCTAssertTrue(node is CompactNode)
+    }
+
+    func testShouldResolveVector() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "Vec<H256>")
+
+        // then
+
+        XCTAssertTrue(node is VectorNode)
+    }
+
+    func testShouldResolveOption() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "Option<OpenTipFinderTo225>")
+
+        // then
+
+        XCTAssertTrue(node is OptionNode)
     }
 
     func testCaseInsensitiveResolutionApplied() throws {
@@ -44,5 +195,52 @@ class TypeRegistryTests: XCTestCase {
         // then
 
         XCTAssertNotNil(registry.node(for: searchingTypeName))
+    }
+
+    func testTableResolutionApplied() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "<T::Lookup as StaticLookup>::Source")
+
+        // then
+
+        XCTAssertNotNil(node)
+    }
+
+    func testRegexResolutionApplied() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "DefunctVoter<T>")
+
+        // then
+
+        XCTAssertTrue(node is StructNode)
+        XCTAssertEqual(node?.typeName, "DefunctVoter")
+    }
+
+    func testGenericsFilterResolutionApplied() throws {
+        // given
+
+        let registry = try RuntimeHelper.createTypeRegistry(from: "default",
+                                                            runtimeMetadataName: "westend-metadata")
+
+        // when
+
+        let node = registry.node(for: "DefunctVoter<<Lookup as StaticLookup>::Source>")
+
+        // then
+
+        XCTAssertTrue(node is StructNode)
+        XCTAssertEqual(node?.typeName, "DefunctVoter")
     }
 }

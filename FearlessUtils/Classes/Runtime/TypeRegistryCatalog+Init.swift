@@ -29,7 +29,7 @@ public extension TypeRegistryCatalog {
             }
         }
 
-        let additonalNodes = SubstrateBasisNodes.allNodes(for: runtimeMetadata) + customNodes
+        let additonalNodes = BasisNodes.allNodes(for: runtimeMetadata) + customNodes
         let baseRegistry = try TypeRegistry
             .createFromTypesDefinition(data: baseDefinitionData,
                                        additionalNodes: additonalNodes)

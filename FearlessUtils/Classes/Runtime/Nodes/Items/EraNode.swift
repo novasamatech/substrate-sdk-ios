@@ -1,7 +1,7 @@
 import Foundation
 
 public struct EraNode: Node {
-    public var typeName: String { "Era" }
+    public var typeName: String { GenericType.era.name }
 
     public init() {}
 

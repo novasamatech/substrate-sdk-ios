@@ -60,7 +60,7 @@
 		849E0AB025C96DD500B33506 /* FixedArrayNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0AAF25C96DD500B33506 /* FixedArrayNodeFactoryTests.swift */; };
 		849E0AB425C96EED00B33506 /* AliasNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0AB325C96EED00B33506 /* AliasNodeFactoryTests.swift */; };
 		849E0AEA25C992F800B33506 /* CaseInsensitiveResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0AE925C992F800B33506 /* CaseInsensitiveResolverTests.swift */; };
-		849E0B3025CBD1CC00B33506 /* TypeRegistryCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0B2F25CBD1CC00B33506 /* TypeRegistryCatalogTests.swift */; };
+		849E0B3025CBD1CC00B33506 /* TypeRegistryCatalogValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0B2F25CBD1CC00B33506 /* TypeRegistryCatalogValidationTests.swift */; };
 		84A0DE3124DBF49400F436A8 /* keystore-ed25519.json in Resources */ = {isa = PBXBuildFile; fileRef = 84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */; };
 		84A0DE3224DBF49700F436A8 /* keystore-ecdsa.json in Resources */ = {isa = PBXBuildFile; fileRef = 84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */; };
 		84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB472324DBE82C00837E11 /* KeystoreExtractorTests.swift */; };
@@ -79,6 +79,8 @@
 		84ED725C254A0233006102DF /* SubstrateQRDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED725B254A0233006102DF /* SubstrateQRDecoderTests.swift */; };
 		84F4394225DBAAA200AEDA56 /* test-metadata in Resources */ = {isa = PBXBuildFile; fileRef = 84F4394125DBAAA200AEDA56 /* test-metadata */; };
 		84F4394625DBE54D00AEDA56 /* TableResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4394525DBE54D00AEDA56 /* TableResolverTests.swift */; };
+		84F439BC25DBF8D600AEDA56 /* TypeRegistryNetworkValidationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F439BB25DBF8D600AEDA56 /* TypeRegistryNetworkValidationTests.swift */; };
+		84F43A2425DC124600AEDA56 /* TypeRegistryCatalogTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F43A2325DC124600AEDA56 /* TypeRegistryCatalogTests.swift */; };
 		84F4A847254CAD73000CF0A3 /* KeystoreBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4A846254CAD73000CF0A3 /* KeystoreBuilderTests.swift */; };
 		A0FDCFB5B61F738FEE34A5E6 /* Pods_FearlessUtils_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D2E77D7010BEBF43DFE08E /* Pods_FearlessUtils_Tests.framework */; };
 		B2BF1BE136637C8404B79450 /* Pods_FearlessUtils_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9A63E44DBCDCE738F798358 /* Pods_FearlessUtils_Example.framework */; };
@@ -154,7 +156,7 @@
 		849E0AAF25C96DD500B33506 /* FixedArrayNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedArrayNodeFactoryTests.swift; sourceTree = "<group>"; };
 		849E0AB325C96EED00B33506 /* AliasNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AliasNodeFactoryTests.swift; sourceTree = "<group>"; };
 		849E0AE925C992F800B33506 /* CaseInsensitiveResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaseInsensitiveResolverTests.swift; sourceTree = "<group>"; };
-		849E0B2F25CBD1CC00B33506 /* TypeRegistryCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeRegistryCatalogTests.swift; sourceTree = "<group>"; };
+		849E0B2F25CBD1CC00B33506 /* TypeRegistryCatalogValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeRegistryCatalogValidationTests.swift; sourceTree = "<group>"; };
 		84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ed25519.json"; sourceTree = "<group>"; };
 		84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ecdsa.json"; sourceTree = "<group>"; };
 		84CB472024DBE7E100837E11 /* keystore-sr25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-sr25519.json"; sourceTree = "<group>"; };
@@ -174,6 +176,8 @@
 		84ED725B254A0233006102DF /* SubstrateQRDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstrateQRDecoderTests.swift; sourceTree = "<group>"; };
 		84F4394125DBAAA200AEDA56 /* test-metadata */ = {isa = PBXFileReference; lastKnownFileType = text; path = "test-metadata"; sourceTree = "<group>"; };
 		84F4394525DBE54D00AEDA56 /* TableResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableResolverTests.swift; sourceTree = "<group>"; };
+		84F439BB25DBF8D600AEDA56 /* TypeRegistryNetworkValidationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeRegistryNetworkValidationTests.swift; sourceTree = "<group>"; };
+		84F43A2325DC124600AEDA56 /* TypeRegistryCatalogTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeRegistryCatalogTests.swift; sourceTree = "<group>"; };
 		84F4A846254CAD73000CF0A3 /* KeystoreBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeystoreBuilderTests.swift; sourceTree = "<group>"; };
 		93F24F5EEC204E4B0F918C39 /* Pods-FearlessUtils_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Example.debug.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Example/Pods-FearlessUtils_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B82F3EE26AAEE44C6E7F9962 /* Pods-FearlessUtils_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Tests.release.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Tests/Pods-FearlessUtils_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -285,8 +289,10 @@
 				849E0A7225C9455600B33506 /* NodeFactory */,
 				841D527E25C49AD900DFA15B /* Parser */,
 				8429C7FC25C432FF0086D7F6 /* TypeRegistryTests.swift */,
-				849E0B2F25CBD1CC00B33506 /* TypeRegistryCatalogTests.swift */,
+				849E0B2F25CBD1CC00B33506 /* TypeRegistryCatalogValidationTests.swift */,
 				84452BF425D2CABE00F47EC5 /* RuntimeMetadataTests.swift */,
+				84F439BB25DBF8D600AEDA56 /* TypeRegistryNetworkValidationTests.swift */,
+				84F43A2325DC124600AEDA56 /* TypeRegistryCatalogTests.swift */,
 			);
 			path = Runtime;
 			sourceTree = "<group>";
@@ -699,11 +705,12 @@
 				849E0A7425C9458F00B33506 /* StructNodeFactoryTests.swift in Sources */,
 				849E0A2125C81DB500B33506 /* FixedArrayParserTests.swift in Sources */,
 				849E0AA825C96AD600B33506 /* CompactNodeFactoryTests.swift in Sources */,
-				849E0B3025CBD1CC00B33506 /* TypeRegistryCatalogTests.swift in Sources */,
+				849E0B3025CBD1CC00B33506 /* TypeRegistryCatalogValidationTests.swift in Sources */,
 				84DA3B4324C8CE5A00B5E27F /* ScaleStringTests.swift in Sources */,
 				84DA3B4224C8CE5A00B5E27F /* ScaleUInt64Tests.swift in Sources */,
 				849E0A7A25C94E3F00B33506 /* EnumMappingFactoryTests.swift in Sources */,
 				84452B0325D27BDB00F47EC5 /* DataNodeTests.swift in Sources */,
+				84F43A2425DC124600AEDA56 /* TypeRegistryCatalogTests.swift in Sources */,
 				842D1E6A24CF800400C30A7A /* JunctionFactoryTests.swift in Sources */,
 				8429C7FD25C432FF0086D7F6 /* TypeRegistryTests.swift in Sources */,
 				841D52EA25C6DDF800DFA15B /* JSONHelpers.swift in Sources */,
@@ -717,6 +724,7 @@
 				8467FD2824E72CCD005D486C /* HSLColorTests.swift in Sources */,
 				842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */,
 				84ED725C254A0233006102DF /* SubstrateQRDecoderTests.swift in Sources */,
+				84F439BC25DBF8D600AEDA56 /* TypeRegistryNetworkValidationTests.swift in Sources */,
 				84ED7256254A001A006102DF /* SubstrateQREncoderTests.swift in Sources */,
 				84452C9B25D40B5600F47EC5 /* RegexReplaceResolverTests.swift in Sources */,
 				84452C7D25D3F75800F47EC5 /* GenericCallNodeTests.swift in Sources */,

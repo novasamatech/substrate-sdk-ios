@@ -1,7 +1,7 @@
 import Foundation
 
 public struct H256Node: Node {
-    public var typeName: String { "H256" }
+    public var typeName: String { GenericType.h256.name }
 
     public init() {}
 

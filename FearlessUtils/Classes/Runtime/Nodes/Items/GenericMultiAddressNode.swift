@@ -2,14 +2,14 @@ import Foundation
 
 public struct GenericMultiAddressNode: Node {
     public static let typeMapping = [
-        ["Id", "AccountId"],
-        ["Index", "Compact<AccountIndex>"],
-        ["Raw", "Bytes"],
-        ["Address32", "H256"],
-        ["Address20", "H160"]
+        ["Id", GenericType.accountId.name],
+        ["Index", "Compact<\(GenericType.accountIndex.name)>"],
+        ["Raw", GenericType.bytes.name],
+        ["Address32", GenericType.h256.name],
+        ["Address20", GenericType.h160.name]
     ]
 
-    public var typeName: String { "GenericMultiAddress" }
+    public var typeName: String { GenericType.multiAddress.name }
 
     public init() {}
 

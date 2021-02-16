@@ -2,9 +2,9 @@ import Foundation
 
 public struct SessionKeysSubstrateNode: Node {
     static let fieldNames: [String] = ["grandpa", "babe", "im_online"]
-    static let fieldTypeName: String = "AccountId"
+    static let fieldTypeName: String = GenericType.accountId.name
 
-    public var typeName: String { "SessionKeysSubstrate" }
+    public var typeName: String { GenericType.sessionKeys.name }
 
     public init() {}
 

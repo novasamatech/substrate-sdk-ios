@@ -10,7 +10,7 @@ public enum GenericCallNodeError: Error {
 }
 
 public struct GenericCallNode: Node {
-    public var typeName: String { "GenericCall" }
+    public var typeName: String { GenericType.call.name }
     public let runtimeMetadata: RuntimeMetadata
 
     public init(runtimeMetadata: RuntimeMetadata) {

@@ -1,7 +1,7 @@
 import Foundation
 
 public struct H160Node: Node {
-    public var typeName: String { "H160" }
+    public var typeName: String { GenericType.h160.name }
 
     public init() {}
 

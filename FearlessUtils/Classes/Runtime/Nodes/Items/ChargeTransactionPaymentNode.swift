@@ -10,11 +10,11 @@ public struct ChargeTransactionPaymentNode: Node {
             throw DynamicScaleCoderError.invalidParams
         }
 
-        try encoder.appendCompact(json: params[0], type: "BalanceOf")
+        try encoder.appendCompact(json: params[0], type: KnownType.balance.name)
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        let tip = try decoder.readCompact(type: "BalanceOf")
+        let tip = try decoder.readCompact(type: KnownType.balance.name)
 
         return .arrayValue([tip])
     }
