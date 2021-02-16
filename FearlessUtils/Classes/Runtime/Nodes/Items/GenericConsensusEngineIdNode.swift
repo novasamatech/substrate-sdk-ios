@@ -1,7 +1,7 @@
 import Foundation
 
 public struct GenericConsensusEngineIdNode: Node {
-    public var typeName: String { "GenericConsensusEngineId" }
+    public var typeName: String { GenericType.consensusEngineId.name }
 
     public init() {}
 

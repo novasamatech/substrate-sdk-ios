@@ -1,7 +1,7 @@
 import Foundation
 
 public struct GenericAccountIndexNode: Node {
-    public var typeName: String { "GenericAccountIndex" }
+    public var typeName: String { GenericType.accountIndex.name }
 
     public init() {}
 

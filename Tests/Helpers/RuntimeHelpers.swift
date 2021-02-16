@@ -22,10 +22,27 @@ final class RuntimeHelper {
         return try RuntimeMetadata(scaleDecoder: decoder)
     }
 
+    static func createTypeRegistry(from name: String, runtimeMetadataName: String) throws
+    -> TypeRegistry {
+        guard let url = Bundle(for: self).url(forResource: name, withExtension: "json") else {
+            throw RuntimeHelperError.invalidCatalogBaseName
+        }
+
+        let runtimeMetadata = try Self.createRuntimeMetadata(runtimeMetadataName)
+
+        let data = try Data(contentsOf: url)
+        let basisNodes = BasisNodes.allNodes(for: runtimeMetadata)
+        let registry = try TypeRegistry
+            .createFromTypesDefinition(data: data,
+                                       additionalNodes: basisNodes)
+
+        return registry
+    }
+
     static func createTypeRegistryCatalog(from baseName: String,
                                           networkName: String,
                                           runtimeMetadataName: String)
-    throws -> TypeRegistryCatalogProtocol {
+    throws -> TypeRegistryCatalog {
         let runtimeMetadata = try Self.createRuntimeMetadata(runtimeMetadataName)
 
         return try createTypeRegistryCatalog(from: baseName,
@@ -36,7 +53,7 @@ final class RuntimeHelper {
     static func createTypeRegistryCatalog(from baseName: String,
                                           networkName: String,
                                           runtimeMetadata: RuntimeMetadata)
-    throws -> TypeRegistryCatalogProtocol {
+    throws -> TypeRegistryCatalog {
         guard let baseUrl = Bundle(for: self).url(forResource: baseName, withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogBaseName
         }
@@ -52,8 +69,7 @@ final class RuntimeHelper {
         let registry = try TypeRegistryCatalog
             .createFromBaseTypeDefinition(baseData,
                                           networkDefinitionData: networdData,
-                                          runtimeMetadata: runtimeMetadata,
-                                          version: 45)
+                                          runtimeMetadata: runtimeMetadata)
 
         return registry
     }

@@ -7,7 +7,7 @@ public enum ExtrinsicNodeError: Error {
 }
 
 public struct ExtrinsicNode: Node {
-    public var typeName: String { "FearlessExtrinsic" }
+    public var typeName: String { GenericType.extrinsic.name }
 
     public init() {}
 
@@ -22,12 +22,12 @@ public struct ExtrinsicNode: Node {
             let version: UInt8 = ExtrinsicConstants.version | ExtrinsicConstants.signedMask
             try subEncoder.append(encodable: version)
 
-            try subEncoder.append(json: params[0], type: "FearlessExtrinsicSignature")
+            try subEncoder.append(json: params[0], type: GenericType.extrinsicSignature.name)
         } else {
             try subEncoder.append(encodable: ExtrinsicConstants.version)
         }
 
-        try subEncoder.append(json: params[1], type: "Call")
+        try subEncoder.append(json: params[1], type: KnownType.call.name)
 
         let encoded = try subEncoder.encode()
 
@@ -51,11 +51,11 @@ public struct ExtrinsicNode: Node {
         var result: [JSON] = []
 
         if isSigned {
-            let signature = try decoder.read(type: "FearlessExtrinsicSignature")
+            let signature = try decoder.read(type: GenericType.extrinsicSignature.name)
             result.append(signature)
         }
 
-        let call = try decoder.read(type: "Call")
+        let call = try decoder.read(type: KnownType.call.name)
         result.append(call)
 
         return .arrayValue(result)

@@ -1,7 +1,7 @@
 import Foundation
 
 public struct DataNode: Node {
-    public var typeName: String { "Data" }
+    public var typeName: String { GenericType.data.name }
 
     public init() {}
 

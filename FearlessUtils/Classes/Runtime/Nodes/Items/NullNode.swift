@@ -1,7 +1,7 @@
 import Foundation
 
 public struct NullNode: Node {
-    public var typeName: String { "Null" }
+    public var typeName: String { GenericType.null.name }
 
     public init() {}
 

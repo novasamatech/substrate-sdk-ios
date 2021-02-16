@@ -10,7 +10,7 @@ public enum GenericEventNodeError: Error {
 }
 
 public struct GenericEventNode: Node {
-    public var typeName: String { "GenericEvent" }
+    public var typeName: String { GenericType.event.name }
     public let runtimeMetadata: RuntimeMetadata
 
     public init(runtimeMetadata: RuntimeMetadata) {

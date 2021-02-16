@@ -8,7 +8,7 @@ public enum BitVecNodeError: Error {
 }
 
 public struct BitVecNode: Node {
-    public var typeName: String { "BitVec" }
+    public var typeName: String { GenericType.bitVec.name }
 
     public init() {}
 
@@ -50,7 +50,7 @@ public struct BitVecNode: Node {
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
         guard
-            let bytesCountStr = try decoder.readCompact(type: "u32").stringValue,
+            let bytesCountStr = try decoder.readCompact(type: PrimitiveType.u32.name).stringValue,
             let bitCount = Int(bytesCountStr) else {
             throw BitVecNodeError.expectedCompactBitLength
         }

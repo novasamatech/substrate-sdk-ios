@@ -7,6 +7,7 @@ enum TypeRegistryCatalogError: Error {
 
 public protocol TypeRegistryCatalogProtocol {
     func node(for typeName: String, version: UInt64) -> Node?
+    func replacingRuntimeMetadata(_ newMetadata: RuntimeMetadata) throws -> TypeRegistryCatalogProtocol
 }
 
 /**
@@ -54,6 +55,16 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
         return fallbackToRuntimeMetadataIfNeeded(from: registry, for: typeName)
     }
 
+    public func replacingRuntimeMetadata(_ newMetadata: RuntimeMetadata) throws
+    -> TypeRegistryCatalogProtocol {
+        let newRuntimeRegistry = try TypeRegistry.createFromRuntimeMetadata(newMetadata)
+
+        return TypeRegistryCatalog(baseRegistry: baseRegistry,
+                                   versionedRegistries: versionedRegistries,
+                                   runtimeMetadataRegistry: newRuntimeRegistry,
+                                   typeResolver: typeResolver)
+    }
+
     // MARK: Private
 
     private func getRegistry(for typeName: String, version: UInt64) -> TypeRegistryProtocol {
@@ -82,56 +93,5 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
         }
 
         return runtimeMetadataRegistry.node(for: typeName)
-    }
-}
-
-public extension TypeRegistryCatalog {
-    static func createFromBaseTypeDefinition(_ baseDefinitionData: Data,
-                                             networkDefinitionData: Data,
-                                             runtimeMetadata: RuntimeMetadata,
-                                             version: UInt64)
-    throws -> TypeRegistryCatalog {
-        let versionedDefinitionJson = try JSONDecoder().decode(JSON.self, from: networkDefinitionData)
-
-        guard let versioning = versionedDefinitionJson.versioning?.arrayValue else {
-            throw TypeRegistryCatalogError.missingVersioning
-        }
-
-        let versionedJsons = versioning.reduce(into: [UInt64: JSON]()) { (result, versionedJson) in
-            guard
-                let version = versionedJson.runtime_range?.arrayValue?.first?.unsignedIntValue,
-                let definitionDic = versionedJson.types?.dictValue else {
-                return
-            }
-
-            let typeKey = "types"
-
-            if let oldDefinitionDic = result[version]?.types?.dictValue {
-                let mapping = oldDefinitionDic.merging(definitionDic) { (v1, v2) in v1 }
-                result[version] = .dictionaryValue([typeKey: .dictionaryValue(mapping)])
-            } else {
-                result[version] = .dictionaryValue([typeKey: .dictionaryValue(definitionDic)])
-            }
-        }
-
-        let baseRegistry = try TypeRegistry
-            .createFromTypesDefinition(data: baseDefinitionData,
-                                       runtimeMetadata: runtimeMetadata)
-        let versionedRegistries = try versionedJsons.mapValues {
-            try TypeRegistry.createFromTypesDefinition(json: $0, additionalNodes: [])
-        }
-
-        let typeResolver = OneOfTypeResolver(children: [
-            CaseInsensitiveResolver(),
-            TableResolver.noise(),
-            RegexReplaceResolver.noise()
-        ])
-
-        let runtimeMetadataRegistry = try TypeRegistry.createFromRuntimeMetadata(runtimeMetadata)
-
-        return TypeRegistryCatalog(baseRegistry: baseRegistry,
-                                   versionedRegistries: versionedRegistries,
-                                   runtimeMetadataRegistry: runtimeMetadataRegistry,
-                                   typeResolver: typeResolver)
     }
 }

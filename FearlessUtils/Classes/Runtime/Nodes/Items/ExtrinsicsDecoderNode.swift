@@ -1,7 +1,7 @@
 import Foundation
 
 public struct ExtrinsicsDecoderNode: Node {
-    public var typeName: String { "ExtrinsicsDecoder" }
+    public var typeName: String { GenericType.extrinsicDecoder.name }
 
     public init() {}
 

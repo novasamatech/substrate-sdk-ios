@@ -2,99 +2,52 @@ import XCTest
 import FearlessUtils
 
 class TypeRegistryCatalogTests: XCTestCase {
-    func testWestendCatalog() throws {
-        guard let baseUrl = Bundle(for: type(of: self)).url(forResource: "default", withExtension: "json") else {
-            XCTFail("Can't find default.json")
-            return
-        }
 
-        guard let westendUrl = Bundle(for: type(of: self)).url(forResource: "westend", withExtension: "json") else {
-            XCTFail("Can't find westend.json")
-            return
-        }
+    func testTypeExtractedOnLastVersion() throws {
+        // given
 
-        guard let metadataUrl = Bundle(for: type(of: self))
-                .url(forResource: "westend-metadata", withExtension: "") else {
-            XCTFail("Can't find metadata file")
-            return
-        }
+        let catalog = try RuntimeHelper.createTypeRegistryCatalog(from: "default",
+                                                                  networkName: "kusama",
+                                                                  runtimeMetadataName: "kusama-metadata")
 
-        performTestNetworkCatalog(for: baseUrl,
-                                  networkURL: westendUrl,
-                                  metadataURL: metadataUrl)
+        // when
+
+        let node = catalog.node(for: "CompactAssignments", version: 2027)
+
+        // then
+
+        XCTAssertEqual(node?.typeName, "CompactAssignmentsFrom258")
     }
 
-    func testKusamaCatalog() throws {
-        guard let baseUrl = Bundle(for: type(of: self)).url(forResource: "default", withExtension: "json") else {
-            XCTFail("Can't find default.json")
-            return
-        }
+    func testTypeExtractedFromProperVersion() throws {
+        // given
 
-        guard let kusamaUrl = Bundle(for: type(of: self)).url(forResource: "kusama", withExtension: "json") else {
-            XCTFail("Can't find westend.json")
-            return
-        }
+        let catalog = try RuntimeHelper.createTypeRegistryCatalog(from: "default",
+                                                                  networkName: "kusama",
+                                                                  runtimeMetadataName: "kusama-metadata")
 
-        guard let metadataUrl = Bundle(for: type(of: self))
-                .url(forResource: "kusama-metadata", withExtension: "") else {
-            XCTFail("Can't find metadata file")
-            return
-        }
+        // when
 
-        performTestNetworkCatalog(for: baseUrl,
-                                  networkURL: kusamaUrl,
-                                  metadataURL: metadataUrl)
+        let node = catalog.node(for: "CompactAssignments", version: 2022)
+
+        // then
+
+        XCTAssertEqual(node?.typeName, "CompactAssignmentsTo257")
     }
 
-    func testPolkadotCatalog() throws {
-        guard let baseUrl = Bundle(for: type(of: self)).url(forResource: "default", withExtension: "json") else {
-            XCTFail("Can't find default.json")
-            return
-        }
+    func testMetadataFallback() throws {
+        // given
 
-        guard let polkadotUrl = Bundle(for: type(of: self)).url(forResource: "kusama", withExtension: "json") else {
-            XCTFail("Can't find westend.json")
-            return
-        }
+        let catalog = try RuntimeHelper.createTypeRegistryCatalog(from: "default",
+                                                                  networkName: "kusama",
+                                                                  runtimeMetadataName: "kusama-metadata")
 
-        guard let metadataUrl = Bundle(for: type(of: self))
-                .url(forResource: "polkadot-metadata", withExtension: "") else {
-            XCTFail("Can't find metadata file")
-            return
-        }
+        // when
 
-        performTestNetworkCatalog(for: baseUrl,
-                                  networkURL: polkadotUrl,
-                                  metadataURL: metadataUrl)
-    }
+        let node = catalog.node(for: "<Moment as hasCompact>::Type", version: 2022)
 
-    // MARK: Private
+        // then
 
-    func performTestNetworkCatalog(for baseURL: URL,
-                                   networkURL: URL,
-                                   metadataURL: URL) {
-        do {
-            let baseData = try Data(contentsOf: baseURL)
-            let networdData = try Data(contentsOf: networkURL)
-
-            let hex = try String(contentsOf: metadataURL)
-                .trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
-            let expectedData = try Data(hexString: hex)
-
-            let decoder = try ScaleDecoder(data: expectedData)
-            let runtimeMetadata = try RuntimeMetadata(scaleDecoder: decoder)
-
-            let registry = try TypeRegistryCatalog
-                .createFromBaseTypeDefinition(baseData,
-                                              networkDefinitionData: networdData,
-                                              runtimeMetadata: runtimeMetadata,
-                                              version: 45)
-
-            XCTAssertTrue(!registry.baseRegistry.registeredTypes.isEmpty)
-            XCTAssertTrue(!registry.versionedRegistries.isEmpty)
-            XCTAssertTrue(!registry.versionedTypes.isEmpty)
-        } catch {
-            XCTFail("Unexpected error \(error)")
-        }
+        XCTAssertEqual(node?.typeName, "Compact<Moment>")
     }
 }

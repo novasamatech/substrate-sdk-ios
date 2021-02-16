@@ -10,11 +10,11 @@ public struct CheckNonceNode: Node {
             throw DynamicScaleCoderError.invalidParams
         }
 
-        try encoder.appendCompact(json: params[0], type: "Index")
+        try encoder.appendCompact(json: params[0], type: KnownType.index.name)
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        let nonce = try decoder.readCompact(type: "Index")
+        let nonce = try decoder.readCompact(type: KnownType.index.name)
 
         return .arrayValue([nonce])
     }

@@ -121,6 +121,54 @@ class RegexReplaceResolverTests: XCTestCase {
         performTestModuleNameRefinement("slashing")
     }
 
+    func testGenericsFilterWhenHasOneLevel() {
+        // given
+
+        let resolver = RegexReplaceResolver.genericsFilter()
+        let searchingType = "BidKind<Account>"
+        let expectedType = "BidKind"
+
+        // when
+
+        let result = resolver.resolve(typeName: searchingType, using: ["Account", "BidKind<Account>", expectedType, "T", "Trait"])
+
+        // then
+
+        XCTAssertEqual(expectedType, result)
+    }
+
+    func testGenericsFilterWhenHasInnerSubtype() {
+        // given
+
+        let resolver = RegexReplaceResolver.genericsFilter()
+        let searchingType = "BidKind<<T as Config>::Account>"
+        let expectedType = "BidKind"
+
+        // when
+
+        let result = resolver.resolve(typeName: searchingType, using: ["Account", "BidKind<Account>", expectedType, "T", "Trait"])
+
+        // then
+
+        XCTAssertEqual(expectedType, result)
+    }
+
+    func testGenericsFilterHasNoEffectInMiddle() {
+        // given
+
+        let resolver = RegexReplaceResolver.genericsFilter()
+        let searchingType = "BidKind<T>::Source"
+        let expectedType = "BidKind<T>::Source"
+
+        // when
+
+        let result = resolver.resolve(typeName: searchingType, using: ["Account", "BidKind", "BidKind<Account>", expectedType, "T", "Trait"])
+
+        // then
+
+        XCTAssertEqual(expectedType, result)
+    }
+
     // MARK: Private
 
     private func performTestModuleNameRefinement(_ name: String) {
