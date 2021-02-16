@@ -10,27 +10,31 @@ public struct StructNode: Node {
     }
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
-        guard let fieldValues = value.arrayValue else {
-            throw DynamicScaleEncoderError.arrayExpected(json: value)
+        guard let mapping = value.dictValue else {
+            throw DynamicScaleEncoderError.dictExpected(json: value)
         }
 
-        guard typeMapping.count == fieldValues.count else {
+        guard typeMapping.count == mapping.count else {
             let fieldNames = typeMapping.map { $0.name }
             throw DynamicScaleEncoderError.unexpectedStructFields(json: value,
                                                                   expectedFields: fieldNames)
         }
 
         for index in 0..<typeMapping.count {
-            try encoder.append(json: fieldValues[index], type: typeMapping[index].node.typeName)
+            guard let child = mapping[typeMapping[index].name] else {
+                throw DynamicScaleCoderError.unresolverType(name: typeMapping[index].name)
+            }
+
+            try encoder.append(json: child, type: typeMapping[index].node.typeName)
         }
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        let jsons = try typeMapping.reduce([JSON]()) { (result, item) in
+        let dictJson = try typeMapping.reduce(into: [String: JSON]()) { (result, item) in
             let json = try decoder.read(type: item.node.typeName)
-            return result + [json]
+            result[item.name] = json
         }
 
-        return .arrayValue(jsons)
+        return .dictionaryValue(dictJson)
     }
 }
