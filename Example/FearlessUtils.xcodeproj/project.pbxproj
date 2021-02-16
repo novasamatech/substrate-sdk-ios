@@ -78,6 +78,7 @@
 		84ED7256254A001A006102DF /* SubstrateQREncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED7255254A001A006102DF /* SubstrateQREncoderTests.swift */; };
 		84ED725C254A0233006102DF /* SubstrateQRDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED725B254A0233006102DF /* SubstrateQRDecoderTests.swift */; };
 		84F4394225DBAAA200AEDA56 /* test-metadata in Resources */ = {isa = PBXBuildFile; fileRef = 84F4394125DBAAA200AEDA56 /* test-metadata */; };
+		84F4394625DBE54D00AEDA56 /* TableResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4394525DBE54D00AEDA56 /* TableResolverTests.swift */; };
 		84F4A847254CAD73000CF0A3 /* KeystoreBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4A846254CAD73000CF0A3 /* KeystoreBuilderTests.swift */; };
 		A0FDCFB5B61F738FEE34A5E6 /* Pods_FearlessUtils_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D2E77D7010BEBF43DFE08E /* Pods_FearlessUtils_Tests.framework */; };
 		B2BF1BE136637C8404B79450 /* Pods_FearlessUtils_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9A63E44DBCDCE738F798358 /* Pods_FearlessUtils_Example.framework */; };
@@ -172,6 +173,7 @@
 		84ED7255254A001A006102DF /* SubstrateQREncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstrateQREncoderTests.swift; sourceTree = "<group>"; };
 		84ED725B254A0233006102DF /* SubstrateQRDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstrateQRDecoderTests.swift; sourceTree = "<group>"; };
 		84F4394125DBAAA200AEDA56 /* test-metadata */ = {isa = PBXFileReference; lastKnownFileType = text; path = "test-metadata"; sourceTree = "<group>"; };
+		84F4394525DBE54D00AEDA56 /* TableResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableResolverTests.swift; sourceTree = "<group>"; };
 		84F4A846254CAD73000CF0A3 /* KeystoreBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeystoreBuilderTests.swift; sourceTree = "<group>"; };
 		93F24F5EEC204E4B0F918C39 /* Pods-FearlessUtils_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Example.debug.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Example/Pods-FearlessUtils_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B82F3EE26AAEE44C6E7F9962 /* Pods-FearlessUtils_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Tests.release.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Tests/Pods-FearlessUtils_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -388,6 +390,7 @@
 			children = (
 				849E0AE925C992F800B33506 /* CaseInsensitiveResolverTests.swift */,
 				84452C9A25D40B5600F47EC5 /* RegexReplaceResolverTests.swift */,
+				84F4394525DBE54D00AEDA56 /* TableResolverTests.swift */,
 			);
 			path = TypeResolution;
 			sourceTree = "<group>";
@@ -727,6 +730,7 @@
 				841D531625C6F70500DFA15B /* TypeSetParserTests.swift in Sources */,
 				84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */,
 				84F4A847254CAD73000CF0A3 /* KeystoreBuilderTests.swift in Sources */,
+				84F4394625DBE54D00AEDA56 /* TableResolverTests.swift in Sources */,
 				842D1E7124CFF31800C30A7A /* KeypairDeriviation.swift in Sources */,
 				841D539525C7517300DFA15B /* JSONTests.swift in Sources */,
 				841D528A25C4A11900DFA15B /* RegexParserTests.swift in Sources */,

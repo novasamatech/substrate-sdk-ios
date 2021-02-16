@@ -24,4 +24,9 @@ public extension RegexReplaceResolver {
             "|(<T as Config>::)|(\n)|((?:grandpa|session|slashing|schedule)::)"
         return RegexReplaceResolver(pattern: pattern, replacement: "")
     }
+
+    static func genericsFilter() -> RegexReplaceResolver {
+        let pattern = "(<.+>)$"
+        return RegexReplaceResolver(pattern: pattern, replacement: "")
+    }
 }

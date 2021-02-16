@@ -25,7 +25,10 @@ public extension TableResolver {
             "&[u8]": "Bytes",
             "<lookup as staticlookup>::source": "LookupSource",
             "<t::lookup as staticlookup>::source": "LookupSource",
-            "<inherentofflinereport as inherentofflinereport>::inherent": "InherentOfflineReport"
+            "<inherentofflinereport as inherentofflinereport>::inherent": "InherentOfflineReport",
+            "<balance as hascompact>::type": "Compact<Balance>",
+            "<blocknumber as hascompact>::type": "Compact<BlockNumber>",
+            "<moment as hascompact>::type": "Compact<Moment>"
         ]
 
         return TableResolver(mapping: mapping)
