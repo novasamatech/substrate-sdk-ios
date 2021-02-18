@@ -13,7 +13,7 @@ public struct ExtrinsicSignedExtra: Codable {
         case tip
     }
 
-    @NullCodable public var era: Era?
+    public var era: Era?
     @OptionStringCodable public  var nonce: UInt32?
     @OptionStringCodable public  var tip: BigUInt?
 
@@ -30,8 +30,8 @@ public struct Extrinsic: Codable {
         case call
     }
 
-    @NullCodable public var signature: ExtrinsicSignature?
-    public var call: JSON
+    public let signature: ExtrinsicSignature?
+    public let call: JSON
 
     public init(signature: ExtrinsicSignature?, call: JSON) {
         self.signature = signature

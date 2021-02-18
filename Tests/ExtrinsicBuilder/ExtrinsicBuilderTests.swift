@@ -127,4 +127,46 @@ class ExtrinsicBuilderTests: XCTestCase {
             XCTFail("Unexpected error: \(error)")
         }
     }
+
+    func testUnsignedExtrinsic() throws {
+        do {
+            // given
+            let genesisHash = "0xe143f23803ac50e8f6f8e62695d1ce9e4e1d68aa36c1cd2cfd15340213f3423e"
+            let specVersion: UInt32 = 48
+
+            let catalog = try RuntimeHelper
+                .createTypeRegistryCatalog(from: "default",
+                                           networkName: "westend",
+                                           runtimeMetadataName: "westend-metadata")
+            let metadata = try RuntimeHelper.createRuntimeMetadata("westend-metadata")
+
+            let encoder = DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion))
+
+            let accountId = Data(repeating: 0, count: 32)
+            let args = TransferArgs(dest: .accoundId(accountId), value: 1)
+            let call = RuntimeCall(moduleName: "Balances",
+                                   callName: "transfer",
+                                   args: args)
+
+            let extrinsicData = try ExtrinsicBuilder(specVersion: specVersion,
+                                                     transactionVersion: 4,
+                                                     genesisHash: genesisHash)
+                    .adding(call: call)
+                    .build(encodingBy: encoder.newEncoder(), metadata: metadata)
+
+            let decoder = try DynamicScaleDecoder(data: extrinsicData,
+                                                  registry: catalog,
+                                                  version: UInt64(specVersion))
+
+            let extrinsic: Extrinsic = try decoder.read(of: GenericType.extrinsic.name)
+
+            let expectedCall = try call.toScaleCompatibleJSON()
+
+            XCTAssertNil(extrinsic.signature)
+            XCTAssertEqual(expectedCall, extrinsic.call)
+            XCTAssertTrue(decoder.remained == 0)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
 }
