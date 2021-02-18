@@ -5,11 +5,11 @@ import IrohaCrypto
 public protocol ExtrinsicBuilderProtocol: class {
     func with<A: Codable>(address: A) throws -> Self
     func with(nonce: UInt32) -> Self
-    func with(era: Era) -> Self
+    func with(era: Era, blockHash: String) -> Self
     func with(tip: BigUInt) -> Self
     func adding<T: RuntimeCallable>(call: T) throws -> Self
 
-    func signing(by signer: IRSignatureCreatorProtocol,
+    func signing(by signer: (Data) throws -> Data,
                  of type: CryptoType,
                  using encoder: DynamicScaleEncoding,
                  metadata: RuntimeMetadata) throws -> Self
@@ -25,7 +25,7 @@ public enum ExtrinsicBuilderError: Error {
     case unsupportedBatch
 }
 
-public final class ExtrinsicBuilder<A: Codable> {
+public final class ExtrinsicBuilder {
     struct InternalCall: Codable {
         let moduleName: String
         let callName: String
@@ -67,7 +67,7 @@ public final class ExtrinsicBuilder<A: Codable> {
 
         let call = RuntimeCall(moduleName: KnowRuntimeModule.Utitlity.name,
                                callName: KnowRuntimeModule.Utitlity.batch,
-                               args: calls)
+                               args: BatchArgs(calls: calls))
 
         guard metadata.getFunction(from: call.moduleName, with: call.callName) != nil else {
             throw ExtrinsicBuilderError.unsupportedBatch
@@ -78,7 +78,7 @@ public final class ExtrinsicBuilder<A: Codable> {
 
     private func appendExtraToPayload(encodingBy encoder: DynamicScaleEncoding) throws {
         let extra = ExtrinsicSignedExtra(era: era, nonce: nonce ?? 0, tip: tip)
-        try encoder.append(extra, ofType: "Extra")
+        try encoder.append(extra, ofType: GenericType.extrinsicExtra.name)
     }
 
     private func appendAdditionalSigned(encodingBy encoder: DynamicScaleEncoding,
@@ -130,8 +130,9 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         return self
     }
 
-    public func with(era: Era) -> Self {
+    public func with(era: Era, blockHash: String) -> Self {
         self.era = era
+        self.blockHash = blockHash
         self.signature = nil
 
         return self
@@ -151,7 +152,7 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         return self
     }
 
-    public func signing(by signer: IRSignatureCreatorProtocol,
+    public func signing(by signer: (Data) throws -> Data,
                         of type: CryptoType,
                         using encoder: DynamicScaleEncoding,
                         metadata: RuntimeMetadata) throws -> Self {
@@ -161,7 +162,7 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
 
         let data = try prepareSignaturePayload(encodingBy: encoder, using: metadata)
 
-        let rawSignature = try signer.sign(data).rawData()
+        let rawSignature = try signer(data)
 
         let signature: MultiSignature
 

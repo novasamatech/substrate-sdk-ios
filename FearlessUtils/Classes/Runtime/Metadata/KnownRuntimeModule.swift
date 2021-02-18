@@ -1,8 +1,8 @@
 import Foundation
 
-struct KnowRuntimeModule {
-    struct Utitlity {
-        static let name = "Utility"
-        static let batch = "batch"
+public struct KnowRuntimeModule {
+    public struct Utitlity {
+        public static let name = "Utility"
+        public static let batch = "batch"
     }
 }

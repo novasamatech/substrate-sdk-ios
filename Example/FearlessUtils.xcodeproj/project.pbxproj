@@ -87,6 +87,8 @@
 		84F43A6125DC701F00AEDA56 /* Reasons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F43A5B25DC6FC900AEDA56 /* Reasons.swift */; };
 		84F43A6A25DC7AE300AEDA56 /* IdentityFields.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F43A6425DC7ADA00AEDA56 /* IdentityFields.swift */; };
 		84F43A7D25DC82B200AEDA56 /* TransientValidationData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F43A7725DC827A00AEDA56 /* TransientValidationData.swift */; };
+		84F43B4625DE800F00AEDA56 /* ExtrinsicBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F43B4525DE800F00AEDA56 /* ExtrinsicBuilderTests.swift */; };
+		84F43B7025DE90EC00AEDA56 /* TransferArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F43B6F25DE90EC00AEDA56 /* TransferArgs.swift */; };
 		84F4A847254CAD73000CF0A3 /* KeystoreBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4A846254CAD73000CF0A3 /* KeystoreBuilderTests.swift */; };
 		A0FDCFB5B61F738FEE34A5E6 /* Pods_FearlessUtils_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D2E77D7010BEBF43DFE08E /* Pods_FearlessUtils_Tests.framework */; };
 		B2BF1BE136637C8404B79450 /* Pods_FearlessUtils_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9A63E44DBCDCE738F798358 /* Pods_FearlessUtils_Example.framework */; };
@@ -190,6 +192,8 @@
 		84F43A5B25DC6FC900AEDA56 /* Reasons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reasons.swift; sourceTree = "<group>"; };
 		84F43A6425DC7ADA00AEDA56 /* IdentityFields.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IdentityFields.swift; sourceTree = "<group>"; };
 		84F43A7725DC827A00AEDA56 /* TransientValidationData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransientValidationData.swift; sourceTree = "<group>"; };
+		84F43B4525DE800F00AEDA56 /* ExtrinsicBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrinsicBuilderTests.swift; sourceTree = "<group>"; };
+		84F43B6F25DE90EC00AEDA56 /* TransferArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferArgs.swift; sourceTree = "<group>"; };
 		84F4A846254CAD73000CF0A3 /* KeystoreBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeystoreBuilderTests.swift; sourceTree = "<group>"; };
 		93F24F5EEC204E4B0F918C39 /* Pods-FearlessUtils_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Example.debug.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Example/Pods-FearlessUtils_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		B82F3EE26AAEE44C6E7F9962 /* Pods-FearlessUtils_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Tests.release.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Tests/Pods-FearlessUtils_Tests.release.xcconfig"; sourceTree = "<group>"; };
@@ -437,6 +441,7 @@
 		84DA3B3024C8CE5900B5E27F /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				84F43B4425DE7FF700AEDA56 /* ExtrinsicBuilder */,
 				841D539325C7516600DFA15B /* JSON */,
 				8429C7FA25C432CC0086D7F6 /* Runtime */,
 				84ED7254254A0006006102DF /* QR */,
@@ -489,6 +494,7 @@
 				84F43A5B25DC6FC900AEDA56 /* Reasons.swift */,
 				84F43A6425DC7ADA00AEDA56 /* IdentityFields.swift */,
 				84F43A7725DC827A00AEDA56 /* TransientValidationData.swift */,
+				84F43B6F25DE90EC00AEDA56 /* TransferArgs.swift */,
 			);
 			path = RuntimeTypes;
 			sourceTree = "<group>";
@@ -499,6 +505,14 @@
 				84F43A3325DC44A000AEDA56 /* BindingTests.swift */,
 			);
 			path = Binding;
+			sourceTree = "<group>";
+		};
+		84F43B4425DE7FF700AEDA56 /* ExtrinsicBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				84F43B4525DE800F00AEDA56 /* ExtrinsicBuilderTests.swift */,
+			);
+			path = ExtrinsicBuilder;
 			sourceTree = "<group>";
 		};
 		A78EB2A0158FDFCA62F39CAC /* Pods */ = {
@@ -736,6 +750,7 @@
 				84DA3B4024C8CE5900B5E27F /* ScaleInt8Tests.swift in Sources */,
 				84DA3B4524C8CE5A00B5E27F /* ScaleUInt8Tests.swift in Sources */,
 				84F43A6125DC701F00AEDA56 /* Reasons.swift in Sources */,
+				84F43B4625DE800F00AEDA56 /* ExtrinsicBuilderTests.swift in Sources */,
 				84DA3B3D24C8CE5900B5E27F /* ScaleCompactIntTests.swift in Sources */,
 				849E0A7425C9458F00B33506 /* StructNodeFactoryTests.swift in Sources */,
 				849E0A2125C81DB500B33506 /* FixedArrayParserTests.swift in Sources */,
@@ -788,6 +803,7 @@
 				841D52E625C6DD1E00DFA15B /* TypeMappingParserTests.swift in Sources */,
 				845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */,
 				84DA3B3C24C8CE5900B5E27F /* ScaleUInt32Tests.swift in Sources */,
+				84F43B7025DE90EC00AEDA56 /* TransferArgs.swift in Sources */,
 				841D530825C6E75300DFA15B /* TypeValuesParserTests.swift in Sources */,
 				84DA3B3F24C8CE5900B5E27F /* ScaleUInt16Tests.swift in Sources */,
 			);

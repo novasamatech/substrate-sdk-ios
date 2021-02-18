@@ -1,6 +1,11 @@
 import Foundation
 import BigInt
 
+public struct ExtrinsicConstants {
+    static let version: UInt8 = 4
+    static let signedMask: UInt8 = 1 << 7
+}
+
 public struct ExtrinsicSignedExtra: Codable {
     enum CodingKeys: String, CodingKey {
         case era
