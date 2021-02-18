@@ -2,11 +2,11 @@ import Foundation
 
 public struct GenericMultiAddressNode: Node {
     public static let typeMapping = [
-        ["Id", GenericType.accountId.name],
-        ["Index", "Compact<\(GenericType.accountIndex.name)>"],
-        ["Raw", GenericType.bytes.name],
-        ["Address32", GenericType.h256.name],
-        ["Address20", GenericType.h160.name]
+        [MultiAddress.accountIdField, GenericType.accountId.name],
+        [MultiAddress.indexField, "Compact<\(GenericType.accountIndex.name)>"],
+        [MultiAddress.rawField, GenericType.bytes.name],
+        [MultiAddress.address32Field, GenericType.h256.name],
+        [MultiAddress.address20Field, GenericType.h160.name]
     ]
 
     public var typeName: String { GenericType.multiAddress.name }
@@ -17,17 +17,17 @@ public struct GenericMultiAddressNode: Node {
         guard
             let enumValue = value.arrayValue,
             enumValue.count == 2,
-            let caseValue = enumValue.first?.unsignedIntValue,
+            let caseValue = enumValue.first?.stringValue,
             let assocValue = enumValue.last else {
             throw DynamicScaleEncoderError.unexpectedEnumJSON(json: value)
         }
 
-        guard caseValue < Self.typeMapping.count else {
-            throw DynamicScaleEncoderError.unexpectedEnumCase(value: caseValue, count: Self.typeMapping.count)
+        guard let index = Self.typeMapping.firstIndex(where: { $0[0] == caseValue }) else {
+            throw DynamicScaleEncoderError.unexpectedEnumCase(value: caseValue)
         }
 
-        try encoder.appendU8(json: .stringValue(String(caseValue)))
-        try encoder.append(json: assocValue, type: Self.typeMapping[Int(caseValue)][1])
+        try encoder.appendU8(json: .stringValue(String(index)))
+        try encoder.append(json: assocValue, type: Self.typeMapping[index][1])
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
@@ -42,6 +42,6 @@ public struct GenericMultiAddressNode: Node {
 
         let json = try decoder.read(type: Self.typeMapping[caseValue][1])
 
-        return .arrayValue([.unsignedIntValue(UInt64(caseValue)), json])
+        return .arrayValue([.stringValue(Self.typeMapping[caseValue][0]), json])
     }
 }

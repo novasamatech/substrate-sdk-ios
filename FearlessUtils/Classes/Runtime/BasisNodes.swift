@@ -46,13 +46,7 @@ public struct BasisNodes {
             AccountIdAddressNode(),
             ExtrinsicNode(),
             ExtrinsicSignatureNode(runtimeMetadata: runtimeMetadata),
-            ChargeTransactionPaymentNode(),
-            CheckGenesisNode(),
-            CheckMortalityNode(),
-            CheckNonceNode(),
-            CheckSpecVersionNode(),
-            CheckTxVersionNode(),
-            CheckWeightNode()
+            ExtrinsicExtraNode(runtimeMetadata: runtimeMetadata)
         ]
     }
 }

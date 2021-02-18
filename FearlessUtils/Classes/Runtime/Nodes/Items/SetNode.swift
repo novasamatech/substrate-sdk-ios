@@ -22,10 +22,20 @@ public struct SetNode: Node {
     }
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
-        try encoder.append(json: value, type: itemType.typeName)
+        guard let intValue = value.unsignedIntValue else {
+            throw DynamicScaleEncoderError.unsignedIntExpected(json: value)
+        }
+
+        try encoder.append(json: .stringValue(String(intValue)), type: itemType.typeName)
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        try decoder.read(type: itemType.typeName)
+        guard
+            let stringValue = try decoder.read(type: itemType.typeName).stringValue,
+            let intValue = UInt64(stringValue) else {
+            throw DynamicScaleCoderError.invalidParams
+        }
+
+        return .unsignedIntValue(intValue)
     }
 }

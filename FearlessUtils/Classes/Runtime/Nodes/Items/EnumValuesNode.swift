@@ -15,7 +15,8 @@ public struct EnumValuesNode: Node {
         }
 
         guard caseValue < values.count else {
-            throw DynamicScaleEncoderError.unexpectedEnumCase(value: caseValue, count: values.count)
+            throw DynamicScaleEncoderError.unexpectedEnumValues(value: caseValue,
+                                                                count: values.count)
         }
 
         try encoder.appendU8(json: .stringValue(String(caseValue)))

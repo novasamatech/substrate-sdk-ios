@@ -13,17 +13,17 @@ public struct EnumNode: Node {
         guard
             let enumValue = value.arrayValue,
             enumValue.count == 2,
-            let caseValue = enumValue.first?.unsignedIntValue,
+            let caseValue = enumValue.first?.stringValue,
             let assocValue = enumValue.last else {
             throw DynamicScaleEncoderError.unexpectedEnumJSON(json: value)
         }
 
-        guard caseValue < typeMapping.count else {
-            throw DynamicScaleEncoderError.unexpectedEnumCase(value: caseValue, count: typeMapping.count)
+        guard let index = typeMapping.firstIndex(where: { $0.name == caseValue }) else {
+            throw DynamicScaleEncoderError.unexpectedEnumCase(value: caseValue)
         }
 
-        try encoder.appendU8(json: .stringValue(String(caseValue)))
-        try encoder.append(json: assocValue, type: typeMapping[Int(caseValue)].node.typeName)
+        try encoder.append(encodable: UInt8(index))
+        try encoder.append(json: assocValue, type: typeMapping[index].node.typeName)
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
@@ -38,6 +38,6 @@ public struct EnumNode: Node {
 
         let json = try decoder.read(type: typeMapping[caseValue].node.typeName)
 
-        return .arrayValue([.unsignedIntValue(UInt64(caseValue)), json])
+        return .arrayValue([.stringValue(typeMapping[caseValue].name), json])
     }
 }
