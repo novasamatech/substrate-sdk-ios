@@ -12,22 +12,26 @@ public struct ExtrinsicNode: Node {
     public init() {}
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
-        guard let params = value.arrayValue, params.count == 2 else {
+        guard let params = value.dictValue else {
+            throw DynamicScaleEncoderError.dictExpected(json: value)
+        }
+
+        guard let call = params[Extrinsic.CodingKeys.call.rawValue] else {
             throw ExtrinsicNodeError.invalidParams
         }
 
         let subEncoder = encoder.newEncoder()
 
-        if params[0] != .null {
+        if let signature = params[Extrinsic.CodingKeys.signature.rawValue], signature != .null {
             let version: UInt8 = ExtrinsicConstants.version | ExtrinsicConstants.signedMask
             try subEncoder.append(encodable: version)
 
-            try subEncoder.append(json: params[0], type: GenericType.extrinsicSignature.name)
+            try subEncoder.append(json: signature, type: GenericType.extrinsicSignature.name)
         } else {
             try subEncoder.append(encodable: ExtrinsicConstants.version)
         }
 
-        try subEncoder.append(json: params[1], type: KnownType.call.name)
+        try subEncoder.append(json: call, type: KnownType.call.name)
 
         let encoded = try subEncoder.encode()
 
@@ -48,16 +52,16 @@ public struct ExtrinsicNode: Node {
             throw ExtrinsicNodeError.invalidVersion
         }
 
-        var result: [JSON] = []
+        var result: [String: JSON] = [:]
 
         if isSigned {
             let signature = try decoder.read(type: GenericType.extrinsicSignature.name)
-            result.append(signature)
+            result[Extrinsic.CodingKeys.signature.rawValue] = signature
         }
 
         let call = try decoder.read(type: KnownType.call.name)
-        result.append(call)
+        result[Extrinsic.CodingKeys.call.rawValue] = call
 
-        return .arrayValue(result)
+        return .dictionaryValue(result)
     }
 }

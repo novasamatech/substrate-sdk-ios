@@ -15,6 +15,25 @@ public struct RuntimeMetadata {
         self.metaReserved = metaReserved
         self.runtimeMetadataVersion = runtimeMetadataVersion
     }
+
+    func getFunction(from module: String, with name: String) -> FunctionMetadata? {
+        modules
+            .first(where: { $0.name == module })?
+            .calls?.first(where: { $0.name == name })
+    }
+
+    func getModuleIndex(_ name: String) -> UInt8? {
+        modules.first(where: { $0.name == name })?.index
+    }
+
+    func getCallIndex(in moduleName: String, callName: String) -> UInt8? {
+        guard let index = modules.first(where: { $0.name == moduleName })?.calls?
+                .firstIndex(where: { $0.name == callName}) else {
+            return nil
+        }
+
+        return UInt8(index)
+    }
 }
 
 extension RuntimeMetadata: ScaleCodable {

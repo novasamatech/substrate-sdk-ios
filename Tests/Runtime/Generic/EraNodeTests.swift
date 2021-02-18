@@ -4,7 +4,7 @@ import FearlessUtils
 class EraNodeTests: XCTestCase {
     func testShouldDecodeImmortal() throws {
         let data = try Data(hexString: "0x00")
-        try performDecodingTest(data: data, expected: .arrayValue([.unsignedIntValue(0)]))
+        try performDecodingTest(data: data, expected: Era.immortal)
     }
 
     func testShouldDecodeMortal() throws {
@@ -15,7 +15,7 @@ class EraNodeTests: XCTestCase {
 
     func testShouldEncodeImmortal() throws {
         let data = try Data(hexString: "0x00")
-        try performEncodingTest(value: .arrayValue([.unsignedIntValue(0)]), expected: data)
+        try performEncodingTest(value: Era.immortal, expected: data)
     }
 
     func testShouldEncodeMortal() throws {
@@ -28,25 +28,19 @@ class EraNodeTests: XCTestCase {
 
     private func performMortalDecodingTest(hex: String, period: UInt64, phase: UInt64) throws {
         let data = try Data(hexString: hex)
-        let expected = JSON.arrayValue([
-            .unsignedIntValue(1),
-            .arrayValue([.unsignedIntValue(period), .unsignedIntValue(phase)])
-        ])
+        let expected = Era.mortal(period: period, phase: phase)
 
         try performDecodingTest(data: data, expected: expected)
     }
 
     private func performMortalEncodingTest(hex: String, period: UInt64, phase: UInt64) throws {
         let expected = try Data(hexString: hex)
-        let value = JSON.arrayValue([
-            .unsignedIntValue(1),
-            .arrayValue([.unsignedIntValue(period), .unsignedIntValue(phase)])
-        ])
+        let value = Era.mortal(period: period, phase: phase)
 
         try performEncodingTest(value: value, expected: expected)
     }
 
-    private func performDecodingTest(data: Data, expected: JSON) throws {
+    private func performDecodingTest(data: Data, expected: Era) throws {
         // given
 
         let typeRegistry = try RuntimeHelper
@@ -57,7 +51,7 @@ class EraNodeTests: XCTestCase {
 
         // when
 
-        let result = try decoder.read(type: "Era")
+        let result: Era = try decoder.read(of: GenericType.era.name)
 
         // then
 
@@ -65,7 +59,7 @@ class EraNodeTests: XCTestCase {
         XCTAssertEqual(decoder.remained, 0)
     }
 
-    private func performEncodingTest(value: JSON, expected: Data) throws {
+    private func performEncodingTest(value: Era, expected: Data) throws {
         // given
 
         let typeRegistry = try RuntimeHelper
@@ -76,7 +70,7 @@ class EraNodeTests: XCTestCase {
 
         // when
 
-        try encoder.append(json: value, type: "Era")
+        try encoder.append(value, ofType: GenericType.era.name)
         let result = try encoder.encode()
 
         // then

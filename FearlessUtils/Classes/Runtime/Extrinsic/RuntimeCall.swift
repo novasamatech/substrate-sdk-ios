@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol RuntimeCallable {
+public protocol RuntimeCallable: Codable {
     associatedtype Args: Codable
 
     var moduleName: String { get }

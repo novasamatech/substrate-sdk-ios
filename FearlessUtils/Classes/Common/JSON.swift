@@ -73,6 +73,14 @@ public enum JSON {
         return nil
     }
 
+    public var isNull: Bool {
+        if case .null = self {
+            return true
+        } else {
+            return false
+        }
+    }
+
     public subscript(index: Int) -> JSON? {
         if let arr = arrayValue {
             return index < arr.count ? arr[index] : nil

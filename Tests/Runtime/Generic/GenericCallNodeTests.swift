@@ -6,12 +6,12 @@ class GenericCallNodeTests: XCTestCase {
     func testShouldDecodeCall() throws {
         do {
             let data = try Data(hexString: "0x01000103")
-            let expected = JSON.arrayValue([
-                .unsignedIntValue(1),
-                .unsignedIntValue(0),
-                .arrayValue([
-                    .boolValue(true),
-                    .stringValue("3")
+            let expected = JSON.dictionaryValue([
+                "moduleName": .stringValue("A"),
+                "callName": .stringValue("B"),
+                "args": .dictionaryValue([
+                    "arg1": .boolValue(true),
+                    "arg2": .stringValue("3")
                 ])
             ])
 
@@ -24,12 +24,12 @@ class GenericCallNodeTests: XCTestCase {
     func testShouldEncodeCall() throws {
         do {
             let expected = try Data(hexString: "0x01000103")
-            let value = JSON.arrayValue([
-                .unsignedIntValue(1),
-                .unsignedIntValue(0),
-                .arrayValue([
-                    .boolValue(true),
-                    .stringValue("3")
+            let value = JSON.dictionaryValue([
+                "moduleName": .stringValue("A"),
+                "callName": .stringValue("B"),
+                "args": .dictionaryValue([
+                    "arg1": .boolValue(true),
+                    "arg2": .stringValue("3")
                 ])
             ])
 

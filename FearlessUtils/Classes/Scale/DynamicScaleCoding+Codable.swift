@@ -30,30 +30,43 @@ public extension JSONDecoder {
     }
 }
 
-private struct EncodingContainer<T: Encodable>: Encodable {
+struct EncodingContainer<T: Encodable>: Encodable {
     let value: T
 }
 
-private struct DecodingContainer<T: Decodable>: Decodable {
+struct DecodingContainer<T: Decodable>: Decodable {
     let value: T
 }
 
-private struct JsonContainer: Codable {
+struct JsonContainer: Codable {
     let value: JSON
+}
+
+public extension Encodable {
+    func toScaleCompatibleJSON() throws -> JSON {
+        let container = EncodingContainer(value: self)
+
+        let data = try JSONEncoder.scaleCompatible().encode(container)
+        let json = try JSONDecoder.scaleCompatible().decode(JsonContainer.self, from: data).value
+
+        return json
+    }
+}
+
+public extension JSON {
+    func map<T: Decodable>(to type: T.Type) throws -> T {
+        let encoder = JSONEncoder.scaleCompatible()
+        let encodingContainer = JsonContainer(value: self)
+        let data = try encoder.encode(encodingContainer)
+
+        let decoder = JSONDecoder.scaleCompatible()
+        return try decoder.decode(DecodingContainer<T>.self, from: data).value
+    }
 }
 
 public extension DynamicScaleEncoding {
     func append<T: Encodable>(_ codable: T, ofType type: String) throws {
-        let encoder = JSONEncoder.scaleCompatible()
-
-        let container = EncodingContainer(value: codable)
-
-        let data = try encoder.encode(container)
-
-        let decoder = JSONDecoder.scaleCompatible()
-
-        let json = try decoder.decode(JsonContainer.self, from: data).value
-
+        let json = try codable.toScaleCompatibleJSON()
         try append(json: json, type: type)
     }
 }
@@ -61,14 +74,6 @@ public extension DynamicScaleEncoding {
 public extension DynamicScaleDecoding {
     func read<T: Decodable>(of type: String) throws -> T {
         let json = try read(type: type)
-
-        let encoder = JSONEncoder.scaleCompatible()
-
-        let encodingContainer = JsonContainer(value: json)
-        let data = try encoder.encode(encodingContainer)
-
-        let decoder = JSONDecoder.scaleCompatible()
-
-        return try decoder.decode(DecodingContainer<T>.self, from: data).value
+        return try json.map(to: T.self)
     }
 }

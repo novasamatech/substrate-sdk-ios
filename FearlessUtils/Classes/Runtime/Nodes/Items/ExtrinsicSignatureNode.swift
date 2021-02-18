@@ -13,32 +13,31 @@ public struct ExtrinsicSignatureNode: Node {
     }
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
-        guard let params = value.arrayValue, params.count == 3 else {
+        guard let params = value.dictValue else {
+            throw DynamicScaleEncoderError.dictExpected(json: value)
+        }
+
+        guard
+            let address = params[ExtrinsicSignature.CodingKeys.address.rawValue],
+            let signature = params[ExtrinsicSignature.CodingKeys.signature.rawValue],
+            let extra = params[ExtrinsicSignature.CodingKeys.extra.rawValue] else {
             throw ExtrinsicSignatureNodeError.invalidParams
         }
 
-        try encoder.append(json: params[0], type: KnownType.address.name)
-        try encoder.append(json: params[1], type: KnownType.signature.name)
-
-        let signedExtentionNames = runtimeMetadata.extrinsic.signedExtensions
-        guard let extensions = params[2].arrayValue,
-              extensions.count == signedExtentionNames.count else {
-            throw ExtrinsicSignatureNodeError.invalidParams
-        }
-
-        for index in 0..<extensions.count {
-            try encoder.append(json: extensions[index], type: signedExtentionNames[index])
-        }
+        try encoder.append(json: address, type: KnownType.address.name)
+        try encoder.append(json: signature, type: KnownType.signature.name)
+        try encoder.append(json: extra, type: GenericType.extrinsicExtra.name)
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
         let address = try decoder.read(type: KnownType.address.name)
         let signature = try decoder.read(type: KnownType.signature.name)
+        let extra = try decoder.read(type: GenericType.extrinsicExtra.name)
 
-        let extentions = try runtimeMetadata.extrinsic.signedExtensions.map { name in
-            try decoder.read(type: name)
-        }
-
-        return .arrayValue([address, signature, .arrayValue(extentions)])
+        return .dictionaryValue([
+            ExtrinsicSignature.CodingKeys.address.rawValue: address,
+            ExtrinsicSignature.CodingKeys.signature.rawValue: signature,
+            ExtrinsicSignature.CodingKeys.extra.rawValue: extra
+        ])
     }
 }

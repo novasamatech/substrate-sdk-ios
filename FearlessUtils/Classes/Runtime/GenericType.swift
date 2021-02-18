@@ -11,6 +11,7 @@ public enum GenericType: String, CaseIterable {
     case extrinsic = "FearlessExtrinsic"
     case extrinsicDecoder = "ExtrinsicsDecoder"
     case extrinsicSignature = "FearlessExtrinsicSignature"
+    case extrinsicExtra = "FearlessExtrinsicExtra"
     case accountId = "GenericAccountId"
     case accountIndex = "GenericAccountIndex"
     case block = "GenericBlock"

@@ -16,10 +16,10 @@ class ExtrinsicNodeTests: XCTestCase {
                                                   registry: catalog,
                                                   version: 48)
 
-            let extrinsic = try decoder.read(type: "FearlessExtrinsic")
+            let extrinsic: Extrinsic = try decoder.read(of: GenericType.extrinsic.name)
 
             let encoder = DynamicScaleEncoder(registry: catalog, version: 48)
-            try encoder.append(json: extrinsic, type: "FearlessExtrinsic")
+            try encoder.append(extrinsic, ofType: GenericType.extrinsic.name)
             let result = try encoder.encode()
 
             XCTAssertEqual(expected, result)

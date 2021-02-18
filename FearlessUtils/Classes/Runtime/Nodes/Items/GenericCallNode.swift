@@ -18,68 +18,60 @@ public struct GenericCallNode: Node {
     }
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
-        guard let input = value.arrayValue else {
-            throw DynamicScaleEncoderError.arrayExpected(json: value)
-        }
+        let call = try value.map(to: RuntimeCall<JSON>.self)
 
-        guard
-            input.count == 3,
-            let callModule = input[0].unsignedIntValue,
-            let callFunction = input[1].unsignedIntValue,
-            let params = input[2].arrayValue else {
+        guard let function = runtimeMetadata.getFunction(from: call.moduleName,
+                                                         with: call.callName),
+              let moduleIndex = runtimeMetadata.getModuleIndex(call.moduleName),
+              let callIndex = runtimeMetadata.getCallIndex(in: call.moduleName,
+                                                           callName: call.callName) else {
             throw GenericCallNodeError.unexpectedParams
         }
 
-        guard let module = runtimeMetadata.modules.first(where: { $0.index == callModule} ) else {
-            throw GenericCallNodeError.unexpectedCallModule(value: callModule)
+        guard let args = call.args.dictValue, function.arguments.count == args.count else {
+            throw GenericCallNodeError.unexpectedParams
         }
 
-        guard let calls = module.calls, calls.count > callFunction else {
-            throw GenericCallNodeError.unexpectedCallFunction(value: callFunction)
-        }
+        try encoder.appendU8(json: .stringValue(String(moduleIndex)))
+        try encoder.appendU8(json: .stringValue(String(callIndex)))
 
-        let arguments = calls[Int(callFunction)].arguments.map { $0.type }
+        for index in 0..<function.arguments.count {
+            guard let param = args[function.arguments[index].name] else {
+                throw GenericCallNodeError.unexpectedParams
+            }
 
-        guard arguments.count == params.count else {
-            throw GenericCallNodeError.argumentsNotMatchingParams(arguments: arguments,
-                                                                  params: params)
-        }
-
-        try encoder.appendU8(json: .stringValue(String(callModule)))
-        try encoder.appendU8(json: .stringValue(String(callFunction)))
-
-        for index in 0..<arguments.count {
-            try encoder.append(json: params[index], type: arguments[index])
+            try encoder.append(json: param, type: function.arguments[index].type)
         }
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
         guard let callModuleString = (try decoder.readU8()).stringValue,
-              let callModule = UInt8(callModuleString) else {
+              let moduleIndex = Int(callModuleString) else {
             throw GenericCallNodeError.unexpectedDecodedModule
         }
 
         guard let callFunctionString = (try decoder.readU8()).stringValue,
-              let callFunction = UInt8(callFunctionString) else {
+              let callIndex = Int(callFunctionString) else {
             throw GenericCallNodeError.unexpectedDecodedFunction
         }
 
-        guard let module = runtimeMetadata.modules.first(where: { $0.index == callModule} ) else {
-            throw GenericCallNodeError.unexpectedCallModule(value: UInt64(callModule))
+        guard let module = runtimeMetadata.modules.first(where: { $0.index == moduleIndex } ) else {
+            throw GenericCallNodeError.unexpectedCallModule(value: UInt64(moduleIndex))
         }
 
-        guard let calls = module.calls, calls.count > callFunction else {
-            throw GenericCallNodeError.unexpectedCallFunction(value: UInt64(callFunction))
+        guard let calls = module.calls, callIndex < calls.count  else {
+            throw GenericCallNodeError.unexpectedCallFunction(value: UInt64(callIndex))
         }
 
-        let arguments = calls[Int(callFunction)].arguments.map { $0.type }
+        let call = calls[callIndex]
 
-        let params: [JSON] = try arguments.map { try decoder.read(type: $0)}
+        let params = try call.arguments.reduce(into: [String: JSON]()) { (result, item) in
+            let param = try decoder.read(type: item.type)
+            result[item.name] = param
+        }
 
-        return .arrayValue([
-            .unsignedIntValue(UInt64(callModule)),
-            .unsignedIntValue(UInt64(callFunction)),
-            .arrayValue(params)
-        ])
+        let result = RuntimeCall(moduleName: module.name, callName: call.name, args: params)
+
+        return try result.toScaleCompatibleJSON()
     }
 }
