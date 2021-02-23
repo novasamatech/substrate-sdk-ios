@@ -4,6 +4,17 @@ public enum StorageEntryType {
     case plain(_ value: String)
     case map(_ value: MapEntry)
     case doubleMap(_ value: DoubleMapEntry)
+
+    var valueType: String {
+        switch self {
+        case .plain(let value):
+            return value
+        case .map(let singleMap):
+            return singleMap.value
+        case .doubleMap(let doubleMap):
+            return doubleMap.value
+        }
+    }
 }
 
 extension StorageEntryType: ScaleCodable {

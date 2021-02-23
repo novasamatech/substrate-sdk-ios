@@ -15,6 +15,41 @@ class RuntimeMetadataTests: XCTestCase {
         performRuntimeMetadataTest(filename: "polkadot-metadata")
     }
 
+    func testFetchStorage() throws {
+        let metadata = try RuntimeHelper.createRuntimeMetadata("westend-metadata")
+
+        XCTAssertNotNil(metadata.getStorageMetadata(in: "System", storageName: "Account"))
+        XCTAssertNil(metadata.getStorageMetadata(in: "System", storageName: "account"))
+    }
+
+    func testFetchConstant() throws {
+        let metadata = try RuntimeHelper.createRuntimeMetadata("westend-metadata")
+
+        XCTAssertNotNil(metadata.getConstant(in: "Staking", constantName: "SlashDeferDuration"))
+        XCTAssertNil(metadata.getStorageMetadata(in: "Staking", storageName: "account"))
+    }
+
+    func testFetchFunction() throws {
+        let metadata = try RuntimeHelper.createRuntimeMetadata("westend-metadata")
+
+        XCTAssertNotNil(metadata.getFunction(from: "Staking", with: "nominate"))
+        XCTAssertNil(metadata.getFunction(from: "Staking", with: "account"))
+    }
+
+    func testFetchModule() throws {
+        let metadata = try RuntimeHelper.createRuntimeMetadata("westend-metadata")
+
+        XCTAssertNotNil(metadata.getModuleIndex("System"))
+        XCTAssertNil(metadata.getModuleIndex("Undefined"))
+    }
+
+    func testFetchCallIndex() throws {
+        let metadata = try RuntimeHelper.createRuntimeMetadata("westend-metadata")
+
+        XCTAssertNotNil(metadata.getCallIndex(in: "Staking", callName: "bond"))
+        XCTAssertNil(metadata.getCallIndex(in: "System", callName: "bond"))
+    }
+
     // MARK: Private
 
     private func performRuntimeMetadataTest(filename: String) {
