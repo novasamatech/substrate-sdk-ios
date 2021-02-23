@@ -8,4 +8,5 @@ enum ExtrinsicCheck: String {
     case genesis = "CheckGenesis"
     case txPayment = "ChargeTransactionPayment"
     case weight = "CheckWeight"
+    case attests = "PrevalidateAttests"
 }
