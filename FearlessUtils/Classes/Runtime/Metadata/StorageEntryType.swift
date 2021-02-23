@@ -5,7 +5,7 @@ public enum StorageEntryType {
     case map(_ value: MapEntry)
     case doubleMap(_ value: DoubleMapEntry)
 
-    var valueType: String {
+    public var typeName: String {
         switch self {
         case .plain(let value):
             return value
