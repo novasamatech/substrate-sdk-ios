@@ -16,23 +16,33 @@ public struct RuntimeMetadata {
         self.runtimeMetadataVersion = runtimeMetadataVersion
     }
 
-    func getFunction(from module: String, with name: String) -> FunctionMetadata? {
+    public func getFunction(from module: String, with name: String) -> FunctionMetadata? {
         modules
             .first(where: { $0.name == module })?
             .calls?.first(where: { $0.name == name })
     }
 
-    func getModuleIndex(_ name: String) -> UInt8? {
+    public func getModuleIndex(_ name: String) -> UInt8? {
         modules.first(where: { $0.name == name })?.index
     }
 
-    func getCallIndex(in moduleName: String, callName: String) -> UInt8? {
+    public func getCallIndex(in moduleName: String, callName: String) -> UInt8? {
         guard let index = modules.first(where: { $0.name == moduleName })?.calls?
                 .firstIndex(where: { $0.name == callName}) else {
             return nil
         }
 
         return UInt8(index)
+    }
+
+    public func getStorageMetadata(in moduleName: String, storageName: String) -> StorageEntryMetadata? {
+        modules.first(where: { $0.name == moduleName })?
+            .storage?.entries.first(where: { $0.name == storageName})
+    }
+
+    public func getConstant(in moduleName: String, constantName: String) -> ModuleConstantMetadata? {
+        modules.first(where: { $0.name == moduleName })?
+            .constants.first(where: { $0.name == constantName})
     }
 }
 

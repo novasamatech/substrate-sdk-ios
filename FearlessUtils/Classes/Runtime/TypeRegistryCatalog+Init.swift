@@ -41,7 +41,8 @@ public extension TypeRegistryCatalog {
         let typeResolver = OneOfTypeResolver(children: [
             CaseInsensitiveResolver(),
             TableResolver.noise(),
-            RegexReplaceResolver.noise()
+            RegexReplaceResolver.noise(),
+            RegexReplaceResolver.genericsFilter()
         ])
 
         let runtimeMetadataRegistry = try TypeRegistry

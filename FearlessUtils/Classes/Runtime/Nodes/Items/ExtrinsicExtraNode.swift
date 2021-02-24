@@ -2,7 +2,7 @@ import Foundation
 
 public enum ExtrinsicExtraNodeError: Error {
     case invalidParams
-    case unsupportedExtension
+    case unsupportedExtension(_ value: String)
 }
 
 public struct ExtrinsicExtraNode: Node {
@@ -20,7 +20,7 @@ public struct ExtrinsicExtraNode: Node {
 
         for checkString in runtimeMetadata.extrinsic.signedExtensions {
             guard let check = ExtrinsicCheck(rawValue: checkString) else {
-                throw ExtrinsicExtraNodeError.unsupportedExtension
+                throw ExtrinsicExtraNodeError.unsupportedExtension(checkString)
             }
 
             switch check {
