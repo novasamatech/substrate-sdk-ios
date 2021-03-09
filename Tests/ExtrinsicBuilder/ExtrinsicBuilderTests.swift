@@ -1,6 +1,7 @@
 import XCTest
 import FearlessUtils
 import IrohaCrypto
+import BigInt
 
 typealias ExtrinsicBuilderClosure = (ExtrinsicBuilderProtocol) throws -> ExtrinsicBuilderProtocol
 
@@ -10,26 +11,21 @@ class ExtrinsicBuilderTests: XCTestCase {
         let specVersion: UInt32 = 48
 
         do {
-            let account1 = Data(repeating: 1, count: 32)
-            let account2 = Data(repeating: 2, count: 32)
 
-            let args1 = TransferArgs(dest: .accoundId(account1), value: 1)
-            let call1 = RuntimeCall(moduleName: "Balances",
-                                    callName: "transfer",
-                                    args: args1)
+            let calls: [RuntimeCall<TransferArgs>] = (0..<500).map { index in
+                let account = Data(repeating: UInt8(index % 256), count: 32)
 
-            let args2 = TransferArgs(dest: .accoundId(account2), value: 2)
-            let call2 = RuntimeCall(moduleName: "Balances",
-                                    callName: "transfer",
-                                    args: args2)
-
-            let closure: ExtrinsicBuilderClosure = { builder in
-                return try builder
-                    .adding(call: call1)
-                    .adding(call: call2)
+                let args = TransferArgs(dest: .accoundId(account), value: BigUInt(index) + 1)
+                return RuntimeCall(moduleName: "Balances",
+                                   callName: "transfer",
+                                   args: args)
             }
 
-            let expectedJsonCalls = try [call1, call2].toScaleCompatibleJSON()
+            let closure: ExtrinsicBuilderClosure = { builder in
+                return try calls.reduce(builder) { try $0.adding(call: $1) }
+            }
+
+            let expectedJsonCalls = try calls.toScaleCompatibleJSON()
             let expectedCall = try RuntimeCall(moduleName: KnowRuntimeModule.Utitlity.name,
                                                callName: KnowRuntimeModule.Utitlity.batch,
                                                args: BatchArgs(calls: expectedJsonCalls.arrayValue!))
@@ -230,6 +226,8 @@ class ExtrinsicBuilderTests: XCTestCase {
                                        runtimeMetadata: metadata)
 
         let signingClosure: (Data) throws -> Data = { message in
+            XCTAssert(message.count <= 256)
+
             switch cryptoType {
             case .sr25519:
                 let privateKey = try SNPrivateKey(rawData: keypair.privateKey().rawData())
