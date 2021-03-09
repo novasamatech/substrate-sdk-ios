@@ -26,6 +26,7 @@ public enum GenericType: String, CaseIterable {
     case null = "Null"
     case opaqueCall = "OpaqueCall"
     case sessionKeys = "SessionKeysSubstrate"
+    case ecdsa = "EcdsaSignature"
 
     public var name: String { rawValue }
 }
