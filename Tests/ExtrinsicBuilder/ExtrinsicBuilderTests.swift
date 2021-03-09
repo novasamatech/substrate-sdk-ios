@@ -12,7 +12,7 @@ class ExtrinsicBuilderTests: XCTestCase {
 
         do {
 
-            let calls: [RuntimeCall<TransferArgs>] = (0..<500).map { index in
+            let calls: [RuntimeCall<TransferArgs>] = (0..<10).map { index in
                 let account = Data(repeating: UInt8(index % 256), count: 32)
 
                 let args = TransferArgs(dest: .accoundId(account), value: BigUInt(index) + 1)

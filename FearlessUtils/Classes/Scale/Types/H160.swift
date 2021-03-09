@@ -1,13 +1,11 @@
 import Foundation
 
-public struct H160: ScaleCodable, Equatable {
+public struct H160: FixedLengthDataStoring, Equatable {
+    public static var length: Int { 20 }
+
     public let value: Data
 
-    public init(scaleDecoder: ScaleDecoding) throws {
-        value = try scaleDecoder.readAndConfirm(count: 20)
-    }
-
-    public func encode(scaleEncoder: ScaleEncoding) throws {
-        scaleEncoder.appendRaw(data: value)
+    public init(value: Data) {
+        self.value = value
     }
 }
