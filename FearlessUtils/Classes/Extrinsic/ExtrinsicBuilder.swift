@@ -26,6 +26,8 @@ public enum ExtrinsicBuilderError: Error {
 }
 
 public final class ExtrinsicBuilder {
+    static let payloadHashingTreshold = 256
+
     struct InternalCall: Codable {
         let moduleName: String
         let callName: String
@@ -111,7 +113,9 @@ public final class ExtrinsicBuilder {
         try appendExtraToPayload(encodingBy: encoder)
         try appendAdditionalSigned(encodingBy: encoder, metadata: metadata)
 
-        return try encoder.encode()
+        let payload = try encoder.encode()
+
+        return payload.count > Self.payloadHashingTreshold ? (try payload.blake2b32()) : payload
     }
 }
 

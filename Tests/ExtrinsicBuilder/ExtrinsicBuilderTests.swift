@@ -1,6 +1,7 @@
 import XCTest
 import FearlessUtils
 import IrohaCrypto
+import BigInt
 
 typealias ExtrinsicBuilderClosure = (ExtrinsicBuilderProtocol) throws -> ExtrinsicBuilderProtocol
 
@@ -10,26 +11,21 @@ class ExtrinsicBuilderTests: XCTestCase {
         let specVersion: UInt32 = 48
 
         do {
-            let account1 = Data(repeating: 1, count: 32)
-            let account2 = Data(repeating: 2, count: 32)
 
-            let args1 = TransferArgs(dest: .accoundId(account1), value: 1)
-            let call1 = RuntimeCall(moduleName: "Balances",
-                                    callName: "transfer",
-                                    args: args1)
+            let calls: [RuntimeCall<TransferArgs>] = (0..<10).map { index in
+                let account = Data(repeating: UInt8(index % 256), count: 32)
 
-            let args2 = TransferArgs(dest: .accoundId(account2), value: 2)
-            let call2 = RuntimeCall(moduleName: "Balances",
-                                    callName: "transfer",
-                                    args: args2)
-
-            let closure: ExtrinsicBuilderClosure = { builder in
-                return try builder
-                    .adding(call: call1)
-                    .adding(call: call2)
+                let args = TransferArgs(dest: .accoundId(account), value: BigUInt(index) + 1)
+                return RuntimeCall(moduleName: "Balances",
+                                   callName: "transfer",
+                                   args: args)
             }
 
-            let expectedJsonCalls = try [call1, call2].toScaleCompatibleJSON()
+            let closure: ExtrinsicBuilderClosure = { builder in
+                return try calls.reduce(builder) { try $0.adding(call: $1) }
+            }
+
+            let expectedJsonCalls = try calls.toScaleCompatibleJSON()
             let expectedCall = try RuntimeCall(moduleName: KnowRuntimeModule.Utitlity.name,
                                                callName: KnowRuntimeModule.Utitlity.batch,
                                                args: BatchArgs(calls: expectedJsonCalls.arrayValue!))
@@ -38,6 +34,7 @@ class ExtrinsicBuilderTests: XCTestCase {
             try setupSignedExtrinsicBuilderTest("default",
                                                 networkName: "westend",
                                                 metadataName: "westend-metadata",
+                                                cryptoType: .sr25519,
                                                 genesisHash: genesisHash,
                                                 specVersion: specVersion,
                                                 builderClosure: closure,
@@ -47,34 +44,16 @@ class ExtrinsicBuilderTests: XCTestCase {
         }
     }
 
-    func testExtrinsicWithSingleCall() {
-        let genesisHash = Data(repeating: 0, count: 32).toHex(includePrefix: true)
-        let specVersion: UInt32 = 48
+    func testSingleCallWithSR25519() {
+        performExtrinsicWithSingleCall(for: .sr25519)
+    }
 
-        do {
-            let account = Data(repeating: 1, count: 32)
+    func testSingleCallWithED25519() {
+        performExtrinsicWithSingleCall(for: .ed25519)
+    }
 
-            let args = TransferArgs(dest: .accoundId(account), value: 1)
-            let call = RuntimeCall(moduleName: "Balances",
-                                   callName: "transfer",
-                                   args: args)
-
-            let closure: ExtrinsicBuilderClosure = { builder in
-                return try builder.adding(call: call)
-            }
-
-            let expectedCall = try call.toScaleCompatibleJSON()
-
-            try setupSignedExtrinsicBuilderTest("default",
-                                                networkName: "westend",
-                                                metadataName: "westend-metadata",
-                                                genesisHash: genesisHash,
-                                                specVersion: specVersion,
-                                                builderClosure: closure,
-                                                expectedCall: expectedCall)
-        } catch {
-            XCTFail("Unexpected error: \(error)")
-        }
+    func testSingleCallWithEcdsa() {
+        performExtrinsicWithSingleCall(for: .ecdsa)
     }
 
     func testUnsignedExtrinsic() throws {
@@ -148,6 +127,7 @@ class ExtrinsicBuilderTests: XCTestCase {
             try setupSignedExtrinsicBuilderTest("default",
                                                 networkName: "polkadot",
                                                 metadata: metadata,
+                                                cryptoType: .sr25519,
                                                 genesisHash: genesisHash,
                                                 specVersion: specVersion,
                                                 builderClosure: closure,
@@ -165,9 +145,41 @@ class ExtrinsicBuilderTests: XCTestCase {
 
     // MARK: Private
 
+    private func performExtrinsicWithSingleCall(for cryptoType: CryptoType) {
+        let genesisHash = Data(repeating: 0, count: 32).toHex(includePrefix: true)
+        let specVersion: UInt32 = 48
+
+        do {
+            let account = Data(repeating: 1, count: 32)
+
+            let args = TransferArgs(dest: .accoundId(account), value: 1)
+            let call = RuntimeCall(moduleName: "Balances",
+                                   callName: "transfer",
+                                   args: args)
+
+            let closure: ExtrinsicBuilderClosure = { builder in
+                return try builder.adding(call: call)
+            }
+
+            let expectedCall = try call.toScaleCompatibleJSON()
+
+            try setupSignedExtrinsicBuilderTest("default",
+                                                networkName: "westend",
+                                                metadataName: "westend-metadata",
+                                                cryptoType: cryptoType,
+                                                genesisHash: genesisHash,
+                                                specVersion: specVersion,
+                                                builderClosure: closure,
+                                                expectedCall: expectedCall)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+
     private func setupSignedExtrinsicBuilderTest(_ baseName: String,
                                                  networkName: String,
                                                  metadataName: String,
+                                                 cryptoType: CryptoType,
                                                  genesisHash: String,
                                                  specVersion: UInt32,
                                                  builderClosure: ExtrinsicBuilderClosure,
@@ -177,6 +189,7 @@ class ExtrinsicBuilderTests: XCTestCase {
         try setupSignedExtrinsicBuilderTest(baseName,
                                             networkName: networkName,
                                             metadata: metadata,
+                                            cryptoType: cryptoType,
                                             genesisHash: genesisHash,
                                             specVersion: specVersion,
                                             builderClosure: builderClosure,
@@ -186,28 +199,50 @@ class ExtrinsicBuilderTests: XCTestCase {
     private func setupSignedExtrinsicBuilderTest(_ baseName: String,
                                                  networkName: String,
                                                  metadata: RuntimeMetadata,
+                                                 cryptoType: CryptoType,
                                                  genesisHash: String,
                                                  specVersion: UInt32,
                                                  builderClosure: ExtrinsicBuilderClosure,
                                                  expectedCall: JSON?) throws {
         // given
 
-        let keypair = {
-            try! SR25519KeypairFactory()
-                .createKeypairFromSeed(Data(repeating: 8, count: 32), chaincodeList: [])
+        let keypair: IRCryptoKeypairProtocol = {
+            let data = Data(repeating: 8, count: 32)
+            switch cryptoType {
+            case .sr25519:
+                return try! SR25519KeypairFactory().createKeypairFromSeed(data, chaincodeList: [])
+            case .ed25519:
+                return try! Ed25519KeypairFactory().createKeypairFromSeed(data, chaincodeList: [])
+            case .ecdsa:
+                return try! EcdsaKeypairFactory().createKeypairFromSeed(data, chaincodeList: [])
+            }
         }()
 
-        let accountId = keypair.publicKey().rawData()
+        let accountId = try keypair.publicKey().rawData().publicKeyToAccountId()
 
         let catalog = try RuntimeHelper
             .createTypeRegistryCatalog(from: baseName,
                                        networkName: networkName,
                                        runtimeMetadata: metadata)
 
-        let privateKey = try SNPrivateKey(rawData: keypair.privateKey().rawData())
-        let publicKey = try SNPublicKey(rawData: keypair.publicKey().rawData())
+        let signingClosure: (Data) throws -> Data = { message in
+            XCTAssert(message.count <= 256)
 
-        let signer = SNSigner(keypair: SNKeypair(privateKey: privateKey, publicKey: publicKey))
+            switch cryptoType {
+            case .sr25519:
+                let privateKey = try SNPrivateKey(rawData: keypair.privateKey().rawData())
+                let publicKey = try SNPublicKey(rawData: keypair.publicKey().rawData())
+                let signer = SNSigner(keypair: SNKeypair(privateKey: privateKey, publicKey: publicKey))
+                return try signer.sign(message).rawData()
+            case .ed25519:
+                let signer = EDSigner(privateKey: keypair.privateKey())
+                return try signer.sign(message).rawData()
+            case .ecdsa:
+                let signer = SECSigner(privateKey: keypair.privateKey())
+                let hashed = try message.blake2b32()
+                return try signer.sign(hashed).rawData()
+            }
+        }
 
         let encoder = DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion))
 
@@ -217,8 +252,8 @@ class ExtrinsicBuilderTests: XCTestCase {
             .with(address: MultiAddress.accoundId(accountId))
 
         let extrinsicData = try builderClosure(initialBuilder)
-            .signing(by: { try signer.sign($0).rawData() },
-                     of: .sr25519,
+            .signing(by: signingClosure,
+                     of: cryptoType,
                      using: encoder.newEncoder(),
                      metadata: metadata)
             .build(encodingBy: encoder.newEncoder(), metadata: metadata)
