@@ -14,7 +14,7 @@ public class FixedArrayParser: TypeParser {
             return nil
         }
 
-        guard components.count == 2, components.allSatisfy( { $0.stringValue != nil } ) else {
+        guard components.count == 2, components.allSatisfy({ $0.stringValue != nil }) else {
             return nil
         }
 

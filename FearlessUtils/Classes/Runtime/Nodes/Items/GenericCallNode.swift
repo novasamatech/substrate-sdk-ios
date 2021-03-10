@@ -55,7 +55,7 @@ public struct GenericCallNode: Node {
             throw GenericCallNodeError.unexpectedDecodedFunction
         }
 
-        guard let module = runtimeMetadata.modules.first(where: { $0.index == moduleIndex } ) else {
+        guard let module = runtimeMetadata.modules.first(where: { $0.index == moduleIndex }) else {
             throw GenericCallNodeError.unexpectedCallModule(value: UInt64(moduleIndex))
         }
 
