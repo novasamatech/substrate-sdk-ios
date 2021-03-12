@@ -2,6 +2,8 @@ import Foundation
 
 enum TypeRegistryCatalogError: Error {
     case missingVersioning
+    case missingCurrentVersion
+    case missingNetworkTypes
     case duplicatedVersioning
 }
 

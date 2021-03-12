@@ -25,7 +25,9 @@ public class RegexParser: TypeParser {
             let nsValue =  stringValue  as NSString
             let range = NSRange(location: 0, length: nsValue.length)
 
-            if let result = expression.firstMatch(in: stringValue, options: [], range: range), result.numberOfRanges > 1 {
+            if
+                let result = expression.firstMatch(in: stringValue, options: [], range: range),
+                result.numberOfRanges > 1 {
                 let jsons: [JSON] = (1..<result.numberOfRanges).compactMap { index in
                     let range = result.range(at: index)
 

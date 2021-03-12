@@ -110,10 +110,11 @@ public class TypeRegistry: TypeRegistryProtocol {
         let allTypeNames = Set(graph.keys)
 
         let genericTypeNames = allTypeNames.filter { graph[$0] is GenericNode }
+        let nonGenericTypeNames = allTypeNames.subtracting(genericTypeNames)
 
         for genericTypeName in genericTypeNames {
             if let resolvedKey = typeResolver.resolve(typeName: genericTypeName,
-                                                      using: allTypeNames.subtracting([genericTypeName])) {
+                                                      using: nonGenericTypeNames) {
                 graph[genericTypeName] = ProxyNode(typeName: resolvedKey, resolver: self)
             }
         }
