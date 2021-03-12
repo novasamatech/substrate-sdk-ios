@@ -55,4 +55,3 @@ extension ChainData: Codable {
         }
     }
 }
-

@@ -83,7 +83,6 @@ public struct JunctionFactory: JunctionFactoryProtocol {
                         chaincodes.append(hardChaincode)
                     }
 
-
                     let softJunctions: [Chaincode] = try subcomponents[1...].map { softJunction in
                         let data = try createChaincodeFromJunction(softJunction)
                         return Chaincode(data: data, type: .soft)

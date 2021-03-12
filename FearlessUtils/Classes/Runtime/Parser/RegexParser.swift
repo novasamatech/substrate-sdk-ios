@@ -23,7 +23,7 @@ public class RegexParser: TypeParser {
             let expression = try NSRegularExpression(pattern: pattern)
 
             let nsValue =  stringValue  as NSString
-            let range = NSMakeRange(0, nsValue.length)
+            let range = NSRange(location: 0, length: nsValue.length)
 
             if let result = expression.firstMatch(in: stringValue, options: [], range: range), result.numberOfRanges > 1 {
                 let jsons: [JSON] = (1..<result.numberOfRanges).compactMap { index in

@@ -22,7 +22,7 @@ public extension TypeRegistryCatalog {
             let typeKey = "types"
 
             if let oldDefinitionDic = result[version]?.types?.dictValue {
-                let mapping = oldDefinitionDic.merging(definitionDic) { (v1, v2) in v1 }
+                let mapping = oldDefinitionDic.merging(definitionDic) { (v1, _) in v1 }
                 result[version] = .dictionaryValue([typeKey: .dictionaryValue(mapping)])
             } else {
                 result[version] = .dictionaryValue([typeKey: .dictionaryValue(definitionDic)])

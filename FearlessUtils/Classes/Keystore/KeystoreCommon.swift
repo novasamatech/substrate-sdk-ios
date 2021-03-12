@@ -37,7 +37,7 @@ enum KeystoreEncodingType: String {
 }
 
 enum KeystoreEncodingContent: String {
-    case pkcs8 = "pkcs8"
+    case pkcs8
 }
 
 public struct KeystoreConstants {

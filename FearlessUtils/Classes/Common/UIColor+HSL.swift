@@ -2,7 +2,7 @@ import UIKit
 
 public extension UIColor {
 
-    //MARK: - Public method
+    // MARK: - Public method
 
     /**
     Creates UIColor object based on given HSL values.
@@ -28,42 +28,31 @@ public extension UIColor {
         let h60: CGFloat = h / 60.0
         let x: CGFloat = c * CGFloat(1 - abs(h60.truncatingRemainder(dividingBy: 2.0) - 1))
 
-        if (h < 60.0) {
-
+        if h < 60.0 {
             r = c
             g = x
-        }
-        else if (h < 120.0)
-        {
+        } else if h < 120.0 {
             r = x
             g = c
-        }
-        else if (h < 180.0)
-        {
+        } else if h < 180.0 {
             g = c
             b = x
-        }
-        else if (h < 240.0)
-        {
+        } else if h < 240.0 {
             g = x
             b = c
-        }
-        else if (h < 300.0)
-        {
+        } else if h < 300.0 {
             r = x
             b = c
-        }
-        else if (h < 360.0)
-        {
+        } else if h < 360.0 {
             r = c
             b = x
         }
 
         let m: CGFloat = lightness - (c / 2.0)
 
-        r = r + m
-        g = g + m
-        b = b + m
+        r += m
+        g += m
+        b += m
 
         return UIColor(red: r, green: g, blue: b, alpha: 1.0)
     }

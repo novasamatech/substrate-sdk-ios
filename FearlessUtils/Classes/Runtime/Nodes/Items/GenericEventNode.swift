@@ -16,7 +16,7 @@ public struct GenericEventNode: Node {
     public init(runtimeMetadata: RuntimeMetadata) {
         self.runtimeMetadata = runtimeMetadata
     }
-    
+
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
         guard let input = value.arrayValue else {
             throw DynamicScaleEncoderError.arrayExpected(json: value)
@@ -30,7 +30,7 @@ public struct GenericEventNode: Node {
             throw GenericEventNodeError.unexpectedParams
         }
 
-        guard let module = runtimeMetadata.modules.first(where: { $0.index == eventModule} ) else {
+        guard let module = runtimeMetadata.modules.first(where: { $0.index == eventModule }) else {
             throw GenericEventNodeError.unexpectedEventModule(value: eventModule)
         }
 
@@ -64,7 +64,7 @@ public struct GenericEventNode: Node {
             throw GenericEventNodeError.unexpectedDecodedEventIndex
         }
 
-        guard let module = runtimeMetadata.modules.first(where: { $0.index == eventModule} ) else {
+        guard let module = runtimeMetadata.modules.first(where: { $0.index == eventModule }) else {
             throw GenericEventNodeError.unexpectedEventModule(value: UInt64(eventModule))
         }
 
