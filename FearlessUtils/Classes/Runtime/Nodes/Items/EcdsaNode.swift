@@ -1,6 +1,6 @@
 import Foundation
 
-public struct EcdsaNode: Node {
+public class EcdsaNode: Node {
     public var typeName: String { GenericType.ecdsa.name }
 
     public init() {}

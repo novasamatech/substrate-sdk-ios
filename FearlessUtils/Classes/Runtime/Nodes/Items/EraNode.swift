@@ -1,6 +1,6 @@
 import Foundation
 
-public struct EraNode: Node {
+public class EraNode: Node {
     public var typeName: String { GenericType.era.name }
 
     public init() {}

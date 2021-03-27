@@ -5,7 +5,7 @@ public enum ExtrinsicExtraNodeError: Error {
     case unsupportedExtension(_ value: String)
 }
 
-public struct ExtrinsicExtraNode: Node {
+public class ExtrinsicExtraNode: Node {
     public var typeName: String { GenericType.extrinsicExtra.name }
     public let runtimeMetadata: RuntimeMetadata
 

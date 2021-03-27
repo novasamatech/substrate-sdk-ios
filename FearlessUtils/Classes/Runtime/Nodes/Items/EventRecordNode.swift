@@ -1,6 +1,6 @@
 import Foundation
 
-public struct EventRecordNode: Node {
+public class EventRecordNode: Node {
     public var typeName: String { GenericType.eventRecord.name }
     public let runtimeMetadata: RuntimeMetadata
 

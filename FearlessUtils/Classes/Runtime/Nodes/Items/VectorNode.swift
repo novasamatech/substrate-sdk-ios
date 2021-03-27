@@ -1,6 +1,6 @@
 import Foundation
 
-public struct VectorNode: Node {
+public class VectorNode: Node {
     public let typeName: String
     public let underlying: Node
 

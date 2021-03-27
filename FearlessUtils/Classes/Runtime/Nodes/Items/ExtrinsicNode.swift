@@ -6,7 +6,7 @@ public enum ExtrinsicNodeError: Error {
     case invalidVersion
 }
 
-public struct ExtrinsicNode: Node {
+public class ExtrinsicNode: Node {
     public var typeName: String { GenericType.extrinsic.name }
 
     public init() {}

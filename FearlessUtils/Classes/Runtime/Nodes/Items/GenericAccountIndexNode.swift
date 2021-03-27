@@ -1,6 +1,6 @@
 import Foundation
 
-public struct GenericAccountIndexNode: Node {
+public class GenericAccountIndexNode: Node {
     public var typeName: String { GenericType.accountIndex.name }
 
     public init() {}

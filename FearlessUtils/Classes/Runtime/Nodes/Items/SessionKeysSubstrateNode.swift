@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SessionKeysSubstrateNode: Node {
+public class SessionKeysSubstrateNode: Node {
     static let fieldNames: [String] = ["grandpa", "babe", "im_online"]
     static let fieldTypeName: String = GenericType.accountId.name
 

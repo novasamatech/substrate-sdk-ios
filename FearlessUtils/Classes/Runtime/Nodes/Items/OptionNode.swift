@@ -1,6 +1,6 @@
 import Foundation
 
-public struct OptionNode: Node {
+public class OptionNode: Node {
     public let typeName: String
     public let underlying: Node
 

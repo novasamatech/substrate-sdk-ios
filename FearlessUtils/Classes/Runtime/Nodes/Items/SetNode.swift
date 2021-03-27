@@ -1,6 +1,6 @@
 import Foundation
 
-public struct SetNode: Node {
+public class SetNode: Node {
     public struct Item: Hashable, Equatable {
         public let name: String
         public let value: UInt64

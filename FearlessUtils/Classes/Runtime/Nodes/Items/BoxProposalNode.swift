@@ -1,6 +1,6 @@
 import Foundation
 
-public struct BoxProposalNode: Node {
+public class BoxProposalNode: Node {
     public var typeName: String { GenericType.boxProposal.name }
     public let runtimeMetadata: RuntimeMetadata
 

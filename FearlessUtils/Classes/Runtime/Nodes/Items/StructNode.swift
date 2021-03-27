@@ -1,6 +1,6 @@
 import Foundation
 
-public struct StructNode: Node {
+public class StructNode: Node {
     public let typeName: String
     public let typeMapping: [NameNode]
 

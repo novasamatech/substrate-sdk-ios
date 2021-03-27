@@ -1,6 +1,6 @@
 import Foundation
 
-public struct CallBytesNode: Node {
+public class CallBytesNode: Node {
     public var typeName: String { GenericType.callBytes.name }
 
     public init() {}

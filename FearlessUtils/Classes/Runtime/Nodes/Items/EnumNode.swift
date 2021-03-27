@@ -1,6 +1,6 @@
 import Foundation
 
-public struct EnumNode: Node {
+public class EnumNode: Node {
     public let typeName: String
     public let typeMapping: [NameNode]
 

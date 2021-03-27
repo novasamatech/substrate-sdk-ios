@@ -1,6 +1,6 @@
 import Foundation
 
-public struct CompactNode: Node {
+public class CompactNode: Node {
     public let typeName: String
     public let underlying: Node
 

@@ -1,6 +1,6 @@
 import Foundation
 
-public struct AccountIdAddressNode: Node {
+public class AccountIdAddressNode: Node {
     public var typeName: String { "AccountIdAddress" }
 
     public init() {}

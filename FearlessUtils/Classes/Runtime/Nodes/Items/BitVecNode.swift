@@ -7,7 +7,7 @@ public enum BitVecNodeError: Error {
     case expectedHex
 }
 
-public struct BitVecNode: Node {
+public class BitVecNode: Node {
     public var typeName: String { GenericType.bitVec.name }
 
     public init() {}

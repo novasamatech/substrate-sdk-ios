@@ -1,6 +1,6 @@
 import Foundation
 
-public struct OpaqueCallNode: Node {
+public class OpaqueCallNode: Node {
     public var typeName: String { GenericType.opaqueCall.name }
     public let runtimeMetadata: RuntimeMetadata
 

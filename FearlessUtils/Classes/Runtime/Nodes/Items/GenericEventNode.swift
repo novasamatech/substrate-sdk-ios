@@ -9,7 +9,7 @@ public enum GenericEventNodeError: Error {
     case unexpectedDecodedEventIndex
 }
 
-public struct GenericEventNode: Node {
+public class GenericEventNode: Node {
     public var typeName: String { GenericType.event.name }
     public let runtimeMetadata: RuntimeMetadata
 
