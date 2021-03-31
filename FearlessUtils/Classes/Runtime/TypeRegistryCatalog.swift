@@ -24,6 +24,10 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
     public let versionedTypes: [String: [UInt64]]
     public let typeResolver: TypeResolving
 
+    public let allTypes: Set<String>
+    public let mutex = NSLock()
+    public var resolutionCache: [String: String] = [:]
+
     public init(baseRegistry: TypeRegistryProtocol,
                 versionedRegistries: [UInt64: TypeRegistryProtocol],
                 runtimeMetadataRegistry: TypeRegistryProtocol,
@@ -50,15 +54,29 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
                 }
             }
         }
+
+        allTypes = Set(versionedTypes.keys)
     }
 
     public func node(for typeName: String, version: UInt64) -> Node? {
+        mutex.lock()
+
+        defer {
+            mutex.unlock()
+        }
+
         let registry = getRegistry(for: typeName, version: version)
         return fallbackToRuntimeMetadataIfNeeded(from: registry, for: typeName)
     }
 
     public func replacingRuntimeMetadata(_ newMetadata: RuntimeMetadata) throws
     -> TypeRegistryCatalogProtocol {
+        mutex.lock()
+
+        defer {
+            mutex.unlock()
+        }
+
         let newRuntimeRegistry = try TypeRegistry.createFromRuntimeMetadata(newMetadata)
 
         return TypeRegistryCatalog(baseRegistry: baseRegistry,
@@ -75,7 +93,10 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
 
         if let typeVersions = versionedTypes[typeName] {
             versions = typeVersions
-        } else if let resolvedName = typeResolver.resolve(typeName: typeName, using: Set(versionedTypes.keys)) {
+        } else if let resolvedName = resolutionCache[typeName] {
+            versions = versionedTypes[resolvedName] ?? []
+        } else if let resolvedName = typeResolver.resolve(typeName: typeName, using: allTypes) {
+            resolutionCache[typeName] = resolvedName
             versions = versionedTypes[resolvedName] ?? []
         } else {
             versions = []
