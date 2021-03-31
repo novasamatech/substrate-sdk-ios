@@ -26,7 +26,7 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
 
     public let allTypes: Set<String>
     public let mutex = NSLock()
-    public var resolutionCache: [String: String] = [:]
+    public var registryCache: [String: TypeRegistryProtocol] = [:]
 
     public init(baseRegistry: TypeRegistryProtocol,
                 versionedRegistries: [UInt64: TypeRegistryProtocol],
@@ -65,8 +65,14 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
             mutex.unlock()
         }
 
+        let cacheKey = "\(typeName)_\(version)"
+
+        if let registry = registryCache[cacheKey] {
+            return registry.node(for: typeName)
+        }
+
         let registry = getRegistry(for: typeName, version: version)
-        return fallbackToRuntimeMetadataIfNeeded(from: registry, for: typeName)
+        return fallbackToRuntimeMetadataIfNeeded(from: registry, typeName: typeName, cacheKey: cacheKey)
     }
 
     public func replacingRuntimeMetadata(_ newMetadata: RuntimeMetadata) throws
@@ -76,6 +82,8 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
         defer {
             mutex.unlock()
         }
+
+        registryCache = [:]
 
         let newRuntimeRegistry = try TypeRegistry.createFromRuntimeMetadata(newMetadata)
 
@@ -93,10 +101,7 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
 
         if let typeVersions = versionedTypes[typeName] {
             versions = typeVersions
-        } else if let resolvedName = resolutionCache[typeName] {
-            versions = versionedTypes[resolvedName] ?? []
         } else if let resolvedName = typeResolver.resolve(typeName: typeName, using: allTypes) {
-            resolutionCache[typeName] = resolvedName
             versions = versionedTypes[resolvedName] ?? []
         } else {
             versions = []
@@ -110,11 +115,14 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
     }
 
     private func fallbackToRuntimeMetadataIfNeeded(from registry: TypeRegistryProtocol,
-                                                   for typeName: String) -> Node? {
+                                                   typeName: String,
+                                                   cacheKey: String) -> Node? {
         if let node = registry.node(for: typeName) {
+            registryCache[cacheKey] = registry
             return node
         }
 
+        registryCache[cacheKey] = runtimeMetadataRegistry
         return runtimeMetadataRegistry.node(for: typeName)
     }
 }
