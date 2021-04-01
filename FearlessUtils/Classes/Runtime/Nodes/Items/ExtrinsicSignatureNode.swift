@@ -4,7 +4,7 @@ public enum ExtrinsicSignatureNodeError: Error {
     case invalidParams
 }
 
-public struct ExtrinsicSignatureNode: Node {
+public class ExtrinsicSignatureNode: Node {
     public var typeName: String { GenericType.extrinsicSignature.name }
     public let runtimeMetadata: RuntimeMetadata
 

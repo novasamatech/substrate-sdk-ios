@@ -1,6 +1,6 @@
 import Foundation
 
-public struct GenericMultiAddressNode: Node {
+public class GenericMultiAddressNode: Node {
     public static let typeMapping = [
         [MultiAddress.accountIdField, GenericType.accountId.name],
         [MultiAddress.indexField, "Compact<\(GenericType.accountIndex.name)>"],

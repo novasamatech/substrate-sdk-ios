@@ -4,7 +4,7 @@ public protocol NodeResolver: class {
     func resolve(for key: String) -> Node?
 }
 
-public struct ProxyNode: Node {
+public class ProxyNode: Node {
     public let typeName: String
     public weak var resolver: NodeResolver?
 

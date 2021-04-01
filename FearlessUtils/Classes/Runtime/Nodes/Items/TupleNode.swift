@@ -1,6 +1,6 @@
 import Foundation
 
-public struct TupleNode: Node {
+public class TupleNode: Node {
     public let typeName: String
     public let innerNodes: [Node]
 

@@ -42,9 +42,11 @@ public class TypeRegistry: TypeRegistryProtocol {
     private var graph: [String: Node] = [:]
     private var nodeFactory: TypeNodeFactoryProtocol
     private var typeResolver: TypeResolving
+    private var resolutionCache: [String: String] = [:]
+    private var allKeys: Set<String> = []
 
     public var registeredTypes: [Node] { graph.keys.compactMap { graph[$0] } }
-    public var registeredTypeNames: Set<String> { Set(graph.keys) }
+    public var registeredTypeNames: Set<String> { allKeys }
 
     init(json: JSON,
          nodeFactory: TypeNodeFactoryProtocol,
@@ -56,6 +58,8 @@ public class TypeRegistry: TypeRegistryProtocol {
         try parse(json: json)
         override(nodes: additionalNodes)
         resolveGenerics()
+
+        allKeys = Set(graph.keys)
     }
 
     public func node(for key: String) -> Node? {
@@ -63,7 +67,12 @@ public class TypeRegistry: TypeRegistryProtocol {
             return node
         }
 
-        if let resolvedKey = typeResolver.resolve(typeName: key, using: Set(graph.keys)) {
+        if let resolvedKey = resolutionCache[key] {
+            return graph[resolvedKey]
+        }
+
+        if let resolvedKey = typeResolver.resolve(typeName: key, using: allKeys) {
+            resolutionCache[key] = resolvedKey
             return graph[resolvedKey]
         }
 

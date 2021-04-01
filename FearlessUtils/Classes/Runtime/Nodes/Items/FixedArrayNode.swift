@@ -1,6 +1,6 @@
 import Foundation
 
-public struct FixedArrayNode: Node {
+public class FixedArrayNode: Node {
     public let typeName: String
     public let elementType: Node
     public let length: UInt64

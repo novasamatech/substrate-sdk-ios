@@ -1,6 +1,6 @@
 import Foundation
 
-public struct GenericVoteNode: Node {
+public class GenericVoteNode: Node {
     public var typeName: String { GenericType.vote.name }
 
     public init() {}

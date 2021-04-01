@@ -1,6 +1,6 @@
 import Foundation
 
-public struct GenericBlockNode: Node {
+public class GenericBlockNode: Node {
     public var typeName: String { GenericType.block.name }
 
     public init() {}

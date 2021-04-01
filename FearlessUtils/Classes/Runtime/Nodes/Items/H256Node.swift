@@ -1,6 +1,6 @@
 import Foundation
 
-public struct H256Node: Node {
+public class H256Node: Node {
     public var typeName: String { GenericType.h256.name }
 
     public init() {}

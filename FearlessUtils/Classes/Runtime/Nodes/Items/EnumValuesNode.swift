@@ -1,6 +1,6 @@
 import Foundation
 
-public struct EnumValuesNode: Node {
+public class EnumValuesNode: Node {
     public let typeName: String
     public let values: [String]
 

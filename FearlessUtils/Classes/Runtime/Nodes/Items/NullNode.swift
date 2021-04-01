@@ -1,6 +1,6 @@
 import Foundation
 
-public struct NullNode: Node {
+public class NullNode: Node {
     public var typeName: String { GenericType.null.name }
 
     public init() {}

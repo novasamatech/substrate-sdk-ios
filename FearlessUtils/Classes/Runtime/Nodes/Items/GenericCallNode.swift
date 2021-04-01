@@ -9,7 +9,7 @@ public enum GenericCallNodeError: Error {
     case unexpectedDecodedFunction
 }
 
-public struct GenericCallNode: Node {
+public class GenericCallNode: Node {
     public var typeName: String { GenericType.call.name }
     public let runtimeMetadata: RuntimeMetadata
 

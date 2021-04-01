@@ -1,6 +1,6 @@
 import Foundation
 
-public struct H512Node: Node {
+public class H512Node: Node {
     public var typeName: String { GenericType.h512.name }
 
     public init() {}

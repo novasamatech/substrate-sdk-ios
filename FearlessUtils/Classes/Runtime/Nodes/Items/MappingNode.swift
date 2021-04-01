@@ -10,7 +10,7 @@ public struct NamedType {
     }
 }
 
-public struct MappingNode: Node {
+public class MappingNode: Node {
     public let typeName: String
     public let typeMapping: [NamedType]
 

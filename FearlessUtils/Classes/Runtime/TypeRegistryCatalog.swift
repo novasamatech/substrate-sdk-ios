@@ -24,6 +24,10 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
     public let versionedTypes: [String: [UInt64]]
     public let typeResolver: TypeResolving
 
+    public let allTypes: Set<String>
+    public let mutex = NSLock()
+    public var registryCache: [String: TypeRegistryProtocol] = [:]
+
     public init(baseRegistry: TypeRegistryProtocol,
                 versionedRegistries: [UInt64: TypeRegistryProtocol],
                 runtimeMetadataRegistry: TypeRegistryProtocol,
@@ -50,15 +54,37 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
                 }
             }
         }
+
+        allTypes = Set(versionedTypes.keys)
     }
 
     public func node(for typeName: String, version: UInt64) -> Node? {
+        mutex.lock()
+
+        defer {
+            mutex.unlock()
+        }
+
+        let cacheKey = "\(typeName)_\(version)"
+
+        if let registry = registryCache[cacheKey] {
+            return registry.node(for: typeName)
+        }
+
         let registry = getRegistry(for: typeName, version: version)
-        return fallbackToRuntimeMetadataIfNeeded(from: registry, for: typeName)
+        return fallbackToRuntimeMetadataIfNeeded(from: registry, typeName: typeName, cacheKey: cacheKey)
     }
 
     public func replacingRuntimeMetadata(_ newMetadata: RuntimeMetadata) throws
     -> TypeRegistryCatalogProtocol {
+        mutex.lock()
+
+        defer {
+            mutex.unlock()
+        }
+
+        registryCache = [:]
+
         let newRuntimeRegistry = try TypeRegistry.createFromRuntimeMetadata(newMetadata)
 
         return TypeRegistryCatalog(baseRegistry: baseRegistry,
@@ -75,7 +101,7 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
 
         if let typeVersions = versionedTypes[typeName] {
             versions = typeVersions
-        } else if let resolvedName = typeResolver.resolve(typeName: typeName, using: Set(versionedTypes.keys)) {
+        } else if let resolvedName = typeResolver.resolve(typeName: typeName, using: allTypes) {
             versions = versionedTypes[resolvedName] ?? []
         } else {
             versions = []
@@ -89,11 +115,14 @@ public class TypeRegistryCatalog: TypeRegistryCatalogProtocol {
     }
 
     private func fallbackToRuntimeMetadataIfNeeded(from registry: TypeRegistryProtocol,
-                                                   for typeName: String) -> Node? {
+                                                   typeName: String,
+                                                   cacheKey: String) -> Node? {
         if let node = registry.node(for: typeName) {
+            registryCache[cacheKey] = registry
             return node
         }
 
+        registryCache[cacheKey] = runtimeMetadataRegistry
         return runtimeMetadataRegistry.node(for: typeName)
     }
 }

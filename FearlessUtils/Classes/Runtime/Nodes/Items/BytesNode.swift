@@ -1,6 +1,6 @@
 import Foundation
 
-public struct BytesNode: Node {
+public class BytesNode: Node {
     public var typeName: String { GenericType.bytes.name }
 
     public init() {}
