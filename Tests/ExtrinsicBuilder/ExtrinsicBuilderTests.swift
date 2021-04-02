@@ -98,51 +98,6 @@ class ExtrinsicBuilderTests: XCTestCase {
         }
     }
 
-    func testUnknownSignedExtensionsNotIgnored() {
-        let unsupportedExtension = "UnknownExtension"
-        let genesisHash = Data(repeating: 0, count: 32).toHex(includePrefix: true)
-        let specVersion: UInt32 = 28
-
-        do {
-            let account = Data(repeating: 1, count: 32)
-
-            let args = TransferArgs(dest: .accoundId(account), value: 1)
-            let call = RuntimeCall(moduleName: "Balances",
-                                   callName: "transfer",
-                                   args: args)
-
-            let closure: ExtrinsicBuilderClosure = { builder in
-                return try builder.adding(call: call)
-            }
-
-            let prevMetadata = try RuntimeHelper.createRuntimeMetadata("polkadot-metadata")
-
-            let newExtensions = prevMetadata.extrinsic.signedExtensions + [unsupportedExtension]
-            let metadata = RuntimeMetadata(metaReserved: prevMetadata.metaReserved,
-                                           runtimeMetadataVersion: prevMetadata.runtimeMetadataVersion,
-                                           modules: prevMetadata.modules,
-                                           extrinsic: ExtrinsicMetadata(version: prevMetadata.extrinsic.version,
-                                                                        signedExtensions: newExtensions))
-
-            try setupSignedExtrinsicBuilderTest("default",
-                                                networkName: "polkadot",
-                                                metadata: metadata,
-                                                cryptoType: .sr25519,
-                                                genesisHash: genesisHash,
-                                                specVersion: specVersion,
-                                                builderClosure: closure,
-                                                expectedCall: nil)
-        } catch {
-            if
-                let error = error as? ExtrinsicExtraNodeError,
-                case .unsupportedExtension(let value) = error {
-                XCTAssertEqual(unsupportedExtension, value)
-            } else {
-                XCTFail("Unexpected error: \(error)")
-            }
-        }
-    }
-
     // MARK: Private
 
     private func performExtrinsicWithSingleCall(for cryptoType: CryptoType) {

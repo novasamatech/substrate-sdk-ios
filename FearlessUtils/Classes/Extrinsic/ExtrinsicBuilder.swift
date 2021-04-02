@@ -87,7 +87,7 @@ public final class ExtrinsicBuilder {
                                         metadata: RuntimeMetadata) throws {
         for checkString in metadata.extrinsic.signedExtensions {
             guard let check = ExtrinsicCheck(rawValue: checkString) else {
-                throw ExtrinsicBuilderError.unsupportedSignedExtension(checkString)
+                continue
             }
 
             switch check {

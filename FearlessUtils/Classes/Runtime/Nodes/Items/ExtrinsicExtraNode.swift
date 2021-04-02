@@ -2,7 +2,6 @@ import Foundation
 
 public enum ExtrinsicExtraNodeError: Error {
     case invalidParams
-    case unsupportedExtension(_ value: String)
 }
 
 public class ExtrinsicExtraNode: Node {
@@ -20,7 +19,7 @@ public class ExtrinsicExtraNode: Node {
 
         for checkString in runtimeMetadata.extrinsic.signedExtensions {
             guard let check = ExtrinsicCheck(rawValue: checkString) else {
-                throw ExtrinsicExtraNodeError.unsupportedExtension(checkString)
+                continue
             }
 
             switch check {
