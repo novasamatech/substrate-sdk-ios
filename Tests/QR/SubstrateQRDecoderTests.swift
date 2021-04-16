@@ -11,7 +11,7 @@ class SubstrateQRDecoderTests: XCTestCase {
                                            rawPublicKey: publicKey,
                                            username: "BVB")
 
-        let decodedInfo = try SubstrateQRDecoder(networkType: .genericSubstrate).decode(data: data)
+        let decodedInfo = try SubstrateQRDecoder(networkType: NetworkTypes.genericSubstrate.rawValue).decode(data: data)
 
         XCTAssertEqual(decodedInfo, expectedInfo)
     }
@@ -25,7 +25,7 @@ class SubstrateQRDecoderTests: XCTestCase {
                                            rawPublicKey: publicKey,
                                            username: nil)
 
-        let decodedInfo = try SubstrateQRDecoder(networkType: .genericSubstrate).decode(data: data)
+        let decodedInfo = try SubstrateQRDecoder(networkType: NetworkTypes.genericSubstrate.rawValue).decode(data: data)
 
         XCTAssertEqual(decodedInfo, expectedInfo)
     }
@@ -52,7 +52,7 @@ class SubstrateQRDecoderTests: XCTestCase {
 
     private func perforErrorTest(_ data: Data, expectedError: SubstrateQRDecoderError) {
         do {
-            _ = try SubstrateQRDecoder(networkType: .genericSubstrate).decode(data: data)
+            _ = try SubstrateQRDecoder(networkType: NetworkTypes.genericSubstrate.rawValue).decode(data: data)
 
             XCTFail("Exception expected")
         } catch {

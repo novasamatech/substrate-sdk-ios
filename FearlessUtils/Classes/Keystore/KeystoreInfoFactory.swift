@@ -20,11 +20,11 @@ public final class KeystoreInfoFactory: KeystoreInfoFactoryProtocol {
             throw KeystoreInfoFactoryError.unsupportedCryptoType
         }
 
-        let addressType: SNAddressType?
+        let addressType: UInt8?
 
         if let address = definition.address,
            let addressTypeValue = try? SS58AddressFactory().type(fromAddress: address) {
-            addressType = SNAddressType(rawValue: addressTypeValue.uint8Value)
+            addressType = UInt8(addressTypeValue.uint8Value)
         } else {
             addressType = nil
         }

@@ -2,13 +2,13 @@ import Foundation
 import IrohaCrypto
 
 open class SubstrateQRDecoder: SubstrateQRDecodable {
-    public let networkType: SNAddressType
+    public let networkType: UInt8
     public let separator: String
     public let prefix: String
 
     private lazy var addressFactory = SS58AddressFactory()
 
-    public init(networkType: SNAddressType,
+    public init(networkType: UInt8,
                 prefix: String = SubstrateQR.prefix,
                 separator: String = SubstrateQR.fieldsSeparator) {
         self.prefix = prefix

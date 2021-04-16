@@ -82,9 +82,7 @@ public class PolkadotIconGenerator: IconGenerating {
 
         let typeValue = try addressFactory.type(fromAddress: address)
 
-        guard let addressType = SNAddressType(rawValue: typeValue.uint8Value) else {
-            throw PolkadotIconGeneratorError.unrecognizedAddress
-        }
+        let addressType = UInt8(typeValue.uint8Value)
 
         let accountId = try addressFactory.accountId(fromAddress: address, type: addressType)
 
@@ -95,7 +93,7 @@ public class PolkadotIconGenerator: IconGenerating {
             bytes[index] = UInt8((value + 256 - UInt(zero[index])) % 256)
         }
 
-        return Data(bytes: bytes)
+        return Data(bytes)
     }
 
     private func getColorsForData(_ data: Data) throws -> [UIColor] {
