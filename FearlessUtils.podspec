@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'FearlessUtils'
-  s.version          = '0.8.0'
+  s.version          = '0.9.0'
   s.summary          = 'Utility library that implements clients specific logic to interact with substrate based networks'
 
   s.homepage         = 'https://github.com/soramitsu/fearless-utils-iOS'
@@ -32,6 +32,6 @@ Pod::Spec.new do |s|
   
   s.test_spec do |ts|
       ts.source_files = 'Tests/**/*.swift'
-      ts.resources = ['Tests/**/*.json']
+      ts.resources = ['Tests/**/*.json', 'Tests/**/*-metadata']
   end
 end

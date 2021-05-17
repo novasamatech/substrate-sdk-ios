@@ -1,60 +1,64 @@
 import Foundation
 
 public protocol StorageKeyFactoryProtocol: class {
-    func createStorageKey(moduleName: String, serviceName: String) throws -> Data
+    func createStorageKey(moduleName: String, storageName: String) throws -> Data
+
     func createStorageKey(moduleName: String,
-                          serviceName: String,
-                          identifier: Data,
-                          hasher: StorageKeyHasher) throws -> Data
+                          storageName: String,
+                          key: Data,
+                          hasher: StorageHasher) throws -> Data
+
+    func createStorageKey(moduleName: String,
+                          storageName: String,
+                          key1: Data,
+                          hasher1: StorageHasher,
+                          key2: Data,
+                          hasher2: StorageHasher) throws -> Data
 }
 
 public enum StorageKeyFactoryError: Error {
     case badSerialization
 }
 
-public protocol StorageKeyHasher: class {
-    func hash(data: Data) throws -> Data
-}
-
-public final class Blake128Concat: StorageKeyHasher {
-    public init() {}
-
-    public func hash(data: Data) throws -> Data {
-        try data.blake128Concat()
-    }
-}
-
-public final class Twox64Concat: StorageKeyHasher {
-    public init() {}
-
-    public func hash(data: Data) throws -> Data {
-        data.twox64Concat()
-    }
-}
-
 public final class StorageKeyFactory: StorageKeyFactoryProtocol {
     public init() {}
 
-    public func createStorageKey(moduleName: String, serviceName: String) throws -> Data {
+    public func createStorageKey(moduleName: String, storageName: String) throws -> Data {
         guard let moduleKey = moduleName.data(using: .utf8) else {
             throw StorageKeyFactoryError.badSerialization
         }
 
-        guard let serviceKey = serviceName.data(using: .utf8) else {
+        guard let serviceKey = storageName.data(using: .utf8) else {
             throw StorageKeyFactoryError.badSerialization
         }
 
-        return moduleKey.xxh128() + serviceKey.xxh128()
+        return moduleKey.twox128() + serviceKey.twox128()
     }
 
     public func createStorageKey(moduleName: String,
-                                 serviceName: String,
-                                 identifier: Data,
-                                 hasher: StorageKeyHasher) throws -> Data {
-        let subkey = try createStorageKey(moduleName: moduleName, serviceName: serviceName)
+                                 storageName: String,
+                                 key: Data,
+                                 hasher: StorageHasher) throws -> Data {
+        let subkey = try createStorageKey(moduleName: moduleName, storageName: storageName)
 
-        let identifierHash: Data = try hasher.hash(data: identifier)
+        let keyHash: Data = try hasher.hash(data: key)
 
-        return subkey + identifierHash
+        return subkey + keyHash
+    }
+
+    public func createStorageKey(moduleName: String,
+                                 storageName: String,
+                                 key1: Data,
+                                 hasher1: StorageHasher,
+                                 key2: Data,
+                                 hasher2: StorageHasher) throws -> Data {
+        let subkey = try createStorageKey(moduleName: moduleName,
+                                          storageName: storageName,
+                                          key: key1,
+                                          hasher: hasher1)
+
+        let key2Hash: Data = try hasher2.hash(data: key2)
+
+        return subkey + key2Hash
     }
 }

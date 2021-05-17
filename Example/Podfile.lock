@@ -1,6 +1,6 @@
 PODS:
   - BigInt (5.0.0)
-  - FearlessUtils (0.8.0):
+  - FearlessUtils (0.9.0):
     - BigInt (~> 5.0)
     - IrohaCrypto/ed25519 (~> 0.7.0)
     - IrohaCrypto/Scrypt (~> 0.7.0)
@@ -24,17 +24,20 @@ PODS:
     - IrohaCrypto/blake2
     - IrohaCrypto/Common
   - scrypt.c (0.1.1)
+  - SwiftLint (0.42.0)
   - TweetNacl (1.0.2)
   - xxHash-Swift (1.0.13)
 
 DEPENDENCIES:
   - FearlessUtils (from `../`)
+  - SwiftLint
 
 SPEC REPOS:
   trunk:
     - BigInt
     - IrohaCrypto
     - scrypt.c
+    - SwiftLint
     - TweetNacl
     - xxHash-Swift
 
@@ -44,12 +47,13 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
-  FearlessUtils: 979e4d4f7fce0432217588b6d693cb86166545e5
+  FearlessUtils: 8c05cb6cf737943f343e6a1fb4be2ac6fafebb9d
   IrohaCrypto: bddf15865c4df189b9c5273ba9c675afae8b7f4c
   scrypt.c: b42ae06183251329d2b2c620c226fb541a4a3592
+  SwiftLint: 4fa9579c63416865179bc416f0a92d55f009600d
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   xxHash-Swift: 30bd6a7507b3b7348a277c49b1cb6346c2905ec7
 
-PODFILE CHECKSUM: 933d053287c20439760037c9b2fdaf8abafb515f
+PODFILE CHECKSUM: e0f8300a361c92040b119bb5c8ff1d72bd40557f
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1

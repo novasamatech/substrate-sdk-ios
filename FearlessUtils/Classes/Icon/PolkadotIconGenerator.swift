@@ -75,7 +75,6 @@ public class PolkadotIconGenerator: IconGenerating {
                             circles: circles)
     }
 
-
     private func deriveAccountIdFromAddress(_ address: String) throws -> Data {
         let zero: [UInt8] = try (Data(repeating: 0, count: 32) as NSData).blake2b(64).map { $0 }
 
@@ -108,7 +107,7 @@ public class PolkadotIconGenerator: IconGenerating {
 
         let accumFreq = (UInt(accountId[30]) + UInt(accountId[31]) * 256) % total
         let rot = (accountId[28] % 6) * 3
-        let sat: CGFloat = (floor(CGFloat(accountId[29]) * 70.0 / 256.0 + 26.0).truncatingRemainder(dividingBy: 80)) + 30.0
+        let sat = floor(CGFloat(accountId[29]) * 70.0 / 256.0 + 26.0).truncatingRemainder(dividingBy: 80) + 30.0
         let scheme = try findScheme(for: accumFreq)
 
         var palette: [UIColor] = []
@@ -124,7 +123,7 @@ public class PolkadotIconGenerator: IconGenerating {
                 palette.append(color)
             } else {
                 let hue: CGFloat = floor(CGFloat(colorParam % 64) * 360.0 / 64.0)
-                let lightness: CGFloat = [53.0, 15.0, 35.0, 75.0][Int(floor(CGFloat(colorParam) / 64.0))];
+                let lightness: CGFloat = [53.0, 15.0, 35.0, 75.0][Int(floor(CGFloat(colorParam) / 64.0))]
 
                 let color = UIColor.colorWithHSL(hue: hue,
                                                  saturation: CGFloat(sat) * 0.01 ,
@@ -154,7 +153,7 @@ public class PolkadotIconGenerator: IconGenerating {
     }
 
     private func generateCircleCenters() -> [CGPoint] {
-        let rotation = createRotation();
+        let rotation = createRotation()
 
         return [
             CGPoint(x: 0.0, y: -rotation.r),
@@ -172,7 +171,7 @@ public class PolkadotIconGenerator: IconGenerating {
             CGPoint(x: rotation.rroot3o2, y: rotation.ro2),
             CGPoint(x: rotation.rroot3o4, y: rotation.ro4),
             CGPoint(x: rotation.rroot3o2, y: 0.0),
-            CGPoint(x: rotation.rroot3o2, y:  -rotation.ro2),
+            CGPoint(x: rotation.rroot3o2, y: -rotation.ro2),
             CGPoint(x: rotation.rroot3o4, y: -rotation.ro4),
             CGPoint(x: rotation.rroot3o4, y: -rotation.r3o4),
             CGPoint(x: 0.0, y: 0.0)

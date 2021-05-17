@@ -1,0 +1,6 @@
+disabled_rules:
+  - identifier_name
+  - inclusive_language
+  - function_parameter_count
+included:
+  - "../FearlessUtils/Classes"

@@ -34,7 +34,7 @@ open class SubstrateQRDecoder: SubstrateQRDecodable {
         let accountId = try addressFactory.accountId(fromAddress: address, type: networkType)
         let publicKey = try Data(hexString: fields[2])
 
-        guard publicKey.matchAccountId(accountId) else {
+        guard publicKey.matchPublicKeyToAccountId(accountId) else {
             throw SubstrateQRDecoderError.accountIdMismatch
         }
 

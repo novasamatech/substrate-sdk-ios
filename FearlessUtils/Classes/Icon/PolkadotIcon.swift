@@ -40,7 +40,7 @@ extension PolkadotIcon: DrawableIcon {
 
         context.addArc(center: CGPoint(x: size.width / 2.0, y: size.height / 2.0),
                        radius: targetRadius,
-                       startAngle:  0.0,
+                       startAngle: 0.0,
                        endAngle: 2.0 * CGFloat.pi,
                        clockwise: true)
 
@@ -51,7 +51,7 @@ extension PolkadotIcon: DrawableIcon {
         for circle in transformedCircles {
             context.addArc(center: circle.origin,
                            radius: circle.radius,
-                           startAngle:  0.0,
+                           startAngle: 0.0,
                            endAngle: 2.0 * CGFloat.pi,
                            clockwise: true)
 
