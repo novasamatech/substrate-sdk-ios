@@ -43,6 +43,9 @@
 		84452C8325D3F97F00F47EC5 /* GenericEventNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84452C8225D3F97F00F47EC5 /* GenericEventNodeTests.swift */; };
 		84452C9B25D40B5600F47EC5 /* RegexReplaceResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84452C9A25D40B5600F47EC5 /* RegexReplaceResolverTests.swift */; };
 		84452D9325D48FC100F47EC5 /* ExtrinsicNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84452D9225D48FC100F47EC5 /* ExtrinsicNodeTests.swift */; };
+		8459EA0E2657961F006BBF9E /* FundInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459EA0D2657961F006BBF9E /* FundInfo.swift */; };
+		8459EA122657963C006BBF9E /* MultiSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459EA112657963C006BBF9E /* MultiSigner.swift */; };
+		8459EA162657987D006BBF9E /* LastContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459EA152657987D006BBF9E /* LastContribution.swift */; };
 		845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */; };
 		8467FD1424E677C2005D486C /* ed25519HDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 8467FD1124E675D0005D486C /* ed25519HDKD.json */; };
 		8467FD1524E677C6005D486C /* ecdsaHDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 8467FD1024E675D0005D486C /* ecdsaHDKD.json */; };
@@ -151,6 +154,9 @@
 		84452C8225D3F97F00F47EC5 /* GenericEventNodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericEventNodeTests.swift; sourceTree = "<group>"; };
 		84452C9A25D40B5600F47EC5 /* RegexReplaceResolverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegexReplaceResolverTests.swift; sourceTree = "<group>"; };
 		84452D9225D48FC100F47EC5 /* ExtrinsicNodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrinsicNodeTests.swift; sourceTree = "<group>"; };
+		8459EA0D2657961F006BBF9E /* FundInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FundInfo.swift; sourceTree = "<group>"; };
+		8459EA112657963C006BBF9E /* MultiSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiSigner.swift; sourceTree = "<group>"; };
+		8459EA152657987D006BBF9E /* LastContribution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastContribution.swift; sourceTree = "<group>"; };
 		845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedFactoryTests.swift; sourceTree = "<group>"; };
 		8467FD1024E675D0005D486C /* ecdsaHDKD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ecdsaHDKD.json; sourceTree = "<group>"; };
 		8467FD1124E675D0005D486C /* ed25519HDKD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ed25519HDKD.json; sourceTree = "<group>"; };
@@ -507,6 +513,9 @@
 				84F43A7725DC827A00AEDA56 /* TransientValidationData.swift */,
 				84F43B6F25DE90EC00AEDA56 /* TransferArgs.swift */,
 				84F30E4625FC05BE00039D09 /* SessionKeysPolkadot.swift */,
+				8459EA0D2657961F006BBF9E /* FundInfo.swift */,
+				8459EA112657963C006BBF9E /* MultiSigner.swift */,
+				8459EA152657987D006BBF9E /* LastContribution.swift */,
 			);
 			path = RuntimeTypes;
 			sourceTree = "<group>";
@@ -793,6 +802,7 @@
 				84DA3B4324C8CE5A00B5E27F /* ScaleStringTests.swift in Sources */,
 				84DA3B4224C8CE5A00B5E27F /* ScaleUInt64Tests.swift in Sources */,
 				849E0A7A25C94E3F00B33506 /* EnumMappingFactoryTests.swift in Sources */,
+				8459EA162657987D006BBF9E /* LastContribution.swift in Sources */,
 				84452B0325D27BDB00F47EC5 /* DataNodeTests.swift in Sources */,
 				84F30E4725FC05BE00039D09 /* SessionKeysPolkadot.swift in Sources */,
 				84FACC0425F799A900F32ED4 /* ChainDataCodingTests.swift in Sources */,
@@ -804,11 +814,13 @@
 				849E0AAC25C96C7800B33506 /* TupleNodeFactoryTests.swift in Sources */,
 				849E0A8225C95E2700B33506 /* NumericSetFactoryTests.swift in Sources */,
 				84DA3B4124C8CE5A00B5E27F /* ScaleInt32Tests.swift in Sources */,
+				8459EA0E2657961F006BBF9E /* FundInfo.swift in Sources */,
 				8467FD2624E71A37005D486C /* IconGenerationTests.swift in Sources */,
 				84F43A7D25DC82B200AEDA56 /* TransientValidationData.swift in Sources */,
 				84452C8325D3F97F00F47EC5 /* GenericEventNodeTests.swift in Sources */,
 				849E0A7E25C95C7F00B33506 /* EnumValuesFactoryTests.swift in Sources */,
 				842D1E2324C98CEA00C30A7A /* StorageKeyFactoryTests.swift in Sources */,
+				8459EA122657963C006BBF9E /* MultiSigner.swift in Sources */,
 				8467FD2824E72CCD005D486C /* HSLColorTests.swift in Sources */,
 				84FACC0C25F79D8600F32ED4 /* GenericHashTests.swift in Sources */,
 				842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */,

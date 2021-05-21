@@ -48,9 +48,7 @@ public class DataNode: Node {
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        guard let chainData: ChainData = try decoder.read() else {
-            return .null
-        }
+        let chainData: ChainData = try decoder.read()
 
         switch chainData {
         case .none:
