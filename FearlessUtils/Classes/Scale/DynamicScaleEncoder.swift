@@ -14,24 +14,16 @@ public final class DynamicScaleEncoder {
         self.version = version
     }
 
-    private func resolveOptionIfNeeded(for json: JSON) throws -> Bool {
-        if modifiers.last == .option {
-            modifiers.removeLast()
-
-            if case .null = json {
-                encoder.appendRaw(data: Data([0]))
-
-                return true
-            } else {
-                encoder.appendRaw(data: Data([1]))
-
-                return false
-            }
-        } else if case .null = json {
-            throw DynamicScaleEncoderError.unexpectedNull
+    private func handleCommonOption(for json: JSON) {
+        if case .null = json {
+            encoder.appendRaw(data: Data([0]))
+        } else {
+            encoder.appendRaw(data: Data([1]))
         }
+    }
 
-        return false
+    private func handleBoolOption(for value: Bool?) throws {
+        try ScaleBoolOption(value: value).encode(scaleEncoder: encoder)
     }
 
     private func encodeCompact(value: JSON) throws {
@@ -57,10 +49,6 @@ public final class DynamicScaleEncoder {
     }
 
     private func appendFixedUnsigned(json: JSON, byteLength: Int) throws {
-        if try resolveOptionIfNeeded(for: json) {
-            return
-        }
-
         if modifiers.last == .compact {
             modifiers.removeLast()
 
@@ -85,16 +73,18 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
             throw DynamicScaleCoderError.unresolverType(name: type)
         }
 
-        modifiers.append(.option)
+        if node is BoolNode {
+            try handleBoolOption(for: json.boolValue)
+        } else {
+            handleCommonOption(for: json)
 
-        try node.accept(encoder: self, value: json)
+            if !json.isNull {
+                try node.accept(encoder: self, value: json)
+            }
+        }
     }
 
     public func appendVector(json: JSON, type: String) throws {
-        if try resolveOptionIfNeeded(for: json) {
-            return
-        }
-
         guard let node = registry.node(for: type, version: version) else {
             throw DynamicScaleCoderError.unresolverType(name: type)
         }
@@ -111,10 +101,6 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
     }
 
     public func appendCompact(json: JSON, type: String) throws {
-        if try resolveOptionIfNeeded(for: json) {
-            return
-        }
-
         guard let node = registry.node(for: type, version: version) else {
             throw DynamicScaleCoderError.unresolverType(name: type)
         }
@@ -125,10 +111,6 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
     }
 
     public func appendFixedArray(json: JSON, type: String) throws {
-        if try resolveOptionIfNeeded(for: json) {
-            return
-        }
-
         guard let node = registry.node(for: type, version: version) else {
             throw DynamicScaleCoderError.unresolverType(name: type)
         }
@@ -143,10 +125,6 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
     }
 
     public func appendBytes(json: JSON) throws {
-        if try resolveOptionIfNeeded(for: json) {
-            return
-        }
-
         guard let hex = json.stringValue, let data = try? Data(hexString: hex) else {
             throw DynamicScaleEncoderError.hexExpected(json: json)
         }
@@ -155,10 +133,6 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
     }
 
     public func appendString(json: JSON) throws {
-        if try resolveOptionIfNeeded(for: json) {
-            return
-        }
-
         guard let str = json.stringValue else {
             throw DynamicScaleEncoderError.hexExpected(json: json)
         }
@@ -195,27 +169,11 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
             throw DynamicScaleEncoderError.expectedStringForBool(json: json)
         }
 
-        if modifiers.last == .option {
-            modifiers.removeLast()
-
-            try ScaleBoolOption(value: value).encode(scaleEncoder: encoder)
-        } else {
-            try value.encode(scaleEncoder: encoder)
-        }
+        try value.encode(scaleEncoder: encoder)
     }
 
     public func append<T: ScaleCodable>(encodable: T) throws {
-        let modifier: ScaleCodingModifier? = !modifiers.isEmpty ? modifiers.last : nil
-
-        if modifier != nil {
-            modifiers.removeLast()
-        }
-
-        if modifier == .option {
-            try ScaleOption(value: encodable).encode(scaleEncoder: encoder)
-        } else {
-            try encodable.encode(scaleEncoder: encoder)
-        }
+        try encodable.encode(scaleEncoder: encoder)
     }
 
     public func newEncoder() -> DynamicScaleEncoding {

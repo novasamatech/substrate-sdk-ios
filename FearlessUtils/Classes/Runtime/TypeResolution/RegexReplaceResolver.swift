@@ -26,7 +26,8 @@ public extension RegexReplaceResolver {
     }
 
     static func genericsFilter() -> RegexReplaceResolver {
-        let pattern = "(<.+>)$"
+        // match generic type which can span multiple lines
+        let pattern = "(?s)(<.+>)$"
         return RegexReplaceResolver(pattern: pattern, replacement: "")
     }
 }
