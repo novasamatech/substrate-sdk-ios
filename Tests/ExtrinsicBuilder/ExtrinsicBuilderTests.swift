@@ -22,12 +22,50 @@ class ExtrinsicBuilderTests: XCTestCase {
             }
 
             let closure: ExtrinsicBuilderClosure = { builder in
-                return try calls.reduce(builder) { try $0.adding(call: $1) }
+                return try calls.reduce(builder.with(shouldUseAtomicBatch: false)) { try $0.adding(call: $1) }
             }
 
             let expectedJsonCalls = try calls.toScaleCompatibleJSON()
             let expectedCall = try RuntimeCall(moduleName: KnowRuntimeModule.Utitlity.name,
                                                callName: KnowRuntimeModule.Utitlity.batch,
+                                               args: BatchArgs(calls: expectedJsonCalls.arrayValue!))
+                                .toScaleCompatibleJSON()
+
+            try setupSignedExtrinsicBuilderTest("default",
+                                                networkName: "westend",
+                                                metadataName: "westend-metadata",
+                                                cryptoType: .sr25519,
+                                                genesisHash: genesisHash,
+                                                specVersion: specVersion,
+                                                builderClosure: closure,
+                                                expectedCall: expectedCall)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+
+    func testExtrinsicWithBatchAllCall() {
+        let genesisHash = Data(repeating: 0, count: 32).toHex(includePrefix: true)
+        let specVersion: UInt32 = 48
+
+        do {
+
+            let calls: [RuntimeCall<TransferArgs>] = (0..<10).map { index in
+                let account = Data(repeating: UInt8(index % 256), count: 32)
+
+                let args = TransferArgs(dest: .accoundId(account), value: BigUInt(index) + 1)
+                return RuntimeCall(moduleName: "Balances",
+                                   callName: "transfer",
+                                   args: args)
+            }
+
+            let closure: ExtrinsicBuilderClosure = { builder in
+                return try calls.reduce(builder) { try $0.adding(call: $1) }
+            }
+
+            let expectedJsonCalls = try calls.toScaleCompatibleJSON()
+            let expectedCall = try RuntimeCall(moduleName: KnowRuntimeModule.Utitlity.name,
+                                               callName: KnowRuntimeModule.Utitlity.batchAll,
                                                args: BatchArgs(calls: expectedJsonCalls.arrayValue!))
                                 .toScaleCompatibleJSON()
 
