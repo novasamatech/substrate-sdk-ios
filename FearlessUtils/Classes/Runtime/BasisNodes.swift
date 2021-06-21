@@ -25,6 +25,7 @@ public struct BasisNodes {
             GenericBlockNode(),
             GenericCallNode(runtimeMetadata: runtimeMetadata),
             GenericVoteNode(),
+            KeyValueNode(typeName: GenericType.hashMap.rawValue),
             H160Node(),
             H256Node(),
             H512Node(),
@@ -47,7 +48,13 @@ public struct BasisNodes {
             AccountIdAddressNode(),
             ExtrinsicNode(),
             ExtrinsicSignatureNode(runtimeMetadata: runtimeMetadata),
-            ExtrinsicExtraNode(runtimeMetadata: runtimeMetadata)
+            ExtrinsicExtraNode(runtimeMetadata: runtimeMetadata),
+            MappingNode.consensus,
+            MappingNode.seal,
+            MappingNode.sealv0,
+            MappingNode.preRuntime,
+            AliasNode(typeName: GenericType.voteWeight.rawValue, underlyingTypeName: PrimitiveType.u64.rawValue)
         ]
     }
+
 }

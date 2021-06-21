@@ -27,6 +27,13 @@ public enum GenericType: String, CaseIterable {
     case opaqueCall = "OpaqueCall"
     case sessionKeys = "SessionKeysSubstrate"
     case ecdsa = "EcdsaSignature"
+    case hashMap = "HashMap"
+    case signature = "Signature"
+    case voteWeight = "VoteWeight"
+    case consensus = "GenericConsensus"
+    case seal = "GenericSeal"
+    case sealv0 = "GenericSealV0"
+    case preRuntime = "GenericPreRuntime"
 
     public var name: String { rawValue }
 }

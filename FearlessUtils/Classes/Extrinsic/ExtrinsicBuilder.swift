@@ -2,7 +2,7 @@ import Foundation
 import BigInt
 import IrohaCrypto
 
-public protocol ExtrinsicBuilderProtocol: class {
+public protocol ExtrinsicBuilderProtocol: AnyObject {
     func with<A: Codable>(address: A) throws -> Self
     func with(nonce: UInt32) -> Self
     func with(era: Era, blockHash: String) -> Self

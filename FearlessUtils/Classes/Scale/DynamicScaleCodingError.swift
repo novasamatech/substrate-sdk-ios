@@ -22,6 +22,7 @@ public enum DynamicScaleEncoderError: Error {
     case unexpectedEnumValues(value: UInt64, count: Int)
     case unexpectedTupleJSON(json: JSON)
     case unexpectedTupleComponents(count: Int, actual: Int)
+    case stringExpected(json: JSON)
 }
 
 public enum DynamicScaleDecoderError: Error {
