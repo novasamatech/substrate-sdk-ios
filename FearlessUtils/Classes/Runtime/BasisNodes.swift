@@ -25,6 +25,7 @@ public struct BasisNodes {
             GenericBlockNode(),
             GenericCallNode(runtimeMetadata: runtimeMetadata),
             GenericVoteNode(),
+            KeyValueNode(typeName: GenericType.hashMap.rawValue),
             H160Node(),
             H256Node(),
             H512Node(),
@@ -47,7 +48,32 @@ public struct BasisNodes {
             AccountIdAddressNode(),
             ExtrinsicNode(),
             ExtrinsicSignatureNode(runtimeMetadata: runtimeMetadata),
-            ExtrinsicExtraNode(runtimeMetadata: runtimeMetadata)
+            ExtrinsicExtraNode(runtimeMetadata: runtimeMetadata),
+            MappingNode(
+                typeName: GenericType.consensus.rawValue,
+                typeMapping: [
+                    NamedType(name: "engineId", type: GenericType.consensusEngineId.name),
+                    NamedType(name: "data", type: GenericType.bytes.rawValue)
+                ]),
+            MappingNode(
+                typeName: GenericType.seal.rawValue,
+                typeMapping: [
+                    NamedType(name: "engineId", type: GenericType.consensusEngineId.name),
+                    NamedType(name: "data", type: GenericType.bytes.rawValue)
+                ]),
+            MappingNode(
+                typeName: GenericType.sealv0.rawValue,
+                typeMapping: [
+                    NamedType(name: "slot", type: PrimitiveType.u64.rawValue),
+                    NamedType(name: "signature", type: GenericType.signature.rawValue)
+                ]),
+            MappingNode(
+                typeName: GenericType.preRuntime.rawValue,
+                typeMapping: [
+                    NamedType(name: "engineId", type: GenericType.consensusEngineId.name),
+                    NamedType(name: "data", type: GenericType.bytes.rawValue)
+                ]),
+            AliasNode(typeName: GenericType.voteWeight.rawValue, underlyingTypeName: PrimitiveType.u64.rawValue)
         ]
     }
 }
