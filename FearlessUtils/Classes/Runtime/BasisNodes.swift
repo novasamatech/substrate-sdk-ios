@@ -18,6 +18,7 @@ public struct BasisNodes {
         ]
     }
 
+    // swiftlint:disable function_body_length
     public static func supportedGenericNodes(for runtimeMetadata: RuntimeMetadata) -> [Node] {
         [
             GenericAccountIdNode(),
@@ -76,4 +77,5 @@ public struct BasisNodes {
             AliasNode(typeName: GenericType.voteWeight.rawValue, underlyingTypeName: PrimitiveType.u64.rawValue)
         ]
     }
+    // swiftlint:enable function_body_length
 }
