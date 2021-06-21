@@ -11,9 +11,7 @@ public class EraNode: Node {
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        guard let era: Era = try decoder.read() else {
-            return .null
-        }
+        let era: Era = try decoder.read()
 
         return try era.toScaleCompatibleJSON()
     }

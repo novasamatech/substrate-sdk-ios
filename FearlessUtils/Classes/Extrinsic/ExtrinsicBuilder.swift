@@ -2,11 +2,12 @@ import Foundation
 import BigInt
 import IrohaCrypto
 
-public protocol ExtrinsicBuilderProtocol: class {
+public protocol ExtrinsicBuilderProtocol: AnyObject {
     func with<A: Codable>(address: A) throws -> Self
     func with(nonce: UInt32) -> Self
     func with(era: Era, blockHash: String) -> Self
     func with(tip: BigUInt) -> Self
+    func with(shouldUseAtomicBatch: Bool) -> Self
     func adding<T: RuntimeCallable>(call: T) throws -> Self
 
     func signing(by signer: (Data) throws -> Data,
@@ -45,6 +46,7 @@ public final class ExtrinsicBuilder {
     private var era: Era
     private var tip: BigUInt
     private var signature: ExtrinsicSignature?
+    private var shouldUseAtomicBatch: Bool = true
 
     public init(specVersion: UInt32,
                 transactionVersion: UInt32,
@@ -67,8 +69,10 @@ public final class ExtrinsicBuilder {
             return calls[0]
         }
 
+        let callName = shouldUseAtomicBatch ? KnowRuntimeModule.Utitlity.batchAll : KnowRuntimeModule.Utitlity.batch
+
         let call = RuntimeCall(moduleName: KnowRuntimeModule.Utitlity.name,
-                               callName: KnowRuntimeModule.Utitlity.batch,
+                               callName: callName,
                                args: BatchArgs(calls: calls))
 
         guard metadata.getFunction(from: call.moduleName, with: call.callName) != nil else {
@@ -146,6 +150,11 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         self.tip = tip
         self.signature = nil
 
+        return self
+    }
+
+    public func with(shouldUseAtomicBatch: Bool) -> Self {
+        self.shouldUseAtomicBatch = shouldUseAtomicBatch
         return self
     }
 

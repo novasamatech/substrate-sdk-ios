@@ -10,12 +10,12 @@ public protocol ScaleDecodable {
 
 public typealias ScaleCodable = ScaleEncodable & ScaleDecodable
 
-public protocol ScaleEncoding: class {
+public protocol ScaleEncoding: AnyObject {
     func appendRaw(data: Data)
     func encode() -> Data
 }
 
-public protocol ScaleDecoding: class {
+public protocol ScaleDecoding: AnyObject {
     var remained: Int { get }
     func read(count: Int) throws -> Data
     func confirm(count: Int) throws

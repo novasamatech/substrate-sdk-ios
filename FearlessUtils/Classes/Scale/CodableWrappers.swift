@@ -97,3 +97,5 @@ public struct NullCodable<T: Codable>: Codable {
         }
     }
 }
+
+extension NullCodable: Equatable where T: Equatable {}

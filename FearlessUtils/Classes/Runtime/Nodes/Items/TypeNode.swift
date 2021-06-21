@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol Node: class, DynamicScaleCodable {
+public protocol Node: AnyObject, DynamicScaleCodable {
     var typeName: String { get }
 }
 

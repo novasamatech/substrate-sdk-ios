@@ -1,5 +1,6 @@
 import XCTest
 import FearlessUtils
+import BigInt
 
 class BindingTests: BaseCodingTests {
     let catalog = try! RuntimeHelper.createTypeRegistryCatalog(from: "default",
@@ -73,18 +74,37 @@ class BindingTests: BaseCodingTests {
                     version: 28)
     }
 
-    func testNetworkTypesDecoding() throws {
-        let expected = SessionKeysPolkadot(grandpa: Data(repeating: 0, count: 32),
-                                           babe: Data(repeating: 1, count: 32),
-                                           imOnline: Data(repeating: 2, count: 32),
-                                           authorityDiscovery: Data(repeating: 3, count: 32),
-                                           parachains: Data(repeating: 4, count: 32))
+    func testOptionEnumCoding() throws {
+        let expected = FundInfo(
+            retiring: false,
+            depositor: Data(repeating: 0, count: 32),
+            verifier: nil,
+            deposit: BigUInt(10),
+            raised: BigUInt(100),
+            end: 1000,
+            cap: BigUInt(1000),
+            lastContribution: .never,
+            firstSlot: 32,
+            lastSlot: 40,
+            trieIndex: 1
+        )
 
         performTest(value: expected,
-                    type: "SessionKeysPolkadot",
+                    type: "FundInfo",
                     baseRegistryName: "default",
-                    networkName: "polkadot",
-                    runtimeMetadataName: "polkadot-metadata",
-                    version: 28)
+                    networkName: "westend",
+                    runtimeMetadataName: "westend-metadata",
+                    version: 9010
+        )
+    }
+
+    func testOptionTupleCoding() throws {
+        performNullTest(
+            type: "Option<OpenTipFinderTo225>",
+            baseRegistryName: "default",
+            networkName: "westend",
+            runtimeMetadataName: "westend-metadata",
+            version: 9010
+        )
     }
 }

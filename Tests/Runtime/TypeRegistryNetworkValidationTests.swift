@@ -9,6 +9,7 @@ class TypeRegistryNetworkValidationTests: XCTestCase {
 
             XCTAssertTrue(!registry.registeredTypes.isEmpty)
             XCTAssertTrue(registry.registeredTypes.allSatisfy( { !($0 is GenericNode) }))
+
         } catch {
             XCTFail("Unexpected error \(error)")
         }

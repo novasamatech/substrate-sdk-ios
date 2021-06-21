@@ -14,23 +14,30 @@ public class DynamicScaleDecoder {
         self.version = version
     }
 
-    private func resolveOptionIfNeeded() throws -> Bool {
-        if modifiers.last == .option {
-            modifiers.removeLast()
+    private func handleCommonOption() throws -> Bool {
+        let mode = try decoder.readAndConfirm(count: 1)[0]
 
-            let mode = try decoder.readAndConfirm(count: 1)[0]
-
-            switch mode {
-            case 0:
-                return true
-            case 1:
-                return false
-            default:
-                throw DynamicScaleDecoderError.unexpectedOption(byte: mode)
-            }
+        switch mode {
+        case 0:
+            return true
+        case 1:
+            return false
+        default:
+            throw DynamicScaleDecoderError.unexpectedOption(byte: mode)
         }
+    }
 
-        return false
+    private func handleBoolOption() throws -> JSON {
+        let value = try ScaleBoolOption(scaleDecoder: decoder)
+
+        switch value {
+        case .none:
+            return .null
+        case .valueTrue:
+            return .boolValue(true)
+        case .valueFalse:
+            return .boolValue(false)
+        }
     }
 
     func decodeCompactOrFixedInt(length: Int) throws -> JSON {
@@ -71,16 +78,16 @@ extension DynamicScaleDecoder: DynamicScaleDecoding {
             throw DynamicScaleCoderError.unresolverType(name: type)
         }
 
-        modifiers.append(.option)
-
-        return try node.accept(decoder: self)
+        if node is BoolNode {
+            return try handleBoolOption()
+        } else if try handleCommonOption() {
+            return .null
+        } else {
+            return try node.accept(decoder: self)
+        }
     }
 
     public func readVector(type: String) throws -> JSON {
-        if try resolveOptionIfNeeded() {
-            return .null
-        }
-
         guard let node = registry.node(for: type, version: version) else {
             throw DynamicScaleCoderError.unresolverType(name: type)
         }
@@ -93,10 +100,6 @@ extension DynamicScaleDecoder: DynamicScaleDecoding {
     }
 
     public func readCompact(type: String) throws -> JSON {
-        if try resolveOptionIfNeeded() {
-            return .null
-        }
-
         guard let node = registry.node(for: type, version: version) else {
             throw DynamicScaleCoderError.unresolverType(name: type)
         }
@@ -107,10 +110,6 @@ extension DynamicScaleDecoder: DynamicScaleDecoding {
     }
 
     public func readFixedArray(type: String, length: UInt64) throws -> JSON {
-        if try resolveOptionIfNeeded() {
-            return .null
-        }
-
         guard let node = registry.node(for: type, version: version) else {
             throw DynamicScaleCoderError.unresolverType(name: type)
         }
@@ -121,102 +120,46 @@ extension DynamicScaleDecoder: DynamicScaleDecoding {
     }
 
     public func readBytes(length: Int) throws -> JSON {
-        if try resolveOptionIfNeeded() {
-            return .null
-        }
-
         let hex = try decoder.readAndConfirm(count: length).toHex(includePrefix: true)
 
         return .stringValue(hex)
     }
 
     public func readString() throws -> JSON {
-        if try resolveOptionIfNeeded() {
-            return .null
-        }
-
         let string = try String(scaleDecoder: decoder)
         return .stringValue(string)
     }
 
     public func readU8() throws -> JSON {
-        if try resolveOptionIfNeeded() {
-            return .null
-        }
-
         return try decodeCompactOrFixedInt(length: 1)
     }
 
     public func readU16() throws -> JSON {
-        if try resolveOptionIfNeeded() {
-            return .null
-        }
-
         return try decodeCompactOrFixedInt(length: 2)
     }
 
     public func readU32() throws -> JSON {
-        if try resolveOptionIfNeeded() {
-            return .null
-        }
-
         return try decodeCompactOrFixedInt(length: 4)
     }
 
     public func readU64() throws -> JSON {
-        if try resolveOptionIfNeeded() {
-            return .null
-        }
-
         return try decodeCompactOrFixedInt(length: 8)
     }
 
     public func readU128() throws -> JSON {
-        if try resolveOptionIfNeeded() {
-            return .null
-        }
-
         return try decodeCompactOrFixedInt(length: 16)
     }
 
     public func readU256() throws -> JSON {
-        if try resolveOptionIfNeeded() {
-            return .null
-        }
-
         return try decodeCompactOrFixedInt(length: 32)
     }
 
     public func readBool() throws -> JSON {
-        if modifiers.last == .option {
-            let value = try ScaleBoolOption(scaleDecoder: decoder)
-
-            switch value {
-            case .none:
-                return .null
-            case .valueTrue:
-                return .boolValue(true)
-            case .valueFalse:
-                return .boolValue(false)
-            }
-
-        } else {
-            let value = try Bool(scaleDecoder: decoder)
-            return .boolValue(value)
-        }
+        let value = try Bool(scaleDecoder: decoder)
+        return .boolValue(value)
     }
 
-    public func read<T: ScaleCodable>() throws -> T? {
-        let modifier: ScaleCodingModifier? = !modifiers.isEmpty ? modifiers.last : nil
-
-        if modifier != nil {
-            modifiers.removeLast()
-        }
-
-        if modifier == .option {
-            return try ScaleOption<T>(scaleDecoder: decoder).value
-        } else {
-            return try T(scaleDecoder: decoder)
-        }
+    public func read<T: ScaleCodable>() throws -> T {
+        return try T(scaleDecoder: decoder)
     }
 }

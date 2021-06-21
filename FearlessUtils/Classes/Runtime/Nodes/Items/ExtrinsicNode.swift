@@ -40,11 +40,8 @@ public class ExtrinsicNode: Node {
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
         // read and ignore extrinsic length
-        let _: BigUInt? = try decoder.read()
-
-        guard let version: UInt8 = try decoder.read() else {
-            throw ExtrinsicNodeError.invalidVersion
-        }
+        let _: BigUInt = try decoder.read()
+        let version: UInt8 = try decoder.read()
 
         let isSigned = (version & ExtrinsicConstants.signedMask) != 0
 

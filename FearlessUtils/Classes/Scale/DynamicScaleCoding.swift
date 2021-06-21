@@ -42,7 +42,7 @@ public protocol DynamicScaleDecoding {
     func readU128() throws -> JSON
     func readU256() throws -> JSON
     func readBool() throws -> JSON
-    func read<T: ScaleCodable>() throws -> T?
+    func read<T: ScaleCodable>() throws -> T
 }
 
 public protocol DynamicScaleDecodable {
@@ -53,5 +53,4 @@ public typealias DynamicScaleCodable = DynamicScaleEncodable & DynamicScaleDecod
 
 enum ScaleCodingModifier {
     case compact
-    case option
 }
