@@ -18,7 +18,6 @@ public struct BasisNodes {
         ]
     }
 
-    // swiftlint:disable function_body_length
     public static func supportedGenericNodes(for runtimeMetadata: RuntimeMetadata) -> [Node] {
         [
             GenericAccountIdNode(),
@@ -50,32 +49,12 @@ public struct BasisNodes {
             ExtrinsicNode(),
             ExtrinsicSignatureNode(runtimeMetadata: runtimeMetadata),
             ExtrinsicExtraNode(runtimeMetadata: runtimeMetadata),
-            MappingNode(
-                typeName: GenericType.consensus.rawValue,
-                typeMapping: [
-                    NamedType(name: "engineId", type: GenericType.consensusEngineId.name),
-                    NamedType(name: "data", type: GenericType.bytes.rawValue)
-                ]),
-            MappingNode(
-                typeName: GenericType.seal.rawValue,
-                typeMapping: [
-                    NamedType(name: "engineId", type: GenericType.consensusEngineId.name),
-                    NamedType(name: "data", type: GenericType.bytes.rawValue)
-                ]),
-            MappingNode(
-                typeName: GenericType.sealv0.rawValue,
-                typeMapping: [
-                    NamedType(name: "slot", type: PrimitiveType.u64.rawValue),
-                    NamedType(name: "signature", type: GenericType.signature.rawValue)
-                ]),
-            MappingNode(
-                typeName: GenericType.preRuntime.rawValue,
-                typeMapping: [
-                    NamedType(name: "engineId", type: GenericType.consensusEngineId.name),
-                    NamedType(name: "data", type: GenericType.bytes.rawValue)
-                ]),
+            MappingNode.consensus,
+            MappingNode.seal,
+            MappingNode.sealv0,
+            MappingNode.preRuntime,
             AliasNode(typeName: GenericType.voteWeight.rawValue, underlyingTypeName: PrimitiveType.u64.rawValue)
         ]
     }
-    // swiftlint:enable function_body_length
+
 }
