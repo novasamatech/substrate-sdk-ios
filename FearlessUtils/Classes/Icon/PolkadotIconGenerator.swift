@@ -82,9 +82,9 @@ public class PolkadotIconGenerator: IconGenerating {
 
         let typeValue = try addressFactory.type(fromAddress: address)
 
-        let addressType = UInt8(typeValue.uint8Value)
+        let chainType = typeValue.uint16Value
 
-        let accountId = try addressFactory.accountId(fromAddress: address, type: addressType)
+        let accountId = try addressFactory.accountId(fromAddress: address, type: chainType)
 
         var bytes: [UInt8] = try (accountId as NSData).blake2b(64).map { $0 }
 

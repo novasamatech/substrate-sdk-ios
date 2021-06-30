@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol NodeResolver: class {
+public protocol NodeResolver: AnyObject {
     func resolve(for key: String) -> Node?
 }
 

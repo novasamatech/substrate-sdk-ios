@@ -12,7 +12,7 @@ struct KeypairDeriviation: Decodable {
     let path: String
 }
 
-enum NetworkTypes: UInt8 {
+enum KnownChainType: UInt16 {
     case polkadotMain = 0
     case polkadotSecondary = 1
     case kusamaMain = 2

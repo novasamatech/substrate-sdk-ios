@@ -1,22 +1,12 @@
 {
-  "runtime_id": 48,
+  "runtime_id": 9010,
   "types": {
     "Address": "MultiAddress",
     "LookupSource": "MultiAddress",
-    "AccountInfo": "AccountInfoWithProviders",
+    "AccountInfo": "AccountInfoWithTripleRefCount",
     "BlockNumber": "U32",
     "LeasePeriod": "BlockNumber",
-    "Keys": {
-      "type": "struct",
-      "type_mapping": [
-        ["grandpa", "AccountId"],
-        ["babe", "AccountId"],
-        ["im_online", "AccountId"],
-        ["para_validator", "AccountId"],
-        ["para_assignment", "AccountId"],
-        ["authority_discovery", "AccountId"]
-      ]
-    },
+    "Keys": "SessionKeys6",
     "ValidatorPrefs": "ValidatorPrefsWithBlocked",
     "ProxyType": {
       "type": "enum",
@@ -24,8 +14,9 @@
         "Any",
         "NonTransfer",
         "Staking",
-        "Unused",
-        "IdentityJudgement"
+        "SudoBalances",
+        "IdentityJudgement",
+        "CancelProxy"
       ]
     },
     "RefCount": "u32"
@@ -37,11 +28,11 @@
         "OpenTip": {
           "type": "struct",
           "type_mapping": [
-            ["reason", "Hash"],
-            ["who", "AccountId"],
-            ["finder", "Option<OpenTipFinder>"],
-            ["closes", "Option<BlockNumber>"],
-            ["tips", "Vec<OpenTipTip>"]
+             ["reason", "Hash"],
+             ["who", "AccountId"],
+             ["finder", "Option<OpenTipFinder>"],
+             ["closes", "Option<BlockNumber>"],
+             ["tips", "Vec<OpenTipTip>"]
           ]
         }
       }
@@ -52,13 +43,13 @@
         "OpenTip": {
           "type": "struct",
           "type_mapping": [
-            ["reason", "Hash"],
-            ["who", "AccountId"],
-            ["finder", "AccountId"],
-            ["deposit", "Balance"],
-            ["closes", "Option<BlockNumber>"],
-            ["tips", "Vec<OpenTipTip>"],
-            ["findersFee", "bool"]
+             ["reason", "Hash"],
+             ["who", "AccountId"],
+             ["finder", "AccountId"],
+             ["deposit", "Balance"],
+             ["closes", "Option<BlockNumber>"],
+             ["tips", "Vec<OpenTipTip>"],
+             ["findersFee", "bool"]
           ]
         }
       }
@@ -93,18 +84,18 @@
         "Heartbeat": {
           "type": "struct",
           "type_mapping": [
-            ["blockNumber", "BlockNumber"],
-            ["networkState", "OpaqueNetworkState"],
-            ["sessionIndex", "SessionIndex"],
-            ["authorityIndex", "AuthIndex"]
+             ["blockNumber", "BlockNumber"],
+             ["networkState", "OpaqueNetworkState"],
+             ["sessionIndex", "SessionIndex"],
+             ["authorityIndex", "AuthIndex"]
           ]
         },
         "DispatchInfo": {
           "type": "struct",
           "type_mapping": [
-            ["weight", "Weight"],
-            ["class", "DispatchClass"],
-            ["paysFee", "bool"]
+             ["weight", "Weight"],
+             ["class", "DispatchClass"],
+             ["paysFee", "bool"]
           ]
         }
       }
@@ -115,19 +106,19 @@
         "Heartbeat": {
           "type": "struct",
           "type_mapping": [
-            ["blockNumber", "BlockNumber"],
-            ["networkState", "OpaqueNetworkState"],
-            ["sessionIndex", "SessionIndex"],
-            ["authorityIndex", "AuthIndex"],
-            ["validatorsLen", "u32"]
+             ["blockNumber", "BlockNumber"],
+             ["networkState", "OpaqueNetworkState"],
+             ["sessionIndex", "SessionIndex"],
+             ["authorityIndex", "AuthIndex"],
+             ["validatorsLen", "u32"]
           ]
         },
         "DispatchInfo": {
           "type": "struct",
           "type_mapping": [
-            ["weight", "Weight"],
-            ["class", "DispatchClass"],
-            ["paysFee", "Pays"]
+             ["weight", "Weight"],
+             ["class", "DispatchClass"],
+             ["paysFee", "Pays"]
           ]
         }
       }
@@ -153,11 +144,11 @@
         "Keys": {
           "type": "struct",
           "type_mapping": [
-            ["grandpa", "AccountId"],
-            ["babe", "AccountId"],
-            ["im_online", "AccountId"],
-            ["authority_discovery", "AccountId"],
-            ["parachains", "AccountId"]
+             ["grandpa", "AccountId"],
+             ["babe", "AccountId"],
+             ["im_online", "AccountId"],
+             ["authority_discovery", "AccountId"],
+             ["parachains", "AccountId"]
           ]
         },
         "ValidatorPrefs": "ValidatorPrefsWithCommission"
@@ -168,19 +159,25 @@
       "types": {
         "Address": "MultiAddress",
         "LookupSource": "MultiAddress",
-        "AccountInfo": "AccountInfoWithProviders",
-        "Keys": {
-          "type": "struct",
-          "type_mapping": [
-            ["grandpa", "AccountId"],
-            ["babe", "AccountId"],
-            ["im_online", "AccountId"],
-            ["para_validator", "AccountId"],
-            ["para_assignment", "AccountId"],
-            ["authority_discovery", "AccountId"]
-          ]
-        },
         "ValidatorPrefs": "ValidatorPrefsWithBlocked"
+      }
+    },
+    {
+      "runtime_range": [48, 49],
+      "types": {
+        "AccountInfo": "AccountInfoWithDualRefCount"
+      }
+    },
+    {
+      "runtime_range": [50, null],
+      "types": {
+        "AccountInfo": "AccountInfoWithTripleRefCount"
+      }
+    },
+    {
+      "runtime_range": [48, null],
+      "types": {
+        "Keys": "SessionKeys6"
       }
     }
   ]

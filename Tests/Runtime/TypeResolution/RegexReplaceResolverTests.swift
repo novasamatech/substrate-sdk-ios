@@ -169,6 +169,22 @@ class RegexReplaceResolverTests: XCTestCase {
         XCTAssertEqual(expectedType, result)
     }
 
+    func testMultilineGenericsProperlyProcessed() {
+        // given
+
+        let resolver = RegexReplaceResolver.genericsFilter()
+        let searchingType = "FundInfo<T::AccountId, BalanceOf<T>, T::BlockNumber, LeasePeriodOf<\nT>>"
+        let expectedType = "FundInfo"
+
+        // when
+
+        let result = resolver.resolve(typeName: searchingType, using: ["Account", "BidKind", "FundInfo<T::AccountId, BalanceOf<T>, T::BlockNumber, LeasePeriodOf<T>>", expectedType, "T", "Trait"])
+
+        // then
+
+        XCTAssertEqual(expectedType, result)
+    }
+
     // MARK: Private
 
     private func performTestModuleNameRefinement(_ name: String) {

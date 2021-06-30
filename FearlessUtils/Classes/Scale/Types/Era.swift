@@ -54,7 +54,7 @@ extension Era: ScaleCodable {
         let secondByte = try UInt8(scaleDecoder: scaleDecoder)
 
         let encoded = UInt64(firstByte) + (UInt64(secondByte) << 8)
-        let period = 2 << (encoded % (1 << 4))
+        let period = UInt64(2 << (encoded % (1 << 4)))
         let quantizeFactor = max(period >> 12, 1)
         let phase = (encoded >> 4) * quantizeFactor
 

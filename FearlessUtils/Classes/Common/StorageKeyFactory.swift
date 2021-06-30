@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol StorageKeyFactoryProtocol: class {
+public protocol StorageKeyFactoryProtocol: AnyObject {
     func createStorageKey(moduleName: String, storageName: String) throws -> Data
 
     func createStorageKey(moduleName: String,
