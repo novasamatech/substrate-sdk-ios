@@ -1,29 +1,35 @@
 PODS:
   - BigInt (5.0.0)
-  - FearlessUtils (0.9.0):
+  - FearlessUtils (0.11.0):
     - BigInt (~> 5.0)
-    - IrohaCrypto/ed25519 (~> 0.7.0)
-    - IrohaCrypto/Scrypt (~> 0.7.0)
-    - IrohaCrypto/secp256k1 (~> 0.7.0)
-    - IrohaCrypto/sr25519 (~> 0.7.0)
+    - IrohaCrypto/ed25519 (~> 0.8.0)
+    - IrohaCrypto/Scrypt (~> 0.8.0)
+    - IrohaCrypto/secp256k1 (~> 0.8.0)
+    - IrohaCrypto/sr25519 (~> 0.8.0)
+    - IrohaCrypto/ss58 (~> 0.8.0)
     - TweetNacl (~> 1.0.0)
     - xxHash-Swift (~> 1.0.0)
-  - IrohaCrypto/BIP39 (0.7.2):
+  - IrohaCrypto/BIP39 (0.8.0):
     - IrohaCrypto/Common
-  - IrohaCrypto/blake2 (0.7.2)
-  - IrohaCrypto/Common (0.7.2)
-  - IrohaCrypto/ed25519 (0.7.2):
+  - IrohaCrypto/blake2 (0.8.0)
+  - IrohaCrypto/Common (0.8.0)
+  - IrohaCrypto/ed25519 (0.8.0):
     - IrohaCrypto/Common
-  - IrohaCrypto/Scrypt (0.7.2):
+  - IrohaCrypto/Scrypt (0.8.0):
     - IrohaCrypto/Common
     - scrypt.c (~> 0.1)
-  - IrohaCrypto/secp256k1 (0.7.2):
+  - IrohaCrypto/secp256k1 (0.8.0):
     - IrohaCrypto/Common
-  - IrohaCrypto/sr25519 (0.7.2):
+    - secp256k1.c (~> 0.1)
+  - IrohaCrypto/sr25519 (0.8.0):
     - IrohaCrypto/BIP39
     - IrohaCrypto/blake2
     - IrohaCrypto/Common
+  - IrohaCrypto/ss58 (0.8.0):
+    - IrohaCrypto/blake2
+    - IrohaCrypto/Common
   - scrypt.c (0.1.1)
+  - secp256k1.c (0.1.2)
   - SwiftLint (0.42.0)
   - TweetNacl (1.0.2)
   - xxHash-Swift (1.0.13)
@@ -37,6 +43,7 @@ SPEC REPOS:
     - BigInt
     - IrohaCrypto
     - scrypt.c
+    - secp256k1.c
     - SwiftLint
     - TweetNacl
     - xxHash-Swift
@@ -47,9 +54,10 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
-  FearlessUtils: 8c05cb6cf737943f343e6a1fb4be2ac6fafebb9d
-  IrohaCrypto: bddf15865c4df189b9c5273ba9c675afae8b7f4c
+  FearlessUtils: 9a5933f8b1a519bfc6baf21d6d23a2be92d638aa
+  IrohaCrypto: bef5e0fdbbfe587657d5de9a8961d7cb1f995a7e
   scrypt.c: b42ae06183251329d2b2c620c226fb541a4a3592
+  secp256k1.c: db47b726585d80f027423682eb369729e61b3b20
   SwiftLint: 4fa9579c63416865179bc416f0a92d55f009600d
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   xxHash-Swift: 30bd6a7507b3b7348a277c49b1cb6346c2905ec7

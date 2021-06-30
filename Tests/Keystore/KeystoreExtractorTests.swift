@@ -29,8 +29,10 @@ class KeystoreExtractorTests: XCTestCase {
             XCTAssertTrue(verifier.verify(signature, forOriginalData: privateKey.rawData(), using: publicKey))
 
             let addressFactory = SS58AddressFactory()
-            let address = try addressFactory.address(fromPublicKey: publicKey,
-                                                     type: .kusamaMain)
+            let address = try addressFactory.address(
+                fromAccountId: publicKey.rawData(),
+                type: KnownChainType.kusamaMain.rawValue
+            )
 
             XCTAssertEqual(address, keystoreData.address)
         } catch {
@@ -60,8 +62,10 @@ class KeystoreExtractorTests: XCTestCase {
             XCTAssertEqual(keypair.publicKey().rawData(), keystoreData.publicKeyData)
 
             let addressFactory = SS58AddressFactory()
-            let address = try addressFactory.address(fromPublicKey: keypair.publicKey(),
-                                                     type: .kusamaMain)
+            let address = try addressFactory.address(
+                fromAccountId: keypair.publicKey().rawData(),
+                type: KnownChainType.kusamaMain.rawValue
+            )
 
             XCTAssertEqual(address, keystoreData.address)
         } catch {
@@ -91,8 +95,10 @@ class KeystoreExtractorTests: XCTestCase {
             XCTAssertEqual(keypair.publicKey().rawData(), keystoreData.publicKeyData)
 
             let addressFactory = SS58AddressFactory()
-            let address = try addressFactory.address(fromPublicKey: keypair.publicKey(),
-                                                     type: .kusamaMain)
+            let address = try addressFactory.address(
+                fromAccountId: keypair.publicKey().rawData(),
+                type: KnownChainType.kusamaMain.rawValue
+            )
 
             XCTAssertEqual(address, keystoreData.address)
         } catch {

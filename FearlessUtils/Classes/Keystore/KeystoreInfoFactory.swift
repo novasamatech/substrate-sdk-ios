@@ -20,17 +20,17 @@ public final class KeystoreInfoFactory: KeystoreInfoFactoryProtocol {
             throw KeystoreInfoFactoryError.unsupportedCryptoType
         }
 
-        let addressType: SNAddressType?
+        let chainType: ChainType?
 
         if let address = definition.address,
-           let addressTypeValue = try? SS58AddressFactory().type(fromAddress: address) {
-            addressType = SNAddressType(rawValue: addressTypeValue.uint8Value)
+           let chainTypeValue = try? SS58AddressFactory().type(fromAddress: address) {
+            chainType = chainTypeValue.uint16Value
         } else {
-            addressType = nil
+            chainType = nil
         }
 
         return KeystoreInfo(address: definition.address,
-                            addressType: addressType,
+                            chainType: chainType,
                             cryptoType: cryptoType,
                             meta: definition.meta)
     }
