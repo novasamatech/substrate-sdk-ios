@@ -43,7 +43,7 @@ enum KeystoreEncodingContent: String {
 public struct KeystoreConstants {
     public static let nonceLength = 24
     public static let encryptionKeyLength = 32
-    public static let pkcs8Header = Data(bytes: [48, 83, 2, 1, 1, 48, 5, 6, 3, 43, 101, 112, 4, 34, 4, 32])
-    public static let pkcs8Divider = Data(bytes: [161, 35, 3, 33, 0])
+    public static let pkcs8Header = Data([48, 83, 2, 1, 1, 48, 5, 6, 3, 43, 101, 112, 4, 34, 4, 32])
+    public static let pkcs8Divider = Data([161, 35, 3, 33, 0])
     public static let version = 3
 }

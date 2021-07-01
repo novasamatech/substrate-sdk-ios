@@ -11,3 +11,12 @@ struct KeypairDeriviation: Decodable {
     let publicKey: String
     let path: String
 }
+
+enum KnownChainType: UInt16 {
+    case polkadotMain = 0
+    case polkadotSecondary = 1
+    case kusamaMain = 2
+    case kusamaSecondary = 3
+    case soraMain = 69
+    case genericSubstrate = 42
+}

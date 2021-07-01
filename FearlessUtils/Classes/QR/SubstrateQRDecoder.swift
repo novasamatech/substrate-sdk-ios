@@ -2,17 +2,17 @@ import Foundation
 import IrohaCrypto
 
 open class SubstrateQRDecoder: SubstrateQRDecodable {
-    public let networkType: SNAddressType
+    public let chainType: ChainType
     public let separator: String
     public let prefix: String
 
     private lazy var addressFactory = SS58AddressFactory()
 
-    public init(networkType: SNAddressType,
+    public init(chainType: ChainType,
                 prefix: String = SubstrateQR.prefix,
                 separator: String = SubstrateQR.fieldsSeparator) {
         self.prefix = prefix
-        self.networkType = networkType
+        self.chainType = chainType
         self.separator = separator
     }
 
@@ -31,7 +31,7 @@ open class SubstrateQRDecoder: SubstrateQRDecodable {
         }
 
         let address = fields[1]
-        let accountId = try addressFactory.accountId(fromAddress: address, type: networkType)
+        let accountId = try addressFactory.accountId(fromAddress: address, type: chainType)
         let publicKey = try Data(hexString: fields[2])
 
         guard publicKey.matchPublicKeyToAccountId(accountId) else {
