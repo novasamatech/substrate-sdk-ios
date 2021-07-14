@@ -21,7 +21,7 @@ public class RegexReplaceResolver: TypeResolving {
 public extension RegexReplaceResolver {
     static func noise() -> RegexReplaceResolver {
         let pattern = "(T::)|(<T>)|(<T as Trait>::)|(<T as Trait<I>>::)" +
-            "|(<T as Config>::)|(\n)|((?:grandpa|session|slashing|schedule)::)"
+            "|(<T as Config>::)|(\n)|((?:grandpa|session|slashing|schedule|limits)::)"
         return RegexReplaceResolver(pattern: pattern, replacement: "")
     }
 
