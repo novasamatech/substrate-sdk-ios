@@ -18,6 +18,9 @@ public extension TypeRegistry {
                         allTypes.insert(map.key1)
                         allTypes.insert(map.key2)
                         allTypes.insert(map.value)
+                    case .nMap(let nMap):
+                        nMap.keyVec.forEach { allTypes.insert($0) }
+                        allTypes.insert(nMap.value)
                     }
                 }
             }

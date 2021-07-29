@@ -47,6 +47,7 @@
 		8459EA122657963C006BBF9E /* MultiSigner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459EA112657963C006BBF9E /* MultiSigner.swift */; };
 		8459EA162657987D006BBF9E /* LastContribution.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8459EA152657987D006BBF9E /* LastContribution.swift */; };
 		845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */; };
+		8467F4C726B285EC00C5B6F4 /* statemine-metadata in Resources */ = {isa = PBXBuildFile; fileRef = 8467F4C626B285EC00C5B6F4 /* statemine-metadata */; };
 		8467FD1424E677C2005D486C /* ed25519HDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 8467FD1124E675D0005D486C /* ed25519HDKD.json */; };
 		8467FD1524E677C6005D486C /* ecdsaHDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 8467FD1024E675D0005D486C /* ecdsaHDKD.json */; };
 		8467FD2624E71A37005D486C /* IconGenerationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467FD2524E71A37005D486C /* IconGenerationTests.swift */; };
@@ -158,6 +159,7 @@
 		8459EA112657963C006BBF9E /* MultiSigner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiSigner.swift; sourceTree = "<group>"; };
 		8459EA152657987D006BBF9E /* LastContribution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LastContribution.swift; sourceTree = "<group>"; };
 		845D80EC24C8D91A00EC2540 /* SeedFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedFactoryTests.swift; sourceTree = "<group>"; };
+		8467F4C626B285EC00C5B6F4 /* statemine-metadata */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "statemine-metadata"; sourceTree = "<group>"; };
 		8467FD1024E675D0005D486C /* ecdsaHDKD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ecdsaHDKD.json; sourceTree = "<group>"; };
 		8467FD1124E675D0005D486C /* ed25519HDKD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ed25519HDKD.json; sourceTree = "<group>"; };
 		8467FD2524E71A37005D486C /* IconGenerationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconGenerationTests.swift; sourceTree = "<group>"; };
@@ -338,6 +340,7 @@
 				84452B6025D2ADC300F47EC5 /* westend-metadata */,
 				84452C0A25D2D54300F47EC5 /* kusama-metadata */,
 				84452C0E25D2D5C300F47EC5 /* polkadot-metadata */,
+				8467F4C626B285EC00C5B6F4 /* statemine-metadata */,
 				84F4394125DBAAA200AEDA56 /* test-metadata */,
 			);
 			path = Runtime;
@@ -666,6 +669,7 @@
 				84A0DE3124DBF49400F436A8 /* keystore-ed25519.json in Resources */,
 				84F4394225DBAAA200AEDA56 /* test-metadata in Resources */,
 				8429C81D25C434E70086D7F6 /* kusama.json in Resources */,
+				8467F4C726B285EC00C5B6F4 /* statemine-metadata in Resources */,
 				84A0DE3224DBF49700F436A8 /* keystore-ecdsa.json in Resources */,
 				84CB472524DBE98500837E11 /* keystore-sr25519.json in Resources */,
 				8429C82225C434EA0086D7F6 /* polkadot.json in Resources */,

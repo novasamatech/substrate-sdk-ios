@@ -15,6 +15,10 @@ class RuntimeMetadataTests: XCTestCase {
         performRuntimeMetadataTest(filename: "polkadot-metadata")
     }
 
+    func testStatemineRuntimeMetadata() {
+        performRuntimeMetadataTest(filename: "statemine-metadata")
+    }
+
     func testFetchStorage() throws {
         let metadata = try RuntimeHelper.createRuntimeMetadata("westend-metadata")
 
