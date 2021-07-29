@@ -133,11 +133,11 @@ public struct NMapEntry {
     public let hashers: [StorageHasher]
     public let value: String
 
-    public init(hashers: [StorageHasher],
-                keyVec: [String],
+    public init(keyVec: [String],
+                hashers: [StorageHasher],
                 value: String) {
-        self.hashers = hashers
         self.keyVec = keyVec
+        self.hashers = hashers
         self.value = value
     }
 }
