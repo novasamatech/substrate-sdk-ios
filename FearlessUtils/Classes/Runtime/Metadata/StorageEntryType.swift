@@ -4,6 +4,7 @@ public enum StorageEntryType {
     case plain(_ value: String)
     case map(_ value: MapEntry)
     case doubleMap(_ value: DoubleMapEntry)
+    case nMap(_ value: NMapEntry)
 
     public var typeName: String {
         switch self {
@@ -13,6 +14,8 @@ public enum StorageEntryType {
             return singleMap.value
         case .doubleMap(let doubleMap):
             return doubleMap.value
+        case .nMap(let nMap):
+            return nMap.value
         }
     }
 }
@@ -28,6 +31,9 @@ extension StorageEntryType: ScaleCodable {
             try value.encode(scaleEncoder: scaleEncoder)
         case .doubleMap(let value):
             try UInt8(2).encode(scaleEncoder: scaleEncoder)
+            try value.encode(scaleEncoder: scaleEncoder)
+        case .nMap(let value):
+            try UInt8(3).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
         }
     }
@@ -45,6 +51,9 @@ extension StorageEntryType: ScaleCodable {
         case 2:
             let value = try DoubleMapEntry(scaleDecoder: scaleDecoder)
             self = .doubleMap(value)
+        case 3:
+            let value = try NMapEntry(scaleDecoder: scaleDecoder)
+            self = .nMap(value)
         default:
             throw ScaleCodingError.unexpectedDecodedValue
         }
@@ -116,6 +125,34 @@ extension DoubleMapEntry: ScaleCodable {
         key2 = try String(scaleDecoder: scaleDecoder)
         value = try String(scaleDecoder: scaleDecoder)
         key2Hasher = try StorageHasher(scaleDecoder: scaleDecoder)
+    }
+}
+
+public struct NMapEntry {
+    public let keyVec: [String]
+    public let hashers: [StorageHasher]
+    public let value: String
+
+    public init(hashers: [StorageHasher],
+                keyVec: [String],
+                value: String) {
+        self.hashers = hashers
+        self.keyVec = keyVec
+        self.value = value
+    }
+}
+
+extension NMapEntry: ScaleCodable {
+    public func encode(scaleEncoder: ScaleEncoding) throws {
+        try keyVec.encode(scaleEncoder: scaleEncoder)
+        try hashers.encode(scaleEncoder: scaleEncoder)
+        try value.encode(scaleEncoder: scaleEncoder)
+    }
+
+    public init(scaleDecoder: ScaleDecoding) throws {
+        keyVec = try [String](scaleDecoder: scaleDecoder)
+        hashers = try [StorageHasher](scaleDecoder: scaleDecoder)
+        value = try String(scaleDecoder: scaleDecoder)
     }
 }
 
