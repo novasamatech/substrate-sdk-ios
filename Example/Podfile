@@ -1,0 +1,19 @@
+use_frameworks!
+
+target 'FearlessUtils_Example' do
+  pod 'FearlessUtils', :path => '../'
+  pod 'Starscream', :git => 'https://github.com/ERussel/Starscream.git', :branch => 'feature/without-origin'
+  pod 'SwiftLint'
+
+  target 'FearlessUtils_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
+
+post_install do |installer|
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+  end
+end

@@ -1,0 +1,12 @@
+{
+  "runtime_id": 1,
+  "types": {
+      "Balance": "u128",
+      "Index": "u32",
+      "Phase": "142",
+      "Address": "195",
+      "ExtrinsicSignature": "499",
+      "ParaId": "88"
+  },
+  "versioning": []
+}
