@@ -35,7 +35,6 @@ public struct BasisNodes {
             H160Node(),
             H256Node(),
             H512Node(),
-            EcdsaNode(),
             BytesNode(),
             BitVecNode(),
             ExtrinsicsDecoderNode(),
