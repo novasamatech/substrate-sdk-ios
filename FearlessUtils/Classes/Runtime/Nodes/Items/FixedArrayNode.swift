@@ -12,7 +12,13 @@ public class FixedArrayNode: Node {
     }
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
-        try encoder.appendFixedArray(json: value, type: elementType.typeName)
+        if value.stringValue != nil {
+            // process hex representation
+            try encoder.appendBytes(json: value)
+        } else {
+            // process byte array representation
+            try encoder.appendFixedArray(json: value, type: elementType.typeName)
+        }
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {

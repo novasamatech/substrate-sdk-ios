@@ -73,7 +73,16 @@ public enum MultiSignature: Codable {
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         let type = try container.decode(String.self)
-        let data = try container.decode(Data.self)
+
+        let data: Data
+
+        // we support both data and byte arrays representation
+        if let dataRepresentation = try? container.decode(Data.self) {
+            data = dataRepresentation
+        } else {
+            let byteArray = try container.decode([StringScaleMapper<UInt8>].self).map { $0.value }
+            data = Data(byteArray)
+        }
 
         switch type {
         case Self.sr25519Field:
