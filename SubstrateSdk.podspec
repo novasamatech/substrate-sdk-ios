@@ -8,13 +8,13 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SubstrateSdk'
-  s.version          = '0.13.1'
+  s.version          = '1.0.0'
   s.summary          = 'Utility library that implements clients specific logic to interact with substrate based networks'
 
-  s.homepage         = 'https://github.com/soramitsu/fearless-utils-iOS'
+  s.homepage         = 'https://github.com/nova-wallet/substrate-sdk-ios'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'ERussel' => 'rezin@soramitsu.co.jp' }
-  s.source           = { :git => 'https://github.com/soramitsu/fearless-utils-iOS.git', :tag => s.version.to_s }
+  s.author           = { 'ERussel' => 'ruslan@novawallet.io' }
+  s.source           = { :git => 'https://github.com/nova-wallet/substrate-sdk-ios.git', :tag => s.version.to_s }
   s.swift_version    = '5.0'
 
   s.ios.deployment_target = '11.0'

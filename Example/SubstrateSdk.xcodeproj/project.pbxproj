@@ -134,7 +134,7 @@
 		60654FCEF77A2B707A129454 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* SubstrateSdkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SubstrateSdkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACE51AFB9204008FA782 /* SubstrateSdkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SubstrateSdkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		84060E992726870E0070F2E4 /* SubstrateSdk.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SubstrateSdk.podspec; path = ../SubstrateSdk.podspec; sourceTree = "<group>"; };
+		84060E992726870E0070F2E4 /* SubstrateSdk.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SubstrateSdk.podspec; path = ../SubstrateSdk.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		841D528925C4A11900DFA15B /* RegexParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegexParserTests.swift; sourceTree = "<group>"; };
 		841D52B325C6BAE600DFA15B /* ComponentsParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentsParserTests.swift; sourceTree = "<group>"; };
 		841D52E525C6DD1E00DFA15B /* TypeMappingParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeMappingParserTests.swift; sourceTree = "<group>"; };
