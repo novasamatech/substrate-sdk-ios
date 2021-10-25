@@ -1,18 +1,5 @@
 PODS:
-  - BigInt (5.0.0)
-  - FearlessUtils (0.13.1):
-    - BigInt (~> 5.0)
-    - IrohaCrypto/ed25519 (~> 0.9.0)
-    - IrohaCrypto/Scrypt (~> 0.9.0)
-    - IrohaCrypto/secp256k1 (~> 0.9.0)
-    - IrohaCrypto/sr25519 (~> 0.9.0)
-    - IrohaCrypto/ss58 (~> 0.9.0)
-    - keccak.c (~> 0.1.0)
-    - ReachabilitySwift (~> 5.0)
-    - RobinHood (~> 2.6.0)
-    - Starscream
-    - TweetNacl (~> 1.0.0)
-    - xxHash-Swift (~> 1.0.0)
+  - BigInt (5.2.0)
   - IrohaCrypto/BIP39 (0.9.0):
     - IrohaCrypto/Common
   - IrohaCrypto/blake2 (0.9.0)
@@ -38,13 +25,26 @@ PODS:
   - scrypt.c (0.1.1)
   - secp256k1.c (0.1.2)
   - Starscream (4.0.4)
+  - SubstrateSdk (0.13.1):
+    - BigInt (~> 5.0)
+    - IrohaCrypto/ed25519 (~> 0.9.0)
+    - IrohaCrypto/Scrypt (~> 0.9.0)
+    - IrohaCrypto/secp256k1 (~> 0.9.0)
+    - IrohaCrypto/sr25519 (~> 0.9.0)
+    - IrohaCrypto/ss58 (~> 0.9.0)
+    - keccak.c (~> 0.1.0)
+    - ReachabilitySwift (~> 5.0)
+    - RobinHood (~> 2.6.0)
+    - Starscream
+    - TweetNacl (~> 1.0.0)
+    - xxHash-Swift (~> 1.0.0)
   - SwiftLint (0.42.0)
   - TweetNacl (1.0.2)
   - xxHash-Swift (1.0.13)
 
 DEPENDENCIES:
-  - FearlessUtils (from `../`)
   - Starscream (from `https://github.com/ERussel/Starscream.git`, branch `feature/without-origin`)
+  - SubstrateSdk (from `../`)
   - SwiftLint
 
 SPEC REPOS:
@@ -61,11 +61,11 @@ SPEC REPOS:
     - xxHash-Swift
 
 EXTERNAL SOURCES:
-  FearlessUtils:
-    :path: "../"
   Starscream:
     :branch: feature/without-origin
     :git: https://github.com/ERussel/Starscream.git
+  SubstrateSdk:
+    :path: "../"
 
 CHECKOUT OPTIONS:
   Starscream:
@@ -73,8 +73,7 @@ CHECKOUT OPTIONS:
     :git: https://github.com/ERussel/Starscream.git
 
 SPEC CHECKSUMS:
-  BigInt: 74b4d88367b0e819d9f77393549226d36faeb0d8
-  FearlessUtils: ead374df3270e36667321837d83cd23b1bb135a6
+  BigInt: f668a80089607f521586bbe29513d708491ef2f7
   IrohaCrypto: 6be75a4268cd1f5cec4231c6d3f95cb03f723fd3
   keccak.c: 859583afdaccb4e4fcc0f0096064d101580313f4
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
@@ -82,10 +81,11 @@ SPEC CHECKSUMS:
   scrypt.c: b42ae06183251329d2b2c620c226fb541a4a3592
   secp256k1.c: db47b726585d80f027423682eb369729e61b3b20
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
+  SubstrateSdk: 4dfb3d0d64c41fdbe3ec3cb340cdeaaca0485c8a
   SwiftLint: 4fa9579c63416865179bc416f0a92d55f009600d
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   xxHash-Swift: 30bd6a7507b3b7348a277c49b1cb6346c2905ec7
 
-PODFILE CHECKSUM: c3224a5b0ef4db3d33361887eb57bbe00ded3842
+PODFILE CHECKSUM: 07745cfc9372592fcbd6ff28cbc71c3d39f5cf0d
 
 COCOAPODS: 1.11.2

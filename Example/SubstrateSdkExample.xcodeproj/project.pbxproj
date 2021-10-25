@@ -7,10 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD51AFB9204008FA782 /* AppDelegate.swift */; };
-		607FACD81AFB9204008FA782 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACD71AFB9204008FA782 /* ViewController.swift */; };
-		607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDC1AFB9204008FA782 /* Images.xcassets */; };
-		607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 607FACDE1AFB9204008FA782 /* LaunchScreen.xib */; };
+		465903FFE343EE08CC3F6D58 /* Pods_substrate_sdk_ios_tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DBE14551C0E76279C6171CFE /* Pods_substrate_sdk_ios_tests.framework */; };
+		81DDD240BF09A0C5A56E703F /* Pods_substrate_sdk_ios_example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 952C23907E41B550A3EC8D99 /* Pods_substrate_sdk_ios_example.framework */; };
 		841D528A25C4A11900DFA15B /* RegexParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D528925C4A11900DFA15B /* RegexParserTests.swift */; };
 		841D52B425C6BAE600DFA15B /* ComponentsParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D52B325C6BAE600DFA15B /* ComponentsParserTests.swift */; };
 		841D52E625C6DD1E00DFA15B /* TypeMappingParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D52E525C6DD1E00DFA15B /* TypeMappingParserTests.swift */; };
@@ -52,6 +50,10 @@
 		8467FD1524E677C6005D486C /* ecdsaHDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = 8467FD1024E675D0005D486C /* ecdsaHDKD.json */; };
 		8467FD2624E71A37005D486C /* IconGenerationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467FD2524E71A37005D486C /* IconGenerationTests.swift */; };
 		8467FD2824E72CCD005D486C /* HSLColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8467FD2724E72CCD005D486C /* HSLColorTests.swift */; };
+		847082F327267E2B003408E8 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847082ED27267E2B003408E8 /* ViewController.swift */; };
+		847082F427267E2B003408E8 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 847082EE27267E2B003408E8 /* LaunchScreen.xib */; };
+		847082F527267E2B003408E8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 847082F027267E2B003408E8 /* Images.xcassets */; };
+		847082F627267E2B003408E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847082F127267E2B003408E8 /* AppDelegate.swift */; };
 		849E0A2125C81DB500B33506 /* FixedArrayParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */; };
 		849E0A7425C9458F00B33506 /* StructNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A7325C9458F00B33506 /* StructNodeFactoryTests.swift */; };
 		849E0A7A25C94E3F00B33506 /* EnumMappingFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A7925C94E3F00B33506 /* EnumMappingFactoryTests.swift */; };
@@ -108,12 +110,10 @@
 		84FACC0425F799A900F32ED4 /* ChainDataCodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FACC0325F799A900F32ED4 /* ChainDataCodingTests.swift */; };
 		84FACC0825F79C5200F32ED4 /* BaseCodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FACC0725F79C5200F32ED4 /* BaseCodingTests.swift */; };
 		84FACC0C25F79D8600F32ED4 /* GenericHashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FACC0B25F79D8600F32ED4 /* GenericHashTests.swift */; };
-		A0FDCFB5B61F738FEE34A5E6 /* Pods_FearlessUtils_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 16D2E77D7010BEBF43DFE08E /* Pods_FearlessUtils_Tests.framework */; };
 		AE425FB626D363F500547303 /* BIP32JunctionFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE425FB526D363F500547303 /* BIP32JunctionFactoryTests.swift */; };
 		AE425FBA26D3726900547303 /* BIP32KeypairDerivationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE425FB926D3726900547303 /* BIP32KeypairDerivationTests.swift */; };
 		AE4B521426CBA71B00A66D2C /* BIP32HDKDEtalon.json in Resources */ = {isa = PBXBuildFile; fileRef = AE4B521326CBA71B00A66D2C /* BIP32HDKDEtalon.json */; };
 		AE4B521826CE127200A66D2C /* BIP32HDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = AE4B521726CE127200A66D2C /* BIP32HDKD.json */; };
-		B2BF1BE136637C8404B79450 /* Pods_FearlessUtils_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B9A63E44DBCDCE738F798358 /* Pods_FearlessUtils_Example.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,16 +127,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		16D2E77D7010BEBF43DFE08E /* Pods_FearlessUtils_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FearlessUtils_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		5BD943DD85A21FC5DB33A750 /* Pods-substrate-sdk-ios-example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-substrate-sdk-ios-example.debug.xcconfig"; path = "Target Support Files/Pods-substrate-sdk-ios-example/Pods-substrate-sdk-ios-example.debug.xcconfig"; sourceTree = "<group>"; };
 		60654FCEF77A2B707A129454 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		607FACD01AFB9204008FA782 /* FearlessUtils_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FearlessUtils_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		607FACD41AFB9204008FA782 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		607FACD51AFB9204008FA782 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		607FACD71AFB9204008FA782 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		607FACDC1AFB9204008FA782 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		607FACDF1AFB9204008FA782 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
-		607FACE51AFB9204008FA782 /* FearlessUtils_Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FearlessUtils_Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7BCE5EB68B0A48835979E64A /* Pods-FearlessUtils_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Tests.debug.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Tests/Pods-FearlessUtils_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		607FACD01AFB9204008FA782 /* substrate-sdk-ios-example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "substrate-sdk-ios-example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		607FACE51AFB9204008FA782 /* substrate-sdk-ios-tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "substrate-sdk-ios-tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		841D528925C4A11900DFA15B /* RegexParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegexParserTests.swift; sourceTree = "<group>"; };
 		841D52B325C6BAE600DFA15B /* ComponentsParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentsParserTests.swift; sourceTree = "<group>"; };
 		841D52E525C6DD1E00DFA15B /* TypeMappingParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeMappingParserTests.swift; sourceTree = "<group>"; };
@@ -178,6 +172,10 @@
 		8467FD1124E675D0005D486C /* ed25519HDKD.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = ed25519HDKD.json; sourceTree = "<group>"; };
 		8467FD2524E71A37005D486C /* IconGenerationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IconGenerationTests.swift; sourceTree = "<group>"; };
 		8467FD2724E72CCD005D486C /* HSLColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HSLColorTests.swift; sourceTree = "<group>"; };
+		847082ED27267E2B003408E8 /* ViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		847082EF27267E2B003408E8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		847082F027267E2B003408E8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		847082F127267E2B003408E8 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedArrayParserTests.swift; sourceTree = "<group>"; };
 		849E0A7325C9458F00B33506 /* StructNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructNodeFactoryTests.swift; sourceTree = "<group>"; };
 		849E0A7925C94E3F00B33506 /* EnumMappingFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumMappingFactoryTests.swift; sourceTree = "<group>"; };
@@ -235,16 +233,17 @@
 		84FACC0325F799A900F32ED4 /* ChainDataCodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainDataCodingTests.swift; sourceTree = "<group>"; };
 		84FACC0725F79C5200F32ED4 /* BaseCodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCodingTests.swift; sourceTree = "<group>"; };
 		84FACC0B25F79D8600F32ED4 /* GenericHashTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericHashTests.swift; sourceTree = "<group>"; };
-		93F24F5EEC204E4B0F918C39 /* Pods-FearlessUtils_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Example.debug.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Example/Pods-FearlessUtils_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		952C23907E41B550A3EC8D99 /* Pods_substrate_sdk_ios_example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_substrate_sdk_ios_example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A6530EF91651651EA9EFFC93 /* Pods-substrate-sdk-ios-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-substrate-sdk-ios-example.release.xcconfig"; path = "Target Support Files/Pods-substrate-sdk-ios-example/Pods-substrate-sdk-ios-example.release.xcconfig"; sourceTree = "<group>"; };
 		AE425FB526D363F500547303 /* BIP32JunctionFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP32JunctionFactoryTests.swift; sourceTree = "<group>"; };
 		AE425FB926D3726900547303 /* BIP32KeypairDerivationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP32KeypairDerivationTests.swift; sourceTree = "<group>"; };
 		AE4B521326CBA71B00A66D2C /* BIP32HDKDEtalon.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BIP32HDKDEtalon.json; sourceTree = "<group>"; };
 		AE4B521726CE127200A66D2C /* BIP32HDKD.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BIP32HDKD.json; sourceTree = "<group>"; };
-		B82F3EE26AAEE44C6E7F9962 /* Pods-FearlessUtils_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Tests.release.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Tests/Pods-FearlessUtils_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		B9A63E44DBCDCE738F798358 /* Pods_FearlessUtils_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FearlessUtils_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		C0EC4D272FE196149F4492DE /* Pods-FearlessUtils_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FearlessUtils_Example.release.xcconfig"; path = "Target Support Files/Pods-FearlessUtils_Example/Pods-FearlessUtils_Example.release.xcconfig"; sourceTree = "<group>"; };
+		B75826DAE37A64510EC1EA87 /* Pods-substrate-sdk-ios-tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-substrate-sdk-ios-tests.release.xcconfig"; path = "Target Support Files/Pods-substrate-sdk-ios-tests/Pods-substrate-sdk-ios-tests.release.xcconfig"; sourceTree = "<group>"; };
 		C16B9A0A217A972DC441B811 /* FearlessUtils.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = FearlessUtils.podspec; path = ../FearlessUtils.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		DBD8662893B1E1373B778CC2 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		DBE14551C0E76279C6171CFE /* Pods_substrate_sdk_ios_tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_substrate_sdk_ios_tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F77460E1104B6718EB43BC7D /* Pods-substrate-sdk-ios-tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-substrate-sdk-ios-tests.debug.xcconfig"; path = "Target Support Files/Pods-substrate-sdk-ios-tests/Pods-substrate-sdk-ios-tests.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -252,7 +251,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B2BF1BE136637C8404B79450 /* Pods_FearlessUtils_Example.framework in Frameworks */,
+				81DDD240BF09A0C5A56E703F /* Pods_substrate_sdk_ios_example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -260,53 +259,41 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A0FDCFB5B61F738FEE34A5E6 /* Pods_FearlessUtils_Tests.framework in Frameworks */,
+				465903FFE343EE08CC3F6D58 /* Pods_substrate_sdk_ios_tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		03C425997ECBE69125939C8B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				952C23907E41B550A3EC8D99 /* Pods_substrate_sdk_ios_example.framework */,
+				DBE14551C0E76279C6171CFE /* Pods_substrate_sdk_ios_tests.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		607FACC71AFB9204008FA782 = {
 			isa = PBXGroup;
 			children = (
+				847082EC27267E2B003408E8 /* substrate-sdk-ios */,
 				607FACF51AFB993E008FA782 /* Podspec Metadata */,
-				607FACD21AFB9204008FA782 /* Example for FearlessUtils */,
 				84DA3B3024C8CE5900B5E27F /* Tests */,
 				607FACD11AFB9204008FA782 /* Products */,
 				A78EB2A0158FDFCA62F39CAC /* Pods */,
-				B71F45E77B6AE967E2E06378 /* Frameworks */,
+				03C425997ECBE69125939C8B /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
 		607FACD11AFB9204008FA782 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				607FACD01AFB9204008FA782 /* FearlessUtils_Example.app */,
-				607FACE51AFB9204008FA782 /* FearlessUtils_Tests.xctest */,
+				607FACD01AFB9204008FA782 /* substrate-sdk-ios-example.app */,
+				607FACE51AFB9204008FA782 /* substrate-sdk-ios-tests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		607FACD21AFB9204008FA782 /* Example for FearlessUtils */ = {
-			isa = PBXGroup;
-			children = (
-				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
-				607FACD71AFB9204008FA782 /* ViewController.swift */,
-				607FACDC1AFB9204008FA782 /* Images.xcassets */,
-				607FACDE1AFB9204008FA782 /* LaunchScreen.xib */,
-				607FACD31AFB9204008FA782 /* Supporting Files */,
-			);
-			name = "Example for FearlessUtils";
-			path = FearlessUtils;
-			sourceTree = "<group>";
-		};
-		607FACD31AFB9204008FA782 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				607FACD41AFB9204008FA782 /* Info.plist */,
-			);
-			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		607FACF51AFB993E008FA782 /* Podspec Metadata */ = {
@@ -452,6 +439,17 @@
 			path = Icon;
 			sourceTree = "<group>";
 		};
+		847082EC27267E2B003408E8 /* substrate-sdk-ios */ = {
+			isa = PBXGroup;
+			children = (
+				847082ED27267E2B003408E8 /* ViewController.swift */,
+				847082EE27267E2B003408E8 /* LaunchScreen.xib */,
+				847082F027267E2B003408E8 /* Images.xcassets */,
+				847082F127267E2B003408E8 /* AppDelegate.swift */,
+			);
+			path = "substrate-sdk-ios";
+			sourceTree = "<group>";
+		};
 		849E0A7225C9455600B33506 /* NodeFactory */ = {
 			isa = PBXGroup;
 			children = (
@@ -591,10 +589,10 @@
 		A78EB2A0158FDFCA62F39CAC /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				93F24F5EEC204E4B0F918C39 /* Pods-FearlessUtils_Example.debug.xcconfig */,
-				C0EC4D272FE196149F4492DE /* Pods-FearlessUtils_Example.release.xcconfig */,
-				7BCE5EB68B0A48835979E64A /* Pods-FearlessUtils_Tests.debug.xcconfig */,
-				B82F3EE26AAEE44C6E7F9962 /* Pods-FearlessUtils_Tests.release.xcconfig */,
+				5BD943DD85A21FC5DB33A750 /* Pods-substrate-sdk-ios-example.debug.xcconfig */,
+				A6530EF91651651EA9EFFC93 /* Pods-substrate-sdk-ios-example.release.xcconfig */,
+				F77460E1104B6718EB43BC7D /* Pods-substrate-sdk-ios-tests.debug.xcconfig */,
+				B75826DAE37A64510EC1EA87 /* Pods-substrate-sdk-ios-tests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -608,43 +606,34 @@
 			path = BIP32;
 			sourceTree = "<group>";
 		};
-		B71F45E77B6AE967E2E06378 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				B9A63E44DBCDCE738F798358 /* Pods_FearlessUtils_Example.framework */,
-				16D2E77D7010BEBF43DFE08E /* Pods_FearlessUtils_Tests.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		607FACCF1AFB9204008FA782 /* FearlessUtils_Example */ = {
+		607FACCF1AFB9204008FA782 /* substrate-sdk-ios-example */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "FearlessUtils_Example" */;
+			buildConfigurationList = 607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "substrate-sdk-ios-example" */;
 			buildPhases = (
-				5B7519DB1E5F7DC9DB9F9479 /* [CP] Check Pods Manifest.lock */,
+				A24F9B238F510695729EBC13 /* [CP] Check Pods Manifest.lock */,
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
-				4F85E8298F9C17DBC3D2C2FB /* [CP] Embed Pods Frameworks */,
 				30CB266525F9200100EDAE1C /* SwiftLint */,
+				06D421A3F889BE80D05B99FC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = FearlessUtils_Example;
+			name = "substrate-sdk-ios-example";
 			productName = FearlessUtils;
-			productReference = 607FACD01AFB9204008FA782 /* FearlessUtils_Example.app */;
+			productReference = 607FACD01AFB9204008FA782 /* substrate-sdk-ios-example.app */;
 			productType = "com.apple.product-type.application";
 		};
-		607FACE41AFB9204008FA782 /* FearlessUtils_Tests */ = {
+		607FACE41AFB9204008FA782 /* substrate-sdk-ios-tests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "FearlessUtils_Tests" */;
+			buildConfigurationList = 607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "substrate-sdk-ios-tests" */;
 			buildPhases = (
-				DDE3847F201A901C43F2CDDD /* [CP] Check Pods Manifest.lock */,
+				3ECD0BAE4F881DE0EB4BFE7F /* [CP] Check Pods Manifest.lock */,
 				607FACE11AFB9204008FA782 /* Sources */,
 				607FACE21AFB9204008FA782 /* Frameworks */,
 				607FACE31AFB9204008FA782 /* Resources */,
@@ -654,9 +643,9 @@
 			dependencies = (
 				607FACE71AFB9204008FA782 /* PBXTargetDependency */,
 			);
-			name = FearlessUtils_Tests;
+			name = "substrate-sdk-ios-tests";
 			productName = Tests;
-			productReference = 607FACE51AFB9204008FA782 /* FearlessUtils_Tests.xctest */;
+			productReference = 607FACE51AFB9204008FA782 /* substrate-sdk-ios-tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -682,7 +671,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "FearlessUtils" */;
+			buildConfigurationList = 607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "substrate-sdk-ios-example" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
@@ -696,8 +685,8 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				607FACCF1AFB9204008FA782 /* FearlessUtils_Example */,
-				607FACE41AFB9204008FA782 /* FearlessUtils_Tests */,
+				607FACCF1AFB9204008FA782 /* substrate-sdk-ios-example */,
+				607FACE41AFB9204008FA782 /* substrate-sdk-ios-tests */,
 			);
 		};
 /* End PBXProject section */
@@ -707,8 +696,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
-				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				847082F427267E2B003408E8 /* LaunchScreen.xib in Resources */,
+				847082F527267E2B003408E8 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -743,6 +732,42 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		06D421A3F889BE80D05B99FC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-substrate-sdk-ios-example/Pods-substrate-sdk-ios-example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
+				"${BUILT_PRODUCTS_DIR}/IrohaCrypto/IrohaCrypto.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
+				"${BUILT_PRODUCTS_DIR}/RobinHood/RobinHood.framework",
+				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
+				"${BUILT_PRODUCTS_DIR}/TweetNacl/TweetNacl.framework",
+				"${BUILT_PRODUCTS_DIR}/keccak.c/keccak.framework",
+				"${BUILT_PRODUCTS_DIR}/scrypt.c/scrypt.framework",
+				"${BUILT_PRODUCTS_DIR}/secp256k1.c/secp256k1.framework",
+				"${BUILT_PRODUCTS_DIR}/xxHash-Swift/xxHash_Swift.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IrohaCrypto.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RobinHood.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TweetNacl.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/keccak.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/scrypt.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/xxHash_Swift.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-substrate-sdk-ios-example/Pods-substrate-sdk-ios-example-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 		30CB266525F9200100EDAE1C /* SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -761,45 +786,7 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\" --config \".swiftlint.yml\"\n";
 		};
-		4F85E8298F9C17DBC3D2C2FB /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-FearlessUtils_Example/Pods-FearlessUtils_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
-				"${BUILT_PRODUCTS_DIR}/FearlessUtils/FearlessUtils.framework",
-				"${BUILT_PRODUCTS_DIR}/IrohaCrypto/IrohaCrypto.framework",
-				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
-				"${BUILT_PRODUCTS_DIR}/RobinHood/RobinHood.framework",
-				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
-				"${BUILT_PRODUCTS_DIR}/TweetNacl/TweetNacl.framework",
-				"${BUILT_PRODUCTS_DIR}/keccak.c/keccak.framework",
-				"${BUILT_PRODUCTS_DIR}/scrypt.c/scrypt.framework",
-				"${BUILT_PRODUCTS_DIR}/secp256k1.c/secp256k1.framework",
-				"${BUILT_PRODUCTS_DIR}/xxHash-Swift/xxHash_Swift.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FearlessUtils.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IrohaCrypto.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RobinHood.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TweetNacl.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/keccak.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/scrypt.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/xxHash_Swift.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FearlessUtils_Example/Pods-FearlessUtils_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5B7519DB1E5F7DC9DB9F9479 /* [CP] Check Pods Manifest.lock */ = {
+		3ECD0BAE4F881DE0EB4BFE7F /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -814,14 +801,14 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FearlessUtils_Example-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-substrate-sdk-ios-tests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DDE3847F201A901C43F2CDDD /* [CP] Check Pods Manifest.lock */ = {
+		A24F9B238F510695729EBC13 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -836,7 +823,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-FearlessUtils_Tests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-substrate-sdk-ios-example-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -850,8 +837,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
-				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
+				847082F627267E2B003408E8 /* AppDelegate.swift in Sources */,
+				847082F327267E2B003408E8 /* ViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -947,16 +934,16 @@
 /* Begin PBXTargetDependency section */
 		607FACE71AFB9204008FA782 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 607FACCF1AFB9204008FA782 /* FearlessUtils_Example */;
+			target = 607FACCF1AFB9204008FA782 /* substrate-sdk-ios-example */;
 			targetProxy = 607FACE61AFB9204008FA782 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		607FACDE1AFB9204008FA782 /* LaunchScreen.xib */ = {
+		847082EE27267E2B003408E8 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
-				607FACDF1AFB9204008FA782 /* Base */,
+				847082EF27267E2B003408E8 /* Base */,
 			);
 			name = LaunchScreen.xib;
 			sourceTree = "<group>";
@@ -1065,12 +1052,12 @@
 		};
 		607FACF01AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 93F24F5EEC204E4B0F918C39 /* Pods-FearlessUtils_Example.debug.xcconfig */;
+			baseConfigurationReference = 5BD943DD85A21FC5DB33A750 /* Pods-substrate-sdk-ios-example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				INFOPLIST_FILE = FearlessUtils/Info.plist;
+				INFOPLIST_FILE = "substrate-sdk-ios/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -1082,12 +1069,12 @@
 		};
 		607FACF11AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C0EC4D272FE196149F4492DE /* Pods-FearlessUtils_Example.release.xcconfig */;
+			baseConfigurationReference = A6530EF91651651EA9EFFC93 /* Pods-substrate-sdk-ios-example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
-				INFOPLIST_FILE = FearlessUtils/Info.plist;
+				INFOPLIST_FILE = "substrate-sdk-ios/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.$(PRODUCT_NAME:rfc1034identifier)";
@@ -1099,8 +1086,9 @@
 		};
 		607FACF31AFB9204008FA782 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 7BCE5EB68B0A48835979E64A /* Pods-FearlessUtils_Tests.debug.xcconfig */;
+			baseConfigurationReference = F77460E1104B6718EB43BC7D /* Pods-substrate-sdk-ios-tests.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1123,8 +1111,9 @@
 		};
 		607FACF41AFB9204008FA782 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = B82F3EE26AAEE44C6E7F9962 /* Pods-FearlessUtils_Tests.release.xcconfig */;
+			baseConfigurationReference = B75826DAE37A64510EC1EA87 /* Pods-substrate-sdk-ios-tests.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1144,7 +1133,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "FearlessUtils" */ = {
+		607FACCB1AFB9204008FA782 /* Build configuration list for PBXProject "substrate-sdk-ios-example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACED1AFB9204008FA782 /* Debug */,
@@ -1153,7 +1142,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "FearlessUtils_Example" */ = {
+		607FACEF1AFB9204008FA782 /* Build configuration list for PBXNativeTarget "substrate-sdk-ios-example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACF01AFB9204008FA782 /* Debug */,
@@ -1162,7 +1151,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "FearlessUtils_Tests" */ = {
+		607FACF21AFB9204008FA782 /* Build configuration list for PBXNativeTarget "substrate-sdk-ios-tests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				607FACF31AFB9204008FA782 /* Debug */,

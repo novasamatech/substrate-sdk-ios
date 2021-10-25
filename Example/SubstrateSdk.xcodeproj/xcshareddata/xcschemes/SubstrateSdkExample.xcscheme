@@ -17,7 +17,7 @@
                BlueprintIdentifier = "607FACCF1AFB9204008FA782"
                BuildableName = "FearlessUtils_Example.app"
                BlueprintName = "FearlessUtils_Example"
-               ReferencedContainer = "container:FearlessUtils.xcodeproj">
+               ReferencedContainer = "container:substrate-ios-sdk.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -31,7 +31,7 @@
                BlueprintIdentifier = "607FACE41AFB9204008FA782"
                BuildableName = "FearlessUtils_Tests.xctest"
                BlueprintName = "FearlessUtils_Tests"
-               ReferencedContainer = "container:FearlessUtils.xcodeproj">
+               ReferencedContainer = "container:substrate-ios-sdk.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -47,7 +47,7 @@
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
             BuildableName = "FearlessUtils_Example.app"
             BlueprintName = "FearlessUtils_Example"
-            ReferencedContainer = "container:FearlessUtils.xcodeproj">
+            ReferencedContainer = "container:substrate-ios-sdk.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <Testables>
@@ -56,9 +56,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "607FACE41AFB9204008FA782"
-               BuildableName = "FearlessUtils_Tests.xctest"
-               BlueprintName = "FearlessUtils_Tests"
-               ReferencedContainer = "container:FearlessUtils.xcodeproj">
+               BuildableName = "SubstrateSdkTests.xctest"
+               BlueprintName = "SubstrateSdkTests"
+               ReferencedContainer = "container:SubstrateSdk.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -78,11 +78,20 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
-            BuildableName = "FearlessUtils_Example.app"
-            BlueprintName = "FearlessUtils_Example"
-            ReferencedContainer = "container:FearlessUtils.xcodeproj">
+            BuildableName = "SubstrateSdkExample.app"
+            BlueprintName = "SubstrateSdkExample"
+            ReferencedContainer = "container:SubstrateSdk.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "607FACCF1AFB9204008FA782"
+            BuildableName = "FearlessUtils_Example.app"
+            BlueprintName = "FearlessUtils_Example"
+            ReferencedContainer = "container:substrate-ios-sdk.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -97,7 +106,7 @@
             BlueprintIdentifier = "607FACCF1AFB9204008FA782"
             BuildableName = "FearlessUtils_Example.app"
             BlueprintName = "FearlessUtils_Example"
-            ReferencedContainer = "container:FearlessUtils.xcodeproj">
+            ReferencedContainer = "container:substrate-ios-sdk.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
