@@ -1,5 +1,5 @@
 import XCTest
-import FearlessUtils
+import SubstrateSdk
 
 class BIP32JunctionFactoryTests: XCTestCase {
     func testExtractSoft() throws {

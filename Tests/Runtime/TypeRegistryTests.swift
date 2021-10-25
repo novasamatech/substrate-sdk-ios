@@ -1,5 +1,5 @@
 import XCTest
-import FearlessUtils
+import SubstrateSdk
 
 class TypeRegistryTests: XCTestCase {
     func testShouldResolveStruct() throws {

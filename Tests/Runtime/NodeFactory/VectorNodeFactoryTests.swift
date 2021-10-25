@@ -1,5 +1,5 @@
 import XCTest
-import FearlessUtils
+import SubstrateSdk
 
 class VectorNodeFactoryTests: XCTestCase {
     func testValidVectorFactory() throws {

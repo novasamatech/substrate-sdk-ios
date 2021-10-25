@@ -1,6 +1,6 @@
 import Foundation
 import BigInt
-import FearlessUtils
+import SubstrateSdk
 
 struct AccountInfo: Codable, Equatable {
     @StringCodable var nonce: UInt32

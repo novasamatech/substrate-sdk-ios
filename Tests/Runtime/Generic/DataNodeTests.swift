@@ -1,5 +1,5 @@
 import XCTest
-import FearlessUtils
+import SubstrateSdk
 
 class DataNodeTests: XCTestCase {
     func testShouldDecodeNone() throws {

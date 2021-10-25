@@ -1,5 +1,5 @@
 import XCTest
-import FearlessUtils
+import SubstrateSdk
 
 class RuntimeMetadataV14Tests: XCTestCase {
     func testWestendMetadataParsing() {

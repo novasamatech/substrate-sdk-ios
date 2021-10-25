@@ -1,5 +1,5 @@
 import XCTest
-import FearlessUtils
+import SubstrateSdk
 
 class BaseCodingTests: XCTestCase {
     func performTest<T: Codable & Equatable>(value: T,

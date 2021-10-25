@@ -1,6 +1,6 @@
 //
 //  HSLColorTests.swift
-//  FearlessUtils_Tests
+//  SubstrateSdk_Tests
 //
 //  Created by Ruslan Rezin on 14.08.2020.
 //  Copyright © 2020 CocoaPods. All rights reserved.

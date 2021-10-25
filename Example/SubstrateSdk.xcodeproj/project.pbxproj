@@ -122,7 +122,7 @@
 			containerPortal = 607FACC81AFB9204008FA782 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 607FACCF1AFB9204008FA782;
-			remoteInfo = FearlessUtils;
+			remoteInfo = SubstrateSdk;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -625,7 +625,7 @@
 			dependencies = (
 			);
 			name = SubstrateSdkExample;
-			productName = FearlessUtils;
+			productName = SubstrateSdk;
 			productReference = 607FACD01AFB9204008FA782 /* SubstrateSdkExample.app */;
 			productType = "com.apple.product-type.application";
 		};

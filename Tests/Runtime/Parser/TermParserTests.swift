@@ -1,5 +1,5 @@
 import XCTest
-import FearlessUtils
+import SubstrateSdk
 
 class TermParserTests: XCTestCase {
     func testValidTerm() {

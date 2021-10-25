@@ -3,4 +3,4 @@ disabled_rules:
   - inclusive_language
   - function_parameter_count
 included:
-  - "../FearlessUtils/Classes"
+  - "../SubstrateSdk/Classes"

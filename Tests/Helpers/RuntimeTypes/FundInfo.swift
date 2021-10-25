@@ -1,6 +1,6 @@
 import Foundation
 import BigInt
-import FearlessUtils
+import SubstrateSdk
 
 struct FundInfo: Codable, Equatable {
     let retiring: Bool

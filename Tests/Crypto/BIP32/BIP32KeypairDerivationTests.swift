@@ -1,5 +1,5 @@
 import XCTest
-import FearlessUtils
+import SubstrateSdk
 import IrohaCrypto
 
 class BIP32KeypairDeriviationTests: XCTestCase {

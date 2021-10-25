@@ -1,5 +1,5 @@
 import XCTest
-import FearlessUtils
+import SubstrateSdk
 
 class TypeRegistryCatalogValidationTests: XCTestCase {
     func testWestendCatalog() throws {

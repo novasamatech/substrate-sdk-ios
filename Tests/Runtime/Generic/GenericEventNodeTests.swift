@@ -1,5 +1,5 @@
 import XCTest
-import FearlessUtils
+import SubstrateSdk
 
 class GenericEventNodeTests: XCTestCase {
     func testShouldEncodeEvent() throws {

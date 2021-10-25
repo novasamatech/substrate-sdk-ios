@@ -1,5 +1,5 @@
 import Foundation
-import FearlessUtils
+import SubstrateSdk
 
 enum LastContribution: Equatable {
     static let neverField = "Never"

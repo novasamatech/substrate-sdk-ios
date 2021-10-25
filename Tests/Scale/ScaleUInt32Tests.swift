@@ -1,5 +1,5 @@
 import XCTest
-import FearlessUtils
+import SubstrateSdk
 
 class ScaleUInt32Tests: XCTestCase {
     private struct TestExample {

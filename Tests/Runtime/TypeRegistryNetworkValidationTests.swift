@@ -1,5 +1,5 @@
 import XCTest
-import FearlessUtils
+import SubstrateSdk
 
 class TypeRegistryNetworkValidationTests: XCTestCase {
     func testTypeRegistryBuildSuccess() throws {
