@@ -10,13 +10,14 @@ extension WebSocket: WebSocketConnectionProtocol {}
 
 public protocol WebSocketEngineDelegate: AnyObject {
     func webSocketDidChangeState(
+        _ connection: AnyObject,
         from oldState: WebSocketEngine.State,
         to newState: WebSocketEngine.State
     )
 }
 
 public final class WebSocketEngine {
-    public static let sharedProcessingQueue = DispatchQueue(label: "jp.co.soramitsu.fearless.ws.processing")
+    public static let sharedProcessingQueue = DispatchQueue(label: "com.nova.ws.processing")
 
     public enum State {
         case notConnected
@@ -39,7 +40,7 @@ public final class WebSocketEngine {
                 let newState = state
 
                 completionQueue.async {
-                    delegate.webSocketDidChangeState(from: oldState, to: newState)
+                    delegate.webSocketDidChangeState(self, from: oldState, to: newState)
                 }
             }
         }
