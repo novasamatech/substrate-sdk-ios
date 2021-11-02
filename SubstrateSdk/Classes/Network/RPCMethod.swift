@@ -9,6 +9,7 @@ public enum RPCMethod {
     public static let getChildStorageAt = "childstate_getStorage"
     public static let getBlockHash = "chain_getBlockHash"
     public static let submitExtrinsic = "author_submitExtrinsic"
+    public static let submitAndWatchExtrinsic = "author_submitAndWatchExtrinsic"
     public static let paymentInfo = "payment_queryInfo"
     public static let getRuntimeVersion = "chain_getRuntimeVersion"
     public static let getRuntimeMetadata = "state_getMetadata"
