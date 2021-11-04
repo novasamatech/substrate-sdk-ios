@@ -9,7 +9,7 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func with(tip: BigUInt) -> Self
     func with(shouldUseAtomicBatch: Bool) -> Self
     func adding<T: RuntimeCallable>(call: T) throws -> Self
-
+    func reset() -> Self
     func signing(by signer: (Data) throws -> Data,
                  of type: CryptoType,
                  using encoder: DynamicScaleEncoding,
@@ -168,6 +168,11 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         let json = try call.toScaleCompatibleJSON()
         calls.append(json)
 
+        return self
+    }
+
+    public func reset() -> Self {
+        calls = []
         return self
     }
 
