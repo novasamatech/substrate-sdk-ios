@@ -79,12 +79,14 @@ public class KeystoreExtractor: KeystoreExtracting {
         let importedSecretData = Data(data[secretStart..<secretEnd])
 
         let secretKeyData: Data
-        switch info.cryptoType {
+        switch info.secretType {
         case .sr25519:
             secretKeyData = try SNPrivateKey(fromEd25519: importedSecretData).rawData()
         case .ed25519:
             secretKeyData = importedSecretData
         case .ecdsa:
+            secretKeyData = importedSecretData
+        case .ethereum:
             secretKeyData = importedSecretData
         }
 
@@ -94,6 +96,6 @@ public class KeystoreExtractor: KeystoreExtracting {
         return KeystoreData(address: definition.address,
                             secretKeyData: secretKeyData,
                             publicKeyData: publicKeyData,
-                            cryptoType: info.cryptoType)
+                            secretType: info.secretType)
     }
 }

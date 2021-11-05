@@ -4,6 +4,6 @@ import IrohaCrypto
 public struct KeystoreInfo {
     public let address: String?
     public let chainType: ChainType?
-    public let cryptoType: CryptoType
+    public let secretType: KeystoreSecretType
     public let meta: KeystoreMeta?
 }

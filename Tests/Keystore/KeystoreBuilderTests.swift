@@ -48,6 +48,21 @@ class KeystoreBuilderTests: XCTestCase {
         }
     }
 
+    func testOnEthereumJson() {
+        guard let url = Bundle(for: KeystoreExtractorTests.self)
+            .url(forResource: "keystore-ethereum", withExtension: "json") else {
+            XCTFail("Can't find resource")
+            return
+        }
+
+        do {
+            let testData = try Data(contentsOf: url)
+            performTestForData(testData, password: "Moonriver")
+        } catch {
+            XCTFail("Unexpected error \(error)")
+        }
+    }
+
     // MARK: Private
 
     private func performTestForData(_ testData: Data, password: String) {

@@ -21,7 +21,7 @@ public enum KeystoreExtractorError: Error {
     case missingScryptR
     case unsupportedEncoding
     case unsupportedContent
-    case unsupportedCryptoType
+    case unsupportedSecret
     case invalidPasswordFormat
     case missingPkcs8Header
     case missingPkcs8Divider
