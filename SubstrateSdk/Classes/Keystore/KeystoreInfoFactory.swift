@@ -6,7 +6,7 @@ public protocol KeystoreInfoFactoryProtocol {
 }
 
 public enum KeystoreInfoFactoryError: Error {
-    case unsupportedCryptoType
+    case unsupportedSecretType
     case unsupportedAddressType
 }
 
@@ -14,10 +14,10 @@ public final class KeystoreInfoFactory: KeystoreInfoFactoryProtocol {
     public init() {}
 
     public func createInfo(from definition: KeystoreDefinition) throws -> KeystoreInfo {
-        let cryptoTypeValue = definition.encoding.content.count > 1 ? definition.encoding.content[1] : nil
+        let maybeSecretTypeValue = definition.encoding.content.count > 1 ? definition.encoding.content[1] : nil
 
-        guard let value = cryptoTypeValue, let cryptoType = CryptoType(rawValue: value) else {
-            throw KeystoreInfoFactoryError.unsupportedCryptoType
+        guard let value = maybeSecretTypeValue, let secretType = KeystoreSecretType(rawValue: value) else {
+            throw KeystoreInfoFactoryError.unsupportedSecretType
         }
 
         let chainType: ChainType?
@@ -31,7 +31,7 @@ public final class KeystoreInfoFactory: KeystoreInfoFactoryProtocol {
 
         return KeystoreInfo(address: definition.address,
                             chainType: chainType,
-                            cryptoType: cryptoType,
+                            secretType: secretType,
                             meta: definition.meta)
     }
 }

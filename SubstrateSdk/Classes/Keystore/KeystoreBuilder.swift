@@ -52,12 +52,14 @@ extension KeystoreBuilder: KeystoreBuilding {
         let nonce = try Data.generateRandomBytes(of: KeystoreConstants.nonceLength)
 
         let secretKeyData: Data
-        switch data.cryptoType {
+        switch data.secretType {
         case .sr25519:
             secretKeyData = try SNPrivateKey(rawData: data.secretKeyData).toEd25519Data()
         case .ed25519:
             secretKeyData = data.secretKeyData
         case .ecdsa:
+            secretKeyData = data.secretKeyData
+        case .ethereum:
             secretKeyData = data.secretKeyData
         }
 
@@ -67,7 +69,7 @@ extension KeystoreBuilder: KeystoreBuilding {
         let encoded = scryptParameters.encode() + nonce + encrypted
 
         let encodingType = [KeystoreEncodingType.scrypt.rawValue, KeystoreEncodingType.xsalsa.rawValue]
-        let encodingContent = [KeystoreEncodingContent.pkcs8.rawValue, data.cryptoType.rawValue]
+        let encodingContent = [KeystoreEncodingContent.pkcs8.rawValue, data.secretType.rawValue]
         let keystoreEncoding = KeystoreEncoding(content: encodingContent,
                                                 type: encodingType,
                                                 version: String(KeystoreConstants.version))

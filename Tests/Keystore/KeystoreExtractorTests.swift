@@ -105,4 +105,31 @@ class KeystoreExtractorTests: XCTestCase {
             XCTFail("Unexpected error \(error)")
         }
     }
+
+    func testEthereumJson() {
+        guard let url = Bundle(for: KeystoreExtractorTests.self)
+            .url(forResource: "keystore-ethereum", withExtension: "json") else {
+            XCTFail("Can't find resource")
+            return
+        }
+
+        do {
+            let testData = try Data(contentsOf: url)
+            let keystore = try JSONDecoder().decode(KeystoreDefinition.self, from: testData)
+
+            let extractor = KeystoreExtractor()
+
+            let keystoreData = try extractor.extractFromDefinition(keystore,
+                                                                   password: "Moonriver")
+
+            let rawPrivateKey = keystoreData.secretKeyData
+            let keypair = try SECKeyFactory().derive(fromPrivateKey: SECPrivateKey(rawData: rawPrivateKey))
+
+            XCTAssertEqual(keypair.publicKey().rawData(), keystoreData.publicKeyData)
+
+            XCTAssertEqual(keypair.publicKey().rawData().toHex(includePrefix: true), keystoreData.address)
+        } catch {
+            XCTFail("Unexpected error \(error)")
+        }
+    }
 }
