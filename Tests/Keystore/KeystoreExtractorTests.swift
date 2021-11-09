@@ -107,8 +107,18 @@ class KeystoreExtractorTests: XCTestCase {
     }
 
     func testEthereumJson() {
+        performEthereumTest(for: "keystore-ethereum", password: "Moonriver")
+    }
+
+    func testEthereumJsonWithIntVersion() {
+        performEthereumTest(for: "keystore-ethereum-int-version", password: "Moonriver")
+    }
+
+    // MARK: Private
+
+    private func performEthereumTest(for filename: String, password: String) {
         guard let url = Bundle(for: KeystoreExtractorTests.self)
-            .url(forResource: "keystore-ethereum", withExtension: "json") else {
+            .url(forResource: filename, withExtension: "json") else {
             XCTFail("Can't find resource")
             return
         }
@@ -119,8 +129,7 @@ class KeystoreExtractorTests: XCTestCase {
 
             let extractor = KeystoreExtractor()
 
-            let keystoreData = try extractor.extractFromDefinition(keystore,
-                                                                   password: "Moonriver")
+            let keystoreData = try extractor.extractFromDefinition(keystore, password: password)
 
             let rawPrivateKey = keystoreData.secretKeyData
             let keypair = try SECKeyFactory().derive(fromPrivateKey: SECPrivateKey(rawData: rawPrivateKey))

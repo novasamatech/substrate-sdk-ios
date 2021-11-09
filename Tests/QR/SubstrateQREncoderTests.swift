@@ -30,4 +30,23 @@ class SubstrateQREncoderTests: XCTestCase {
 
         XCTAssertEqual(expectedData, resultData)
     }
+
+    func testSuccessfullEncodingWithEthereumAddress() throws {
+        let expectedData =  "7375627374726174653a3078396433333237323432303430646532353965653739336338313430613963326235333538313763353a3078303337363936333135626563623737323761613234313233313236366339366634626639333837383034363134636230326232633462623564313631396137643964"
+
+        let publicKey = try Data(
+            hexString: "0x037696315becb7727aa241231266c96f4bf9387804614cb02b2c4bb5d1619a7d9d"
+        )
+
+        let address = try publicKey.ethereumAddressFromPublicKey()
+
+        let info = SubstrateQRInfo(prefix: SubstrateQR.prefix,
+                                   address: address.toHex(includePrefix: true),
+                                   rawPublicKey: publicKey,
+                                   username: nil)
+
+        let resultData = try SubstrateQREncoder().encode(info: info)
+
+        XCTAssertEqual(expectedData, resultData.toHex())
+    }
 }

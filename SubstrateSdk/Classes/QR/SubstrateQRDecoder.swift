@@ -2,17 +2,22 @@ import Foundation
 import IrohaCrypto
 
 open class SubstrateQRDecoder: SubstrateQRDecodable {
-    public let chainType: ChainType
+    public enum AddressFormat {
+        case substrate(type: ChainType)
+        case ethereum
+    }
+
+    public let addressFormat: AddressFormat
     public let separator: String
     public let prefix: String
 
     private lazy var addressFactory = SS58AddressFactory()
 
-    public init(chainType: ChainType,
+    public init(addressFormat: AddressFormat,
                 prefix: String = SubstrateQR.prefix,
                 separator: String = SubstrateQR.fieldsSeparator) {
         self.prefix = prefix
-        self.chainType = chainType
+        self.addressFormat = addressFormat
         self.separator = separator
     }
 
@@ -31,11 +36,24 @@ open class SubstrateQRDecoder: SubstrateQRDecodable {
         }
 
         let address = fields[1]
-        let accountId = try addressFactory.accountId(fromAddress: address, type: chainType)
+        let accountId: Data
         let publicKey = try Data(hexString: fields[2])
 
-        guard publicKey.matchPublicKeyToAccountId(accountId) else {
-            throw SubstrateQRDecoderError.accountIdMismatch
+        switch addressFormat {
+        case .substrate(let type):
+            accountId = try addressFactory.accountId(fromAddress: address, type: type)
+
+            guard publicKey.matchPublicKeyToAccountId(accountId) else {
+                throw SubstrateQRDecoderError.accountIdMismatch
+            }
+        case .ethereum:
+            accountId = try Data(hexString: address)
+
+            let expectedAccountId = try publicKey.ethereumAddressFromPublicKey()
+
+            guard accountId == expectedAccountId else {
+                throw SubstrateQRDecoderError.accountIdMismatch
+            }
         }
 
         let username = fields.count > 3 ? fields[3] : nil

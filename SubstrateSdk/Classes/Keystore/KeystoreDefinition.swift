@@ -18,6 +18,12 @@ public struct KeystoreDefinition: Codable {
 }
 
 public struct KeystoreEncoding: Codable {
+    enum CodingKeys: String, CodingKey {
+        case content
+        case type
+        case version
+    }
+
     public let content: [String]
     public let type: [String]
     public let version: String
@@ -26,6 +32,25 @@ public struct KeystoreEncoding: Codable {
         self.content = content
         self.type = type
         self.version = version
+    }
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+
+        content = try container.decode([String].self, forKey: .content)
+        type = try container.decode([String].self, forKey: .type)
+
+        if let stringVersion = try? container.decode(String.self, forKey: .version) {
+            version = stringVersion
+        } else if let intVersion = try? container.decode(Int.self, forKey: .version) {
+            version = String(intVersion)
+        } else {
+            throw DecodingError.dataCorruptedError(
+                forKey: .version,
+                in: container,
+                debugDescription: "Unexpected value type"
+            )
+        }
     }
 }
 
