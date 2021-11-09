@@ -12,7 +12,7 @@ class SubstrateQRDecoderTests: XCTestCase {
                                            username: "BVB")
 
         let decodedInfo = try SubstrateQRDecoder(
-            chainType: KnownChainType.genericSubstrate.rawValue
+            addressFormat: .substrate(type: KnownChainType.genericSubstrate.rawValue)
         ).decode(data: data)
 
         XCTAssertEqual(decodedInfo, expectedInfo)
@@ -28,7 +28,7 @@ class SubstrateQRDecoderTests: XCTestCase {
                                            username: nil)
 
         let decodedInfo = try SubstrateQRDecoder(
-            chainType: KnownChainType.genericSubstrate.rawValue
+            addressFormat: .substrate(type: KnownChainType.genericSubstrate.rawValue)
         ).decode(data: data)
 
         XCTAssertEqual(decodedInfo, expectedInfo)
@@ -52,12 +52,29 @@ class SubstrateQRDecoderTests: XCTestCase {
         perforErrorTest(data, expectedError: .accountIdMismatch)
     }
 
+    func testEthereumDecoding() throws {
+        let data = try Data(hexString: "7375627374726174653a3078396433333237323432303430646532353965653739336338313430613963326235333538313763353a3078303337363936333135626563623737323761613234313233313236366339366634626639333837383034363134636230326232633462623564313631396137643964")
+
+        let publicKey = try Data(hexString: "0x037696315becb7727aa241231266c96f4bf9387804614cb02b2c4bb5d1619a7d9d")
+        let address = try publicKey.ethereumAddressFromPublicKey()
+        let expectedInfo = SubstrateQRInfo(prefix: SubstrateQR.prefix,
+                                           address: address.toHex(includePrefix: true),
+                                           rawPublicKey: publicKey,
+                                           username: nil)
+
+        let decodedInfo = try SubstrateQRDecoder(
+            addressFormat: .ethereum
+        ).decode(data: data)
+
+        XCTAssertEqual(decodedInfo, expectedInfo)
+    }
+
     // MARK: Private
 
     private func perforErrorTest(_ data: Data, expectedError: SubstrateQRDecoderError) {
         do {
             _ = try SubstrateQRDecoder(
-                chainType: KnownChainType.genericSubstrate.rawValue
+                addressFormat: .substrate(type: KnownChainType.genericSubstrate.rawValue)
             ).decode(data: data)
 
             XCTFail("Exception expected")
