@@ -54,6 +54,7 @@
 		84708302272683C6003408E8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 847082FD272683C6003408E8 /* Images.xcassets */; };
 		84708303272683C6003408E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847082FE272683C6003408E8 /* AppDelegate.swift */; };
 		84784105273569A000401EFA /* keystore-ethereum.json in Resources */ = {isa = PBXBuildFile; fileRef = 84784104273569A000401EFA /* keystore-ethereum.json */; };
+		849CFADE27394E5D0096D201 /* keystore-ethereum-int-version.json in Resources */ = {isa = PBXBuildFile; fileRef = 849CFADD27394E5D0096D201 /* keystore-ethereum-int-version.json */; };
 		849E0A2125C81DB500B33506 /* FixedArrayParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */; };
 		849E0A7425C9458F00B33506 /* StructNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A7325C9458F00B33506 /* StructNodeFactoryTests.swift */; };
 		849E0A7A25C94E3F00B33506 /* EnumMappingFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A7925C94E3F00B33506 /* EnumMappingFactoryTests.swift */; };
@@ -182,6 +183,7 @@
 		847082FD272683C6003408E8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		847082FE272683C6003408E8 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84784104273569A000401EFA /* keystore-ethereum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ethereum.json"; sourceTree = "<group>"; };
+		849CFADD27394E5D0096D201 /* keystore-ethereum-int-version.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "keystore-ethereum-int-version.json"; sourceTree = "<group>"; };
 		849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedArrayParserTests.swift; sourceTree = "<group>"; };
 		849E0A7325C9458F00B33506 /* StructNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructNodeFactoryTests.swift; sourceTree = "<group>"; };
 		849E0A7925C94E3F00B33506 /* EnumMappingFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnumMappingFactoryTests.swift; sourceTree = "<group>"; };
@@ -490,6 +492,7 @@
 		84CB471F24DBE7BD00837E11 /* Keystore */ = {
 			isa = PBXGroup;
 			children = (
+				849CFADD27394E5D0096D201 /* keystore-ethereum-int-version.json */,
 				84CB472024DBE7E100837E11 /* keystore-sr25519.json */,
 				84A0DE2D24DBF3F300F436A8 /* keystore-ed25519.json */,
 				84A0DE2F24DBF40900F436A8 /* keystore-ecdsa.json */,
@@ -722,6 +725,7 @@
 				84452C0F25D2D5C300F47EC5 /* polkadot-metadata in Resources */,
 				8429C82725C434ED0086D7F6 /* westend.json in Resources */,
 				84A0DE3124DBF49400F436A8 /* keystore-ed25519.json in Resources */,
+				849CFADE27394E5D0096D201 /* keystore-ethereum-int-version.json in Resources */,
 				AE4B521826CE127200A66D2C /* BIP32HDKD.json in Resources */,
 				84F4394225DBAAA200AEDA56 /* test-metadata in Resources */,
 				8429C81D25C434E70086D7F6 /* kusama.json in Resources */,

@@ -95,7 +95,7 @@ class RegexParserTests: XCTestCase {
         let result = parser.parse(json: .stringValue(type))
 
         if let expectedResult = expectedResult {
-            XCTAssertEqual(result?.map({ $0.stringValue }), expectedResult)
+            XCTAssertEqual(result?.compactMap({ $0.stringValue }), expectedResult)
         } else {
             XCTAssertNil(result)
         }
