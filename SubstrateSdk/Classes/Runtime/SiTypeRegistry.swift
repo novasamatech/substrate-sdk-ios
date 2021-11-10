@@ -18,17 +18,29 @@ public class SiTypeRegistry: TypeRegistryProtocol {
             return node
         }
 
-        if let type = types[key] {
-            return nodeFactory.buildNode(from: type, identifier: key)
+        guard let type = types[key] else {
+            return nil
         }
 
-        return nil
+        let maybePathBasedName = type.pathBasedName
+
+        if let pathBasedName = maybePathBasedName, let node = baseNodes[pathBasedName] {
+            return node
+        } else if let pathBasedName = maybePathBasedName, key != pathBasedName {
+            return AliasNode(typeName: key, underlyingTypeName: pathBasedName)
+        } else {
+            return nodeFactory.buildNode(from: type, identifier: key)
+        }
     }
 
     init(typesLookup: RuntimeTypesLookup, baseNodes: [Node], nodeFactory: ScaleInfoNodeFactoryProtocol) {
         types = typesLookup.types.reduce(into: [:]) { (result, item) in
             let key = String(item.identifier)
             result[key] = item.type
+
+            if let pathBasedName = item.type.pathBasedName {
+                result[pathBasedName] = item.type
+            }
          }
 
         let baseKeys = Set(baseNodes.map({ $0.typeName }))
@@ -75,7 +87,6 @@ extension SiTypeRegistry {
         [
             SiOptionTypeMapper(),
             SiSetTypeMapper(),
-            SiClosureTypeMapper { $0.path.last == "AccountId32" ? GenericAccountIdNode() : nil },
             SiCompositeNoneToAliasMapper()
         ]
     }

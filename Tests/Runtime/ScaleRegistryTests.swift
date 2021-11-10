@@ -10,7 +10,12 @@ class ScaleRegistryTests: XCTestCase {
         // when
 
         // try to extract account data
-        let node = registry.node(for: "5", version: 0)
+        guard let aliasNode = registry.node(for: "5", version: 0) as? AliasNode else {
+            XCTFail("Expected alias for node")
+            return
+        }
+
+        let node = registry.node(for: aliasNode.underlyingTypeName, version: 0)
 
         // then
 

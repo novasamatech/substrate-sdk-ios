@@ -1,12 +1,14 @@
 {
-  "runtime_id": 1,
+  "runtime_id": 0,
   "types": {
       "Balance": "u128",
       "Index": "u32",
       "Phase": "142",
       "Address": "195",
       "ExtrinsicSignature": "499",
-      "ParaId": "88"
+      "ParaId": "88",
+      "sp_core.crypto.AccountId32": "GenericAccountId",
+      "pallet_identity.types.Data": "Data"
   },
   "versioning": []
 }

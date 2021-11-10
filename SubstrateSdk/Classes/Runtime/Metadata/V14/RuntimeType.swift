@@ -44,6 +44,12 @@ public struct RuntimeType {
     }
 }
 
+extension RuntimeType {
+    var pathBasedName: String? {
+        !path.isEmpty ? path.joined(separator: ".") : nil
+    }
+}
+
 extension RuntimeType: ScaleCodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
         try path.encode(scaleEncoder: scaleEncoder)
