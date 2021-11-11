@@ -2,18 +2,13 @@ import Foundation
 import IrohaCrypto
 
 open class SubstrateQRDecoder: SubstrateQRDecodable {
-    public enum AddressFormat {
-        case substrate(type: ChainType)
-        case ethereum
-    }
-
-    public let addressFormat: AddressFormat
+    public let addressFormat: QRAddressFormat
     public let separator: String
     public let prefix: String
 
     private lazy var addressFactory = SS58AddressFactory()
 
-    public init(addressFormat: AddressFormat,
+    public init(addressFormat: QRAddressFormat,
                 prefix: String = SubstrateQR.prefix,
                 separator: String = SubstrateQR.fieldsSeparator) {
         self.prefix = prefix
