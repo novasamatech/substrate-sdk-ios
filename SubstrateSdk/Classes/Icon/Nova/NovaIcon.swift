@@ -26,11 +26,6 @@ extension NovaIcon: DrawableIcon {
             clockwise: false
         )
 
-        /*
-         TODO: There are eight star components, not four.
-         However, it is possible to put everything into one formula
-         I'll do it after I finish with coloring
-         */
         let topStarPoint = CGPoint(x: centerX, y: centerY + starInset * 4.0)
         let leftStarPoint = CGPoint(x: centerX - starInset * 4.0, y: centerY)
         let bottomStarPoint = CGPoint(x: centerX, y: centerY - starInset * 4.0)

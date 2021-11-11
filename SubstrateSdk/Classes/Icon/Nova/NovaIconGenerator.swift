@@ -49,35 +49,7 @@ public final class NovaIconGenerator {
 
 extension NovaIconGenerator: IconGenerating {
     public func generateFromAccountId(_ accountId: Data) throws -> DrawableIcon {
-        /*
-         let internalId = try deriveInternalIdFromAccountId(accountId)
-
-         let colors = try getColorsForData(internalId)
-         let centers = generateCircleCenters()
-
-         let circles = (0..<centers.count).map { index in
-         PolkadotIcon.Circle(origin: centers[index],
-         color: colors[index],
-         radius: Self.circleRadius)
-         }
-
-         return PolkadotIcon(radius: Self.diameter / 2.0,
-         circles: circles)
-         */
-        /*
-         Plan:
-         1. [DONE] Create cicrcle with defined radius filled with linear gradient of two static colors
-         2. [DONE] Add diamond-shaped hole in the middle
-         3. [DONE] Adjust hole shape to become a star
-         4. [TODO] Add dynamic color definition
-         5. [TODO] Adjust star shape to be similar to Figma (add
-         5. [TODO, COULD HAVE] Experiment with gradients type and rotation
-
-         */
-
         let colors = deriveColors(from: accountId)
         return NovaIcon(radius: Self.diameter / 2.0, colors: colors)
-
-        // return NovaIcon(radius: Self.diameter / 2.0, colors: colors)
     }
 }
