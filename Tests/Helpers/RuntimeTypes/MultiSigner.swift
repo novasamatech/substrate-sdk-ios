@@ -1,4 +1,5 @@
 import Foundation
+import SubstrateSdk
 
 enum MultiSigner: Equatable {
     static let ed25519Field = "Ed25519"
@@ -14,36 +15,42 @@ extension MultiSigner: Codable {
     public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
         let type = try container.decode(String.self)
+        let bytes = try container.decode([StringScaleMapper<UInt8>].self).map(\.value)
+        let data = Data(bytes)
 
         switch type {
         case Self.ed25519Field:
-            let data = try container.decode(Data.self)
             self = .ed25519(data)
         case Self.sr25519Field:
-            let data = try container.decode(Data.self)
             self = .sr25519(data)
         case Self.ecdsaField:
-            let data = try container.decode(Data.self)
             self = .ecdsa(data)
         default:
-            throw DecodingError.dataCorruptedError(in: container,
-                                                   debugDescription: "Unexpected type")
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Unexpected type"
+            )
         }
     }
 
     public func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
 
+        let data: Data
+
         switch self {
-        case .ed25519(let value):
+        case let .ed25519(value):
             try container.encode(Self.ed25519Field)
-            try container.encode(value)
-        case .sr25519(let value):
+            data = value
+        case let .sr25519(value):
             try container.encode(Self.sr25519Field)
-            try container.encode(value)
-        case .ecdsa(let value):
+            data = value
+        case let .ecdsa(value):
             try container.encode(Self.ecdsaField)
-            try container.encode(value)
+            data = value
         }
+
+        let encodingList = data.map { StringScaleMapper(value: $0) }
+        try container.encode(encodingList)
     }
 }
