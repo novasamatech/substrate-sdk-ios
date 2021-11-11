@@ -8,15 +8,69 @@ public struct NovaIcon {
         self.radius = radius
         self.colors = colors
     }
+
+    private func generateOuterStarPoints(with center: CGPoint, radius: CGFloat) -> [CGPoint] {
+        let topPoint = CGPoint(x: center.x, y: center.y + radius)
+        let leftPoint = CGPoint(x: center.x - radius, y: center.y)
+        let bottomPoint = CGPoint(x: center.x, y: center.y - radius)
+        let rightPoint = CGPoint(x: center.x + radius, y: center.y)
+
+        return [topPoint, leftPoint, bottomPoint, rightPoint]
+    }
+
+    private func generateInnerStarPoints(with center: CGPoint, radius: CGFloat) -> [CGPoint] {
+        let topLeftPoint = CGPoint(x: center.x - radius, y: center.y + radius)
+        let leftBottomPoint = CGPoint(x: center.x - radius, y: center.y - radius)
+        let bottomRightPoint = CGPoint(x: center.x + radius, y: center.y - radius)
+        let rightTopPoint = CGPoint(x: center.x + radius, y: center.y + radius)
+
+        return [topLeftPoint, leftBottomPoint, bottomRightPoint, rightTopPoint]
+    }
+
+    private func generateControlPoints(
+        with center: CGPoint,
+        outerRadius: CGFloat,
+        innerRadius: CGFloat
+    ) -> [(CGPoint, CGPoint)] {
+        let outerShift = outerRadius / 53.0
+        let innerShift = innerRadius * 2.0
+
+        return [
+            (CGPoint(x: center.x - outerShift, y: center.y + outerRadius),
+             CGPoint(x: center.x, y: center.y + innerShift)),
+
+            (CGPoint(x: center.x - innerShift, y: center.y),
+             CGPoint(x: center.x - outerRadius, y: center.y + outerShift)),
+
+            (CGPoint(x: center.x - outerRadius, y: center.y - outerShift),
+             CGPoint(x: center.x - innerShift, y: center.y)),
+
+            (CGPoint(x: center.x, y: center.y - innerShift),
+             CGPoint(x: center.x - outerShift, y: center.y - outerRadius)),
+
+            (CGPoint(x: center.x + outerShift, y: center.y - outerRadius),
+             CGPoint(x: center.x, y: center.y - innerShift)),
+
+            (CGPoint(x: center.x + innerShift, y: center.y),
+             CGPoint(x: center.x + outerRadius, y: center.y - outerShift)),
+
+            (CGPoint(x: center.x + outerRadius, y: center.y + outerShift),
+             CGPoint(x: center.x + innerShift, y: center.y)),
+
+            (CGPoint(x: center.x, y: center.y + innerShift),
+             CGPoint(x: center.x + outerShift, y: center.y + outerRadius))
+        ]
+    }
 }
 
 extension NovaIcon: DrawableIcon {
     public func drawInContext(_ context: CGContext, fillColor: UIColor, size: CGSize) {
         let targetRadius = min(size.width, size.height) / 2.0
-        let starInset = targetRadius / 5.0
-        let controlPointOffset = targetRadius / 10
         let centerX = size.width / 2.0
         let centerY = size.height / 2.0
+        let center = CGPoint(x: centerX, y: centerY)
+        let outerStarRadius = targetRadius * 0.8
+        let innerStarRadius = outerStarRadius / 6.0
 
         let path = UIBezierPath(
             arcCenter: CGPoint(x: size.width / 2.0, y: size.height / 2.0),
@@ -26,21 +80,27 @@ extension NovaIcon: DrawableIcon {
             clockwise: false
         )
 
-        let topStarPoint = CGPoint(x: centerX, y: centerY + starInset * 4.0)
-        let leftStarPoint = CGPoint(x: centerX - starInset * 4.0, y: centerY)
-        let bottomStarPoint = CGPoint(x: centerX, y: centerY - starInset * 4.0)
-        let rightStarPoint = CGPoint(x: centerX + starInset * 4.0, y: centerY)
+        let outerPoints = generateOuterStarPoints(with: center, radius: outerStarRadius)
+        let innerPoints = generateInnerStarPoints(with: center, radius: innerStarRadius)
+        let controlPoints = generateControlPoints(
+            with: center,
+            outerRadius: outerStarRadius,
+            innerRadius: innerStarRadius
+        )
 
-        let topControlPoint = CGPoint(x: centerX, y: centerY + controlPointOffset)
-        let leftControlPoint = CGPoint(x: centerX - controlPointOffset, y: centerY)
-        let bottomControlPoint = CGPoint(x: centerX, y: centerY - controlPointOffset)
-        let rightControlPoint = CGPoint(x: centerX + controlPointOffset, y: centerY)
-
-        path.move(to: topStarPoint)
-        path.addCurve(to: leftStarPoint, controlPoint1: topControlPoint, controlPoint2: leftControlPoint)
-        path.addCurve(to: bottomStarPoint, controlPoint1: leftControlPoint, controlPoint2: bottomControlPoint)
-        path.addCurve(to: rightStarPoint, controlPoint1: bottomControlPoint, controlPoint2: rightControlPoint)
-        path.addCurve(to: topStarPoint, controlPoint1: rightControlPoint, controlPoint2: topControlPoint)
+        path.move(to: outerPoints[0])
+        for index in 0..<outerPoints.count {
+            path.addCurve(
+                to: innerPoints[index],
+                controlPoint1: controlPoints[index * 2].0,
+                controlPoint2: controlPoints[index * 2].1
+            )
+            path.addCurve(
+                to: outerPoints[(index + 1) % 4],
+                controlPoint1: controlPoints[index * 2 + 1].0,
+                controlPoint2: controlPoints[index * 2 + 1].1
+            )
+        }
 
         path.addClip()
 
