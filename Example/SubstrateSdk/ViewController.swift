@@ -12,7 +12,7 @@ import SubstrateSdk
 class ViewController: UIViewController {
     private struct Constants {
         static let address = "Fewyw2YrQgjtnuRsYQXfeHoTMoazKJKkfKkT8hc1WLjPsUP"
-        static let radius: CGFloat = 100.0
+        static let radius: CGFloat = 128.0
     }
 
     private var stackView: UIStackView = {
@@ -20,7 +20,8 @@ class ViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 20.0
         stackView.contentMode = .center
-        stackView.distribution = .fillEqually
+        stackView.distribution = .equalCentering
+        stackView.alignment = .center
 
         return stackView
     }()
@@ -35,7 +36,6 @@ class ViewController: UIViewController {
         view.addSubview(stackView)
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
 
