@@ -53,6 +53,8 @@ public struct SubstrateQR {
 }
 
 public enum QRAddressFormat {
+    public static let ethereumAddressLength = 20
+
     case substrate(type: ChainType)
     case ethereum
 }

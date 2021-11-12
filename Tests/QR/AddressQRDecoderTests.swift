@@ -49,4 +49,19 @@ class AddressQRDecoderTests: XCTestCase {
             XCTAssertTrue(isInvalidAddressError)
         }
     }
+
+    func testInvalidEthereumAddressDecoding() throws {
+        do {
+            let expectedAddress = "0x032edaf9e591ee27c36221e3c54c38088ef"
+            let encodedAddress = expectedAddress.data(using: .utf8)!
+
+            _ = try AddressQRDecoder(addressFormat: .ethereum).decode(data: encodedAddress)
+
+            XCTFail("Error expexted")
+        } catch {
+            let isInvalidAddressError = (error as? AddressQRDecoderError) == .invalidAddress
+
+            XCTAssertTrue(isInvalidAddressError)
+        }
+    }
 }

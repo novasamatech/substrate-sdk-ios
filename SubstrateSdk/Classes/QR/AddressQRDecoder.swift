@@ -33,7 +33,11 @@ open class AddressQRDecoder: AddressQRDecodable {
         case let .substrate(type):
             return (try? addressFactory.accountId(fromAddress: address, type: type)) != nil
         case .ethereum:
-            return (try? Data(hexString: address)) != nil
+            guard let addressData = try? Data(hexString: address) else {
+                return false
+            }
+
+            return addressData.count == QRAddressFormat.ethereumAddressLength
         }
     }
 }
