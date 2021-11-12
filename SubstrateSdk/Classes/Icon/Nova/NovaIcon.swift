@@ -96,7 +96,7 @@ extension NovaIcon: DrawableIcon {
                 controlPoint2: controlPoints[index * 2].1
             )
             path.addCurve(
-                to: outerPoints[(index + 1) % 4],
+                to: outerPoints[(index + 1) % outerPoints.count],
                 controlPoint1: controlPoints[index * 2 + 1].0,
                 controlPoint2: controlPoints[index * 2 + 1].1
             )
