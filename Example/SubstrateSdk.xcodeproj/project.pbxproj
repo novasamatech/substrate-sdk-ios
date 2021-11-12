@@ -16,6 +16,7 @@
 		841D531625C6F70500DFA15B /* TypeSetParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D531525C6F70500DFA15B /* TypeSetParserTests.swift */; };
 		841D532425C727FC00DFA15B /* TermParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D532325C727FC00DFA15B /* TermParserTests.swift */; };
 		841D539525C7517300DFA15B /* JSONTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D539425C7517300DFA15B /* JSONTests.swift */; };
+		8420B439273DADE50000555E /* AddressQRDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8420B438273DADE50000555E /* AddressQRDecoderTests.swift */; };
 		8429C7FD25C432FF0086D7F6 /* TypeRegistryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8429C7FC25C432FF0086D7F6 /* TypeRegistryTests.swift */; };
 		8429C81825C434E40086D7F6 /* default.json in Resources */ = {isa = PBXBuildFile; fileRef = 8429C80F25C434DA0086D7F6 /* default.json */; };
 		8429C81D25C434E70086D7F6 /* kusama.json in Resources */ = {isa = PBXBuildFile; fileRef = 8429C80E25C434DA0086D7F6 /* kusama.json */; };
@@ -145,6 +146,7 @@
 		841D531525C6F70500DFA15B /* TypeSetParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeSetParserTests.swift; sourceTree = "<group>"; };
 		841D532325C727FC00DFA15B /* TermParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermParserTests.swift; sourceTree = "<group>"; };
 		841D539425C7517300DFA15B /* JSONTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONTests.swift; sourceTree = "<group>"; };
+		8420B438273DADE50000555E /* AddressQRDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressQRDecoderTests.swift; sourceTree = "<group>"; };
 		8429C7FC25C432FF0086D7F6 /* TypeRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeRegistryTests.swift; sourceTree = "<group>"; };
 		8429C80C25C434DA0086D7F6 /* westend.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = westend.json; sourceTree = "<group>"; };
 		8429C80D25C434DA0086D7F6 /* polkadot.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = polkadot.json; sourceTree = "<group>"; };
@@ -554,6 +556,7 @@
 			children = (
 				84ED7255254A001A006102DF /* SubstrateQREncoderTests.swift */,
 				84ED725B254A0233006102DF /* SubstrateQRDecoderTests.swift */,
+				8420B438273DADE50000555E /* AddressQRDecoderTests.swift */,
 			);
 			path = QR;
 			sourceTree = "<group>";
@@ -895,6 +898,7 @@
 				8459EA0E2657961F006BBF9E /* FundInfo.swift in Sources */,
 				8467FD2624E71A37005D486C /* IconGenerationTests.swift in Sources */,
 				84F43A7D25DC82B200AEDA56 /* TransientValidationData.swift in Sources */,
+				8420B439273DADE50000555E /* AddressQRDecoderTests.swift in Sources */,
 				84452C8325D3F97F00F47EC5 /* GenericEventNodeTests.swift in Sources */,
 				849E0A7E25C95C7F00B33506 /* EnumValuesFactoryTests.swift in Sources */,
 				842D1E2324C98CEA00C30A7A /* StorageKeyFactoryTests.swift in Sources */,

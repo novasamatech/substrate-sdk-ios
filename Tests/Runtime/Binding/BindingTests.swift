@@ -181,6 +181,23 @@ class BindingTests: BaseCodingTests {
         performScaleInfoTest(value: expected, type: "679", runtimeFilename: "kusama-v14-metadata")
     }
 
+    func testOptionEnumWithVariantCodingAndOptionField() throws {
+        let expected = FundInfoV14(
+            depositor: Data(repeating: 0, count: 32),
+            verifier: MultiSigner.sr25519(Data(repeating: 1, count: 32)),
+            deposit: BigUInt(10),
+            raised: BigUInt(100),
+            end: 1000,
+            cap: BigUInt(1000),
+            lastContribution: .never,
+            firstPeriod: 32,
+            lastPeriod: 40,
+            trieIndex: 1
+        )
+
+        performScaleInfoTest(value: expected, type: "679", runtimeFilename: "kusama-v14-metadata")
+    }
+
     func testOptionTupleCoding() throws {
         performNullTest(
             type: "Option<OpenTipFinderTo225>",

@@ -39,4 +39,22 @@ public enum SubstrateQRDecoderError: Error, Equatable {
 public struct SubstrateQR {
     public static let prefix: String = "substrate"
     public static let fieldsSeparator: String = ":"
+
+    public static func isSubstrateQR(data: Data) -> Bool {
+        if
+            let fields = String(data: data, encoding: .utf8)?.components(separatedBy: Self.fieldsSeparator),
+            fields.count >= 3, fields.count <= 4,
+            fields[0] == prefix {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+public enum QRAddressFormat {
+    public static let ethereumAddressLength = 20
+
+    case substrate(type: ChainType)
+    case ethereum
 }
