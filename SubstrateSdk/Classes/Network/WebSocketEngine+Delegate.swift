@@ -29,8 +29,10 @@ extension WebSocketEngine: WebSocketDelegate {
         logger?.warning("Remote cancelled")
 
         switch state {
-        case let .connecting(attempt):
+        case .connecting:
             connection.disconnect()
+
+            let attempt = reconnectionAttempts[selectedURL] ?? 0
             scheduleReconnectionOrDisconnect(attempt + 1)
         case .connected:
             let cancelledRequests = resetInProgress()
@@ -69,9 +71,10 @@ extension WebSocketEngine: WebSocketDelegate {
                 requests: cancelledRequests,
                 error: JSONRPCEngineError.clientCancelled
             )
-        case let .connecting(attempt):
+        case .connecting:
             connection.disconnect()
 
+            let attempt = reconnectionAttempts[selectedURL] ?? 0
             scheduleReconnectionOrDisconnect(attempt + 1)
         default:
             break
@@ -98,6 +101,7 @@ extension WebSocketEngine: WebSocketDelegate {
     private func handleConnectedEvent() {
         logger?.debug("connection established")
 
+        updateReconnectionAttempts(0, for: selectedURL)
         changeState(.connected)
         sendAllPendingRequests()
 
@@ -108,7 +112,8 @@ extension WebSocketEngine: WebSocketDelegate {
         logger?.warning("Disconnected with code \(code): \(reason)")
 
         switch state {
-        case let .connecting(attempt):
+        case .connecting:
+            let attempt = reconnectionAttempts[selectedURL] ?? 0
             scheduleReconnectionOrDisconnect(attempt + 1)
         case .connected:
             let cancelledRequests = resetInProgress()
@@ -158,7 +163,8 @@ extension WebSocketEngine: SchedulerDelegate {
     private func handleReconnection(scheduler _: SchedulerProtocol) {
         logger?.debug("Did trigger reconnection scheduler")
 
-        if case let .waitingReconnection(attempt) = state {
+        if case .waitingReconnection = state {
+            let attempt = reconnectionAttempts[selectedURL] ?? 0
             startConnecting(attempt)
         }
     }
