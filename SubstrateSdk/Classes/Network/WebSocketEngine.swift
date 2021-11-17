@@ -14,6 +14,11 @@ public protocol WebSocketEngineDelegate: AnyObject {
         from oldState: WebSocketEngine.State,
         to newState: WebSocketEngine.State
     )
+
+    func webSocketDidSwitchURL(
+        _ connection: AnyObject,
+        newUrl: URL
+    )
 }
 
 public final class WebSocketEngine {
@@ -26,7 +31,7 @@ public final class WebSocketEngine {
         case connected
     }
 
-    public let urls: [URL]
+    public private(set) var urls: [URL]
     public private(set) var connection: WebSocketConnectionProtocol
     public let connectionFactory: WebSocketConnectionFactoryProtocol
     public let version: String
@@ -75,7 +80,7 @@ public final class WebSocketEngine {
     private(set) var pendingSubscriptionResponses: [String: [Data]] = [:]
     private(set) var selectedURLIndex: Int
     private(set) var reconnectionAttempts: [URL: Int] = [:]
-    var selectedURL: URL { urls[selectedURLIndex] }
+    public var selectedURL: URL { urls[selectedURLIndex] }
 
     public weak var delegate: WebSocketEngineDelegate?
 
@@ -130,6 +135,32 @@ public final class WebSocketEngine {
 
         reconnectionScheduler.cancel()
         pingScheduler.cancel()
+    }
+
+    public func changeUrls(_ newUrls: [URL]) {
+        guard !newUrls.isEmpty else {
+            return
+        }
+
+        disconnectIfNeeded()
+
+        mutex.lock()
+
+        self.urls = newUrls
+        reconnectionAttempts = [:]
+        selectedURLIndex = 0
+
+        connection = connectionFactory.createConnection(
+            for: selectedURL,
+            processingQueue: self.processingQueue,
+            connectionTimeout: connectionTimeout
+        )
+
+        logger?.debug("(\(chainName)) Did set new urls: \(newUrls)")
+
+        mutex.lock()
+
+        connectIfNeeded()
     }
 
     public func connectIfNeeded() {
@@ -516,6 +547,13 @@ extension WebSocketEngine {
             connection.delegate = self
 
             actualAttempt = (reconnectionAttempts[selectedURL] ?? 0) + 1
+
+            if urls.count > 1 {
+                let currentURL = selectedURL
+                completionQueue.async {
+                    self.delegate?.webSocketDidSwitchURL(self, newUrl: currentURL)
+                }
+            }
         } else {
             actualAttempt = attempt
         }
