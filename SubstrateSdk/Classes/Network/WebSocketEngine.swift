@@ -520,8 +520,10 @@ extension WebSocketEngine {
             actualAttempt = attempt
         }
 
+        updateReconnectionAttempts(actualAttempt, for: selectedURL)
+
         if let reconnectionStrategy = reconnectionStrategy,
-           let nextDelay = reconnectionStrategy.reconnectAfter(attempt: actualAttempt - 1) {
+           let nextDelay = reconnectionStrategy.reconnectAfter(attempt: actualAttempt) {
             state = .waitingReconnection
 
             logger?.debug(
