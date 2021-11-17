@@ -565,7 +565,7 @@ extension WebSocketEngine {
             state = .waitingReconnection
 
             logger?.debug(
-                "(\(chainName):\(selectedURL)) Schedule reconnection with attempt \(attempt) and delay \(nextDelay)"
+                "(\(chainName):\(selectedURL)) Schedule reconnection with attempt \(actualAttempt) and delay \(nextDelay)"
             )
 
             reconnectionScheduler.notifyAfter(nextDelay)
