@@ -19,14 +19,14 @@ extension WebSocketEngine: WebSocketDelegate {
         case .cancelled:
             handleCancelled()
         default:
-            logger?.warning("Unhandled event \(event)")
+            logger?.warning("(\(chainName):\(selectedURL)) Unhandled event \(event)")
         }
 
         mutex.unlock()
     }
 
     private func handleCancelled() {
-        logger?.warning("Remote cancelled")
+        logger?.warning("(\(chainName):\(selectedURL)) Remote cancelled")
 
         switch state {
         case .connecting:
@@ -53,9 +53,9 @@ extension WebSocketEngine: WebSocketDelegate {
 
     private func handleErrorEvent(_ error: Error?) {
         if let error = error {
-            logger?.error("Did receive error: \(error)")
+            logger?.error("(\(chainName):\(selectedURL)) Did receive error: \(error)")
         } else {
-            logger?.error("Did receive unknown error")
+            logger?.error("(\(chainName):\(selectedURL)) Did receive unknown error")
         }
 
         switch state {
@@ -83,23 +83,23 @@ extension WebSocketEngine: WebSocketDelegate {
 
     private func handleBinaryEvent(data: Data) {
         if let decodedString = String(data: data, encoding: .utf8) {
-            logger?.debug("Did receive data: \(decodedString.prefix(1024))")
+            logger?.debug("(\(chainName):\(selectedURL)) Did receive data: \(decodedString.prefix(1024))")
         }
 
         process(data: data)
     }
 
     private func handleTextEvent(string: String) {
-        logger?.debug("Did receive text: \(string.prefix(1024))")
+        logger?.debug("(\(chainName):\(selectedURL)) Did receive text: \(string.prefix(1024))")
         if let data = string.data(using: .utf8) {
             process(data: data)
         } else {
-            logger?.warning("Unsupported text event: \(string)")
+            logger?.warning("(\(chainName):\(selectedURL)) Unsupported text event: \(string)")
         }
     }
 
     private func handleConnectedEvent() {
-        logger?.debug("connection established")
+        logger?.debug("(\(chainName):\(selectedURL)) connection established")
 
         updateReconnectionAttempts(0, for: selectedURL)
         changeState(.connected)
@@ -109,7 +109,7 @@ extension WebSocketEngine: WebSocketDelegate {
     }
 
     private func handleDisconnectedEvent(reason: String, code: UInt16) {
-        logger?.warning("Disconnected with code \(code): \(reason)")
+        logger?.warning("(\(chainName):\(selectedURL)) Disconnected with code \(code): \(reason)")
 
         switch state {
         case .connecting:
@@ -137,7 +137,7 @@ extension WebSocketEngine: ReachabilityListenerDelegate {
         mutex.lock()
 
         if manager.isReachable, case .waitingReconnection = state {
-            logger?.debug("Network became reachable, retrying connection")
+            logger?.debug("(\(chainName):\(selectedURL)) Network became reachable, retrying connection")
 
             reconnectionScheduler.cancel()
             startConnecting(0)
@@ -161,7 +161,7 @@ extension WebSocketEngine: SchedulerDelegate {
     }
 
     private func handleReconnection(scheduler _: SchedulerProtocol) {
-        logger?.debug("Did trigger reconnection scheduler")
+        logger?.debug("(\(chainName):\(selectedURL)) Did trigger reconnection scheduler")
 
         if case .waitingReconnection = state {
             let attempt = reconnectionAttempts[selectedURL] ?? 0

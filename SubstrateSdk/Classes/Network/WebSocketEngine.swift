@@ -72,7 +72,7 @@ public final class WebSocketEngine {
         return scheduler
     }()
 
-    private var chainName: String { name ?? "unknown" }
+    public var chainName: String { name ?? "unknown" }
 
     private(set) var pendingRequests: [JSONRPCRequest] = []
     private(set) var inProgressRequests: [UInt16: JSONRPCRequest] = [:]
@@ -621,7 +621,7 @@ extension WebSocketEngine {
                 logger?.warning("(\(chainName):\(selectedURL)) Node is not healthy")
             }
         case let .failure(error):
-            logger?.error("(\(chainName)) Health check error: \(error)")
+            logger?.error("(\(chainName):\(selectedURL)) Health check error: \(error)")
         }
     }
 
