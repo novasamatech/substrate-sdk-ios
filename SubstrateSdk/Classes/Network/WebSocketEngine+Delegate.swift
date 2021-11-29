@@ -30,7 +30,7 @@ extension WebSocketEngine: WebSocketDelegate {
 
         switch state {
         case .connecting:
-            connection.disconnect()
+            connection.forceDisconnect()
 
             let attempt = reconnectionAttempts[selectedURL] ?? 0
             scheduleReconnectionOrDisconnect(attempt + 1)
@@ -39,7 +39,7 @@ extension WebSocketEngine: WebSocketDelegate {
 
             pingScheduler.cancel()
 
-            connection.disconnect()
+            connection.forceDisconnect()
             scheduleReconnectionOrDisconnect(1)
 
             notify(
@@ -72,7 +72,7 @@ extension WebSocketEngine: WebSocketDelegate {
                 error: JSONRPCEngineError.clientCancelled
             )
         case .connecting:
-            connection.disconnect()
+            connection.forceDisconnect()
 
             let attempt = reconnectionAttempts[selectedURL] ?? 0
             scheduleReconnectionOrDisconnect(attempt + 1)
