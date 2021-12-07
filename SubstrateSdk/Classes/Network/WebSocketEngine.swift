@@ -4,6 +4,8 @@ import Starscream
 public protocol WebSocketConnectionProtocol: WebSocketClient {
     var callbackQueue: DispatchQueue { get }
     var delegate: WebSocketDelegate? { get set }
+
+    func forceDisconnect()
 }
 
 extension WebSocket: WebSocketConnectionProtocol {}
@@ -131,7 +133,7 @@ public final class WebSocketEngine {
 
     deinit {
         connection.delegate = nil
-        connection.disconnect()
+        connection.forceDisconnect()
 
         reconnectionScheduler.cancel()
         pingScheduler.cancel()
@@ -184,7 +186,7 @@ public final class WebSocketEngine {
         mutex.unlock()
     }
 
-    public func disconnectIfNeeded() {
+    public func disconnectIfNeeded(_ force: Bool = false) {
         mutex.lock()
 
         switch state {
@@ -193,7 +195,11 @@ public final class WebSocketEngine {
 
             let cancelledRequests = resetInProgress()
 
-            connection.disconnect(closeCode: CloseCode.goingAway.rawValue)
+            if force {
+                connection.forceDisconnect()
+            } else {
+                connection.disconnect(closeCode: CloseCode.goingAway.rawValue)
+            }
 
             notify(
                 requests: cancelledRequests,
@@ -206,7 +212,7 @@ public final class WebSocketEngine {
         case .connecting:
             state = .notConnected
 
-            connection.disconnect()
+            connection.forceDisconnect()
 
             logger?.debug("(\(chainName):\(selectedURL)) Cancel socket connection")
 
@@ -535,7 +541,7 @@ extension WebSocketEngine {
             logger?.warning("(\(chainName):\(selectedURL)) Looks like node is down trying another one...")
 
             // looks like node is down try another one
-            connection.disconnect()
+            connection.forceDisconnect()
 
             selectedURLIndex = (selectedURLIndex + 1) % urls.count
             connection = connectionFactory.createConnection(
