@@ -196,7 +196,7 @@ public final class WebSocketEngine {
             let cancelledRequests = resetInProgress()
 
             if force {
-                connection.forceDisconnect()
+                forceConnectionReset()
             } else {
                 connection.disconnect(closeCode: CloseCode.goingAway.rawValue)
             }
@@ -212,7 +212,7 @@ public final class WebSocketEngine {
         case .connecting:
             state = .notConnected
 
-            connection.forceDisconnect()
+            forceConnectionReset()
 
             logger?.debug("(\(chainName):\(selectedURL)) Cancel socket connection")
 
@@ -282,6 +282,19 @@ extension WebSocketEngine {
             logger?.debug("(\(chainName):\(selectedURL)) \(String(data: pending.data, encoding: .utf8)!)")
             send(request: pending)
         }
+    }
+
+    func forceConnectionReset() {
+        connection.delegate = nil
+        connection.forceDisconnect()
+
+        connection = connectionFactory.createConnection(
+            for: selectedURL,
+            processingQueue: processingQueue,
+            connectionTimeout: connectionTimeout
+        )
+
+        connection.delegate = self
     }
 
     func resetInProgress() -> [JSONRPCRequest] {
@@ -541,6 +554,7 @@ extension WebSocketEngine {
             logger?.warning("(\(chainName):\(selectedURL)) Looks like node is down trying another one...")
 
             // looks like node is down try another one
+            connection.delegate = nil
             connection.forceDisconnect()
 
             selectedURLIndex = (selectedURLIndex + 1) % urls.count
