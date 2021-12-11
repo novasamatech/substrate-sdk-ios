@@ -29,17 +29,7 @@ extension KeystoreBuilder: KeystoreBuilding {
     public func build(from data: KeystoreData, password: String?) throws -> KeystoreDefinition {
         let scryptParameters = try ScryptParameters()
 
-        let scryptData: Data
-
-        if let password = password {
-            guard let passwordData = password.data(using: .utf8) else {
-                throw KeystoreExtractorError.invalidPasswordFormat
-            }
-
-            scryptData = passwordData
-        } else {
-            scryptData = Data()
-        }
+        let scryptData: Data = try scryptData(from: password)
 
         let encryptionKey = try IRScryptKeyDeriviation()
             .deriveKey(from: scryptData,
@@ -82,5 +72,17 @@ extension KeystoreBuilder: KeystoreBuilding {
                                   encoded: encoded.base64EncodedString(),
                                   encoding: keystoreEncoding,
                                   meta: meta)
+    }
+
+    private func scryptData(from password: String?) throws -> Data {
+        if let password = password {
+            guard let passwordData = password.data(using: .utf8) else {
+                throw KeystoreExtractorError.invalidPasswordFormat
+            }
+
+            return passwordData
+        } else {
+            return Data()
+        }
     }
 }

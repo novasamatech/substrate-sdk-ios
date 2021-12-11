@@ -43,7 +43,7 @@ struct JSONRPCData<T: Decodable>: Decodable {
 public struct JSONRPCSubscriptionUpdate<T: Decodable>: Decodable {
     public struct Result: Decodable {
         public let result: T
-        public let subscription: String
+        @JSONRPCSubscriptionId public var subscription: String
 
         public init(result: T, subscription: String) {
             self.result = result
@@ -64,7 +64,7 @@ public struct JSONRPCSubscriptionUpdate<T: Decodable>: Decodable {
 
 struct JSONRPCSubscriptionBasicUpdate: Decodable {
     struct Result: Decodable {
-        let subscription: String
+        @JSONRPCSubscriptionId var subscription: String
     }
 
     let jsonrpc: String

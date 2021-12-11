@@ -42,7 +42,7 @@ public final class NovaIconGenerator {
 
         let accountId: [UInt8] = data.map { $0 }
         let index = (UInt(accountId[30]) + UInt(accountId[31]) * 256) % UInt(colors.count)
-        
+
         return colors[Int(index)]
     }
 }

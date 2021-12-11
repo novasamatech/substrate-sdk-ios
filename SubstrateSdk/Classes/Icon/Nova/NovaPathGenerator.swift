@@ -13,7 +13,7 @@ import Foundation
 struct NovaPathGenerator {
     static func generatePath() -> UIBezierPath {
         let shape = UIBezierPath()
-        
+
         shape.move(to: CGPoint(x: 88.77, y: 0.98))
         shape.addCurve(
             to: CGPoint(x: 91.23, y: 0.98),
@@ -64,7 +64,7 @@ struct NovaPathGenerator {
         )
         shape.addLine(to: CGPoint(x: 88.77, y: 0.98))
         shape.close()
-        
+
         return shape
     }
 }
