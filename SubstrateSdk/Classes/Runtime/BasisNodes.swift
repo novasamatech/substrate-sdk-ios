@@ -1,8 +1,8 @@
 import Foundation
 
 public struct BasisNodes {
-    public static func allNodes(for runtimeMetadata: RuntimeMetadataProtocol) -> [Node] {
-        supportedBaseNodes() + supportedGenericNodes(for: runtimeMetadata)
+    public static func allNodes(for runtimeMetadata: RuntimeMetadataProtocol, accountIdLength: Int) -> [Node] {
+        supportedBaseNodes() + supportedGenericNodes(for: runtimeMetadata, accountIdLength: accountIdLength)
     }
 
     public static func supportedBaseNodes() -> [Node] {
@@ -24,9 +24,12 @@ public struct BasisNodes {
         ]
     }
 
-    public static func supportedGenericNodes(for runtimeMetadata: RuntimeMetadataProtocol) -> [Node] {
+    public static func supportedGenericNodes(
+        for runtimeMetadata: RuntimeMetadataProtocol,
+        accountIdLength: Int
+    ) -> [Node] {
         [
-            GenericAccountIdNode(),
+            GenericAccountIdNode(length: accountIdLength),
             NullNode(),
             GenericBlockNode(),
             GenericCallNode(runtimeMetadata: runtimeMetadata),
@@ -46,7 +49,6 @@ public struct BasisNodes {
             SessionKeysSubstrateNode(),
             GenericMultiAddressNode(),
             OpaqueCallNode(),
-            GenericAccountIdNode(),
             GenericAccountIndexNode(),
             GenericEventNode(runtimeMetadata: runtimeMetadata),
             EventRecordNode(),
