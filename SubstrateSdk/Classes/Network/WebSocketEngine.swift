@@ -457,13 +457,14 @@ extension WebSocketEngine {
 
     func processSubscriptionResponse(_ identifier: UInt16, data: Data) {
         do {
-            let response = try jsonDecoder.decode(JSONRPCData<String>.self, from: data)
-            subscriptions[identifier]?.remoteId = response.result
+            let response = try jsonDecoder.decode(JSONRPCData<JSONRPCSubscriptionId>.self, from: data)
+            let remoteId = response.result.wrappedValue
+            subscriptions[identifier]?.remoteId = remoteId
 
-            logger?.debug("(\(chainName):\(selectedURL)) Did receive subscription id: \(response.result)")
+            logger?.debug("(\(chainName):\(selectedURL)) Did receive subscription id: \(remoteId)")
 
-            if let pendingResponses = pendingSubscriptionResponses[response.result] {
-                pendingSubscriptionResponses[response.result] = nil
+            if let pendingResponses = pendingSubscriptionResponses[remoteId] {
+                pendingSubscriptionResponses[remoteId] = nil
 
                 try pendingResponses.forEach { try processSubscriptionUpdate($0) }
             }
@@ -584,8 +585,9 @@ extension WebSocketEngine {
            let nextDelay = reconnectionStrategy.reconnectAfter(attempt: actualAttempt) {
             state = .waitingReconnection
 
+            let chainName = "\(chainName):\(selectedURL)"
             logger?.debug(
-                "(\(chainName):\(selectedURL)) Schedule reconnection with attempt \(actualAttempt) and delay \(nextDelay)"
+                "(\(chainName) Schedule reconnection with attempt \(actualAttempt) and delay \(nextDelay)"
             )
 
             reconnectionScheduler.notifyAfter(nextDelay)

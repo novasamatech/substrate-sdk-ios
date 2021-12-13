@@ -55,6 +55,7 @@
 		84708302272683C6003408E8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 847082FD272683C6003408E8 /* Images.xcassets */; };
 		84708303272683C6003408E8 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 847082FE272683C6003408E8 /* AppDelegate.swift */; };
 		84784105273569A000401EFA /* keystore-ethereum.json in Resources */ = {isa = PBXBuildFile; fileRef = 84784104273569A000401EFA /* keystore-ethereum.json */; };
+		849C066D276483A300394C82 /* JSONSubscriptionIdTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849C066C276483A300394C82 /* JSONSubscriptionIdTests.swift */; };
 		849CFADE27394E5D0096D201 /* keystore-ethereum-int-version.json in Resources */ = {isa = PBXBuildFile; fileRef = 849CFADD27394E5D0096D201 /* keystore-ethereum-int-version.json */; };
 		849E0A2125C81DB500B33506 /* FixedArrayParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */; };
 		849E0A7425C9458F00B33506 /* StructNodeFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 849E0A7325C9458F00B33506 /* StructNodeFactoryTests.swift */; };
@@ -185,6 +186,7 @@
 		847082FD272683C6003408E8 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		847082FE272683C6003408E8 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		84784104273569A000401EFA /* keystore-ethereum.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-ethereum.json"; sourceTree = "<group>"; };
+		849C066C276483A300394C82 /* JSONSubscriptionIdTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONSubscriptionIdTests.swift; sourceTree = "<group>"; };
 		849CFADD27394E5D0096D201 /* keystore-ethereum-int-version.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "keystore-ethereum-int-version.json"; sourceTree = "<group>"; };
 		849E0A2025C81DB500B33506 /* FixedArrayParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedArrayParserTests.swift; sourceTree = "<group>"; };
 		849E0A7325C9458F00B33506 /* StructNodeFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StructNodeFactoryTests.swift; sourceTree = "<group>"; };
@@ -456,6 +458,14 @@
 			path = SubstrateSdk;
 			sourceTree = "<group>";
 		};
+		849C066B2764837700394C82 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				849C066C276483A300394C82 /* JSONSubscriptionIdTests.swift */,
+			);
+			path = Network;
+			sourceTree = "<group>";
+		};
 		849E0A7225C9455600B33506 /* NodeFactory */ = {
 			isa = PBXGroup;
 			children = (
@@ -515,6 +525,7 @@
 		84DA3B3024C8CE5900B5E27F /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				849C066B2764837700394C82 /* Network */,
 				84F43B4425DE7FF700AEDA56 /* ExtrinsicBuilder */,
 				841D539325C7516600DFA15B /* JSON */,
 				8429C7FA25C432CC0086D7F6 /* Runtime */,
@@ -896,6 +907,7 @@
 				849E0A8225C95E2700B33506 /* NumericSetFactoryTests.swift in Sources */,
 				84DA3B4124C8CE5A00B5E27F /* ScaleInt32Tests.swift in Sources */,
 				8459EA0E2657961F006BBF9E /* FundInfo.swift in Sources */,
+				849C066D276483A300394C82 /* JSONSubscriptionIdTests.swift in Sources */,
 				8467FD2624E71A37005D486C /* IconGenerationTests.swift in Sources */,
 				84F43A7D25DC82B200AEDA56 /* TransientValidationData.swift in Sources */,
 				8420B439273DADE50000555E /* AddressQRDecoderTests.swift in Sources */,
