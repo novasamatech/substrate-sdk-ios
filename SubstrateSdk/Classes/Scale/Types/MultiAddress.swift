@@ -13,17 +13,57 @@ public enum MultiAddress: Equatable {
     case raw(_ value: Data)
     case address32(_ value: Data)
     case address20(_ value: Data)
+
+    public var accountId: Data? {
+        switch self {
+        case .accoundId(let value):
+            return value
+        case .accountIndex, .raw, .address32, .address20:
+            return nil
+        }
+    }
 }
 
 extension MultiAddress: Codable {
     public init(from decoder: Decoder) throws {
+        let context = RuntimeJsonContext(rawContext: decoder.userInfo)
+
+        if context.prefersRawAddress {
+            self = try Self.decodeAccountId(from: decoder)
+        } else {
+            self = try Self.decodeMultiAddress(from: decoder)
+        }
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        let context = RuntimeJsonContext(rawContext: encoder.userInfo)
+
+        if
+            context.prefersRawAddress,
+            let accountId = self.accountId {
+            try encodeAccountId(accountId, to: encoder)
+        } else {
+            try encodeMultiAddress(to: encoder)
+        }
+    }
+
+    private static func decodeAccountId(from decoder: Decoder) throws -> MultiAddress {
+        let container = try decoder.singleValueContainer()
+
+        let byteArray = try container.decode([StringScaleMapper<UInt8>].self)
+        let accountId = Data(byteArray.map { $0.value })
+
+        return .accoundId(accountId)
+    }
+
+    private static func decodeMultiAddress(from decoder: Decoder) throws -> MultiAddress {
         var container = try decoder.unkeyedContainer()
         let type = try container.decode(String.self)
 
         switch type {
         case Self.accountIdField:
             let data = try container.decode(Data.self)
-            self = .accoundId(data)
+            return .accoundId(data)
         case Self.indexField:
             let intStr = try container.decode(String.self)
             guard let value = BigUInt(intStr) else {
@@ -31,23 +71,28 @@ extension MultiAddress: Codable {
                                                        debugDescription: "Unexpected big int value")
             }
 
-            self = .accountIndex(value)
+            return .accountIndex(value)
         case Self.rawField:
             let data = try container.decode(Data.self)
-            self = .raw(data)
+            return .raw(data)
         case Self.address32Field:
             let data = try container.decode(Data.self)
-            self = .address32(data)
+            return .address32(data)
         case Self.address20Field:
             let data = try container.decode(Data.self)
-            self = .address20(data)
+            return .address20(data)
         default:
             throw DecodingError.dataCorruptedError(in: container,
                                                    debugDescription: "Unexpected type")
         }
     }
 
-    public func encode(to encoder: Encoder) throws {
+    private func encodeAccountId(_ accountId: Data, to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(accountId)
+    }
+
+    private func encodeMultiAddress(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
 
         switch self {
