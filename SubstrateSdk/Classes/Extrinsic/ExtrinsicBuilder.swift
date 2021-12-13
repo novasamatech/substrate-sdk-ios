@@ -133,7 +133,7 @@ public final class ExtrinsicBuilder {
 
 extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
     public func with<A: Codable>(address: A) throws -> Self {
-        self.address = try address.toScaleCompatibleJSON()
+        self.address = try address.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
         self.signature = nil
 
         return self
