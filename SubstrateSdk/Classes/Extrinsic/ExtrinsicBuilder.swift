@@ -8,6 +8,7 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func with(era: Era, blockHash: String) -> Self
     func with(tip: BigUInt) -> Self
     func with(shouldUseAtomicBatch: Bool) -> Self
+    func with(runtimeJsonContext: RuntimeJsonContext) -> Self
     func adding<T: RuntimeCallable>(call: T) throws -> Self
     func reset() -> Self
     func signing(by signer: (Data) throws -> Data,
@@ -53,6 +54,7 @@ public final class ExtrinsicBuilder {
     private var tip: BigUInt
     private var signature: ExtrinsicSignature?
     private var shouldUseAtomicBatch: Bool = true
+    private var runtimeJsonContext: RuntimeJsonContext?
 
     public init(specVersion: UInt32,
                 transactionVersion: UInt32,
@@ -85,12 +87,12 @@ public final class ExtrinsicBuilder {
             throw ExtrinsicBuilderError.unsupportedBatch
         }
 
-        return try call.toScaleCompatibleJSON()
+        return try call.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
     }
 
     private func appendExtraToPayload(encodingBy encoder: DynamicScaleEncoding) throws {
         let extra = ExtrinsicSignedExtra(era: era, nonce: nonce ?? 0, tip: tip)
-        try encoder.append(extra, ofType: GenericType.extrinsicExtra.name)
+        try encoder.append(extra, ofType: GenericType.extrinsicExtra.name, with: runtimeJsonContext?.toRawContext())
     }
 
     private func appendAdditionalSigned(encodingBy encoder: DynamicScaleEncoding,
@@ -131,7 +133,7 @@ public final class ExtrinsicBuilder {
 
 extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
     public func with<A: Codable>(address: A) throws -> Self {
-        self.address = try address.toScaleCompatibleJSON()
+        self.address = try address.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
         self.signature = nil
 
         return self
@@ -164,8 +166,13 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         return self
     }
 
+    public func with(runtimeJsonContext: RuntimeJsonContext) -> Self {
+        self.runtimeJsonContext = runtimeJsonContext
+        return self
+    }
+
     public func adding<T: RuntimeCallable>(call: T) throws -> Self {
-        let json = try call.toScaleCompatibleJSON()
+        let json = try call.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
         calls.append(json)
 
         return self
@@ -199,7 +206,7 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
             signature = .ecdsa(data: rawSignature)
         }
 
-        let sigJson = try signature.toScaleCompatibleJSON()
+        let sigJson = try signature.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
 
         let extra = ExtrinsicSignedExtra(era: era, nonce: nonce ?? 0, tip: tip)
         self.signature = ExtrinsicSignature(address: address,
@@ -234,7 +241,7 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
 
         let extrinsic = Extrinsic(signature: signature, call: call)
 
-        try encoder.append(extrinsic, ofType: GenericType.extrinsic.name)
+        try encoder.append(extrinsic, ofType: GenericType.extrinsic.name, with: runtimeJsonContext?.toRawContext())
 
         return try encoder.encode()
     }

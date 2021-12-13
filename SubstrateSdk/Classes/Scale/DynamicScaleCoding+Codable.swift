@@ -15,16 +15,26 @@ public class HexCodingStrategy {
 }
 
 public extension JSONEncoder {
-    static func scaleCompatible() -> JSONEncoder {
+    static func scaleCompatible(with context: [CodingUserInfoKey: Any]? = nil) -> JSONEncoder {
         let encoder = JSONEncoder()
+
+        if let context = context {
+            encoder.userInfo = context
+        }
+
         encoder.dataEncodingStrategy = .custom(HexCodingStrategy.encoding(data:encoder:))
         return encoder
     }
 }
 
 public extension JSONDecoder {
-    static func scaleCompatible() -> JSONDecoder {
+    static func scaleCompatible(with context: [CodingUserInfoKey: Any]? = nil) -> JSONDecoder {
         let decoder = JSONDecoder()
+
+        if let context = context {
+            decoder.userInfo = context
+        }
+
         decoder.dataDecodingStrategy = .custom(HexCodingStrategy.decoding(with:))
         return decoder
     }
@@ -43,37 +53,44 @@ struct JsonContainer: Codable {
 }
 
 public extension Encodable {
-    func toScaleCompatibleJSON() throws -> JSON {
+    func toScaleCompatibleJSON(with context: [CodingUserInfoKey: Any]? = nil) throws -> JSON {
         let container = EncodingContainer(value: self)
 
-        let data = try JSONEncoder.scaleCompatible().encode(container)
-        let json = try JSONDecoder.scaleCompatible().decode(JsonContainer.self, from: data).value
+        let data = try JSONEncoder.scaleCompatible(with: context).encode(container)
+        let json = try JSONDecoder.scaleCompatible(with: context).decode(JsonContainer.self, from: data).value
 
         return json
     }
 }
 
 public extension JSON {
-    func map<T: Decodable>(to type: T.Type) throws -> T {
-        let encoder = JSONEncoder.scaleCompatible()
+    func map<T: Decodable>(to type: T.Type, with context: [CodingUserInfoKey: Any]? = nil) throws -> T {
+        let encoder = JSONEncoder.scaleCompatible(with: context)
         let encodingContainer = JsonContainer(value: self)
         let data = try encoder.encode(encodingContainer)
 
-        let decoder = JSONDecoder.scaleCompatible()
+        let decoder = JSONDecoder.scaleCompatible(with: context)
         return try decoder.decode(DecodingContainer<T>.self, from: data).value
     }
 }
 
 public extension DynamicScaleEncoding {
-    func append<T: Encodable>(_ codable: T, ofType type: String) throws {
-        let json = try codable.toScaleCompatibleJSON()
+    func append<T: Encodable>(
+        _ codable: T,
+        ofType type: String,
+        with context: [CodingUserInfoKey: Any]? = nil
+    ) throws {
+        let json = try codable.toScaleCompatibleJSON(with: context)
         try append(json: json, type: type)
     }
 }
 
 public extension DynamicScaleDecoding {
-    func read<T: Decodable>(of type: String) throws -> T {
+    func read<T: Decodable>(
+        of type: String,
+        with context: [CodingUserInfoKey: Any]? = nil
+    ) throws -> T {
         let json = try read(type: type)
-        return try json.map(to: T.self)
+        return try json.map(to: T.self, with: context)
     }
 }
