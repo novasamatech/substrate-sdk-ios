@@ -89,7 +89,9 @@ extension MultiAddress: Codable {
 
     private func encodeAccountId(_ accountId: Data, to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-        try container.encode(accountId)
+
+        let byteArray: [StringScaleMapper<UInt8>] = accountId.map { StringScaleMapper(value: $0) }
+        try container.encode(byteArray)
     }
 
     private func encodeMultiAddress(to encoder: Encoder) throws {
