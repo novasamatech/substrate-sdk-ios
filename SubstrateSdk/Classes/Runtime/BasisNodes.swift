@@ -46,7 +46,6 @@ public struct BasisNodes {
             SessionKeysSubstrateNode(),
             GenericMultiAddressNode(),
             OpaqueCallNode(),
-            GenericAccountIdNode(),
             GenericAccountIndexNode(),
             GenericEventNode(runtimeMetadata: runtimeMetadata),
             EventRecordNode(),

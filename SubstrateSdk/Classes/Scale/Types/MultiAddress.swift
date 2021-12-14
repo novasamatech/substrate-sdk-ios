@@ -51,7 +51,7 @@ extension MultiAddress: Codable {
         let container = try decoder.singleValueContainer()
 
         let byteArray = try container.decode([StringScaleMapper<UInt8>].self)
-        let accountId = Data(byteArray.map { $0.value })
+        let accountId = Data(scaleByteArray: byteArray)
 
         return .accoundId(accountId)
     }
@@ -62,7 +62,8 @@ extension MultiAddress: Codable {
 
         switch type {
         case Self.accountIdField:
-            let data = try container.decode(Data.self)
+            let byteArray = try container.decode([StringScaleMapper<UInt8>].self)
+            let data = Data(scaleByteArray: byteArray)
             return .accoundId(data)
         case Self.indexField:
             let intStr = try container.decode(String.self)
@@ -73,13 +74,16 @@ extension MultiAddress: Codable {
 
             return .accountIndex(value)
         case Self.rawField:
-            let data = try container.decode(Data.self)
+            let byteArray = try container.decode([StringScaleMapper<UInt8>].self)
+            let data = Data(scaleByteArray: byteArray)
             return .raw(data)
         case Self.address32Field:
-            let data = try container.decode(Data.self)
+            let byteArray = try container.decode([StringScaleMapper<UInt8>].self)
+            let data = Data(scaleByteArray: byteArray)
             return .address32(data)
         case Self.address20Field:
-            let data = try container.decode(Data.self)
+            let byteArray = try container.decode([StringScaleMapper<UInt8>].self)
+            let data = Data(scaleByteArray: byteArray)
             return .address20(data)
         default:
             throw DecodingError.dataCorruptedError(in: container,
@@ -89,9 +93,7 @@ extension MultiAddress: Codable {
 
     private func encodeAccountId(_ accountId: Data, to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
-
-        let byteArray: [StringScaleMapper<UInt8>] = accountId.map { StringScaleMapper(value: $0) }
-        try container.encode(byteArray)
+        try container.encode(accountId.toScaleByteArray())
     }
 
     private func encodeMultiAddress(to encoder: Encoder) throws {
@@ -100,19 +102,19 @@ extension MultiAddress: Codable {
         switch self {
         case .accoundId(let value):
             try container.encode(Self.accountIdField)
-            try container.encode(value)
+            try container.encode(value.toScaleByteArray())
         case .accountIndex(let value):
             try container.encode(Self.indexField)
             try container.encode(String(value))
         case .raw(let value):
             try container.encode(Self.rawField)
-            try container.encode(value)
+            try container.encode(value.toScaleByteArray())
         case .address32(let value):
             try container.encode(Self.address32Field)
-            try container.encode(value)
+            try container.encode(value.toScaleByteArray())
         case .address20(let value):
             try container.encode(Self.address20Field)
-            try container.encode(value)
+            try container.encode(value.toScaleByteArray())
         }
     }
 }

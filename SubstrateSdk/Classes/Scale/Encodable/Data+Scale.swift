@@ -11,3 +11,13 @@ extension Data: ScaleCodable {
         try byteArray.encode(scaleEncoder: scaleEncoder)
     }
 }
+
+public extension Data {
+    func toScaleByteArray() -> [StringScaleMapper<UInt8>] {
+        map { StringScaleMapper(value: $0) }
+    }
+
+    init(scaleByteArray: [StringScaleMapper<UInt8>]) {
+        self.init(scaleByteArray.map { $0.value })
+    }
+}
