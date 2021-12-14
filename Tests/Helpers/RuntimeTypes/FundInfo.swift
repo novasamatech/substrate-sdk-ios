@@ -4,7 +4,7 @@ import SubstrateSdk
 
 struct FundInfo: Codable, Equatable {
     let retiring: Bool
-    @BytesCodable var depositor: Data
+    let depositor: Data
     @NullCodable var verifier: MultiSigner?
     @StringCodable var deposit: BigUInt
     @StringCodable var raised: BigUInt
@@ -17,7 +17,7 @@ struct FundInfo: Codable, Equatable {
 }
 
 struct FundInfoV14: Codable, Equatable {
-    @BytesCodable var depositor: Data
+    let depositor: Data
     @NullCodable var verifier: MultiSigner?
     @StringCodable var deposit: BigUInt
     @StringCodable var raised: BigUInt

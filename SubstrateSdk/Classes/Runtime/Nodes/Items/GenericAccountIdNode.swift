@@ -16,6 +16,6 @@ public class GenericAccountIdNode: Node {
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        try decoder.readFixedArray(type: PrimitiveType.u8.rawValue, length: 32)
+        try decoder.readBytes(length: 32)
     }
 }
