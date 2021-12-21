@@ -6,7 +6,13 @@ public class GenericAccountIdNode: Node {
     public init() {}
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
-        try encoder.appendBytes(json: value)
+        if value.stringValue != nil {
+            // process hex representation
+            try encoder.appendBytes(json: value)
+        } else {
+            // process byte array representation
+            try encoder.appendFixedArray(json: value, type: PrimitiveType.u8.rawValue)
+        }
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
