@@ -22,6 +22,17 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
         metadata: RuntimeMetadataProtocol
     ) throws -> Self
 
+    func buildRawSignature(
+        using signer: (Data) throws -> Data,
+        encoder: DynamicScaleEncoding,
+        metadata: RuntimeMetadataProtocol
+    ) throws -> Data
+
+    func buildSignaturePayload(
+        encoder: DynamicScaleEncoding,
+        metadata: RuntimeMetadataProtocol
+    ) throws -> Data
+
     func build(encodingBy encoder: DynamicScaleEncoding, metadata: RuntimeMetadataProtocol) throws -> Data
 }
 
@@ -233,6 +244,23 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         self.signature = ExtrinsicSignature(address: address, signature: sigJson, extra: extra)
 
         return self
+    }
+
+    public func buildRawSignature(
+        using signer: (Data) throws -> Data,
+        encoder: DynamicScaleEncoding,
+        metadata: RuntimeMetadataProtocol
+    ) throws -> Data {
+        let data = try prepareSignaturePayload(encodingBy: encoder, using: metadata)
+
+        return try signer(data)
+    }
+
+    public func buildSignaturePayload(
+        encoder: DynamicScaleEncoding,
+        metadata: RuntimeMetadataProtocol
+    ) throws -> Data {
+        try prepareSignaturePayload(encodingBy: encoder, using: metadata)
     }
 
     public func build(encodingBy encoder: DynamicScaleEncoding,

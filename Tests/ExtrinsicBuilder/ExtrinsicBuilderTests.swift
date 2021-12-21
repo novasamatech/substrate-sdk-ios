@@ -136,6 +136,14 @@ class ExtrinsicBuilderTests: XCTestCase {
         }
     }
 
+    func testSignatureBuilder() {
+        let cryptoTypes: [CryptoType] = [.sr25519, .ed25519, .ecdsa]
+
+        for cryptoType in cryptoTypes {
+            performExtrinsicSignatureWithSingleCall(for: cryptoType)
+        }
+    }
+
     // MARK: Private
 
     private func performExtrinsicWithSingleCall(for cryptoType: CryptoType) {
@@ -164,6 +172,36 @@ class ExtrinsicBuilderTests: XCTestCase {
                                                 specVersion: specVersion,
                                                 builderClosure: closure,
                                                 expectedCall: expectedCall)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+
+    private func performExtrinsicSignatureWithSingleCall(for cryptoType: CryptoType) {
+        let genesisHash = Data(repeating: 0, count: 32).toHex(includePrefix: true)
+        let specVersion: UInt32 = 48
+
+        do {
+            let account = Data(repeating: 1, count: 32)
+
+            let args = TransferArgs(dest: .accoundId(account), value: 1)
+            let call = RuntimeCall(moduleName: "Balances",
+                                   callName: "transfer",
+                                   args: args)
+
+            let closure: ExtrinsicBuilderClosure = { builder in
+                return try builder.adding(call: call)
+            }
+
+            let metadata = try RuntimeHelper.createRuntimeMetadata("westend-metadata")
+
+            try setupSignatureBuilderTest("default",
+                                          networkName: "westend",
+                                          metadata: metadata,
+                                          cryptoType: cryptoType,
+                                          genesisHash: genesisHash,
+                                          specVersion: specVersion,
+                                          builderClosure: closure)
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
@@ -266,5 +304,94 @@ class ExtrinsicBuilderTests: XCTestCase {
         }
 
         XCTAssertTrue(decoder.remained == 0)
+    }
+
+    private func setupSignatureBuilderTest(_ baseName: String,
+                                           networkName: String,
+                                           metadata: RuntimeMetadata,
+                                           cryptoType: CryptoType,
+                                           genesisHash: String,
+                                           specVersion: UInt32,
+                                           builderClosure: ExtrinsicBuilderClosure) throws {
+        let keypair: IRCryptoKeypairProtocol = {
+            let data = Data(repeating: 8, count: 32)
+            switch cryptoType {
+            case .sr25519:
+                return try! SR25519KeypairFactory().createKeypairFromSeed(data, chaincodeList: [])
+            case .ed25519:
+                return try! Ed25519KeypairFactory().createKeypairFromSeed(data, chaincodeList: [])
+            case .ecdsa:
+                return try! EcdsaKeypairFactory().createKeypairFromSeed(data, chaincodeList: [])
+            }
+        }()
+
+        let accountId = try keypair.publicKey().rawData().publicKeyToAccountId()
+
+        let catalog = try RuntimeHelper
+            .createTypeRegistryCatalog(from: baseName,
+                                       networkName: networkName,
+                                       runtimeMetadata: metadata)
+
+        let signingClosure: (Data) throws -> Data = { message in
+            XCTAssert(message.count <= 256)
+
+            switch cryptoType {
+            case .sr25519:
+                let privateKey = try SNPrivateKey(rawData: keypair.privateKey().rawData())
+                let publicKey = try SNPublicKey(rawData: keypair.publicKey().rawData())
+                let signer = SNSigner(keypair: SNKeypair(privateKey: privateKey, publicKey: publicKey))
+                return try signer.sign(message).rawData()
+            case .ed25519:
+                let signer = EDSigner(privateKey: keypair.privateKey())
+                return try signer.sign(message).rawData()
+            case .ecdsa:
+                let signer = SECSigner(privateKey: keypair.privateKey())
+                let hashed = try message.blake2b32()
+                return try signer.sign(hashed).rawData()
+            }
+        }
+
+        let verificationClosure: (Data, Data) throws -> Bool = { message, rawSignature in
+            switch cryptoType {
+            case .sr25519:
+                let publicKey = try SNPublicKey(rawData: keypair.publicKey().rawData())
+                let verifier = SNSignatureVerifier()
+                let signature = try SNSignature(rawData: rawSignature)
+                return verifier.verify(signature, forOriginalData: message, using: publicKey)
+            case .ed25519:
+                let publicKey = try EDPublicKey(rawData: keypair.publicKey().rawData())
+                let verifier = EDSignatureVerifier()
+                let signature = try EDSignature(rawData: rawSignature)
+                return verifier.verify(signature, forOriginalData: message, usingPublicKey: publicKey)
+            case .ecdsa:
+                let publicKey = try SECPublicKey(rawData: keypair.publicKey().rawData())
+                let verifier = SECSignatureVerifier()
+                let signature = try SECSignature(rawData: rawSignature)
+                let hashed = try message.blake2b32()
+                return verifier.verify(signature, forOriginalData: hashed, usingPublicKey: publicKey)
+            }
+        }
+
+        let initialBuilder = try ExtrinsicBuilder(specVersion: specVersion,
+                                                  transactionVersion: 4,
+                                                  genesisHash: genesisHash)
+            .with(address: MultiAddress.accoundId(accountId))
+
+        let processedBuilder = try builderClosure(initialBuilder)
+
+        let originalData = try processedBuilder.buildSignaturePayload(
+            encoder: DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion)),
+            metadata: metadata
+        )
+
+        let rawSignature = try processedBuilder.buildRawSignature(
+            using: signingClosure,
+            encoder: DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion)),
+            metadata: metadata
+        )
+
+        let result = try verificationClosure(originalData, rawSignature)
+
+        XCTAssertTrue(result)
     }
 }
