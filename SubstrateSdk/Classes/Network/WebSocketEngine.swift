@@ -160,7 +160,7 @@ public final class WebSocketEngine {
 
         logger?.debug("(\(chainName)) Did set new urls: \(newUrls)")
 
-        mutex.lock()
+        mutex.unlock()
 
         connectIfNeeded()
     }
