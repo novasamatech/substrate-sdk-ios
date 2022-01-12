@@ -10,6 +10,7 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func with(shouldUseAtomicBatch: Bool) -> Self
     func with(runtimeJsonContext: RuntimeJsonContext) -> Self
     func adding<T: RuntimeCallable>(call: T) throws -> Self
+    func adding(rawCall: Data) throws -> Self
     func reset() -> Self
     func signing(by signer: (Data) throws -> Data,
                  of type: CryptoType,
@@ -184,6 +185,13 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
 
     public func adding<T: RuntimeCallable>(call: T) throws -> Self {
         let json = try call.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
+        calls.append(json)
+
+        return self
+    }
+
+    public func adding(rawCall: Data) throws -> Self {
+        let json = JSON.stringValue(rawCall.toHex())
         calls.append(json)
 
         return self
