@@ -82,6 +82,48 @@ class ExtrinsicBuilderTests: XCTestCase {
         }
     }
 
+    func testExtrinsicWithRawCall() {
+        let genesisHash = Data(repeating: 0, count: 32).toHex(includePrefix: true)
+        let specVersion: UInt32 = 48
+
+        do {
+
+            let catalog = try RuntimeHelper.createTypeRegistryCatalog(
+                from: "default",
+                networkName: "westend",
+                runtimeMetadataName: "westend-metadata"
+            )
+
+            let encoder = DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion))
+
+            let accountId = Data(repeating: 0, count: 32)
+            let args = TransferArgs(dest: .accoundId(accountId), value: 1)
+            let call = RuntimeCall(moduleName: "Balances",
+                                   callName: "transfer",
+                                   args: args)
+
+            try encoder.append(json: call.toScaleCompatibleJSON(), type: KnownType.call.name)
+            let encodedCall = try encoder.encode()
+
+            let closure: ExtrinsicBuilderClosure = { builder in
+                return try builder.adding(rawCall: encodedCall)
+            }
+
+            let expectedCall = try call.toScaleCompatibleJSON()
+
+            try setupSignedExtrinsicBuilderTest("default",
+                                                networkName: "westend",
+                                                metadataName: "westend-metadata",
+                                                cryptoType: .sr25519,
+                                                genesisHash: genesisHash,
+                                                specVersion: specVersion,
+                                                builderClosure: closure,
+                                                expectedCall: expectedCall)
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+    }
+
     func testSingleCallWithSR25519() {
         performExtrinsicWithSingleCall(for: .sr25519)
     }
