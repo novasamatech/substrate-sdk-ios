@@ -157,10 +157,10 @@ final class ScaleInfoNodeFactory: ScaleInfoNodeFactoryProtocol {
         from fields: [RuntimeTypeField],
         identifier: String
     ) -> StructNode {
-        let typeMapping: [NameNode] = fields.map { field in
-            let fieldId = String(field.type)
+        let typeMapping: [NameNode] = fields.enumerated().map { indexedField in
+            let fieldId = String(indexedField.element.type)
             let node = ProxyNode(typeName: fieldId)
-            let originalName = field.name ?? fieldId
+            let originalName = indexedField.element.name ?? String(indexedField.offset)
             let mappedName = nameMapper?.map(name: originalName) ?? originalName
             return NameNode(name: mappedName, node: node)
         }
