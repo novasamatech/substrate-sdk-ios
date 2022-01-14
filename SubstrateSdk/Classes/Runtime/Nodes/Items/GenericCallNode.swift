@@ -18,30 +18,38 @@ public class GenericCallNode: Node {
     }
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
-        let callInfo = try value.map(to: RuntimeCall<JSON>.self)
+        if case .stringValue = value {
+            // raw call in hex
 
-        guard let call = runtimeMetadata.getCall(from: callInfo.moduleName, with: callInfo.callName),
-              let moduleIndex = runtimeMetadata.getModuleIndex(callInfo.moduleName),
-              let callIndex = runtimeMetadata.getCallIndex(
-                in: callInfo.moduleName,
-                callName: callInfo.callName
-              ) else {
-            throw GenericCallNodeError.unexpectedParams
-        }
+            try encoder.appendBytes(json: value)
+        } else {
+            // constructed call
 
-        guard let args = callInfo.args.dictValue, call.arguments.count == args.count else {
-            throw GenericCallNodeError.unexpectedParams
-        }
+            let callInfo = try value.map(to: RuntimeCall<JSON>.self)
 
-        try encoder.appendU8(json: .stringValue(String(moduleIndex)))
-        try encoder.appendU8(json: .stringValue(String(callIndex)))
-
-        for index in 0..<call.arguments.count {
-            guard let param = args[call.arguments[index].name] else {
+            guard let call = runtimeMetadata.getCall(from: callInfo.moduleName, with: callInfo.callName),
+                  let moduleIndex = runtimeMetadata.getModuleIndex(callInfo.moduleName),
+                  let callIndex = runtimeMetadata.getCallIndex(
+                    in: callInfo.moduleName,
+                    callName: callInfo.callName
+                  ) else {
                 throw GenericCallNodeError.unexpectedParams
             }
 
-            try encoder.append(json: param, type: call.arguments[index].type)
+            guard let args = callInfo.args.dictValue, call.arguments.count == args.count else {
+                throw GenericCallNodeError.unexpectedParams
+            }
+
+            try encoder.appendU8(json: .stringValue(String(moduleIndex)))
+            try encoder.appendU8(json: .stringValue(String(callIndex)))
+
+            for index in 0..<call.arguments.count {
+                guard let param = args[call.arguments[index].name] else {
+                    throw GenericCallNodeError.unexpectedParams
+                }
+
+                try encoder.append(json: param, type: call.arguments[index].type)
+            }
         }
     }
 
