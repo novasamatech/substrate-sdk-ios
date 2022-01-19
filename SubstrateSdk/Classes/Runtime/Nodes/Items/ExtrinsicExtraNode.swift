@@ -7,9 +7,9 @@ public enum ExtrinsicExtraNodeError: Error {
 public class ExtrinsicExtraNode: Node {
     public var typeName: String { GenericType.extrinsicExtra.name }
     public let runtimeMetadata: RuntimeMetadataProtocol
-    public let customExtensions: [ExtrinsicExtension]
+    public let customExtensions: [ExtrinsicExtensionCoder]
 
-    public init(runtimeMetadata: RuntimeMetadataProtocol, customExtensions: [ExtrinsicExtension]) {
+    public init(runtimeMetadata: RuntimeMetadataProtocol, customExtensions: [ExtrinsicExtensionCoder]) {
         self.runtimeMetadata = runtimeMetadata
         self.customExtensions = customExtensions
     }
@@ -43,7 +43,7 @@ public class ExtrinsicExtraNode: Node {
                 try encoder.appendCompact(json: tip, type: KnownType.balance.name)
             default:
                 if let customExtension = customExtensions.first(where: { $0.name == checkString }) {
-                    try customExtension.writeAdditionalExtra(from: params, encoder: encoder)
+                    try customExtension.encodeAdditionalExtra(from: params, encoder: encoder)
                 }
             }
         }
@@ -65,7 +65,7 @@ public class ExtrinsicExtraNode: Node {
                     result[KnownExtrinsicExtraKey.tip] = tip
                 default:
                     if let customExtension = customExtensions.first(where: { $0.name == item }) {
-                        try customExtension.readAdditionalExtra(to: &result, decoder: decoder)
+                        try customExtension.decodeAdditionalExtra(to: &result, decoder: decoder)
                     }
                 }
         }

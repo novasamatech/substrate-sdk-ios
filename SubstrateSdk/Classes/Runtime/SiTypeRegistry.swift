@@ -78,7 +78,7 @@ public extension SiTypeRegistry {
     static func createFromTypesLookup(
         _ metadata: RuntimeMetadataV14,
         additionalNodes: [Node] = [],
-        customExtensions: [ExtrinsicExtension] = [],
+        customExtensions: [ExtrinsicExtensionCoder] = [],
         customTypeMapper: SiTypeMapping? = nil,
         customNameMapper: SiNameMapping? = nil
     ) -> SiTypeRegistry {

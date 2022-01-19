@@ -5,7 +5,7 @@ public extension TypeRegistryCatalog {
                                          versioningData: Data,
                                          runtimeMetadata: RuntimeMetadata,
                                          customNodes: [Node] = [],
-                                         customExtensions: [ExtrinsicExtension] = [])
+                                         customExtensions: [ExtrinsicExtensionCoder] = [])
     throws -> TypeRegistryCatalog {
         let versionedJsons = try prepareVersionedJsons(from: versioningData)
 
@@ -22,7 +22,7 @@ public extension TypeRegistryCatalog {
         _ definitionData: Data,
         runtimeMetadata: RuntimeMetadata,
         customNodes: [Node] = [],
-        customExtensions: [ExtrinsicExtension] = []
+        customExtensions: [ExtrinsicExtensionCoder] = []
     ) throws -> TypeRegistryCatalog {
         try createFromTypeDefinition(
             definitionData,
@@ -37,7 +37,7 @@ public extension TypeRegistryCatalog {
                                          versionedJsons: [UInt64: JSON],
                                          runtimeMetadata: RuntimeMetadata,
                                          customNodes: [Node],
-                                         customExtensions: [ExtrinsicExtension])
+                                         customExtensions: [ExtrinsicExtensionCoder])
     throws -> TypeRegistryCatalog {
         let allNodes = BasisNodes.allNodes(for: runtimeMetadata, customExtensions: customExtensions)
         let additonalNodes = allNodes + customNodes

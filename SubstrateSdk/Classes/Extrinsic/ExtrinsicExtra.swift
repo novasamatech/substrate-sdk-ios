@@ -4,9 +4,9 @@ import BigInt
 public typealias ExtrinsicExtra = [String: JSON]
 
 public enum KnownExtrinsicExtraKey {
-    static let era = "era"
-    static let nonce = "nonce"
-    static let tip = "tip"
+    public static let era = "era"
+    public static let nonce = "nonce"
+    public static let tip = "tip"
 }
 
 public extension ExtrinsicExtra {

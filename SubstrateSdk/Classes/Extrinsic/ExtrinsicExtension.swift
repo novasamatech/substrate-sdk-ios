@@ -4,6 +4,11 @@ public protocol ExtrinsicExtension: AnyObject {
     var name: String { get }
 
     func setAdditionalExtra(to extraStore: inout ExtrinsicExtra)
-    func readAdditionalExtra(to extraStore: inout ExtrinsicExtra, decoder: DynamicScaleDecoding) throws
-    func writeAdditionalExtra(from extra: ExtrinsicExtra, encoder: DynamicScaleEncoding) throws
+}
+
+public protocol ExtrinsicExtensionCoder: AnyObject {
+    var name: String { get }
+
+    func decodeAdditionalExtra(to extraStore: inout ExtrinsicExtra, decoder: DynamicScaleDecoding) throws
+    func encodeAdditionalExtra(from extra: ExtrinsicExtra, encoder: DynamicScaleEncoding) throws
 }
