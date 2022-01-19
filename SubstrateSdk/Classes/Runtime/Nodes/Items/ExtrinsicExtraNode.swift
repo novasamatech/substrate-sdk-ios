@@ -7,9 +7,11 @@ public enum ExtrinsicExtraNodeError: Error {
 public class ExtrinsicExtraNode: Node {
     public var typeName: String { GenericType.extrinsicExtra.name }
     public let runtimeMetadata: RuntimeMetadataProtocol
+    public let customExtensions: [ExtrinsicExtension]
 
-    public init(runtimeMetadata: RuntimeMetadataProtocol) {
+    public init(runtimeMetadata: RuntimeMetadataProtocol, customExtensions: [ExtrinsicExtension]) {
         self.runtimeMetadata = runtimeMetadata
+        self.customExtensions = customExtensions
     }
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
@@ -18,53 +20,53 @@ public class ExtrinsicExtraNode: Node {
         }
 
         for checkString in runtimeMetadata.getSignedExtensions() {
-            guard let check = ExtrinsicCheck(rawValue: checkString) else {
-                continue
-            }
+            let check = ExtrinsicCheck(rawValue: checkString)
 
             switch check {
             case .mortality:
-                guard let era = params[ExtrinsicSignedExtra.CodingKeys.era.rawValue] else {
+                guard let era = params[KnownExtrinsicExtraKey.era] else {
                     throw ExtrinsicExtraNodeError.invalidParams
                 }
 
                 try encoder.append(json: era, type: GenericType.era.name)
             case .nonce:
-                guard let nonce = params[ExtrinsicSignedExtra.CodingKeys.nonce.rawValue] else {
+                guard let nonce = params[KnownExtrinsicExtraKey.nonce] else {
                     throw ExtrinsicExtraNodeError.invalidParams
                 }
 
                 try encoder.appendCompact(json: nonce, type: KnownType.index.name)
             case .txPayment:
-                guard let tip = params[ExtrinsicSignedExtra.CodingKeys.tip.rawValue] else {
+                guard let tip = params[KnownExtrinsicExtraKey.tip] else {
                     throw ExtrinsicExtraNodeError.invalidParams
                 }
 
                 try encoder.appendCompact(json: tip, type: KnownType.balance.name)
             default:
-                continue
+                if let customExtension = customExtensions.first(where: { $0.name == checkString }) {
+                    try customExtension.writeAdditionalExtra(from: params, encoder: encoder)
+                }
             }
         }
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
         let extra = try runtimeMetadata.getSignedExtensions().reduce(into: [String: JSON]()) { (result, item) in
-                guard let check = ExtrinsicCheck(rawValue: item) else {
-                    return
-                }
+                let check = ExtrinsicCheck(rawValue: item)
 
                 switch check {
                 case .mortality:
                     let era = try decoder.read(type: GenericType.era.rawValue)
-                    result[ExtrinsicSignedExtra.CodingKeys.era.rawValue] = era
+                    result[KnownExtrinsicExtraKey.era] = era
                 case .nonce:
                     let nonce = try decoder.readCompact(type: KnownType.index.rawValue)
-                    result[ExtrinsicSignedExtra.CodingKeys.nonce.rawValue] = nonce
+                    result[KnownExtrinsicExtraKey.nonce] = nonce
                 case .txPayment:
                     let tip = try decoder.readCompact(type: KnownType.balance.rawValue)
-                    result[ExtrinsicSignedExtra.CodingKeys.tip.rawValue] = tip
+                    result[KnownExtrinsicExtraKey.tip] = tip
                 default:
-                    return
+                    if let customExtension = customExtensions.first(where: { $0.name == item }) {
+                        try customExtension.readAdditionalExtra(to: &result, decoder: decoder)
+                    }
                 }
         }
 

@@ -6,24 +6,6 @@ public struct ExtrinsicConstants {
     static let signedMask: UInt8 = 1 << 7
 }
 
-public struct ExtrinsicSignedExtra: Codable {
-    enum CodingKeys: String, CodingKey {
-        case era
-        case nonce
-        case tip
-    }
-
-    public var era: Era?
-    @OptionStringCodable public  var nonce: UInt32?
-    @OptionStringCodable public  var tip: BigUInt?
-
-    public init(era: Era?, nonce: UInt32?, tip: BigUInt?) {
-        self.era = era
-        self.nonce = nonce
-        self.tip = tip
-    }
-}
-
 public struct Extrinsic: Codable {
     enum CodingKeys: String, CodingKey {
         case signature
@@ -48,9 +30,9 @@ public struct ExtrinsicSignature: Codable {
 
     public let address: JSON
     public let signature: JSON
-    public let extra: ExtrinsicSignedExtra
+    public let extra: ExtrinsicExtra
 
-    public init(address: JSON, signature: JSON, extra: ExtrinsicSignedExtra) {
+    public init(address: JSON, signature: JSON, extra: ExtrinsicExtra) {
         self.address = address
         self.signature = signature
         self.extra = extra

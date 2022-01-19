@@ -30,8 +30,11 @@ final class RuntimeHelper {
         }
     }
 
-    static func createTypeRegistry(from name: String, runtimeMetadataName: String) throws
-    -> TypeRegistry {
+    static func createTypeRegistry(
+        from name: String,
+        runtimeMetadataName: String,
+        customExtensions: [ExtrinsicExtension] = []
+    ) throws -> TypeRegistry {
         guard let url = Bundle(for: self).url(forResource: name, withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogBaseName
         }
@@ -39,7 +42,7 @@ final class RuntimeHelper {
         let runtimeMetadata = try Self.createRuntimeMetadata(runtimeMetadataName)
 
         let data = try Data(contentsOf: url)
-        let basisNodes = BasisNodes.allNodes(for: runtimeMetadata)
+        let basisNodes = BasisNodes.allNodes(for: runtimeMetadata, customExtensions: customExtensions)
         let registry = try TypeRegistry
             .createFromTypesDefinition(data: data,
                                        additionalNodes: basisNodes)
