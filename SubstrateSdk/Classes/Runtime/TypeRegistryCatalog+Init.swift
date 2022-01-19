@@ -70,12 +70,14 @@ public extension TypeRegistryCatalog {
         versioningData: Data,
         runtimeMetadata: RuntimeMetadataV14,
         additionalNodes: [Node] = [],
+        customExtensions: [ExtrinsicExtensionCoder] = [],
         customTypeMapper: SiTypeMapping? = nil,
         customNameMapper: SiNameMapping? = nil
     ) throws -> TypeRegistryCatalog {
         let runtimeRegistry: SiTypeRegistry = SiTypeRegistry.createFromTypesLookup(
             runtimeMetadata,
             additionalNodes: additionalNodes,
+            customExtensions: customExtensions,
             customTypeMapper: customTypeMapper,
             customNameMapper: customNameMapper
         )
