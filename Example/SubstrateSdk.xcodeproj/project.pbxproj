@@ -94,6 +94,9 @@
 		84DA3B4324C8CE5A00B5E27F /* ScaleStringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3924C8CE5900B5E27F /* ScaleStringTests.swift */; };
 		84DA3B4424C8CE5A00B5E27F /* ScaleInt16Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3A24C8CE5900B5E27F /* ScaleInt16Tests.swift */; };
 		84DA3B4524C8CE5A00B5E27F /* ScaleUInt8Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3B24C8CE5900B5E27F /* ScaleUInt8Tests.swift */; };
+		84DEE7062798116700B9A39E /* statemine.json in Resources */ = {isa = PBXBuildFile; fileRef = 84DEE7052798116700B9A39E /* statemine.json */; };
+		84DEE708279811CE00B9A39E /* statemine-v14-metadata in Resources */ = {isa = PBXBuildFile; fileRef = 84DEE707279811CE00B9A39E /* statemine-v14-metadata */; };
+		84DEE70B2798145E00B9A39E /* ExtrinsicExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DEE70A2798145E00B9A39E /* ExtrinsicExtensionsTests.swift */; };
 		84ED7256254A001A006102DF /* SubstrateQREncoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED7255254A001A006102DF /* SubstrateQREncoderTests.swift */; };
 		84ED725C254A0233006102DF /* SubstrateQRDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84ED725B254A0233006102DF /* SubstrateQRDecoderTests.swift */; };
 		84F30E4725FC05BE00039D09 /* SessionKeysPolkadot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F30E4625FC05BE00039D09 /* SessionKeysPolkadot.swift */; };
@@ -226,6 +229,9 @@
 		84DA3B3A24C8CE5900B5E27F /* ScaleInt16Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleInt16Tests.swift; sourceTree = "<group>"; };
 		84DA3B3B24C8CE5900B5E27F /* ScaleUInt8Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleUInt8Tests.swift; sourceTree = "<group>"; };
 		84DA3B4824C8CEEF00B5E27F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Tests/Info.plist; sourceTree = SOURCE_ROOT; };
+		84DEE7052798116700B9A39E /* statemine.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = statemine.json; sourceTree = "<group>"; };
+		84DEE707279811CE00B9A39E /* statemine-v14-metadata */ = {isa = PBXFileReference; lastKnownFileType = text; path = "statemine-v14-metadata"; sourceTree = "<group>"; };
+		84DEE70A2798145E00B9A39E /* ExtrinsicExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrinsicExtensionsTests.swift; sourceTree = "<group>"; };
 		84ED7255254A001A006102DF /* SubstrateQREncoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstrateQREncoderTests.swift; sourceTree = "<group>"; };
 		84ED725B254A0233006102DF /* SubstrateQRDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubstrateQRDecoderTests.swift; sourceTree = "<group>"; };
 		84F30E4625FC05BE00039D09 /* SessionKeysPolkadot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionKeysPolkadot.swift; sourceTree = "<group>"; };
@@ -372,6 +378,8 @@
 				8467F4C626B285EC00C5B6F4 /* statemine-metadata */,
 				84F4394125DBAAA200AEDA56 /* test-metadata */,
 				84AF378627221F01007408D6 /* common-v14.json */,
+				84DEE7052798116700B9A39E /* statemine.json */,
+				84DEE707279811CE00B9A39E /* statemine-v14-metadata */,
 			);
 			path = Runtime;
 			sourceTree = "<group>";
@@ -602,6 +610,7 @@
 			isa = PBXGroup;
 			children = (
 				84F43B4525DE800F00AEDA56 /* ExtrinsicBuilderTests.swift */,
+				84DEE70A2798145E00B9A39E /* ExtrinsicExtensionsTests.swift */,
 			);
 			path = ExtrinsicBuilder;
 			sourceTree = "<group>";
@@ -741,10 +750,12 @@
 				84A0DE3124DBF49400F436A8 /* keystore-ed25519.json in Resources */,
 				849CFADE27394E5D0096D201 /* keystore-ethereum-int-version.json in Resources */,
 				AE4B521826CE127200A66D2C /* BIP32HDKD.json in Resources */,
+				84DEE7062798116700B9A39E /* statemine.json in Resources */,
 				84F4394225DBAAA200AEDA56 /* test-metadata in Resources */,
 				8429C81D25C434E70086D7F6 /* kusama.json in Resources */,
 				84AF376A271A3A8E007408D6 /* polkadot-v14-metadata in Resources */,
 				8467F4C726B285EC00C5B6F4 /* statemine-metadata in Resources */,
+				84DEE708279811CE00B9A39E /* statemine-v14-metadata in Resources */,
 				84A0DE3224DBF49700F436A8 /* keystore-ecdsa.json in Resources */,
 				84CB472524DBE98500837E11 /* keystore-sr25519.json in Resources */,
 				8429C82225C434EA0086D7F6 /* polkadot.json in Resources */,
@@ -922,6 +933,7 @@
 				842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */,
 				84ED725C254A0233006102DF /* SubstrateQRDecoderTests.swift in Sources */,
 				84F439BC25DBF8D600AEDA56 /* TypeRegistryNetworkValidationTests.swift in Sources */,
+				84DEE70B2798145E00B9A39E /* ExtrinsicExtensionsTests.swift in Sources */,
 				84ED7256254A001A006102DF /* SubstrateQREncoderTests.swift in Sources */,
 				84452C9B25D40B5600F47EC5 /* RegexReplaceResolverTests.swift in Sources */,
 				84452C7D25D3F75800F47EC5 /* GenericCallNodeTests.swift in Sources */,

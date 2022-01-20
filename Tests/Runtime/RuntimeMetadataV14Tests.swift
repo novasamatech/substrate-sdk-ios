@@ -14,6 +14,10 @@ class RuntimeMetadataV14Tests: XCTestCase {
         performRuntimeMetadataTest(filename: "polkadot-v14-metadata")
     }
 
+    func testStatemineMetadataParsing() {
+        performRuntimeMetadataTest(filename: "statemine-v14-metadata")
+    }
+
     // MARK: Private
 
     private func performRuntimeMetadataTest(filename: String) {

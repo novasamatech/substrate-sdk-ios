@@ -28,7 +28,8 @@ final class ScaleInfoHelper {
 
     static func createTypeRegistry(
         from fileName: String,
-        networkFilename: String = "common-v14"
+        networkFilename: String = "common-v14",
+        customExtensions: [ExtrinsicExtensionCoder] = []
     ) throws -> TypeRegistryCatalog {
         let runtimeMetadata = try Self.createScaleInfoMetadata(for: fileName)
 
@@ -44,6 +45,7 @@ final class ScaleInfoHelper {
         return try TypeRegistryCatalog.createFromSiDefinition(
             versioningData: networdData,
             runtimeMetadata: runtimeMetadata,
+            customExtensions: customExtensions,
             customNameMapper: ScaleInfoCamelCaseMapper()
         )
     }

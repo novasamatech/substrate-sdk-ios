@@ -112,7 +112,7 @@ public final class ExtrinsicBuilder {
         extra.setTip(tip)
 
         for extrinsicExtension in additionalExtensions {
-            extrinsicExtension.setAdditionalExtra(to: &extra)
+            extrinsicExtension.setAdditionalExtra(to: &extra, context: runtimeJsonContext?.toRawContext())
         }
 
         return extra
