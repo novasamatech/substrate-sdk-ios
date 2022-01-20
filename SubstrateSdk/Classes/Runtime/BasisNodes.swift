@@ -1,8 +1,11 @@
 import Foundation
 
 public struct BasisNodes {
-    public static func allNodes(for runtimeMetadata: RuntimeMetadataProtocol) -> [Node] {
-        supportedBaseNodes() + supportedGenericNodes(for: runtimeMetadata)
+    public static func allNodes(
+        for runtimeMetadata: RuntimeMetadataProtocol,
+        customExtensions: [ExtrinsicExtensionCoder]
+    ) -> [Node] {
+        supportedBaseNodes() + supportedGenericNodes(for: runtimeMetadata, customExtensions: customExtensions)
     }
 
     public static func supportedBaseNodes() -> [Node] {
@@ -24,7 +27,10 @@ public struct BasisNodes {
         ]
     }
 
-    public static func supportedGenericNodes(for runtimeMetadata: RuntimeMetadataProtocol) -> [Node] {
+    public static func supportedGenericNodes(
+        for runtimeMetadata: RuntimeMetadataProtocol,
+        customExtensions: [ExtrinsicExtensionCoder]
+    ) -> [Node] {
         [
             GenericAccountIdNode(),
             NullNode(),
@@ -52,7 +58,7 @@ public struct BasisNodes {
             AccountIdAddressNode(),
             ExtrinsicNode(),
             ExtrinsicSignatureNode(),
-            ExtrinsicExtraNode(runtimeMetadata: runtimeMetadata),
+            ExtrinsicExtraNode(runtimeMetadata: runtimeMetadata, customExtensions: customExtensions),
             MappingNode.consensus,
             MappingNode.seal,
             MappingNode.sealv0,

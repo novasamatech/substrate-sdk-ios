@@ -78,6 +78,7 @@ public extension SiTypeRegistry {
     static func createFromTypesLookup(
         _ metadata: RuntimeMetadataV14,
         additionalNodes: [Node] = [],
+        customExtensions: [ExtrinsicExtensionCoder] = [],
         customTypeMapper: SiTypeMapping? = nil,
         customNameMapper: SiNameMapping? = nil
     ) -> SiTypeRegistry {
@@ -91,12 +92,9 @@ public extension SiTypeRegistry {
 
         let nodeFactory = ScaleInfoNodeFactory(typeMapper: typeMapping, nameMapper: customNameMapper)
 
-        let baseNodes = BasisNodes.allNodes(for: metadata) + additionalNodes
-        let registry = SiTypeRegistry(
-            typesLookup: metadata.types,
-            baseNodes: baseNodes,
-            nodeFactory: nodeFactory
-        )
+        let allNodes = BasisNodes.allNodes(for: metadata, customExtensions: customExtensions)
+        let baseNodes = allNodes + additionalNodes
+        let registry = SiTypeRegistry(typesLookup: metadata.types, baseNodes: baseNodes, nodeFactory: nodeFactory)
 
         return registry
     }

@@ -4,7 +4,8 @@ public extension TypeRegistryCatalog {
     static func createFromTypeDefinition(_ definitionData: Data,
                                          versioningData: Data,
                                          runtimeMetadata: RuntimeMetadata,
-                                         customNodes: [Node] = [])
+                                         customNodes: [Node] = [],
+                                         customExtensions: [ExtrinsicExtensionCoder] = [])
     throws -> TypeRegistryCatalog {
         let versionedJsons = try prepareVersionedJsons(from: versioningData)
 
@@ -12,29 +13,34 @@ public extension TypeRegistryCatalog {
             definitionData,
             versionedJsons: versionedJsons,
             runtimeMetadata: runtimeMetadata,
-            customNodes: customNodes
+            customNodes: customNodes,
+            customExtensions: customExtensions
         )
     }
 
     static func createFromTypeDefinition(
         _ definitionData: Data,
         runtimeMetadata: RuntimeMetadata,
-        customNodes: [Node] = []
+        customNodes: [Node] = [],
+        customExtensions: [ExtrinsicExtensionCoder] = []
     ) throws -> TypeRegistryCatalog {
         try createFromTypeDefinition(
             definitionData,
             versionedJsons: [:],
             runtimeMetadata: runtimeMetadata,
-            customNodes: customNodes
+            customNodes: customNodes,
+            customExtensions: customExtensions
         )
     }
 
     static func createFromTypeDefinition(_ definitionData: Data,
                                          versionedJsons: [UInt64: JSON],
                                          runtimeMetadata: RuntimeMetadata,
-                                         customNodes: [Node])
+                                         customNodes: [Node],
+                                         customExtensions: [ExtrinsicExtensionCoder])
     throws -> TypeRegistryCatalog {
-        let additonalNodes = BasisNodes.allNodes(for: runtimeMetadata) + customNodes
+        let allNodes = BasisNodes.allNodes(for: runtimeMetadata, customExtensions: customExtensions)
+        let additonalNodes = allNodes + customNodes
         let baseRegistry = try TypeRegistry
             .createFromTypesDefinition(data: definitionData,
                                        additionalNodes: additonalNodes)
@@ -64,12 +70,14 @@ public extension TypeRegistryCatalog {
         versioningData: Data,
         runtimeMetadata: RuntimeMetadataV14,
         additionalNodes: [Node] = [],
+        customExtensions: [ExtrinsicExtensionCoder] = [],
         customTypeMapper: SiTypeMapping? = nil,
         customNameMapper: SiNameMapping? = nil
     ) throws -> TypeRegistryCatalog {
         let runtimeRegistry: SiTypeRegistry = SiTypeRegistry.createFromTypesLookup(
             runtimeMetadata,
             additionalNodes: additionalNodes,
+            customExtensions: customExtensions,
             customTypeMapper: customTypeMapper,
             customNameMapper: customNameMapper
         )

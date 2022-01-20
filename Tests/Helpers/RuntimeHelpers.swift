@@ -30,8 +30,11 @@ final class RuntimeHelper {
         }
     }
 
-    static func createTypeRegistry(from name: String, runtimeMetadataName: String) throws
-    -> TypeRegistry {
+    static func createTypeRegistry(
+        from name: String,
+        runtimeMetadataName: String,
+        customExtensions: [ExtrinsicExtensionCoder] = []
+    ) throws -> TypeRegistry {
         guard let url = Bundle(for: self).url(forResource: name, withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogBaseName
         }
@@ -39,7 +42,7 @@ final class RuntimeHelper {
         let runtimeMetadata = try Self.createRuntimeMetadata(runtimeMetadataName)
 
         let data = try Data(contentsOf: url)
-        let basisNodes = BasisNodes.allNodes(for: runtimeMetadata)
+        let basisNodes = BasisNodes.allNodes(for: runtimeMetadata, customExtensions: customExtensions)
         let registry = try TypeRegistry
             .createFromTypesDefinition(data: data,
                                        additionalNodes: basisNodes)
@@ -49,27 +52,36 @@ final class RuntimeHelper {
 
     static func createTypeRegistryCatalog(from baseName: String,
                                           networkName: String,
-                                          runtimeMetadataName: String)
+                                          runtimeMetadataName: String,
+                                          customExtensions: [ExtrinsicExtensionCoder] = []
+    )
     throws -> TypeRegistryCatalog {
         let runtimeMetadata = try Self.createRuntimeMetadata(runtimeMetadataName)
 
         return try createTypeRegistryCatalog(from: baseName,
                                              networkName: networkName,
-                                             runtimeMetadata: runtimeMetadata)
+                                             runtimeMetadata: runtimeMetadata,
+                                             customExtensions: customExtensions)
     }
 
     static func createTypeRegistryCatalog(
         from baseName: String,
-        runtimeMetadataName: String
+        runtimeMetadataName: String,
+        customExtensions: [ExtrinsicExtensionCoder] = []
     ) throws -> TypeRegistryCatalog {
         let runtimeMetadata = try Self.createRuntimeMetadata(runtimeMetadataName)
 
-        return try createTypeRegistryCatalog(from: baseName, runtimeMetadata: runtimeMetadata)
+        return try createTypeRegistryCatalog(
+            from: baseName,
+            runtimeMetadata: runtimeMetadata,
+            customExtensions: customExtensions
+        )
     }
 
     static func createTypeRegistryCatalog(from baseName: String,
                                           networkName: String,
-                                          runtimeMetadata: RuntimeMetadata)
+                                          runtimeMetadata: RuntimeMetadata,
+                                          customExtensions: [ExtrinsicExtensionCoder] = [])
     throws -> TypeRegistryCatalog {
         guard let baseUrl = Bundle(for: self).url(forResource: baseName, withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogBaseName
@@ -86,7 +98,8 @@ final class RuntimeHelper {
         let registry = try TypeRegistryCatalog.createFromTypeDefinition(
             baseData,
             versioningData: networdData,
-            runtimeMetadata: runtimeMetadata
+            runtimeMetadata: runtimeMetadata,
+            customExtensions: customExtensions
         )
 
         return registry
@@ -94,7 +107,8 @@ final class RuntimeHelper {
 
     static func createTypeRegistryCatalog(
         from baseName: String,
-        runtimeMetadata: RuntimeMetadata
+        runtimeMetadata: RuntimeMetadata,
+        customExtensions: [ExtrinsicExtensionCoder] = []
     ) throws -> TypeRegistryCatalog {
         guard let baseUrl = Bundle(for: self).url(forResource: baseName, withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogBaseName
@@ -104,7 +118,8 @@ final class RuntimeHelper {
 
         let registry = try TypeRegistryCatalog.createFromTypeDefinition(
             typesData,
-            runtimeMetadata: runtimeMetadata
+            runtimeMetadata: runtimeMetadata,
+            customExtensions: customExtensions
         )
 
         return registry
