@@ -131,3 +131,5 @@ extension JSON: Codable {
 }
 
 extension JSON: Equatable {}
+
+extension JSON: Hashable {}
