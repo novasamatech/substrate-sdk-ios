@@ -1,9 +1,7 @@
 # Substrate SDK iOS
 
-[![CI Status](https://img.shields.io/travis/ERussel/SubstrateSdk.svg?style=flat)](https://travis-ci.org/ERussel/SubstrateSdk)
-[![Version](https://img.shields.io/cocoapods/v/SubstrateSdk.svg?style=flat)](https://cocoapods.org/pods/SubstrateSdk)
-[![License](https://img.shields.io/cocoapods/l/SubstrateSdk.svg?style=flat)](https://cocoapods.org/pods/SubstrateSdk)
-[![Platform](https://img.shields.io/cocoapods/p/SubstrateSdk.svg?style=flat)](https://cocoapods.org/pods/SubstrateSdk)
+[![License](https://img.shields.io/cocoapods/l/SubstrateSdk.svg?style=flat)](https://github.com/nova-wallet/substrate-sdk-ios)
+[![Platform](https://img.shields.io/cocoapods/p/SubstrateSdk.svg?style=flat)](https://github.com/nova-wallet/substrate-sdk-ios)
 
 ## Example
 
