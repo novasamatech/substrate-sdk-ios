@@ -1,8 +1,5 @@
 # Substrate SDK iOS
 
-[![License](https://img.shields.io/cocoapods/l/SubstrateSdk.svg?style=flat)](https://github.com/nova-wallet/substrate-sdk-ios)
-[![Platform](https://img.shields.io/cocoapods/p/SubstrateSdk.svg?style=flat)](https://github.com/nova-wallet/substrate-sdk-ios)
-
 ## Example
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
