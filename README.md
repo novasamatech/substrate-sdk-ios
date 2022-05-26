@@ -17,7 +17,7 @@ SubstrateSdk is available through [CocoaPods](https://cocoapods.org). To install
 it, simply add the following line to your Podfile:
 
 ```ruby
-pod 'SubstrateSdk'
+pod 'SubstrateSdk', :git => 'https://github.com/nova-wallet/substrate-sdk-ios.git', :tag => '1.1.0'
 ```
 
 ## Author
@@ -26,4 +26,4 @@ ERussel, emkil.russel@gmail.com
 
 ## License
 
-SubstrateSdk is available under the MIT license. See the LICENSE file for more info.
+SubstrateSdk is available under the Apache Version 2.0 license. See the LICENSE file for more info.
