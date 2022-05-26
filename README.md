@@ -26,4 +26,4 @@ ERussel, emkil.russel@gmail.com
 
 ## License
 
-SubstrateSdk is available under the Apache2 license. See the LICENSE file for more info.
+SubstrateSdk is available under the Apache Version 2.0 license. See the LICENSE file for more info.
