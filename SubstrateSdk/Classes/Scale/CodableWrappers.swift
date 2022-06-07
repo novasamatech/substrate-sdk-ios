@@ -17,9 +17,12 @@ public struct BytesCodable: Codable, Equatable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        let byteArray = try container.decode([StringScaleMapper<UInt8>].self)
 
-        wrappedValue = Data(byteArray.map(\.value))
+        if let byteArray = try? container.decode([StringScaleMapper<UInt8>].self) {
+            wrappedValue = Data(byteArray.map(\.value))
+        } else {
+            wrappedValue = try container.decode(Data.self)
+        }
     }
 
     public func encode(to encoder: Encoder) throws {
