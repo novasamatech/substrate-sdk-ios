@@ -443,6 +443,38 @@ extension WebSocketEngine {
                 error: JSONRPCEngineError.clientCancelled
             )
         }
+
+        // check whether there is subscription for this id and send unsubscribe request
+
+        if let subscription = subscriptions[identifier], let remoteId = subscription.remoteId {
+            unsubscribe(for: remoteId)
+        }
+
+        subscriptions[identifier] = nil
+    }
+
+    func unsubscribe(for remoteId: String) {
+        pendingSubscriptionResponses[remoteId] = nil
+
+        do {
+            _ = try callMethod(
+                RPCMethod.storageUnsubscribe,
+                params: [remoteId]
+            ) { [weak self] (result: (Result<Bool, Error>)) in
+                self?.provideUnsubscriptionResult(result, remoteId: remoteId)
+            }
+        } catch {
+            logger?.error("(\(chainName):\(selectedURL)) Failed to create unsubscription request: \(error)")
+        }
+    }
+
+    func provideUnsubscriptionResult(_ result: (Result<Bool, Error>), remoteId: String) {
+        switch result {
+        case let .success(isSuccess):
+            logger?.debug("(\(chainName):\(selectedURL)) Unsubscription request completed \(remoteId): \(isSuccess)")
+        case let .failure(error):
+            logger?.error("(\(chainName):\(selectedURL)) Unsubscription request failed \(remoteId): \(error)")
+        }
     }
 
     func completeRequestForRemoteId(_ identifier: UInt16, data: Data) {
