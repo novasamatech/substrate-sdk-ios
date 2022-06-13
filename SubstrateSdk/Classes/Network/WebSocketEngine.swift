@@ -457,12 +457,15 @@ extension WebSocketEngine {
         pendingSubscriptionResponses[remoteId] = nil
 
         do {
-            _ = try callMethod(
-                RPCMethod.storageUnsubscribe,
-                params: [remoteId]
+            let request = try prepareRequest(
+                method: RPCMethod.storageUnsubscribe,
+                params: [remoteId],
+                options: JSONRPCOptions()
             ) { [weak self] (result: (Result<Bool, Error>)) in
                 self?.provideUnsubscriptionResult(result, remoteId: remoteId)
             }
+
+            updateConnectionForRequest(request)
         } catch {
             logger?.error("(\(chainName):\(selectedURL)) Failed to create unsubscription request: \(error)")
         }
