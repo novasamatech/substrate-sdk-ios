@@ -48,8 +48,6 @@ public enum ExtrinsicBuilderError: Error {
 }
 
 public class ExtrinsicBuilder {
-    static let payloadHashingTreshold = 256
-
     struct InternalCall: Codable {
         let moduleName: String
         let callName: String
@@ -167,7 +165,7 @@ public class ExtrinsicBuilder {
         return try encoder.encode()
     }
 
-    private func prepareRegularExtrinsicPayload(
+    private func prepareRegularSignaturePayload(
         encodingBy encoder: DynamicScaleEncoding,
         using metadata: RuntimeMetadataProtocol
     ) throws -> Data {
@@ -179,7 +177,7 @@ public class ExtrinsicBuilder {
 
         let payload = try encoder.encode()
 
-        return payload.count > Self.payloadHashingTreshold ? (try payload.blake2b32()) : payload
+        return try ExtrinsicSignatureConverter.convertExtrinsicPayloadToRegular(payload)
     }
 
     private func prepareSignaturePayload(
@@ -188,7 +186,7 @@ public class ExtrinsicBuilder {
     ) throws -> Data {
         switch signaturePayloadFormat {
         case .regular:
-            return try prepareRegularExtrinsicPayload(encodingBy: encoder, using: metadata)
+            return try prepareRegularSignaturePayload(encodingBy: encoder, using: metadata)
         case .paritySigner:
             return try prepareParitySignerSignaturePayload(encodingBy: encoder, using: metadata)
         }
