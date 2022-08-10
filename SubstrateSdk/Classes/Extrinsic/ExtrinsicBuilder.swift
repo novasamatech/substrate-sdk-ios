@@ -9,6 +9,7 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func with(tip: BigUInt) -> Self
     func with(shouldUseAtomicBatch: Bool) -> Self
     func with(runtimeJsonContext: RuntimeJsonContext) -> Self
+    func with(signaturePayloadFormat: ExtrinsicSignaturePayloadFormat) -> Self
     func adding<T: RuntimeCallable>(call: T) throws -> Self
     func adding(rawCall: Data) throws -> Self
     func adding(extrinsicExtension: ExtrinsicExtension) -> Self
@@ -46,9 +47,7 @@ public enum ExtrinsicBuilderError: Error {
     case unsupportedBatch
 }
 
-public final class ExtrinsicBuilder {
-    static let payloadHashingTreshold = 256
-
+public class ExtrinsicBuilder {
     struct InternalCall: Codable {
         let moduleName: String
         let callName: String
@@ -66,6 +65,7 @@ public final class ExtrinsicBuilder {
     private var era: Era
     private var tip: BigUInt
     private var signature: ExtrinsicSignature?
+    private var signaturePayloadFormat: ExtrinsicSignaturePayloadFormat = .regular
     private var shouldUseAtomicBatch: Bool = true
     private var runtimeJsonContext: RuntimeJsonContext?
     private var additionalExtensions: [ExtrinsicExtension] = []
@@ -123,8 +123,10 @@ public final class ExtrinsicBuilder {
         try encoder.append(extra, ofType: GenericType.extrinsicExtra.name, with: runtimeJsonContext?.toRawContext())
     }
 
-    private func appendAdditionalSigned(encodingBy encoder: DynamicScaleEncoding,
-                                        metadata: RuntimeMetadataProtocol) throws {
+    private func appendAdditionalSigned(
+        encodingBy encoder: DynamicScaleEncoding,
+        metadata: RuntimeMetadataProtocol
+    ) throws {
         for checkString in metadata.getSignedExtensions() {
             guard let check = ExtrinsicCheck(rawValue: checkString) else {
                 continue
@@ -145,8 +147,28 @@ public final class ExtrinsicBuilder {
         }
     }
 
-    private func prepareSignaturePayload(encodingBy encoder: DynamicScaleEncoding,
-                                         using metadata: RuntimeMetadataProtocol) throws -> Data {
+    private func prepareParitySignerSignaturePayload(
+        encodingBy encoder: DynamicScaleEncoding,
+        using metadata: RuntimeMetadataProtocol
+    ) throws -> Data {
+        let call = try prepareExtrinsicCall(for: metadata)
+        let callEncoder = encoder.newEncoder()
+        try callEncoder.append(json: call, type: GenericType.call.name)
+
+        let encodedCall = try callEncoder.encode()
+
+        try encoder.append(encodable: encodedCall)
+
+        try appendExtraToPayload(encodingBy: encoder)
+        try appendAdditionalSigned(encodingBy: encoder, metadata: metadata)
+
+        return try encoder.encode()
+    }
+
+    private func prepareRegularSignaturePayload(
+        encodingBy encoder: DynamicScaleEncoding,
+        using metadata: RuntimeMetadataProtocol
+    ) throws -> Data {
         let call = try prepareExtrinsicCall(for: metadata)
         try encoder.append(json: call, type: GenericType.call.name)
 
@@ -155,7 +177,19 @@ public final class ExtrinsicBuilder {
 
         let payload = try encoder.encode()
 
-        return payload.count > Self.payloadHashingTreshold ? (try payload.blake2b32()) : payload
+        return try ExtrinsicSignatureConverter.convertExtrinsicPayloadToRegular(payload)
+    }
+
+    private func prepareSignaturePayload(
+        encodingBy encoder: DynamicScaleEncoding,
+        using metadata: RuntimeMetadataProtocol
+    ) throws -> Data {
+        switch signaturePayloadFormat {
+        case .regular:
+            return try prepareRegularSignaturePayload(encodingBy: encoder, using: metadata)
+        case .paritySigner:
+            return try prepareParitySignerSignaturePayload(encodingBy: encoder, using: metadata)
+        }
     }
 }
 
@@ -196,6 +230,11 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
 
     public func with(runtimeJsonContext: RuntimeJsonContext) -> Self {
         self.runtimeJsonContext = runtimeJsonContext
+        return self
+    }
+
+    public func with(signaturePayloadFormat: ExtrinsicSignaturePayloadFormat) -> Self {
+        self.signaturePayloadFormat = signaturePayloadFormat
         return self
     }
 
