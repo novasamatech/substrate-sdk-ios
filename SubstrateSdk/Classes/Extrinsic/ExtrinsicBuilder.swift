@@ -169,6 +169,14 @@ public class ExtrinsicBuilder {
         encodingBy encoder: DynamicScaleEncoding,
         using metadata: RuntimeMetadataProtocol
     ) throws -> Data {
+        let payload = try prepareNotHashedSignaturePayload(encodingBy: encoder, using: metadata)
+        return try ExtrinsicSignatureConverter.convertExtrinsicPayloadToRegular(payload)
+    }
+
+    private func prepareNotHashedSignaturePayload(
+        encodingBy encoder: DynamicScaleEncoding,
+        using metadata: RuntimeMetadataProtocol
+    ) throws -> Data {
         let call = try prepareExtrinsicCall(for: metadata)
         try encoder.append(json: call, type: GenericType.call.name)
 
@@ -177,7 +185,7 @@ public class ExtrinsicBuilder {
 
         let payload = try encoder.encode()
 
-        return try ExtrinsicSignatureConverter.convertExtrinsicPayloadToRegular(payload)
+        return payload
     }
 
     private func prepareSignaturePayload(
@@ -189,6 +197,8 @@ public class ExtrinsicBuilder {
             return try prepareRegularSignaturePayload(encodingBy: encoder, using: metadata)
         case .paritySigner:
             return try prepareParitySignerSignaturePayload(encodingBy: encoder, using: metadata)
+        case .extrinsicPayload:
+            return try prepareNotHashedSignaturePayload(encodingBy: encoder, using: metadata)
         }
     }
 }
