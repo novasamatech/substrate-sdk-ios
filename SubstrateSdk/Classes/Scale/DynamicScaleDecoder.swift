@@ -64,7 +64,7 @@ public class DynamicScaleDecoder {
     private func decodeSignedInt(length: Int) throws -> JSON {
         let data = try decoder.readAndConfirm(count: length)
         let magnitude = BigUInt(Data(data.reversed()))
-        let signMask = BigUInt(1) << (length - 1)
+        let signMask = BigUInt(1) << (8 * length - 1)
         let sign: BigInt.Sign = (magnitude & signMask) == 0 ? .plus : .minus
 
         let value: BigInt
@@ -175,27 +175,27 @@ extension DynamicScaleDecoder: DynamicScaleDecoding {
     }
 
     public func readI8() throws -> JSON {
-        try decodeFixedInt(length: 1)
+        try decodeSignedInt(length: 1)
     }
 
     public func readI16() throws -> JSON {
-        try decodeFixedInt(length: 2)
+        try decodeSignedInt(length: 2)
     }
 
     public func readI32() throws -> JSON {
-        try decodeFixedInt(length: 4)
+        try decodeSignedInt(length: 4)
     }
 
     public func readI64() throws -> JSON {
-        try decodeFixedInt(length: 8)
+        try decodeSignedInt(length: 8)
     }
 
     public func readI128() throws -> JSON {
-        try decodeFixedInt(length: 16)
+        try decodeSignedInt(length: 16)
     }
 
     public func readI256() throws -> JSON {
-        try decodeFixedInt(length: 32)
+        try decodeSignedInt(length: 32)
     }
 
     public func readBool() throws -> JSON {

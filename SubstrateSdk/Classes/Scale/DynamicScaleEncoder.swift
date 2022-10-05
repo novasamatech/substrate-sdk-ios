@@ -59,7 +59,8 @@ public final class DynamicScaleEncoder {
         case .plus:
             magnitude = intValue.magnitude
         case .minus:
-            let invertingMask = (BigUInt(1) << byteLength) - 1
+            let bitLength = 8 * byteLength
+            let invertingMask = (BigUInt(1) << bitLength) - 1
             magnitude = (intValue.magnitude ^ invertingMask) + 1
         }
 
