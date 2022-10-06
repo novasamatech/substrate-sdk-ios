@@ -118,11 +118,11 @@ public class I32Node: Node {
     public init() {}
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
-        try encoder.appendU32(json: value)
+        try encoder.appendI32(json: value)
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        try decoder.readU32()
+        try decoder.readI32()
     }
 }
 

@@ -82,6 +82,7 @@
 		84AF377F271DE550007408D6 /* ScaleInfoMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF377E271DE550007408D6 /* ScaleInfoMappingTests.swift */; };
 		84AF378527215DB4007408D6 /* ValidatorPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF378427215DB4007408D6 /* ValidatorPrefs.swift */; };
 		84AF378727221F02007408D6 /* common-v14.json in Resources */ = {isa = PBXBuildFile; fileRef = 84AF378627221F01007408D6 /* common-v14.json */; };
+		84C41F3A28EE157600DB1CD3 /* SignedIntNodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84C41F3928EE157600DB1CD3 /* SignedIntNodeTests.swift */; };
 		84CB472424DBE82C00837E11 /* KeystoreExtractorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84CB472324DBE82C00837E11 /* KeystoreExtractorTests.swift */; };
 		84CB472524DBE98500837E11 /* keystore-sr25519.json in Resources */ = {isa = PBXBuildFile; fileRef = 84CB472024DBE7E100837E11 /* keystore-sr25519.json */; };
 		84DA3B3C24C8CE5900B5E27F /* ScaleUInt32Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84DA3B3224C8CE5900B5E27F /* ScaleUInt32Tests.swift */; };
@@ -216,6 +217,7 @@
 		84AF377E271DE550007408D6 /* ScaleInfoMappingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleInfoMappingTests.swift; sourceTree = "<group>"; };
 		84AF378427215DB4007408D6 /* ValidatorPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatorPrefs.swift; sourceTree = "<group>"; };
 		84AF378627221F01007408D6 /* common-v14.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "common-v14.json"; sourceTree = "<group>"; };
+		84C41F3928EE157600DB1CD3 /* SignedIntNodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignedIntNodeTests.swift; sourceTree = "<group>"; };
 		84CB472024DBE7E100837E11 /* keystore-sr25519.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = "keystore-sr25519.json"; sourceTree = "<group>"; };
 		84CB472324DBE82C00837E11 /* KeystoreExtractorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeystoreExtractorTests.swift; sourceTree = "<group>"; };
 		84DA3B3224C8CE5900B5E27F /* ScaleUInt32Tests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaleUInt32Tests.swift; sourceTree = "<group>"; };
@@ -431,6 +433,7 @@
 				84452C7C25D3F75800F47EC5 /* GenericCallNodeTests.swift */,
 				84452C8225D3F97F00F47EC5 /* GenericEventNodeTests.swift */,
 				84452D9225D48FC100F47EC5 /* ExtrinsicNodeTests.swift */,
+				84C41F3928EE157600DB1CD3 /* SignedIntNodeTests.swift */,
 			);
 			path = Generic;
 			sourceTree = "<group>";
@@ -890,6 +893,7 @@
 				84DA3B4024C8CE5900B5E27F /* ScaleInt8Tests.swift in Sources */,
 				84AF377F271DE550007408D6 /* ScaleInfoMappingTests.swift in Sources */,
 				84DA3B4524C8CE5A00B5E27F /* ScaleUInt8Tests.swift in Sources */,
+				84C41F3A28EE157600DB1CD3 /* SignedIntNodeTests.swift in Sources */,
 				84F43A6125DC701F00AEDA56 /* Reasons.swift in Sources */,
 				84AF377A271DA9A2007408D6 /* ScaleRegistryTests.swift in Sources */,
 				84F43B4625DE800F00AEDA56 /* ExtrinsicBuilderTests.swift in Sources */,
