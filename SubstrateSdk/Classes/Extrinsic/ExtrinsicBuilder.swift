@@ -92,9 +92,19 @@ public class ExtrinsicBuilder {
             return calls[0]
         }
 
-        let callName = shouldUseAtomicBatch ? KnowRuntimeModule.Utitlity.batchAll : KnowRuntimeModule.Utitlity.batch
+        let callName: String
 
-        let call = RuntimeCall(moduleName: KnowRuntimeModule.Utitlity.name,
+        if shouldUseAtomicBatch {
+            if metadata.getCall(from: KnowRuntimeModule.Utility.name, with: KnowRuntimeModule.Utility.batchAll) != nil {
+                callName = KnowRuntimeModule.Utility.batchAll
+            } else {
+                callName = KnowRuntimeModule.Utility.batchAtomic
+            }
+        } else {
+            callName = KnowRuntimeModule.Utility.batch
+        }
+
+        let call = RuntimeCall(moduleName: KnowRuntimeModule.Utility.name,
                                callName: callName,
                                args: BatchArgs(calls: calls))
 

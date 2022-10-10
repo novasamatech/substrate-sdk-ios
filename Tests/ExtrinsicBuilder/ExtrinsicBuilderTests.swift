@@ -26,8 +26,8 @@ class ExtrinsicBuilderTests: XCTestCase {
             }
 
             let expectedJsonCalls = try calls.toScaleCompatibleJSON()
-            let expectedCall = try RuntimeCall(moduleName: KnowRuntimeModule.Utitlity.name,
-                                               callName: KnowRuntimeModule.Utitlity.batch,
+            let expectedCall = try RuntimeCall(moduleName: KnowRuntimeModule.Utility.name,
+                                               callName: KnowRuntimeModule.Utility.batch,
                                                args: BatchArgs(calls: expectedJsonCalls.arrayValue!))
                                 .toScaleCompatibleJSON()
 
@@ -64,8 +64,8 @@ class ExtrinsicBuilderTests: XCTestCase {
             }
 
             let expectedJsonCalls = try calls.toScaleCompatibleJSON()
-            let expectedCall = try RuntimeCall(moduleName: KnowRuntimeModule.Utitlity.name,
-                                               callName: KnowRuntimeModule.Utitlity.batchAll,
+            let expectedCall = try RuntimeCall(moduleName: KnowRuntimeModule.Utility.name,
+                                               callName: KnowRuntimeModule.Utility.batchAll,
                                                args: BatchArgs(calls: expectedJsonCalls.arrayValue!))
                                 .toScaleCompatibleJSON()
 
