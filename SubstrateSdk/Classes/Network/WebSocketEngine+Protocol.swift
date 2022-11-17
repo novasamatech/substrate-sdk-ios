@@ -28,6 +28,7 @@ extension WebSocketEngine: JSONRPCEngine {
     public func subscribe<P: Encodable, T: Decodable>(
         _ method: String,
         params: P?,
+        unsubscribeMethod: String,
         updateClosure: @escaping (T) -> Void,
         failureClosure: @escaping (Error, Bool) -> Void
     ) throws -> UInt16 {
@@ -50,6 +51,7 @@ extension WebSocketEngine: JSONRPCEngine {
             requestId: request.requestId,
             requestData: request.data,
             requestOptions: request.options,
+            unsubscribeMethod: unsubscribeMethod,
             updateClosure: updateClosure,
             failureClosure: failureClosure
         )

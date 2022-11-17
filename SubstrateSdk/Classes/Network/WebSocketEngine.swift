@@ -447,18 +447,18 @@ extension WebSocketEngine {
         // check whether there is subscription for this id and send unsubscribe request
 
         if let subscription = subscriptions[identifier], let remoteId = subscription.remoteId {
-            unsubscribe(for: remoteId)
+            unsubscribe(for: remoteId, method: subscription.unsubscribeMethod)
         }
 
         subscriptions[identifier] = nil
     }
 
-    func unsubscribe(for remoteId: String) {
+    func unsubscribe(for remoteId: String, method: String) {
         pendingSubscriptionResponses[remoteId] = nil
 
         do {
             let request = try prepareRequest(
-                method: RPCMethod.storageUnsubscribe,
+                method: method,
                 params: [remoteId],
                 options: JSONRPCOptions()
             ) { [weak self] (result: (Result<Bool, Error>)) in

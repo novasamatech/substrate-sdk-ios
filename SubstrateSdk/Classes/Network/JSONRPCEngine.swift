@@ -54,6 +54,7 @@ public protocol JSONRPCSubscribing: AnyObject {
     var requestData: Data { get }
     var requestOptions: JSONRPCOptions { get }
     var remoteId: String? { get set }
+    var unsubscribeMethod: String { get }
 
     func handle(data: Data) throws
     func handle(error: Error, unsubscribed: Bool)
@@ -64,6 +65,7 @@ public final class JSONRPCSubscription<T: Decodable>: JSONRPCSubscribing {
     public let requestData: Data
     public let requestOptions: JSONRPCOptions
     public var remoteId: String?
+    public let unsubscribeMethod: String
 
     private lazy var jsonDecoder = JSONDecoder()
 
@@ -74,12 +76,14 @@ public final class JSONRPCSubscription<T: Decodable>: JSONRPCSubscribing {
         requestId: UInt16,
         requestData: Data,
         requestOptions: JSONRPCOptions,
+        unsubscribeMethod: String,
         updateClosure: @escaping (T) -> Void,
         failureClosure: @escaping (Error, Bool) -> Void
     ) {
         self.requestId = requestId
         self.requestData = requestData
         self.requestOptions = requestOptions
+        self.unsubscribeMethod = unsubscribeMethod
         self.updateClosure = updateClosure
         self.failureClosure = failureClosure
     }
@@ -105,6 +109,7 @@ public protocol JSONRPCEngine: AnyObject {
     func subscribe<P: Encodable, T: Decodable>(
         _ method: String,
         params: P?,
+        unsubscribeMethod: String,
         updateClosure: @escaping (T) -> Void,
         failureClosure: @escaping (Error, Bool) -> Void
     )
@@ -124,6 +129,21 @@ public extension JSONRPCEngine {
             params: params,
             options: JSONRPCOptions(),
             completion: closure
+        )
+    }
+
+    func subscribe<P: Encodable, T: Decodable>(
+        _ method: String,
+        params: P?,
+        updateClosure: @escaping (T) -> Void,
+        failureClosure: @escaping (Error, Bool) -> Void
+    ) throws -> UInt16 {
+        try subscribe(
+            method,
+            params: params,
+            unsubscribeMethod: RPCMethod.storageUnsubscribe,
+            updateClosure: updateClosure,
+            failureClosure: failureClosure
         )
     }
 }
