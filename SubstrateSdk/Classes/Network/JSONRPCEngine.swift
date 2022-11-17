@@ -63,7 +63,7 @@ struct JSONRPCBatchHandler: JSONRPCResponseHandling {
                 } else if let error = rpcData.error {
                     return .failure(error)
                 } else {
-                    return .failure(JSONRPCEngineError.unknownError)
+                    return .failure(JSONRPCEngineError.emptyResult)
                 }
             }
 
