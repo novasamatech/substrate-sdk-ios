@@ -12,6 +12,13 @@ public protocol JSONRPCResponseHandling {
     func handle(error: Error)
 }
 
+public typealias JSONRPCBatchId = String
+
+public struct JSONRPCBatchRequestItem {
+    public let requestId: UInt16
+    public let data: Data
+}
+
 public struct JSONRPCRequest: Equatable {
     public let requestId: UInt16
     public let data: Data
@@ -38,6 +45,39 @@ struct JSONRPCResponseHandler<T: Decodable>: JSONRPCResponseHandling {
 
     public func handle(error: Error) {
         completionClosure(.failure(error))
+    }
+}
+
+struct JSONRPCBatchHandler: JSONRPCResponseHandling {
+    let itemsCount: Int
+
+    public let completionClosure: ([Result<JSON, Error>]) -> Void
+
+    public func handle(data: Data) {
+        do {
+            let decoder = JSONDecoder()
+            let responses = try decoder.decode([JSONRPCData<JSON?>].self, from: data)
+            let results: [Result<JSON, Error>] = responses.map { rpcData in
+                if let value = rpcData.result {
+                    return .success(value)
+                } else if let error = rpcData.error {
+                    return .failure(error)
+                } else {
+                    return .failure(JSONRPCEngineError.unknownError)
+                }
+            }
+
+            completionClosure(results)
+
+        } catch {
+            let errorList: [Result<JSON, Error>] = (0..<itemsCount).map { _ in .failure(error) }
+            completionClosure(errorList)
+        }
+    }
+
+    public func handle(error: Error) {
+        let errorList: [Result<JSON, Error>] = (0..<itemsCount).map { _ in .failure(error) }
+        completionClosure(errorList)
     }
 }
 
@@ -116,9 +156,30 @@ public protocol JSONRPCEngine: AnyObject {
         throws -> UInt16
 
     func cancelForIdentifier(_ identifier: UInt16)
+
+    func addBatchCallMethod<P: Encodable>(
+        _ method: String,
+        params: P?,
+        batchId: JSONRPCBatchId
+    ) throws
+
+    func submitBatch(
+        for batchId: JSONRPCBatchId,
+        options: JSONRPCOptions,
+        completion closure: (([Result<JSON, Error>]) -> Void)?
+    ) throws -> UInt16
+
+    func clearBatch(for batchId: JSONRPCBatchId)
 }
 
 public extension JSONRPCEngine {
+    func submitBatch(
+        for batchId: JSONRPCBatchId,
+        completion closure: (([Result<JSON, Error>]) -> Void)?
+    ) throws -> UInt16 {
+        try submitBatch(for: batchId, options: JSONRPCOptions(), completion: closure)
+    }
+
     func callMethod<P: Encodable, T: Decodable>(
         _ method: String,
         params: P?,
