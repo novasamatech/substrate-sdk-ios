@@ -78,6 +78,7 @@ public final class WebSocketEngine {
 
     private(set) var pendingRequests: [JSONRPCRequest] = []
     private(set) var inProgressRequests: [UInt16: JSONRPCRequest] = [:]
+    private(set) var partialBatches: [String: [JSONRPCBatchRequestItem]] = [:]
     private(set) var subscriptions: [UInt16: JSONRPCSubscribing] = [:]
     private(set) var pendingSubscriptionResponses: [String: [Data]] = [:]
     private(set) var selectedURLIndex: Int
@@ -267,6 +268,17 @@ extension WebSocketEngine {
         }
     }
 
+    func clearPartialBatchStorage(for batchId: JSONRPCBatchId) {
+        partialBatches[batchId] = nil
+    }
+
+    func storeBatchItem(_ item: JSONRPCBatchRequestItem, for batchId: JSONRPCBatchId) {
+        var items = partialBatches[batchId] ?? []
+        items.append(item)
+
+        partialBatches[batchId] = items
+    }
+
     func send(request: JSONRPCRequest) {
         inProgressRequests[request.requestId] = request
 
@@ -337,22 +349,46 @@ extension WebSocketEngine {
 
     func process(data: Data) {
         do {
-            let response = try jsonDecoder.decode(JSONRPCBasicData.self, from: data)
-
-            if let identifier = response.identifier {
-                if let error = response.error {
-                    completeRequestForRemoteId(
-                        identifier,
-                        error: error
-                    )
+            if let response = try? jsonDecoder.decode(JSONRPCBasicData.self, from: data) {
+                // handle single request or subscription
+                if let identifier = response.identifier {
+                    if let error = response.error {
+                        completeRequestForRemoteId(
+                            identifier,
+                            error: error
+                        )
+                    } else {
+                        completeRequestForRemoteId(
+                            identifier,
+                            data: data
+                        )
+                    }
                 } else {
-                    completeRequestForRemoteId(
-                        identifier,
-                        data: data
-                    )
+                    try processSubscriptionUpdate(data)
                 }
             } else {
-                try processSubscriptionUpdate(data)
+                // handle batch response
+
+                let batchResponses = try jsonDecoder.decode([JSONRPCBasicData].self, from: data)
+
+                let optBatchResponse = batchResponses.first { response in
+                    if let identifier = response.identifier, inProgressRequests[identifier] != nil {
+                        return true
+                    } else {
+                        return false
+                    }
+                }
+
+                guard let identifier = optBatchResponse?.identifier else {
+                    if let stringData = String(data: data, encoding: .utf8) {
+                        logger?.error("(\(chainName):\(selectedURL)) Can't parse batch: \(stringData)")
+                    } else {
+                        logger?.error("(\(chainName):\(selectedURL)) Can't parse batch")
+                    }
+                    return
+                }
+
+                completeRequestForRemoteId(identifier, data: data)
             }
         } catch {
             if let stringData = String(data: data, encoding: .utf8) {
@@ -367,17 +403,11 @@ extension WebSocketEngine {
         subscriptions[subscription.requestId] = subscription
     }
 
-    func prepareRequest<P: Encodable, T: Decodable>(
+    func prepareRequestData<P: Encodable>(
         method: String,
-        params: P?,
-        options: JSONRPCOptions,
-        completion closure: ((Result<T, Error>) -> Void)?
-    )
-        throws -> JSONRPCRequest {
-        let data: Data
-
-        let requestId = generateRequestId()
-
+        requestId: UInt16,
+        params: P?
+    ) throws -> Data {
         if let params = params {
             let info = JSONRPCInfo(
                 identifier: requestId,
@@ -386,7 +416,7 @@ extension WebSocketEngine {
                 params: params
             )
 
-            data = try jsonEncoder.encode(info)
+            return try jsonEncoder.encode(info)
         } else {
             let info = JSONRPCInfo(
                 identifier: requestId,
@@ -395,8 +425,56 @@ extension WebSocketEngine {
                 params: [String]()
             )
 
-            data = try jsonEncoder.encode(info)
+            return try jsonEncoder.encode(info)
         }
+    }
+
+    func prepareBatchRequestItem<P: Encodable>(
+        method: String,
+        params: P?
+    ) throws -> JSONRPCBatchRequestItem {
+        let requestId = generateRequestId()
+
+        let data = try prepareRequestData(method: method, requestId: requestId, params: params)
+
+        return JSONRPCBatchRequestItem(requestId: requestId, data: data)
+    }
+
+    func prepareBatchRequest(
+        requestId: UInt16,
+        from batchItems: [JSONRPCBatchRequestItem],
+        options: JSONRPCOptions,
+        completion closure: (([Result<JSON, Error>]) -> Void)?
+    ) throws -> JSONRPCRequest {
+        let jsonList = try batchItems.map { try jsonDecoder.decode(JSON.self, from: $0.data) }
+
+        let data = try jsonEncoder.encode(JSON.arrayValue(jsonList))
+
+        let handler: JSONRPCBatchHandler?
+
+        if let closure = closure {
+            handler = JSONRPCBatchHandler(itemsCount: batchItems.count, completionClosure: closure)
+        } else {
+            handler = nil
+        }
+
+        return JSONRPCRequest(
+            requestId: requestId,
+            data: data,
+            options: options,
+            responseHandler: handler
+        )
+    }
+
+    func prepareRequest<P: Encodable, T: Decodable>(
+        method: String,
+        params: P?,
+        options: JSONRPCOptions,
+        completion closure: ((Result<T, Error>) -> Void)?
+    ) throws -> JSONRPCRequest {
+        let requestId = generateRequestId()
+
+        let data: Data = try prepareRequestData(method: method, requestId: requestId, params: params)
 
         let handler: JSONRPCResponseHandling?
 
@@ -447,18 +525,18 @@ extension WebSocketEngine {
         // check whether there is subscription for this id and send unsubscribe request
 
         if let subscription = subscriptions[identifier], let remoteId = subscription.remoteId {
-            unsubscribe(for: remoteId)
+            unsubscribe(for: remoteId, method: subscription.unsubscribeMethod)
         }
 
         subscriptions[identifier] = nil
     }
 
-    func unsubscribe(for remoteId: String) {
+    func unsubscribe(for remoteId: String, method: String) {
         pendingSubscriptionResponses[remoteId] = nil
 
         do {
             let request = try prepareRequest(
-                method: RPCMethod.storageUnsubscribe,
+                method: method,
                 params: [remoteId],
                 options: JSONRPCOptions()
             ) { [weak self] (result: (Result<Bool, Error>)) in
