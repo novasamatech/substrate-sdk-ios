@@ -754,7 +754,7 @@ extension WebSocketEngine {
     func sendSubstratePing() throws {
         let options = JSONRPCOptions(resendOnReconnect: false)
         _ = try callMethod(
-            RPCMethod.helthCheck,
+            RPCMethod.healthCheck,
             params: [String](),
             options: options
         ) { [weak self] (result: Result<SubstrateHealthResult, Error>) in
