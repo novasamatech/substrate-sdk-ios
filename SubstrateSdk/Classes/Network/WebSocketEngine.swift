@@ -64,6 +64,8 @@ public final class WebSocketEngine {
     private let jsonDecoder = JSONDecoder()
     private let reconnectionStrategy: ReconnectionStrategyProtocol?
 
+    let healthCheckMethod: HealthCheckMethod
+
     private(set) lazy var reconnectionScheduler: SchedulerProtocol = {
         let scheduler = Scheduler(with: self, callbackQueue: processingQueue)
         return scheduler
@@ -92,6 +94,7 @@ public final class WebSocketEngine {
         connectionFactory: WebSocketConnectionFactoryProtocol = WebSocketConnectionFactory(),
         reachabilityManager: ReachabilityManagerProtocol? = nil,
         reconnectionStrategy: ReconnectionStrategyProtocol? = ExponentialReconnection(),
+        healthCheckMethod: HealthCheckMethod = .websocketPingPong,
         version: String = "2.0",
         processingQueue: DispatchQueue? = nil,
         autoconnect: Bool = true,
@@ -105,6 +108,7 @@ public final class WebSocketEngine {
         self.logger = logger
         self.reconnectionStrategy = reconnectionStrategy
         self.reachabilityManager = reachabilityManager
+        self.healthCheckMethod = healthCheckMethod
         self.name = name
         self.urls = urls
         completionQueue = processingQueue ?? Self.sharedProcessingQueue
@@ -736,20 +740,37 @@ extension WebSocketEngine {
         logger?.debug("(\(chainName):\(selectedURL)) Sending socket ping")
 
         do {
-            let options = JSONRPCOptions(resendOnReconnect: false)
-            _ = try callMethod(
-                RPCMethod.helthCheck,
-                params: [String](),
-                options: options
-            ) { [weak self] (result: Result<Health, Error>) in
-                self?.handlePing(result: result)
+            switch healthCheckMethod {
+            case .substrate:
+                try sendSubstratePing()
+            case .websocketPingPong:
+                sendWebsocketPing()
             }
         } catch {
             logger?.error("(\(chainName)) Did receive ping error: \(error)")
         }
     }
 
-    func handlePing(result: Result<Health, Error>) {
+    func sendSubstratePing() throws {
+        let options = JSONRPCOptions(resendOnReconnect: false)
+        _ = try callMethod(
+            RPCMethod.healthCheck,
+            params: [String](),
+            options: options
+        ) { [weak self] (result: Result<SubstrateHealthResult, Error>) in
+            self?.handlePing(result: result)
+        }
+    }
+
+    func sendWebsocketPing() {
+        connection.write(ping: Data())
+    }
+
+    func responseWebsocketPong(for pingData: Data?) {
+        connection.write(pong: pingData ?? Data())
+    }
+
+    func handlePing(result: Result<SubstrateHealthResult, Error>) {
         switch result {
         case let .success(health):
             if health.isSyncing {

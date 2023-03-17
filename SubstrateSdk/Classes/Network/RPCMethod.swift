@@ -18,6 +18,6 @@ public enum RPCMethod {
     public static let getFinalizedBlockHash = "chain_getFinalizedHead"
     public static let getBlockHeader = "chain_getHeader"
     public static let getExtrinsicNonce = "system_accountNextIndex"
-    public static let helthCheck = "system_health"
+    public static let healthCheck = "system_health"
     public static let runtimeVersionSubscribe = "state_subscribeRuntimeVersion"
 }

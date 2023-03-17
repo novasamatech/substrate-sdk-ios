@@ -14,6 +14,8 @@ extension WebSocketEngine: WebSocketDelegate {
             handleConnectedEvent()
         case let .disconnected(reason, code):
             handleDisconnectedEvent(reason: reason, code: code)
+        case let .ping(data):
+            handlePing(data: data)
         case let .error(error):
             handleErrorEvent(error)
         case .cancelled:
@@ -127,6 +129,18 @@ extension WebSocketEngine: WebSocketDelegate {
                 error: JSONRPCEngineError.remoteCancelled
             )
         default:
+            break
+        }
+    }
+
+    private func handlePing(data: Data?) {
+        logger?.debug("(\(chainName):\(selectedURL)) Did receive ping: \((data ?? Data()).toHex())")
+
+        switch state {
+        case .connected:
+            responseWebsocketPong(for: data)
+        default:
+            logger?.warning("(\(chainName):\(selectedURL)) Ping data received but not connected")
             break
         }
     }
