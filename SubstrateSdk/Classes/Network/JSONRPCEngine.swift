@@ -8,8 +8,8 @@ public enum JSONRPCEngineError: Error {
 }
 
 public protocol JSONRPCResponseHandling {
-    func handle(data: Data)
-    func handle(error: Error)
+    func handle(data: Data, for identifier: UInt16)
+    func handle(error: Error, for identifier: UInt16)
 }
 
 public typealias JSONRPCBatchId = String
@@ -45,7 +45,7 @@ public struct JSONRPCRequest: Equatable {
 struct JSONRPCResponseHandler<T: Decodable>: JSONRPCResponseHandling {
     public let completionClosure: (Result<T, Error>) -> Void
 
-    public func handle(data: Data) {
+    func handle(data: Data, for identifier: UInt16) {
         do {
             let decoder = JSONDecoder()
             let response = try decoder.decode(JSONRPCData<T>.self, from: data)
@@ -57,7 +57,7 @@ struct JSONRPCResponseHandler<T: Decodable>: JSONRPCResponseHandling {
         }
     }
 
-    public func handle(error: Error) {
+    func handle(error: Error, for identifier: UInt16) {
         completionClosure(.failure(error))
     }
 }
@@ -85,29 +85,32 @@ class JSONRPCBatchHandler: JSONRPCResponseHandling {
         }
     }
 
-    public func handle(data: Data) {
+    private func notifyCallbackIfReady() {
+        if receivedResponses.count == itemIds.count {
+            let results = itemIds.compactMap { receivedResponses[$0] }
+            completionClosure(results)
+        }
+    }
+
+    func handle(data: Data, for identifier: UInt16) {
+        guard itemIds.contains(identifier) else {
+            return
+        }
+
         do {
             let decoder = JSONDecoder()
             let response = try decoder.decode(JSONRPCData<JSON?>.self, from: data)
 
-            if itemIds.contains(response.identifier) {
-                receivedResponses[response.identifier] = createResult(from: response)
-            }
-
-            if receivedResponses.count == itemIds.count {
-                let results = itemIds.compactMap { receivedResponses[$0] }
-                completionClosure(results)
-            }
-
+            receivedResponses[identifier] = createResult(from: response)
         } catch {
-            let errorList: [Result<JSON, Error>] = (0..<itemIds.count).map { _ in .failure(error) }
-            completionClosure(errorList)
+
         }
+
+        notifyCallbackIfReady()
     }
 
-    public func handle(error: Error) {
-        let errorList: [Result<JSON, Error>] = (0..<itemIds.count).map { _ in .failure(error) }
-        completionClosure(errorList)
+    func handle(error: Error, for identifier: UInt16) {
+        receivedResponses[identifier] = .failure(error)
     }
 }
 

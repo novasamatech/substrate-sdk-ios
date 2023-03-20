@@ -322,11 +322,16 @@ extension WebSocketEngine {
     }
 
     func resetInProgress() -> [JSONRPCRequest] {
-        let idempotentRequests: [JSONRPCRequest] = inProgressRequests.compactMap {
+        // we can have batches decomposed by single requests
+        let inProgressWithoutDuplicates = inProgressRequests.values.reduce(into: [JSONRPCRequestId: JSONRPCRequest]()) {
+            $0[$1.requestId] = $1
+        }
+
+        let idempotentRequests: [JSONRPCRequest] = inProgressWithoutDuplicates.compactMap {
             $1.options.resendOnReconnect ? $1 : nil
         }
 
-        let notifiableRequests = inProgressRequests.compactMap {
+        let notifiableRequests = inProgressWithoutDuplicates.compactMap {
             !$1.options.resendOnReconnect && $1.responseHandler != nil ? $1 : nil
         }
 
@@ -384,7 +389,10 @@ extension WebSocketEngine {
                 let batchResponses = try jsonDecoder.decode([JSON].self, from: data)
 
                 let singleItemResponses = try batchResponses.reduce(into: [UInt16: Data]()) { (accum, response) in
-                    guard let identifier = response.identifier?.unsignedIntValue else {
+                    guard let identifier = response.id?.unsignedIntValue else {
+                        logger?.error(
+                            "(\(chainName):\(selectedURL)) Batch item id is missing, this should normally not happen"
+                        )
                         return
                     }
 
@@ -518,13 +526,15 @@ extension WebSocketEngine {
             let request = pendingRequests.remove(at: index)
 
             notify(
-                requests: [request],
-                error: JSONRPCEngineError.clientCancelled
+                request: request,
+                error: JSONRPCEngineError.clientCancelled,
+                identifier: identifier
             )
         } else if let request = inProgressRequests.removeValue(forKey: identifier) {
             notify(
-                requests: [request],
-                error: JSONRPCEngineError.clientCancelled
+                request: request,
+                error: JSONRPCEngineError.clientCancelled,
+                identifier: identifier
             )
         }
 
@@ -566,7 +576,7 @@ extension WebSocketEngine {
 
     func completeRequestForRemoteId(_ identifier: UInt16, data: Data) {
         if let request = inProgressRequests.removeValue(forKey: identifier) {
-            notify(request: request, data: data)
+            notify(request: request, data: data, identifier: identifier)
         }
 
         if subscriptions[identifier] != nil {
@@ -624,7 +634,7 @@ extension WebSocketEngine {
 
     func completeRequestForRemoteId(_ identifier: UInt16, error: Error) {
         if let request = inProgressRequests.removeValue(forKey: identifier) {
-            notify(requests: [request], error: error)
+            notify(request: request, error: error, identifier: identifier)
         }
 
         if subscriptions[identifier] != nil {
@@ -644,21 +654,23 @@ extension WebSocketEngine {
         }
     }
 
-    func notify(request: JSONRPCRequest, data: Data) {
+    func notify(request: JSONRPCRequest, data: Data, identifier: UInt16) {
         completionQueue.async {
-            request.responseHandler?.handle(data: data)
+            request.responseHandler?.handle(data: data, for: identifier)
         }
     }
 
     func notify(requests: [JSONRPCRequest], error: Error) {
-        guard !requests.isEmpty else {
-            return
-        }
-
-        completionQueue.async {
-            requests.forEach {
-                $0.responseHandler?.handle(error: error)
+        requests.forEach { request in
+            request.requestId.itemIds.forEach { identifier in
+                notify(request: request, error: error, identifier: identifier)
             }
+        }
+    }
+
+    func notify(request: JSONRPCRequest, error: Error, identifier: UInt16) {
+        completionQueue.async {
+            request.responseHandler?.handle(error: error, for: identifier)
         }
     }
 
@@ -719,7 +731,11 @@ extension WebSocketEngine {
             pendingRequests = []
 
             let requestError = error ?? JSONRPCEngineError.unknownError
-            requests.forEach { $0.responseHandler?.handle(error: requestError) }
+            requests.forEach { request in
+                request.requestId.itemIds.forEach { identifier in
+                    request.responseHandler?.handle(error: requestError, for: identifier)
+                }
+            }
         }
     }
 
