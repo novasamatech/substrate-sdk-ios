@@ -284,7 +284,15 @@ extension WebSocketEngine {
     }
 
     func send(request: JSONRPCRequest) {
-        inProgressRequests[request.requestId] = request
+        // batches results can be returned in different responses, handle them as single requests
+        switch request.requestId {
+        case let .single(singleId):
+            inProgressRequests[singleId] = request
+        case let .batch(_, itemIds):
+            for itemId in itemIds {
+                inProgressRequests[itemId] = request
+            }
+        }
 
         connection.write(stringData: request.data, completion: nil)
     }
@@ -339,9 +347,9 @@ extension WebSocketEngine {
             subscription.remoteId = nil
         }
 
-        let subscriptionRequests: [JSONRPCRequest] = activeSubscriptions.enumerated().map {
+        let subscriptionRequests: [JSONRPCRequest] = activeSubscriptions.enumerated().compactMap {
             JSONRPCRequest(
-                requestId: $1.requestId,
+                requestId: .single($1.requestId),
                 data: $1.requestData,
                 options: $1.requestOptions,
                 responseHandler: nil
@@ -373,26 +381,19 @@ extension WebSocketEngine {
             } else {
                 // handle batch response
 
-                let batchResponses = try jsonDecoder.decode([JSONRPCBasicData].self, from: data)
+                let batchResponses = try jsonDecoder.decode([JSON].self, from: data)
 
-                let optBatchResponse = batchResponses.first { response in
-                    if let identifier = response.identifier, inProgressRequests[identifier] != nil {
-                        return true
-                    } else {
-                        return false
+                let singleItemResponses = try batchResponses.reduce(into: [UInt16: Data]()) { (accum, response) in
+                    guard let identifier = response.identifier?.unsignedIntValue else {
+                        return
                     }
+
+                    accum[UInt16(identifier)] = try jsonEncoder.encode(response)
                 }
 
-                guard let identifier = optBatchResponse?.identifier else {
-                    if let stringData = String(data: data, encoding: .utf8) {
-                        logger?.error("(\(chainName):\(selectedURL)) Can't parse batch: \(stringData)")
-                    } else {
-                        logger?.error("(\(chainName):\(selectedURL)) Can't parse batch")
-                    }
-                    return
+                for singleItemResponse in singleItemResponses {
+                    completeRequestForRemoteId(singleItemResponse.key, data: singleItemResponse.value)
                 }
-
-                completeRequestForRemoteId(identifier, data: data)
             }
         } catch {
             if let stringData = String(data: data, encoding: .utf8) {
@@ -445,25 +446,26 @@ extension WebSocketEngine {
     }
 
     func prepareBatchRequest(
-        requestId: UInt16,
+        batchId: JSONRPCBatchId,
         from batchItems: [JSONRPCBatchRequestItem],
         options: JSONRPCOptions,
         completion closure: (([Result<JSON, Error>]) -> Void)?
     ) throws -> JSONRPCRequest {
         let jsonList = try batchItems.map { try jsonDecoder.decode(JSON.self, from: $0.data) }
+        let itemIds = batchItems.map { $0.requestId }
 
         let data = try jsonEncoder.encode(JSON.arrayValue(jsonList))
 
         let handler: JSONRPCBatchHandler?
 
         if let closure = closure {
-            handler = JSONRPCBatchHandler(itemsCount: batchItems.count, completionClosure: closure)
+            handler = JSONRPCBatchHandler(itemIds: itemIds, completionClosure: closure)
         } else {
             handler = nil
         }
 
         return JSONRPCRequest(
-            requestId: requestId,
+            requestId: .batch(batchId: batchId, itemIds: itemIds),
             data: data,
             options: options,
             responseHandler: handler
@@ -474,10 +476,10 @@ extension WebSocketEngine {
         method: String,
         params: P?,
         options: JSONRPCOptions,
-        completion closure: ((Result<T, Error>) -> Void)?
+        completion closure: ((Result<T, Error>) -> Void)?,
+        preGeneratedRequestId: UInt16? = nil
     ) throws -> JSONRPCRequest {
-        let requestId = generateRequestId()
-
+        let requestId = preGeneratedRequestId ?? generateRequestId()
         let data: Data = try prepareRequestData(method: method, requestId: requestId, params: params)
 
         let handler: JSONRPCResponseHandling?
@@ -489,7 +491,7 @@ extension WebSocketEngine {
         }
 
         let request = JSONRPCRequest(
-            requestId: requestId,
+            requestId: .single(requestId),
             data: data,
             options: options,
             responseHandler: handler
@@ -499,7 +501,7 @@ extension WebSocketEngine {
     }
 
     func generateRequestId() -> UInt16 {
-        let items = pendingRequests.map(\.requestId) + inProgressRequests.map(\.key)
+        let items = pendingRequests.flatMap(\.requestId.itemIds) + inProgressRequests.map(\.key)
         let existingIds: Set<UInt16> = Set(items)
 
         var targetId = (1 ... UInt16.max).randomElement() ?? 1
@@ -512,7 +514,7 @@ extension WebSocketEngine {
     }
 
     func cancelRequestForLocalId(_ identifier: UInt16) {
-        if let index = pendingRequests.firstIndex(where: { $0.requestId == identifier }) {
+        if let index = pendingRequests.firstIndex(where: { $0.requestId.itemIds.contains(identifier) }) {
             let request = pendingRequests.remove(at: index)
 
             notify(

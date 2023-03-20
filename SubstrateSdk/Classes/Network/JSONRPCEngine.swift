@@ -19,8 +19,22 @@ public struct JSONRPCBatchRequestItem {
     public let data: Data
 }
 
+public enum JSONRPCRequestId: Hashable, Equatable {
+    case single(UInt16)
+    case batch(batchId: JSONRPCBatchId, itemIds: [UInt16])
+
+    var itemIds: [UInt16] {
+        switch self {
+        case let .single(identifier):
+            return [identifier]
+        case let .batch(_, itemIds):
+            return itemIds
+        }
+    }
+}
+
 public struct JSONRPCRequest: Equatable {
-    public let requestId: UInt16
+    public let requestId: JSONRPCRequestId
     public let data: Data
     public let options: JSONRPCOptions
     public let responseHandler: JSONRPCResponseHandling?
@@ -48,35 +62,51 @@ struct JSONRPCResponseHandler<T: Decodable>: JSONRPCResponseHandling {
     }
 }
 
-struct JSONRPCBatchHandler: JSONRPCResponseHandling {
-    let itemsCount: Int
+// Class to share between multiple batch items to gather a single response
+class JSONRPCBatchHandler: JSONRPCResponseHandling {
+    let itemIds: [UInt16]
+
+    private var receivedResponses: [UInt16: Result<JSON, Error>] = [:]
+
+    init(itemIds: [UInt16], completionClosure: @escaping ([Result<JSON, Error>]) -> Void) {
+        self.itemIds = itemIds
+        self.completionClosure = completionClosure
+    }
 
     public let completionClosure: ([Result<JSON, Error>]) -> Void
+
+    private func createResult(from rpcData: JSONRPCData<JSON?>) -> Result<JSON, Error> {
+        if let value = rpcData.result {
+            return .success(value)
+        } else if let error = rpcData.error {
+            return .failure(error)
+        } else {
+            return .failure(JSONRPCEngineError.emptyResult)
+        }
+    }
 
     public func handle(data: Data) {
         do {
             let decoder = JSONDecoder()
-            let responses = try decoder.decode([JSONRPCData<JSON?>].self, from: data)
-            let results: [Result<JSON, Error>] = responses.map { rpcData in
-                if let value = rpcData.result {
-                    return .success(value)
-                } else if let error = rpcData.error {
-                    return .failure(error)
-                } else {
-                    return .failure(JSONRPCEngineError.emptyResult)
-                }
+            let response = try decoder.decode(JSONRPCData<JSON?>.self, from: data)
+
+            if itemIds.contains(response.identifier) {
+                receivedResponses[response.identifier] = createResult(from: response)
             }
 
-            completionClosure(results)
+            if receivedResponses.count == itemIds.count {
+                let results = itemIds.compactMap { receivedResponses[$0] }
+                completionClosure(results)
+            }
 
         } catch {
-            let errorList: [Result<JSON, Error>] = (0..<itemsCount).map { _ in .failure(error) }
+            let errorList: [Result<JSON, Error>] = (0..<itemIds.count).map { _ in .failure(error) }
             completionClosure(errorList)
         }
     }
 
     public func handle(error: Error) {
-        let errorList: [Result<JSON, Error>] = (0..<itemsCount).map { _ in .failure(error) }
+        let errorList: [Result<JSON, Error>] = (0..<itemIds.count).map { _ in .failure(error) }
         completionClosure(errorList)
     }
 }
@@ -155,7 +185,7 @@ public protocol JSONRPCEngine: AnyObject {
     )
         throws -> UInt16
 
-    func cancelForIdentifier(_ identifier: UInt16)
+    func cancelForIdentifiers(_ identifiers: [UInt16])
 
     func addBatchCallMethod<P: Encodable>(
         _ method: String,
@@ -167,7 +197,7 @@ public protocol JSONRPCEngine: AnyObject {
         for batchId: JSONRPCBatchId,
         options: JSONRPCOptions,
         completion closure: (([Result<JSON, Error>]) -> Void)?
-    ) throws -> UInt16
+    ) throws -> [UInt16]
 
     func clearBatch(for batchId: JSONRPCBatchId)
 }
@@ -176,7 +206,7 @@ public extension JSONRPCEngine {
     func submitBatch(
         for batchId: JSONRPCBatchId,
         completion closure: (([Result<JSON, Error>]) -> Void)?
-    ) throws -> UInt16 {
+    ) throws -> [UInt16] {
         try submitBatch(for: batchId, options: JSONRPCOptions(), completion: closure)
     }
 
@@ -206,5 +236,9 @@ public extension JSONRPCEngine {
             updateClosure: updateClosure,
             failureClosure: failureClosure
         )
+    }
+
+    func cancelForIdentifier(_ identifier: UInt16) {
+        cancelForIdentifiers([identifier])
     }
 }

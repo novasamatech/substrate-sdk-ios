@@ -20,21 +20,21 @@ extension WebSocketEngine: JSONRPCEngine {
         for batchId: JSONRPCBatchId,
         options: JSONRPCOptions,
         completion closure: (([Result<JSON, Error>]) -> Void)?
-    ) throws -> UInt16 {
+    ) throws -> [UInt16] {
         mutex.lock()
 
         defer {
             mutex.unlock()
         }
 
-        guard let batchItems = partialBatches[batchId], let requestId = batchItems.first?.requestId else {
+        guard let batchItems = partialBatches[batchId] else {
             throw JSONRPCEngineError.emptyResult
         }
 
         clearPartialBatchStorage(for: batchId)
 
         let request = try prepareBatchRequest(
-            requestId: requestId,
+            batchId: batchId,
             from: batchItems,
             options: options,
             completion: closure
@@ -42,7 +42,7 @@ extension WebSocketEngine: JSONRPCEngine {
 
         updateConnectionForRequest(request)
 
-        return requestId
+        return request.requestId.itemIds
     }
 
     public func clearBatch(for batchId: JSONRPCBatchId) {
@@ -67,16 +67,18 @@ extension WebSocketEngine: JSONRPCEngine {
             mutex.unlock()
         }
 
+        let requestId = generateRequestId()
         let request = try prepareRequest(
             method: method,
             params: params,
             options: options,
-            completion: closure
+            completion: closure,
+            preGeneratedRequestId: requestId
         )
 
         updateConnectionForRequest(request)
 
-        return request.requestId
+        return requestId
     }
 
     public func subscribe<P: Encodable, T: Decodable>(
@@ -94,15 +96,17 @@ extension WebSocketEngine: JSONRPCEngine {
 
         let completion: ((Result<String, Error>) -> Void)? = nil
 
+        let requestId = generateRequestId()
         let request = try prepareRequest(
             method: method,
             params: params,
             options: JSONRPCOptions(resendOnReconnect: true),
-            completion: completion
+            completion: completion,
+            preGeneratedRequestId: requestId
         )
 
         let subscription = JSONRPCSubscription(
-            requestId: request.requestId,
+            requestId: requestId,
             requestData: request.data,
             requestOptions: request.options,
             unsubscribeMethod: unsubscribeMethod,
@@ -114,13 +118,15 @@ extension WebSocketEngine: JSONRPCEngine {
 
         updateConnectionForRequest(request)
 
-        return request.requestId
+        return requestId
     }
 
-    public func cancelForIdentifier(_ identifier: UInt16) {
+    public func cancelForIdentifiers(_ identifiers: [UInt16]) {
         mutex.lock()
 
-        cancelRequestForLocalId(identifier)
+        identifiers.forEach { identifier in
+            cancelRequestForLocalId(identifier)
+        }
 
         mutex.unlock()
     }
