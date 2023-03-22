@@ -141,7 +141,6 @@ extension WebSocketEngine: WebSocketDelegate {
             responseWebsocketPong(for: data)
         default:
             logger?.warning("(\(chainName):\(selectedURL)) Ping data received but not connected")
-            break
         }
     }
 }
