@@ -352,7 +352,7 @@ extension WebSocketEngine {
             subscription.remoteId = nil
         }
 
-        let subscriptionRequests: [JSONRPCRequest] = activeSubscriptions.enumerated().compactMap {
+        let subscriptionRequests: [JSONRPCRequest] = activeSubscriptions.enumerated().map {
             JSONRPCRequest(
                 requestId: .single($1.requestId),
                 data: $1.requestData,
@@ -731,11 +731,7 @@ extension WebSocketEngine {
             pendingRequests = []
 
             let requestError = error ?? JSONRPCEngineError.unknownError
-            requests.forEach { request in
-                request.requestId.itemIds.forEach { identifier in
-                    request.responseHandler?.handle(error: requestError, for: identifier)
-                }
-            }
+            notify(requests: requests, error: requestError)
         }
     }
 
