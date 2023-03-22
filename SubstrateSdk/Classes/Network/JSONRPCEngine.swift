@@ -103,7 +103,7 @@ class JSONRPCBatchHandler: JSONRPCResponseHandling {
 
             receivedResponses[identifier] = createResult(from: response)
         } catch {
-
+            receivedResponses[identifier] = .failure(error)
         }
 
         notifyCallbackIfReady()
@@ -111,6 +111,8 @@ class JSONRPCBatchHandler: JSONRPCResponseHandling {
 
     func handle(error: Error, for identifier: UInt16) {
         receivedResponses[identifier] = .failure(error)
+
+        notifyCallbackIfReady()
     }
 }
 
