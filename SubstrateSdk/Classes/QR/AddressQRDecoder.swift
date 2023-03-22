@@ -5,10 +5,6 @@ public protocol AddressQRDecodable {
     func decode(data: Data) throws -> String
 }
 
-public enum AddressQRDecoderError: Error {
-    case invalidAddress
-}
-
 open class AddressQRDecoder: AddressQRDecodable {
     public let addressFormat: QRAddressFormat
 
@@ -21,23 +17,14 @@ open class AddressQRDecoder: AddressQRDecodable {
     public func decode(data: Data) throws -> String {
         guard
             let addressString = String(data: data, encoding: .utf8),
-            isAddressValid(addressString) else {
-                throw AddressQRDecoderError.invalidAddress
+            AddressQRValidator.isAddressValid(
+                addressString,
+                format: addressFormat,
+                addressFactory: addressFactory
+            ) else {
+                throw AddressQRCoderError.invalidAddress
             }
 
         return addressString
-    }
-
-    private func isAddressValid(_ address: String) -> Bool {
-        switch addressFormat {
-        case let .substrate(type):
-            return (try? addressFactory.accountId(fromAddress: address, type: type)) != nil
-        case .ethereum:
-            guard let addressData = try? Data(hexString: address) else {
-                return false
-            }
-
-            return addressData.count == QRAddressFormat.ethereumAddressLength
-        }
     }
 }
