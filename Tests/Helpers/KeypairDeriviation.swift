@@ -19,6 +19,5 @@ enum KnownChainType: UInt16 {
     case polkadotSecondary = 1
     case kusamaMain = 2
     case kusamaSecondary = 3
-    case soraMain = 69
     case genericSubstrate = 42
 }
