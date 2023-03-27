@@ -44,7 +44,7 @@ class AddressQRDecoderTests: XCTestCase {
             XCTFail("Error expected")
 
         } catch {
-            let isInvalidAddressError = (error as? AddressQRDecoderError) == .invalidAddress
+            let isInvalidAddressError = (error as? AddressQRCoderError) == .invalidAddress
 
             XCTAssertTrue(isInvalidAddressError)
         }
@@ -59,7 +59,7 @@ class AddressQRDecoderTests: XCTestCase {
 
             XCTFail("Error expexted")
         } catch {
-            let isInvalidAddressError = (error as? AddressQRDecoderError) == .invalidAddress
+            let isInvalidAddressError = (error as? AddressQRCoderError) == .invalidAddress
 
             XCTAssertTrue(isInvalidAddressError)
         }
