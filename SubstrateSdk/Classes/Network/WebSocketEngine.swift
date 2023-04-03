@@ -763,6 +763,8 @@ extension WebSocketEngine {
 
         let reconnectionAttempt = switchNode()
         startConnecting(reconnectionAttempt)
+
+        notify(requests: cancelledRequests, error: JSONRPCEngineError.unknownError)
     }
 
     func switchNode() -> Int {

@@ -71,7 +71,7 @@ extension WebSocketEngine: WebSocketDelegate {
 
             notify(
                 requests: cancelledRequests,
-                error: JSONRPCEngineError.clientCancelled
+                error: JSONRPCEngineError.unknownError
             )
         case .connecting:
             forceConnectionReset()
