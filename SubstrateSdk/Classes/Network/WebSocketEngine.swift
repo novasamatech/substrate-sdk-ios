@@ -385,11 +385,6 @@ extension WebSocketEngine {
 
                 let batchResponses = try jsonDecoder.decode([JSON].self, from: data)
 
-                // complete processing if there is an error that resets connection
-                if processErrorsInBatch(responses: batchResponses) {
-                    return
-                }
-
                 let singleItemResponses = try batchResponses.reduce(into: [UInt16: Data]()) { (accum, response) in
                     // ignore undefined responses without ids
                     guard let identifier = response.id?.unsignedIntValue else {
@@ -399,7 +394,7 @@ extension WebSocketEngine {
                         return
                     }
 
-                    // ignore error as we proccess them previously
+                    // ignore error as we proccess them separately
                     guard response.error?.dictValue == nil else {
                         return
                     }
@@ -410,6 +405,8 @@ extension WebSocketEngine {
                 for singleItemResponse in singleItemResponses {
                     completeRequestForRemoteId(singleItemResponse.key, data: singleItemResponse.value)
                 }
+
+                processErrorsInBatch(responses: batchResponses)
             }
         } catch {
             if let stringData = String(data: data, encoding: .utf8) {
@@ -420,6 +417,7 @@ extension WebSocketEngine {
         }
     }
 
+    @discardableResult
     func processErrorsInBatch(responses: [JSON]) -> Bool {
         for jsonResponse in responses {
             if
