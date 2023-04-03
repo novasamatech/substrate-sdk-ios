@@ -40,6 +40,7 @@ public final class WebSocketEngine {
     public let name: String?
     public let logger: SDKLoggerProtocol?
     public let reachabilityManager: ReachabilityManagerProtocol?
+    public let customNodeSwitcher: WebSocketNodeSwitching?
     public let completionQueue: DispatchQueue
     public let processingQueue: DispatchQueue
     public let pingInterval: TimeInterval
@@ -92,6 +93,7 @@ public final class WebSocketEngine {
     public init?(
         urls: [URL],
         connectionFactory: WebSocketConnectionFactoryProtocol = WebSocketConnectionFactory(),
+        customNodeSwitcher: WebSocketNodeSwitching? = nil,
         reachabilityManager: ReachabilityManagerProtocol? = nil,
         reconnectionStrategy: ReconnectionStrategyProtocol? = ExponentialReconnection(),
         healthCheckMethod: HealthCheckMethod = .websocketPingPong,
@@ -105,6 +107,7 @@ public final class WebSocketEngine {
     ) {
         self.version = version
         self.connectionFactory = connectionFactory
+        self.customNodeSwitcher = customNodeSwitcher
         self.logger = logger
         self.reconnectionStrategy = reconnectionStrategy
         self.reachabilityManager = reachabilityManager
@@ -370,15 +373,9 @@ extension WebSocketEngine {
                 // handle single request or subscription
                 if let identifier = response.identifier {
                     if let error = response.error {
-                        completeRequestForRemoteId(
-                            identifier,
-                            error: error
-                        )
+                        processErrorAndResetIfNeeded(for: identifier, error: error)
                     } else {
-                        completeRequestForRemoteId(
-                            identifier,
-                            data: data
-                        )
+                        completeRequestForRemoteId(identifier, data: data)
                     }
                 } else {
                     try processSubscriptionUpdate(data)
@@ -388,11 +385,22 @@ extension WebSocketEngine {
 
                 let batchResponses = try jsonDecoder.decode([JSON].self, from: data)
 
+                // complete processing if there is an error that resets connection
+                if processErrorsInBatch(responses: batchResponses) {
+                    return
+                }
+
                 let singleItemResponses = try batchResponses.reduce(into: [UInt16: Data]()) { (accum, response) in
+                    // ignore undefined responses without ids
                     guard let identifier = response.id?.unsignedIntValue else {
                         logger?.error(
                             "(\(chainName):\(selectedURL)) Batch item id is missing, this should normally not happen"
                         )
+                        return
+                    }
+
+                    // ignore error as we proccess them previously
+                    guard response.error?.dictValue == nil else {
                         return
                     }
 
@@ -409,6 +417,38 @@ extension WebSocketEngine {
             } else {
                 logger?.error("(\(chainName):\(selectedURL)) Can't parse data")
             }
+        }
+    }
+
+    func processErrorsInBatch(responses: [JSON]) -> Bool {
+        for jsonResponse in responses {
+            if
+                let errorJson = jsonResponse.error,
+                let error = try? errorJson.map(to: JSONRPCError.self),
+                let identifier = jsonResponse.id?.unsignedIntValue {
+
+                if processErrorAndResetIfNeeded(for: UInt16(identifier), error: error) {
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+
+    @discardableResult
+    func processErrorAndResetIfNeeded(for identifier: UInt16, error: JSONRPCError) -> Bool {
+        if
+            let customNodeSwitcher = customNodeSwitcher,
+            customNodeSwitcher.shouldInterceptAndSwitchNode(for: error, identifier: identifier) {
+
+            resetRequestsAndSwitchNode()
+
+            return true
+        } else {
+            completeRequestForRemoteId(identifier, error: error)
+
+            return false
         }
     }
 
@@ -686,26 +726,7 @@ extension WebSocketEngine {
             logger?.warning("(\(chainName):\(selectedURL)) Looks like node is down trying another one...")
 
             // looks like node is down try another one
-            connection.delegate = nil
-            connection.forceDisconnect()
-
-            selectedURLIndex = (selectedURLIndex + 1) % urls.count
-            connection = connectionFactory.createConnection(
-                for: selectedURL,
-                processingQueue: processingQueue,
-                connectionTimeout: connectionTimeout
-            )
-
-            connection.delegate = self
-
-            actualAttempt = (reconnectionAttempts[selectedURL] ?? 0) + 1
-
-            if urls.count > 1 {
-                let currentURL = selectedURL
-                completionQueue.async {
-                    self.delegate?.webSocketDidSwitchURL(self, newUrl: currentURL)
-                }
-            }
+            actualAttempt = switchNode()
         } else {
             actualAttempt = attempt
         }
@@ -733,6 +754,42 @@ extension WebSocketEngine {
             let requestError = error ?? JSONRPCEngineError.unknownError
             notify(requests: requests, error: requestError)
         }
+    }
+
+    func resetRequestsAndSwitchNode() {
+        let cancelledRequests = resetInProgress()
+
+        pingScheduler.cancel()
+
+        let reconnectionAttempt = switchNode()
+        startConnecting(reconnectionAttempt)
+    }
+
+    func switchNode() -> Int {
+        logger?.warning("(\(chainName):\(selectedURL)) Switching node urls...")
+
+        connection.delegate = nil
+        connection.forceDisconnect()
+
+        selectedURLIndex = (selectedURLIndex + 1) % urls.count
+        connection = connectionFactory.createConnection(
+            for: selectedURL,
+            processingQueue: processingQueue,
+            connectionTimeout: connectionTimeout
+        )
+
+        connection.delegate = self
+
+        let actualAttempt = (reconnectionAttempts[selectedURL] ?? 0) + 1
+
+        if urls.count > 1 {
+            let currentURL = selectedURL
+            completionQueue.async {
+                self.delegate?.webSocketDidSwitchURL(self, newUrl: currentURL)
+            }
+        }
+
+        return actualAttempt
     }
 
     func schedulePingIfNeeded() {
