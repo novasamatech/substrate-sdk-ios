@@ -16,6 +16,8 @@ public final class HTTPEngine {
     public let timeout: TimeInterval
     public let customNodeSwitcher: JSONRPCNodeSwitching?
 
+    public var chainName: String { name ?? "unknown" }
+
     internal let requestFactory: JSONRPCRequestFactory
 
     internal let mutex = NSLock()
@@ -124,8 +126,11 @@ public final class HTTPEngine {
 
     func resendRequest(_ request: JSONRPCRequest) {
         guard let nextUrl = nextUnusedUrl(for: request.requestId) else {
+            logger?.debug("(\(chainName)) no url to retry request: \(request)")
             return
         }
+
+        logger?.debug("(\(chainName):\(nextUrl)) retrying request: \(request)")
 
         send(
             request: request,
@@ -217,7 +222,7 @@ public final class HTTPEngine {
         }
     }
 
-    func processResult(of operation: NetworkOperation<[Response]>, for request: JSONRPCRequest) {
+    func processResult(of operation: NetworkOperation<[Response]>, for request: JSONRPCRequest, url: URL) {
         guard unbindRequest(request: request, operation: operation) else {
             return
         }
@@ -232,6 +237,8 @@ public final class HTTPEngine {
         guard let responseHandler = request.responseHandler else {
             return
         }
+
+        logger?.debug("(\(chainName):\(url)) processing result: \(String(describing: operation.result))")
 
         switch operation.result {
         case let .success(responses):
@@ -261,12 +268,14 @@ public final class HTTPEngine {
                     self.mutex.unlock()
                 }
 
-                self.processResult(of: operation, for: request)
+                self.processResult(of: operation, for: request, url: url)
             }
         }
 
         bindRequest(request: request, operation: operation)
         storeUsedUrl(url, for: request.requestId)
+
+        logger?.debug("(\(chainName):\(url)) sending request: \(request)")
 
         operationQueue.addOperation(operation)
     }
