@@ -12,7 +12,13 @@ extension WebSocketEngine: JSONRPCEngine {
             mutex.unlock()
         }
 
-        let batchItem = try prepareBatchRequestItem(method: method, params: params)
+        let requestId = generateRequestId()
+        let batchItem = try requestFactory.prepareBatchRequestItem(
+            method: method,
+            params: params,
+            idType: .existing(requestId)
+        )
+
         storeBatchItem(batchItem, for: batchId)
     }
 
@@ -33,7 +39,7 @@ extension WebSocketEngine: JSONRPCEngine {
 
         clearPartialBatchStorage(for: batchId)
 
-        let request = try prepareBatchRequest(
+        let request = try requestFactory.prepareBatchRequest(
             batchId: batchId,
             from: batchItems,
             options: options,
