@@ -24,8 +24,6 @@ public protocol WebSocketEngineDelegate: AnyObject {
 }
 
 public final class WebSocketEngine {
-    public static let sharedProcessingQueue = DispatchQueue(label: "com.nova.ws.processing")
-
     public enum State {
         case notConnected
         case connecting
@@ -36,10 +34,10 @@ public final class WebSocketEngine {
     public private(set) var urls: [URL]
     public private(set) var connection: WebSocketConnectionProtocol
     public let connectionFactory: WebSocketConnectionFactoryProtocol
-    public let version: String
     public let name: String?
     public let logger: SDKLoggerProtocol?
     public let reachabilityManager: ReachabilityManagerProtocol?
+    public let customNodeSwitcher: JSONRPCNodeSwitching?
     public let completionQueue: DispatchQueue
     public let processingQueue: DispatchQueue
     public let pingInterval: TimeInterval
@@ -60,8 +58,16 @@ public final class WebSocketEngine {
 
     internal let mutex = NSLock()
 
-    private let jsonEncoder = JSONEncoder()
-    private let jsonDecoder = JSONDecoder()
+    internal let requestFactory: JSONRPCRequestFactory
+
+    private var jsonDecoder: JSONDecoder {
+        requestFactory.jsonDecoder
+    }
+
+    private var jsonEncoder: JSONEncoder {
+        requestFactory.jsonEncoder
+    }
+
     private let reconnectionStrategy: ReconnectionStrategyProtocol?
 
     let healthCheckMethod: HealthCheckMethod
@@ -92,6 +98,7 @@ public final class WebSocketEngine {
     public init?(
         urls: [URL],
         connectionFactory: WebSocketConnectionFactoryProtocol = WebSocketConnectionFactory(),
+        customNodeSwitcher: JSONRPCNodeSwitching? = nil,
         reachabilityManager: ReachabilityManagerProtocol? = nil,
         reconnectionStrategy: ReconnectionStrategyProtocol? = ExponentialReconnection(),
         healthCheckMethod: HealthCheckMethod = .websocketPingPong,
@@ -103,16 +110,17 @@ public final class WebSocketEngine {
         name: String? = nil,
         logger: SDKLoggerProtocol? = nil
     ) {
-        self.version = version
         self.connectionFactory = connectionFactory
+        self.requestFactory = JSONRPCRequestFactory(version: version)
+        self.customNodeSwitcher = customNodeSwitcher
         self.logger = logger
         self.reconnectionStrategy = reconnectionStrategy
         self.reachabilityManager = reachabilityManager
         self.healthCheckMethod = healthCheckMethod
         self.name = name
         self.urls = urls
-        completionQueue = processingQueue ?? Self.sharedProcessingQueue
-        self.processingQueue = processingQueue ?? Self.sharedProcessingQueue
+        completionQueue = processingQueue ?? JSONRPCEngineShared.processingQueue
+        self.processingQueue = processingQueue ?? JSONRPCEngineShared.processingQueue
         self.pingInterval = pingInterval
         self.connectionTimeout = connectionTimeout
         self.selectedURLIndex = 0
@@ -370,15 +378,9 @@ extension WebSocketEngine {
                 // handle single request or subscription
                 if let identifier = response.identifier {
                     if let error = response.error {
-                        completeRequestForRemoteId(
-                            identifier,
-                            error: error
-                        )
+                        processErrorAndResetIfNeeded(for: identifier, error: error)
                     } else {
-                        completeRequestForRemoteId(
-                            identifier,
-                            data: data
-                        )
+                        completeRequestForRemoteId(identifier, data: data)
                     }
                 } else {
                     try processSubscriptionUpdate(data)
@@ -389,10 +391,16 @@ extension WebSocketEngine {
                 let batchResponses = try jsonDecoder.decode([JSON].self, from: data)
 
                 let singleItemResponses = try batchResponses.reduce(into: [UInt16: Data]()) { (accum, response) in
+                    // ignore undefined responses without ids
                     guard let identifier = response.id?.unsignedIntValue else {
                         logger?.error(
                             "(\(chainName):\(selectedURL)) Batch item id is missing, this should normally not happen"
                         )
+                        return
+                    }
+
+                    // ignore error as we proccess them separately
+                    guard response.error?.dictValue == nil else {
                         return
                     }
 
@@ -402,6 +410,8 @@ extension WebSocketEngine {
                 for singleItemResponse in singleItemResponses {
                     completeRequestForRemoteId(singleItemResponse.key, data: singleItemResponse.value)
                 }
+
+                processErrorsInBatch(responses: batchResponses)
             }
         } catch {
             if let stringData = String(data: data, encoding: .utf8) {
@@ -412,72 +422,41 @@ extension WebSocketEngine {
         }
     }
 
+    @discardableResult
+    func processErrorsInBatch(responses: [JSON]) -> Bool {
+        for jsonResponse in responses {
+            if
+                let errorJson = jsonResponse.error,
+                let error = try? errorJson.map(to: JSONRPCError.self),
+                let identifier = jsonResponse.id?.unsignedIntValue {
+
+                if processErrorAndResetIfNeeded(for: UInt16(identifier), error: error) {
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+
+    @discardableResult
+    func processErrorAndResetIfNeeded(for identifier: UInt16, error: JSONRPCError) -> Bool {
+        if
+            let customNodeSwitcher = customNodeSwitcher,
+            customNodeSwitcher.shouldInterceptAndSwitchNode(for: error, identifier: identifier) {
+
+            resetRequestsAndSwitchNode()
+
+            return true
+        } else {
+            completeRequestForRemoteId(identifier, error: error)
+
+            return false
+        }
+    }
+
     func addSubscription(_ subscription: JSONRPCSubscribing) {
         subscriptions[subscription.requestId] = subscription
-    }
-
-    func prepareRequestData<P: Encodable>(
-        method: String,
-        requestId: UInt16,
-        params: P?
-    ) throws -> Data {
-        if let params = params {
-            let info = JSONRPCInfo(
-                identifier: requestId,
-                jsonrpc: version,
-                method: method,
-                params: params
-            )
-
-            return try jsonEncoder.encode(info)
-        } else {
-            let info = JSONRPCInfo(
-                identifier: requestId,
-                jsonrpc: version,
-                method: method,
-                params: [String]()
-            )
-
-            return try jsonEncoder.encode(info)
-        }
-    }
-
-    func prepareBatchRequestItem<P: Encodable>(
-        method: String,
-        params: P?
-    ) throws -> JSONRPCBatchRequestItem {
-        let requestId = generateRequestId()
-
-        let data = try prepareRequestData(method: method, requestId: requestId, params: params)
-
-        return JSONRPCBatchRequestItem(requestId: requestId, data: data)
-    }
-
-    func prepareBatchRequest(
-        batchId: JSONRPCBatchId,
-        from batchItems: [JSONRPCBatchRequestItem],
-        options: JSONRPCOptions,
-        completion closure: (([Result<JSON, Error>]) -> Void)?
-    ) throws -> JSONRPCRequest {
-        let jsonList = try batchItems.map { try jsonDecoder.decode(JSON.self, from: $0.data) }
-        let itemIds = batchItems.map { $0.requestId }
-
-        let data = try jsonEncoder.encode(JSON.arrayValue(jsonList))
-
-        let handler: JSONRPCBatchHandler?
-
-        if let closure = closure {
-            handler = JSONRPCBatchHandler(itemIds: itemIds, completionClosure: closure)
-        } else {
-            handler = nil
-        }
-
-        return JSONRPCRequest(
-            requestId: .batch(batchId: batchId, itemIds: itemIds),
-            data: data,
-            options: options,
-            responseHandler: handler
-        )
     }
 
     func prepareRequest<P: Encodable, T: Decodable>(
@@ -488,37 +467,25 @@ extension WebSocketEngine {
         preGeneratedRequestId: UInt16? = nil
     ) throws -> JSONRPCRequest {
         let requestId = preGeneratedRequestId ?? generateRequestId()
-        let data: Data = try prepareRequestData(method: method, requestId: requestId, params: params)
 
-        let handler: JSONRPCResponseHandling?
-
-        if let completionClosure = closure {
-            handler = JSONRPCResponseHandler(completionClosure: completionClosure)
-        } else {
-            handler = nil
-        }
-
-        let request = JSONRPCRequest(
-            requestId: .single(requestId),
-            data: data,
+        return try requestFactory.prepareRequest(
+            method: method,
+            params: params,
             options: options,
-            responseHandler: handler
+            completion: closure,
+            idType: .existing(requestId)
         )
-
-        return request
     }
 
     func generateRequestId() -> UInt16 {
-        let items = pendingRequests.flatMap(\.requestId.itemIds) + inProgressRequests.map(\.key)
-        let existingIds: Set<UInt16> = Set(items)
-
-        var targetId = (1 ... UInt16.max).randomElement() ?? 1
-
-        while existingIds.contains(targetId) {
-            targetId += 1
+        let pendingItems = pendingRequests.flatMap(\.requestId.itemIds) + inProgressRequests.map(\.key)
+        let partialBatches = partialBatches.values.flatMap { batch in
+            batch.map { $0.requestId }
         }
 
-        return targetId
+        let existingIds: Set<UInt16> = Set(pendingItems + partialBatches)
+
+        return requestFactory.generateRequestId(skipping: existingIds)
     }
 
     func cancelRequestForLocalId(_ identifier: UInt16) {
@@ -686,26 +653,7 @@ extension WebSocketEngine {
             logger?.warning("(\(chainName):\(selectedURL)) Looks like node is down trying another one...")
 
             // looks like node is down try another one
-            connection.delegate = nil
-            connection.forceDisconnect()
-
-            selectedURLIndex = (selectedURLIndex + 1) % urls.count
-            connection = connectionFactory.createConnection(
-                for: selectedURL,
-                processingQueue: processingQueue,
-                connectionTimeout: connectionTimeout
-            )
-
-            connection.delegate = self
-
-            actualAttempt = (reconnectionAttempts[selectedURL] ?? 0) + 1
-
-            if urls.count > 1 {
-                let currentURL = selectedURL
-                completionQueue.async {
-                    self.delegate?.webSocketDidSwitchURL(self, newUrl: currentURL)
-                }
-            }
+            actualAttempt = switchNode()
         } else {
             actualAttempt = attempt
         }
@@ -733,6 +681,44 @@ extension WebSocketEngine {
             let requestError = error ?? JSONRPCEngineError.unknownError
             notify(requests: requests, error: requestError)
         }
+    }
+
+    func resetRequestsAndSwitchNode() {
+        let cancelledRequests = resetInProgress()
+
+        pingScheduler.cancel()
+
+        let reconnectionAttempt = switchNode()
+        startConnecting(reconnectionAttempt)
+
+        notify(requests: cancelledRequests, error: JSONRPCEngineError.unknownError)
+    }
+
+    func switchNode() -> Int {
+        logger?.warning("(\(chainName):\(selectedURL)) Switching node urls...")
+
+        connection.delegate = nil
+        connection.forceDisconnect()
+
+        selectedURLIndex = (selectedURLIndex + 1) % urls.count
+        connection = connectionFactory.createConnection(
+            for: selectedURL,
+            processingQueue: processingQueue,
+            connectionTimeout: connectionTimeout
+        )
+
+        connection.delegate = self
+
+        let actualAttempt = (reconnectionAttempts[selectedURL] ?? 0) + 1
+
+        if urls.count > 1 {
+            let currentURL = selectedURL
+            completionQueue.async {
+                self.delegate?.webSocketDidSwitchURL(self, newUrl: currentURL)
+            }
+        }
+
+        return actualAttempt
     }
 
     func schedulePingIfNeeded() {
