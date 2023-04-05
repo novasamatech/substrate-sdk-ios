@@ -24,8 +24,6 @@ public protocol WebSocketEngineDelegate: AnyObject {
 }
 
 public final class WebSocketEngine {
-    public static let sharedProcessingQueue = DispatchQueue(label: "com.nova.ws.processing")
-
     public enum State {
         case notConnected
         case connecting
@@ -36,11 +34,10 @@ public final class WebSocketEngine {
     public private(set) var urls: [URL]
     public private(set) var connection: WebSocketConnectionProtocol
     public let connectionFactory: WebSocketConnectionFactoryProtocol
-    public let version: String
     public let name: String?
     public let logger: SDKLoggerProtocol?
     public let reachabilityManager: ReachabilityManagerProtocol?
-    public let customNodeSwitcher: WebSocketNodeSwitching?
+    public let customNodeSwitcher: JSONRPCNodeSwitching?
     public let completionQueue: DispatchQueue
     public let processingQueue: DispatchQueue
     public let pingInterval: TimeInterval
@@ -61,8 +58,16 @@ public final class WebSocketEngine {
 
     internal let mutex = NSLock()
 
-    private let jsonEncoder = JSONEncoder()
-    private let jsonDecoder = JSONDecoder()
+    internal let requestFactory: JSONRPCRequestFactory
+
+    private var jsonDecoder: JSONDecoder {
+        requestFactory.jsonDecoder
+    }
+
+    private var jsonEncoder: JSONEncoder {
+        requestFactory.jsonEncoder
+    }
+
     private let reconnectionStrategy: ReconnectionStrategyProtocol?
 
     let healthCheckMethod: HealthCheckMethod
@@ -93,7 +98,7 @@ public final class WebSocketEngine {
     public init?(
         urls: [URL],
         connectionFactory: WebSocketConnectionFactoryProtocol = WebSocketConnectionFactory(),
-        customNodeSwitcher: WebSocketNodeSwitching? = nil,
+        customNodeSwitcher: JSONRPCNodeSwitching? = nil,
         reachabilityManager: ReachabilityManagerProtocol? = nil,
         reconnectionStrategy: ReconnectionStrategyProtocol? = ExponentialReconnection(),
         healthCheckMethod: HealthCheckMethod = .websocketPingPong,
@@ -105,8 +110,8 @@ public final class WebSocketEngine {
         name: String? = nil,
         logger: SDKLoggerProtocol? = nil
     ) {
-        self.version = version
         self.connectionFactory = connectionFactory
+        self.requestFactory = JSONRPCRequestFactory(version: version)
         self.customNodeSwitcher = customNodeSwitcher
         self.logger = logger
         self.reconnectionStrategy = reconnectionStrategy
@@ -114,8 +119,8 @@ public final class WebSocketEngine {
         self.healthCheckMethod = healthCheckMethod
         self.name = name
         self.urls = urls
-        completionQueue = processingQueue ?? Self.sharedProcessingQueue
-        self.processingQueue = processingQueue ?? Self.sharedProcessingQueue
+        completionQueue = processingQueue ?? JSONRPCEngineShared.processingQueue
+        self.processingQueue = processingQueue ?? JSONRPCEngineShared.processingQueue
         self.pingInterval = pingInterval
         self.connectionTimeout = connectionTimeout
         self.selectedURLIndex = 0
@@ -454,70 +459,6 @@ extension WebSocketEngine {
         subscriptions[subscription.requestId] = subscription
     }
 
-    func prepareRequestData<P: Encodable>(
-        method: String,
-        requestId: UInt16,
-        params: P?
-    ) throws -> Data {
-        if let params = params {
-            let info = JSONRPCInfo(
-                identifier: requestId,
-                jsonrpc: version,
-                method: method,
-                params: params
-            )
-
-            return try jsonEncoder.encode(info)
-        } else {
-            let info = JSONRPCInfo(
-                identifier: requestId,
-                jsonrpc: version,
-                method: method,
-                params: [String]()
-            )
-
-            return try jsonEncoder.encode(info)
-        }
-    }
-
-    func prepareBatchRequestItem<P: Encodable>(
-        method: String,
-        params: P?
-    ) throws -> JSONRPCBatchRequestItem {
-        let requestId = generateRequestId()
-
-        let data = try prepareRequestData(method: method, requestId: requestId, params: params)
-
-        return JSONRPCBatchRequestItem(requestId: requestId, data: data)
-    }
-
-    func prepareBatchRequest(
-        batchId: JSONRPCBatchId,
-        from batchItems: [JSONRPCBatchRequestItem],
-        options: JSONRPCOptions,
-        completion closure: (([Result<JSON, Error>]) -> Void)?
-    ) throws -> JSONRPCRequest {
-        let jsonList = try batchItems.map { try jsonDecoder.decode(JSON.self, from: $0.data) }
-        let itemIds = batchItems.map { $0.requestId }
-
-        let data = try jsonEncoder.encode(JSON.arrayValue(jsonList))
-
-        let handler: JSONRPCBatchHandler?
-
-        if let closure = closure {
-            handler = JSONRPCBatchHandler(itemIds: itemIds, completionClosure: closure)
-        } else {
-            handler = nil
-        }
-
-        return JSONRPCRequest(
-            requestId: .batch(batchId: batchId, itemIds: itemIds),
-            data: data,
-            options: options,
-            responseHandler: handler
-        )
-    }
-
     func prepareRequest<P: Encodable, T: Decodable>(
         method: String,
         params: P?,
@@ -526,37 +467,25 @@ extension WebSocketEngine {
         preGeneratedRequestId: UInt16? = nil
     ) throws -> JSONRPCRequest {
         let requestId = preGeneratedRequestId ?? generateRequestId()
-        let data: Data = try prepareRequestData(method: method, requestId: requestId, params: params)
 
-        let handler: JSONRPCResponseHandling?
-
-        if let completionClosure = closure {
-            handler = JSONRPCResponseHandler(completionClosure: completionClosure)
-        } else {
-            handler = nil
-        }
-
-        let request = JSONRPCRequest(
-            requestId: .single(requestId),
-            data: data,
+        return try requestFactory.prepareRequest(
+            method: method,
+            params: params,
             options: options,
-            responseHandler: handler
+            completion: closure,
+            idType: .existing(requestId)
         )
-
-        return request
     }
 
     func generateRequestId() -> UInt16 {
-        let items = pendingRequests.flatMap(\.requestId.itemIds) + inProgressRequests.map(\.key)
-        let existingIds: Set<UInt16> = Set(items)
-
-        var targetId = (1 ... UInt16.max).randomElement() ?? 1
-
-        while existingIds.contains(targetId) {
-            targetId += 1
+        let pendingItems = pendingRequests.flatMap(\.requestId.itemIds) + inProgressRequests.map(\.key)
+        let partialBatches = partialBatches.values.flatMap { batch in
+            batch.map { $0.requestId }
         }
 
-        return targetId
+        let existingIds: Set<UInt16> = Set(pendingItems + partialBatches)
+
+        return requestFactory.generateRequestId(skipping: existingIds)
     }
 
     func cancelRequestForLocalId(_ identifier: UInt16) {

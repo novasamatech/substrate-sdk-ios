@@ -5,6 +5,7 @@ public enum JSONRPCEngineError: Error {
     case remoteCancelled
     case clientCancelled
     case unknownError
+    case unsupportedMethod
 }
 
 public protocol JSONRPCResponseHandling {

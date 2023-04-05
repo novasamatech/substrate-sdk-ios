@@ -1,10 +1,10 @@
 import Foundation
 
-public protocol WebSocketNodeSwitching {
+public protocol JSONRPCNodeSwitching {
     func shouldInterceptAndSwitchNode(for error: JSONRPCError, identifier: UInt16) -> Bool
 }
 
-public final class JSONRRPCodeNodeSwitcher: WebSocketNodeSwitching {
+public final class JSONRRPCodeNodeSwitcher: JSONRPCNodeSwitching {
     let codes: Set<Int>
 
     public init(codes: Set<Int>) {
