@@ -32,13 +32,9 @@ extension HTTPEngine: JSONRPCEngine {
             idType: .existing(requestId)
         )
 
-        guard let url = nextUnusedUrl(for: request.requestId) else {
-            throw JSONRPCEngineError.unknownError
-        }
-
         send(
             request: request,
-            url: url,
+            url: selectedURL,
             timeout: timeout,
             encoder: requestFactory.jsonEncoder,
             decoder: requestFactory.jsonDecoder
@@ -55,6 +51,8 @@ extension HTTPEngine: JSONRPCEngine {
         }
 
         for identifier in identifiers {
+            unbindResendAttempts(for: identifier)
+
             if let operation = unbindOperation(for: identifier) {
                 operation.cancel()
             }
@@ -85,13 +83,9 @@ extension HTTPEngine: JSONRPCEngine {
             completion: closure
         )
 
-        guard let url = nextUnusedUrl(for: request.requestId) else {
-            throw JSONRPCEngineError.unknownError
-        }
-
         send(
             request: request,
-            url: url,
+            url: selectedURL,
             timeout: timeout,
             encoder: requestFactory.jsonEncoder,
             decoder: requestFactory.jsonDecoder

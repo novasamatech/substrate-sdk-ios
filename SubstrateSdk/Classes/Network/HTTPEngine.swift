@@ -7,7 +7,27 @@ public final class HTTPEngine {
         let originalData: Data
     }
 
-    public let urls: [URL]
+    struct ResendAttempt {
+        let attempt: Int
+        let url: URL
+        let scheduler: Scheduler?
+        let request: JSONRPCRequest
+
+        static func initial(for url: URL, request: JSONRPCRequest) -> ResendAttempt {
+            .init(attempt: 0, url: url, scheduler: nil, request: request)
+        }
+
+        func scheduling(attempt: Int, url: URL, scheduler: Scheduler?) -> ResendAttempt {
+            .init(
+                attempt: attempt,
+                url: url,
+                scheduler: scheduler,
+                request: request
+            )
+        }
+    }
+
+    public private(set) var urls: [URL]
 
     public let name: String?
     public let logger: SDKLoggerProtocol?
@@ -15,6 +35,7 @@ public final class HTTPEngine {
     public let operationQueue: OperationQueue
     public let timeout: TimeInterval
     public let customNodeSwitcher: JSONRPCNodeSwitching?
+    public let maxAttemptsPerNode: Int
 
     public var chainName: String { name ?? "unknown" }
 
@@ -24,27 +45,57 @@ public final class HTTPEngine {
 
     private(set) var inProgressRequests: [UInt16: JSONRPCRequestId] = [:]
     private(set) var requestIdMapping: [JSONRPCRequestId: Operation] = [:]
-    private(set) var requestAttempts: [JSONRPCRequestId: Set<URL>] = [:]
+    private(set) var resendAttempts: [JSONRPCRequestId: ResendAttempt] = [:]
     private(set) var partialBatches: [String: [JSONRPCBatchRequestItem]] = [:]
+    private let resendStrategy: ReconnectionStrategyProtocol?
 
-    public init(
+    private var selectedURLIndex: Int = 0
+
+    public var selectedURL: URL {
+        urls[selectedURLIndex]
+    }
+
+    public init?(
         urls: [URL],
         operationQueue: OperationQueue,
         version: String = "2.0",
+        resendStrategy: ReconnectionStrategyProtocol? = ExponentialReconnection(),
+        maxAttemptsPerNode: Int = 3,
         customNodeSwitcher: JSONRPCNodeSwitching? = nil,
         timeout: TimeInterval = 60,
         completionQueue: DispatchQueue? = nil,
         name: String? = nil,
         logger: SDKLoggerProtocol? = nil
     ) {
+        guard !urls.isEmpty else {
+            return nil
+        }
+
         self.urls = urls
         self.requestFactory = JSONRPCRequestFactory(version: version)
         self.completionQueue = completionQueue ?? JSONRPCEngineShared.processingQueue
         self.customNodeSwitcher = customNodeSwitcher
+        self.resendStrategy = resendStrategy
+        self.maxAttemptsPerNode = maxAttemptsPerNode
         self.operationQueue = operationQueue
         self.timeout = timeout
         self.name = name
         self.logger = logger
+    }
+
+    public func changeUrls(_ newUrls: [URL]) {
+        guard !newUrls.isEmpty else {
+            return
+        }
+
+        mutex.lock()
+
+        self.urls = newUrls
+        selectedURLIndex = 0
+
+        logger?.debug("(\(chainName)) Did set new urls: \(newUrls)")
+
+        mutex.unlock()
     }
 
     func storeBatchItem(_ item: JSONRPCBatchRequestItem, for batchId: JSONRPCBatchId) {
@@ -93,6 +144,19 @@ public final class HTTPEngine {
         return operation
     }
 
+    func unbindResendAttempts(for identifier: UInt16) {
+        guard let requestId = resendAttempts.keys.first(where: { $0.itemIds.contains(identifier) }) else {
+            return
+        }
+
+        clearResendAttempts(for: requestId)
+    }
+
+    func clearResendAttempts(for requestId: JSONRPCRequestId) {
+        resendAttempts[requestId]?.scheduler?.cancel()
+        resendAttempts[requestId] = nil
+    }
+
     func generateRequestId() -> UInt16 {
         let pendingItems = inProgressRequests.keys
         let partialBatches = partialBatches.values.flatMap { batch in
@@ -104,37 +168,61 @@ public final class HTTPEngine {
         return requestFactory.generateRequestId(skipping: existingIds)
     }
 
-    func nextUnusedUrl(for requestId: JSONRPCRequestId) -> URL? {
-        let usedUrls = requestAttempts[requestId] ?? Set()
-        return urls.first { !usedUrls.contains($0) }
-    }
-
-    func hasNotUsedUrls(for requestId: JSONRPCRequestId) -> Bool {
-        nextUnusedUrl(for: requestId) != nil
-    }
-
-    func storeUsedUrl(_ url: URL, for requestId: JSONRPCRequestId) {
-        var usedUrls = requestAttempts[requestId] ?? Set()
-        usedUrls.insert(url)
-
-        requestAttempts[requestId] = usedUrls
-    }
-
-    func clearAttempts(for requestId: JSONRPCRequestId) {
-        requestAttempts[requestId] = nil
-    }
-
-    func resendRequest(_ request: JSONRPCRequest) {
-        guard let nextUrl = nextUnusedUrl(for: request.requestId) else {
-            logger?.debug("(\(chainName)) no url to retry request: \(request)")
+    func scheduleResend(request: JSONRPCRequest) {
+        guard let resendStrategy = resendStrategy else {
             return
         }
 
-        logger?.debug("(\(chainName):\(nextUrl)) retrying request: \(request)")
+        var currentAttempt = resendAttempts[request.requestId] ??
+            ResendAttempt.initial(for: selectedURL, request: request)
+
+        let nextAttempt: Int
+
+        if currentAttempt.attempt >= maxAttemptsPerNode - 1, urls.count > 1 {
+            // other requests may also change nodes
+            if currentAttempt.url == selectedURL {
+                selectedURLIndex = (selectedURLIndex + 1) % urls.count
+            }
+
+            nextAttempt = 0
+        } else {
+            nextAttempt = currentAttempt.attempt + 1
+        }
+
+        currentAttempt.scheduler?.cancel()
+
+        if let delay = resendStrategy.reconnectAfter(attempt: nextAttempt), delay > 0 {
+            logger?.debug("Retrying request \(request.requestId) after \(delay)...")
+
+            let scheduler = currentAttempt.scheduler ?? Scheduler(with: self, callbackQueue: completionQueue)
+            currentAttempt = currentAttempt.scheduling(
+                attempt: nextAttempt,
+                url: selectedURL,
+                scheduler: scheduler
+            )
+
+            resendAttempts[request.requestId] = currentAttempt
+
+            scheduler.notifyAfter(delay)
+        } else {
+            currentAttempt = currentAttempt.scheduling(
+                attempt: nextAttempt,
+                url: selectedURL,
+                scheduler: currentAttempt.scheduler
+            )
+
+            resendAttempts[request.requestId] = currentAttempt
+
+            resendRequest(currentAttempt)
+        }
+    }
+
+    func resendRequest(_ attempt: ResendAttempt) {
+        logger?.debug("(\(chainName):\(attempt)) retrying request: \(attempt.request)")
 
         send(
-            request: request,
-            url: nextUrl,
+            request: attempt.request,
+            url: attempt.url,
             timeout: timeout,
             encoder: requestFactory.jsonEncoder,
             decoder: requestFactory.jsonDecoder
@@ -142,7 +230,7 @@ public final class HTTPEngine {
     }
 
     func shouldRetryRequest(_ request: JSONRPCRequest, result: Result<[Response], Error>?) -> Bool {
-        guard request.options.resendOnReconnect else {
+        guard request.options.resendOnReconnect, resendStrategy != nil else {
             return false
         }
 
@@ -160,9 +248,9 @@ public final class HTTPEngine {
                 return customNodeSwitcher.shouldInterceptAndSwitchNode(for: error, identifier: identifier)
             }
 
-            return hasErrorToRetry && hasNotUsedUrls(for: request.requestId)
+            return hasErrorToRetry
         case .failure:
-            return hasNotUsedUrls(for: request.requestId)
+            return true
         case .none:
             return false
         }
@@ -228,11 +316,11 @@ public final class HTTPEngine {
         }
 
         guard !shouldRetryRequest(request, result: operation.result) else {
-            resendRequest(request)
+            scheduleResend(request: request)
             return
         }
 
-        clearAttempts(for: request.requestId)
+        clearResendAttempts(for: request.requestId)
 
         guard let responseHandler = request.responseHandler else {
             return
@@ -273,10 +361,25 @@ public final class HTTPEngine {
         }
 
         bindRequest(request: request, operation: operation)
-        storeUsedUrl(url, for: request.requestId)
 
         logger?.debug("(\(chainName):\(url)) sending request: \(request)")
 
         operationQueue.addOperation(operation)
+    }
+}
+
+extension HTTPEngine: SchedulerDelegate {
+    func didTrigger(scheduler: SchedulerProtocol) {
+        mutex.lock()
+
+        defer {
+            mutex.unlock()
+        }
+
+        guard let attempt = resendAttempts.first(where: { $0.value.scheduler === scheduler }) else {
+            return
+        }
+
+        resendRequest(attempt.value)
     }
 }
