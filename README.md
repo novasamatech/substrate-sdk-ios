@@ -21,4 +21,5 @@ ERussel, emkil.russel@gmail.com
 
 ## License
 
-SubstrateSdk is available under the Apache Version 2.0 license. See the LICENSE file for more info.
+SubstrateSdk iOS is available under the Apache Version 2.0 license. See the LICENSE file for more info.
+© Novasama Technologies GmbH 2023
