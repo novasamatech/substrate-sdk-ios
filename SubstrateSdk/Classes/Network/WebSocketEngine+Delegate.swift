@@ -2,7 +2,7 @@ import Foundation
 import Starscream
 
 extension WebSocketEngine: WebSocketDelegate {
-    public func didReceive(event: WebSocketEvent, client _: WebSocket) {
+    public func didReceive(event: WebSocketEvent, client _: WebSocketClient) {
         mutex.lock()
 
         switch event {
