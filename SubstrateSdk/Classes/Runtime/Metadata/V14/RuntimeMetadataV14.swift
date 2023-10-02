@@ -143,6 +143,14 @@ public struct RuntimeMetadataV14: RuntimeMetadataProtocol {
     public func getSignedExtensions() -> [String] {
         extrinsic.signedExtensions.map { $0.identifier }
     }
+    
+    public func getSignedExtensionType(for identifier: String) -> String? {
+        guard let signedExtension = extrinsic.signedExtensions.first(where: { $0.identifier == identifier}) else {
+            return nil
+        }
+        
+        return String(signedExtension.type)
+    }
 
     private func convert(call: RuntimeTypeVariantItem) -> CallMetadata {
         let name = call.name
