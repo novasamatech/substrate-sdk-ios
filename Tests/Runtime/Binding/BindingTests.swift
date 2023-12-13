@@ -3,10 +3,6 @@ import SubstrateSdk
 import BigInt
 
 class BindingTests: BaseCodingTests {
-    let catalog = try! RuntimeHelper.createTypeRegistryCatalog(from: "default",
-                                                               networkName: "polkadot",
-                                                               runtimeMetadataName: "polkadot-metadata")
-
     func testStructBindingCoding() throws {
         let accountData = AccountData(free: "11111111",
                                       reserved: 102,
@@ -27,6 +23,11 @@ class BindingTests: BaseCodingTests {
     }
 
     func testScaleInfoStructBindingCoding() throws {
+        performTestScaleInfoStructBindingCoding(true)
+        performTestScaleInfoStructBindingCoding(false)
+    }
+    
+    private func performTestScaleInfoStructBindingCoding(_ shouldUseVersioning: Bool) {
         let accountData = AccountData(free: "11111111",
                                       reserved: 102,
                                       miscFrozen: 103,
@@ -40,16 +41,31 @@ class BindingTests: BaseCodingTests {
             data: accountData
         )
 
-        performScaleInfoTest(value: expected, type: "3", runtimeFilename: "kusama-v14-metadata")
+        performScaleInfoTest(
+            value: expected,
+            type: "3",
+            runtimeFilename: "kusama-v14-metadata",
+            shouldUseDefaultVersioning: shouldUseVersioning
+        )
     }
 
     func testSiValidatorPrefsBindingCoding() throws {
+        try performTestSiValidatorPrefsBindingCoding(true)
+        try performTestSiValidatorPrefsBindingCoding(false)
+    }
+    
+    private func performTestSiValidatorPrefsBindingCoding(_ shouldUseVersioning: Bool) throws {
         let expected = ValidatorPrefs(
             commission: BigUInt(1e+6),
             blocked: false
         )
 
-        performScaleInfoTest(value: expected, type: "213", runtimeFilename: "kusama-v14-metadata")
+        performScaleInfoTest(
+            value: expected,
+            type: "213",
+            runtimeFilename: "kusama-v14-metadata",
+            shouldUseDefaultVersioning: shouldUseVersioning
+        )
     }
 
     func testEnumBindingCoding() throws {
@@ -64,12 +80,18 @@ class BindingTests: BaseCodingTests {
     }
 
     func testScaleInfoVariantNullBindingCoding() throws {
+        performTestScaleInfoVariantNullBindingCoding(true)
+        performTestScaleInfoVariantNullBindingCoding(false)
+    }
+    
+    private func performTestScaleInfoVariantNullBindingCoding(_ shouldUseVersioning: Bool) {
         let expected = RawOrigin.root
 
         performScaleInfoTest(
             value: expected,
             type: "574",
-            runtimeFilename: "kusama-v14-metadata"
+            runtimeFilename: "kusama-v14-metadata",
+            shouldUseDefaultVersioning: shouldUseVersioning
         )
     }
 
@@ -96,9 +118,19 @@ class BindingTests: BaseCodingTests {
     }
 
     func testScaleInfoSetBindingCoding() throws {
+        try performTestScaleInfoSetBindingCoding(true)
+        try performTestScaleInfoSetBindingCoding(false)
+    }
+    
+    func performTestScaleInfoSetBindingCoding(_ shouldUseVersioning: Bool) throws {
         let expected: IdentityFields = [.legal, .fingerprint, .image]
 
-        performScaleInfoTest(value: expected, type: "351", runtimeFilename: "kusama-v14-metadata")
+        performScaleInfoTest(
+            value: expected,
+            type: "351",
+            runtimeFilename: "kusama-v14-metadata",
+            shouldUseDefaultVersioning: shouldUseVersioning
+        )
     }
 
     func testOptionBindingCoding() throws {
@@ -165,6 +197,11 @@ class BindingTests: BaseCodingTests {
     }
 
     func testScaleInfoOptionVariantCoding() throws {
+        performTestScaleInfoOptionVariantCoding(true)
+        performTestScaleInfoOptionVariantCoding(false)
+    }
+    
+    private func performTestScaleInfoOptionVariantCoding(_ shouldUseVersioning: Bool) {
         let expected = FundInfoV14(
             depositor: Data(repeating: 0, count: 32),
             verifier: nil,
@@ -178,10 +215,20 @@ class BindingTests: BaseCodingTests {
             trieIndex: 1
         )
 
-        performScaleInfoTest(value: expected, type: "679", runtimeFilename: "kusama-v14-metadata")
+        performScaleInfoTest(
+            value: expected,
+            type: "679",
+            runtimeFilename: "kusama-v14-metadata",
+            shouldUseDefaultVersioning: shouldUseVersioning
+        )
     }
 
     func testOptionEnumWithVariantCodingAndOptionField() throws {
+        try performTestOptionEnumWithVariantCodingAndOptionField(true)
+        try performTestOptionEnumWithVariantCodingAndOptionField(false)
+    }
+    
+    func performTestOptionEnumWithVariantCodingAndOptionField(_ shouldUseVersioning: Bool) throws {
         let expected = FundInfoV14(
             depositor: Data(repeating: 0, count: 32),
             verifier: MultiSigner.sr25519(Data(repeating: 1, count: 32)),
@@ -195,7 +242,12 @@ class BindingTests: BaseCodingTests {
             trieIndex: 1
         )
 
-        performScaleInfoTest(value: expected, type: "679", runtimeFilename: "kusama-v14-metadata")
+        performScaleInfoTest(
+            value: expected,
+            type: "679",
+            runtimeFilename: "kusama-v14-metadata",
+            shouldUseDefaultVersioning: shouldUseVersioning
+        )
     }
 
     func testOptionTupleCoding() throws {

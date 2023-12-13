@@ -60,11 +60,18 @@ class BaseCodingTests: XCTestCase {
     func performScaleInfoTest<T: Codable & Equatable>(
         value: T,
         type: String,
-        runtimeFilename: String = "westend-v14-metadata"
+        runtimeFilename: String = "westend-v14-metadata",
+        shouldUseDefaultVersioning: Bool = true
     ) {
         do {
-            let registry = try ScaleInfoHelper.createTypeRegistry(from: runtimeFilename)
-
+            let registry: TypeRegistryCatalog
+            
+            if shouldUseDefaultVersioning {
+                registry = try ScaleInfoHelper.createTypeRegistry(from: runtimeFilename)
+            } else {
+                registry = try ScaleInfoHelper.createTypeRegistryWithoutVersioning(from: runtimeFilename)
+            }
+            
             let encoder = DynamicScaleEncoder(registry: registry, version: 0)
             try encoder.append(value, ofType: type)
 
