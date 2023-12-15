@@ -9,7 +9,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
     static let uncheckedExtrinsicModuleName = "sp_runtime.UncheckedExtrinsic"
 
     public init() {}
-    
+
     private func addingAdditionalOneOfTo(
         types: [String],
         fromType: String,
@@ -191,15 +191,17 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
 
         guard
             let weightLookupId = compositeType.fields.first(where: { $0.name == "weight" })?.type,
-            let weightType = runtime.types.types.first(
-                where: { $0.identifier == weightLookupId }
-            )?.type.pathBasedName,
-            let dispatchClassLookupId = compositeType.fields.first(where: { $0.name == "class" })?.type,
-            let dispatchClassType = runtime.types.types.first(
-                where: { $0.identifier == dispatchClassLookupId }
-            )?.type.pathBasedName else {
+            let dispatchClassLookupId = compositeType.fields.first(where: { $0.name == "class" })?.type else {
             return additionalNodes.adding(notMatchedType: feeType)
         }
+
+        let weightType = runtime.types.types.first(
+            where: { $0.identifier == weightLookupId }
+        )?.type.pathBasedName ?? String(weightLookupId)
+
+        let dispatchClassType = runtime.types.types.first(
+            where: { $0.identifier == dispatchClassLookupId }
+        )?.type.pathBasedName ?? String(dispatchClassLookupId)
 
         let node = StructNode(
             typeName: feeType,
