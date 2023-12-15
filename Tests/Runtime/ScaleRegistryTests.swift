@@ -21,4 +21,18 @@ class ScaleRegistryTests: XCTestCase {
 
         XCTAssertTrue(node is StructNode)
     }
+    
+    func testShouldResolvePredefinedTypes() throws {
+        // given
+        
+        let registry = try ScaleInfoHelper.createTypeRegistryWithoutVersioning(from: "kusama-v14-metadata-latest")
+        
+        // when
+        
+        KnownType.allCases.forEach { type in
+            if  registry.node(for: type.name, version: 0) == nil {
+                XCTFail("Can't resolve type: \(type)")
+            }
+        }
+    }
 }

@@ -55,9 +55,12 @@ final class ScaleInfoHelper {
         customExtensions: [ExtrinsicExtensionCoder] = []
     ) throws -> TypeRegistryCatalog {
         let runtimeMetadata = try Self.createScaleInfoMetadata(for: fileName)
+        
+        let predefinedNodes = RuntimeAugmentationFactory().createSubstrateAugmentation(for: runtimeMetadata)
 
         return try TypeRegistryCatalog.createFromSiDefinition(
             runtimeMetadata: runtimeMetadata,
+            additionalNodes: predefinedNodes.additionalNodes.nodes,
             customExtensions: customExtensions,
             customNameMapper: ScaleInfoCamelCaseMapper()
         )
