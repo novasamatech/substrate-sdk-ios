@@ -13,6 +13,8 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func adding<T: RuntimeCallable>(call: T) throws -> Self
     func adding(rawCall: Data) throws -> Self
     func adding(extrinsicExtension: ExtrinsicExtension) -> Self
+    func wrapProxy(proxiedAccountId: MultiAddress,
+                   type: ProxyType) throws -> Self
     func reset() -> Self
     func signing(by signer: (Data) throws -> Data,
                  of type: CryptoType,
@@ -277,6 +279,18 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         return self
     }
 
+    public func wrapProxy(proxiedAccountId: MultiAddress,
+                          type: ProxyType) throws -> Self {
+        self.calls = try calls.map { call in
+            let proxyCall = ProxyCall(real: proxiedAccountId,
+                                      forceProxyType: type,
+                                      call: call)
+            let json = try proxyCall.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
+            return json
+        }
+        return self
+    }
+    
     public func reset() -> Self {
         calls = []
         return self
