@@ -49,4 +49,20 @@ final class ScaleInfoHelper {
             customNameMapper: ScaleInfoCamelCaseMapper()
         )
     }
+    
+    static func createTypeRegistryWithoutVersioning(
+        from fileName: String,
+        customExtensions: [ExtrinsicExtensionCoder] = []
+    ) throws -> TypeRegistryCatalog {
+        let runtimeMetadata = try Self.createScaleInfoMetadata(for: fileName)
+        
+        let predefinedNodes = RuntimeAugmentationFactory().createSubstrateAugmentation(for: runtimeMetadata)
+
+        return try TypeRegistryCatalog.createFromSiDefinition(
+            runtimeMetadata: runtimeMetadata,
+            additionalNodes: predefinedNodes.additionalNodes.nodes,
+            customExtensions: customExtensions,
+            customNameMapper: ScaleInfoCamelCaseMapper()
+        )
+    }
 }

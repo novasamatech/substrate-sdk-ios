@@ -8,7 +8,7 @@ public struct NameNode {
     public let name: String
     public let node: Node
 
-    init(name: String, node: Node) {
+    public init(name: String, node: Node) {
         self.name = name
         self.node = node
     }
@@ -19,7 +19,7 @@ public struct IndexedNameNode {
     public let name: String
     public let node: Node
 
-    init(index: UInt8, name: String, node: Node) {
+    public init(index: UInt8, name: String, node: Node) {
         self.index = index
         self.name = name
         self.node = node
