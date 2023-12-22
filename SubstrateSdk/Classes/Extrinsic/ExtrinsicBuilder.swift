@@ -13,8 +13,8 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func adding<T: RuntimeCallable>(call: T) throws -> Self
     func adding(rawCall: Data) throws -> Self
     func adding(extrinsicExtension: ExtrinsicExtension) -> Self
-    func wrapProxy(proxiedAccountId: MultiAddress,
-                   type: ProxyType) throws -> Self
+    func wrapCalls(for mapClosure: (JSON) throws -> JSON) throws
+    func getCalls() -> [JSON]
     func reset() -> Self
     func signing(by signer: (Data) throws -> Data,
                  of type: CryptoType,
@@ -50,12 +50,6 @@ public enum ExtrinsicBuilderError: Error {
 }
 
 public class ExtrinsicBuilder {
-    struct InternalCall: Codable {
-        let moduleName: String
-        let callName: String
-        let args: JSON
-    }
-
     private let specVersion: UInt32
     private let transactionVersion: UInt32
     private let genesisHash: String
@@ -279,18 +273,14 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         return self
     }
 
-    public func wrapProxy(proxiedAccountId: MultiAddress,
-                          type: ProxyType) throws -> Self {
-        self.calls = try calls.map { call in
-            let proxyCall = ProxyCall(real: proxiedAccountId,
-                                      forceProxyType: type,
-                                      call: call)
-            let json = try proxyCall.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
-            return json
-        }
-        return self
+    public func wrapCalls(for mapClosure: (JSON) throws -> JSON) throws {
+        self.calls = try calls.map { try mapClosure($0) }
     }
-    
+
+    public func getCalls() -> [JSON] {
+        calls
+    }
+
     public func reset() -> Self {
         calls = []
         return self
