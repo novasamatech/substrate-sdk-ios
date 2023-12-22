@@ -17,7 +17,7 @@ struct FundInfo: Codable, Equatable {
 }
 
 struct FundInfoV14: Codable, Equatable {
-    let depositor: Data
+    @BytesCodable var depositor: Data
     @NullCodable var verifier: MultiSigner?
     @StringCodable var deposit: BigUInt
     @StringCodable var raised: BigUInt
