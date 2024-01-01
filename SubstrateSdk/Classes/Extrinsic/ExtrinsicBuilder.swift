@@ -13,7 +13,7 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func adding<T: RuntimeCallable>(call: T) throws -> Self
     func adding(rawCall: Data) throws -> Self
     func adding(extrinsicExtension: ExtrinsicExtension) -> Self
-    func wrapCalls(for mapClosure: (JSON) throws -> JSON) throws
+    func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self
     func getCalls() -> [JSON]
     func reset() -> Self
     func signing(by signer: (Data) throws -> Data,
@@ -273,8 +273,10 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         return self
     }
 
-    public func wrapCalls(for mapClosure: (JSON) throws -> JSON) throws {
-        self.calls = try calls.map { try mapClosure($0) }
+    public func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self {
+        let newCalls = try calls.map { try mapClosure($0) }
+        self.calls = newCalls
+        return self
     }
 
     public func getCalls() -> [JSON] {
