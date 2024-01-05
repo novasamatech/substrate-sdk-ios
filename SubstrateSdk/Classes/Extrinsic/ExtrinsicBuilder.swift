@@ -13,6 +13,8 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func adding<T: RuntimeCallable>(call: T) throws -> Self
     func adding(rawCall: Data) throws -> Self
     func adding(extrinsicExtension: ExtrinsicExtension) -> Self
+    func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self
+    func getCalls() -> [JSON]
     func reset() -> Self
     func signing(by signer: (Data) throws -> Data,
                  of type: CryptoType,
@@ -48,12 +50,6 @@ public enum ExtrinsicBuilderError: Error {
 }
 
 public class ExtrinsicBuilder {
-    struct InternalCall: Codable {
-        let moduleName: String
-        let callName: String
-        let args: JSON
-    }
-
     private let specVersion: UInt32
     private let transactionVersion: UInt32
     private let genesisHash: String
@@ -275,6 +271,16 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
     public func adding(extrinsicExtension: ExtrinsicExtension) -> Self {
         additionalExtensions.append(extrinsicExtension)
         return self
+    }
+
+    public func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self {
+        let newCalls = try calls.map { try mapClosure($0) }
+        self.calls = newCalls
+        return self
+    }
+
+    public func getCalls() -> [JSON] {
+        calls
     }
 
     public func reset() -> Self {
