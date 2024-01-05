@@ -1,26 +1,26 @@
 import Foundation
 
 public enum RuntimeMetadataSearchEngine {
-    public static func findPortableType(
+    public static func findPortableTypes(
         for type: String,
         in metadata: RuntimeMetadataV14,
         mode: RuntimeTypeMatchingMode
-    ) -> PortableType? {
+    ) -> [PortableType] {
         switch mode {
         case .full:
             let path = RuntimeType.pathFromName(type)
-            return metadata.types.types.first(where: { $0.type.path == path })
+            return metadata.types.types.filter({ $0.type.path == path })
         case .lastComponent:
             let component = RuntimeType.pathFromName(type).last
 
-            return metadata.types.types.first(where: { $0.type.path.last == component })
+            return metadata.types.types.filter({ $0.type.path.last == component })
         case .firstLastComponents:
             let path = RuntimeType.pathFromName(type)
             let first = path.first
             let last = path.last
 
-            return metadata.types.types.first(
-                where: { $0.type.path.first == first && $0.type.path.last == last }
+            return metadata.types.types.filter(
+                { $0.type.path.first == first && $0.type.path.last == last }
             )
         }
     }
@@ -31,7 +31,7 @@ public enum RuntimeMetadataSearchEngine {
         in metadata: RuntimeMetadataV14,
         mode: RuntimeTypeMatchingMode
     ) -> String? {
-        guard let type = findPortableType(for: mainType, in: metadata, mode: mode) else {
+        guard let type = findPortableTypes(for: mainType, in: metadata, mode: mode).first else {
             return nil
         }
 
@@ -45,6 +45,16 @@ public enum RuntimeMetadataSearchEngine {
     }
 
     public static func find(type: String, in metadata: RuntimeMetadataV14, mode: RuntimeTypeMatchingMode) -> String? {
-        findPortableType(for: type, in: metadata, mode: mode)?.type.pathBasedName
+        let types = findPortableTypes(for: type, in: metadata, mode: mode)
+        
+        guard !types.isEmpty else {
+            return nil
+        }
+        
+        if types.count > 1 {
+            return types.first?.type.pathBasedName
+        } else {
+            return types.first.map { String($0.identifier) }
+        }
     }
 }

@@ -48,7 +48,7 @@ public extension RuntimeType {
     public var pathBasedName: String? {
         !path.isEmpty ? path.joined(separator: ".") : nil
     }
-    
+
     public static func pathFromName(_ name: String) -> [String] {
         name.components(separatedBy: ".")
     }

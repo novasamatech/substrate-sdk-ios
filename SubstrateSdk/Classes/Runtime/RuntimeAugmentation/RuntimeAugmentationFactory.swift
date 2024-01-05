@@ -180,11 +180,11 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
         let runtimeType = "frame_support.dispatch.DispatchInfo"
 
         guard
-            let portableType = RuntimeMetadataSearchEngine.findPortableType(
+            let portableType = RuntimeMetadataSearchEngine.findPortableTypes(
                 for: runtimeType,
                 in: runtime,
                 mode: .firstLastComponents
-            ),
+            ).first,
             case let .composite(compositeType) = portableType.type.typeDefinition else {
             return additionalNodes.adding(notMatchedType: feeType)
         }
