@@ -40,21 +40,21 @@ public enum RuntimeMetadataSearchEngine {
         guard let concreteType = metadata.types.types.first(where: { $0.identifier == lookUpId }) else {
             return nil
         }
-
-        return concreteType.type.pathBasedName
+        
+        return String(concreteType.identifier)
     }
 
     public static func find(type: String, in metadata: RuntimeMetadataV14, mode: RuntimeTypeMatchingMode) -> String? {
         let types = findPortableTypes(for: type, in: metadata, mode: mode)
         
-        guard !types.isEmpty else {
+        guard let concreteType = types.first else {
             return nil
         }
         
         if types.count > 1 {
-            return types.first?.type.pathBasedName
+            return concreteType.type.pathBasedName ?? String(concreteType.identifier)
         } else {
-            return types.first.map { String($0.identifier) }
+            return String(concreteType.identifier)
         }
     }
 }
