@@ -7,7 +7,7 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func with(nonce: UInt32) -> Self
     func with(era: Era, blockHash: String) -> Self
     func with(tip: BigUInt) -> Self
-    func with(shouldUseAtomicBatch: Bool) -> Self
+    func with(batchType: ExtrinsicBatch) -> Self
     func with(runtimeJsonContext: RuntimeJsonContext) -> Self
     func with(signaturePayloadFormat: ExtrinsicSignaturePayloadFormat) -> Self
     func adding<T: RuntimeCallable>(call: T) throws -> Self
@@ -41,6 +41,12 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func build(encodingBy encoder: DynamicScaleEncoding, metadata: RuntimeMetadataProtocol) throws -> Data
 }
 
+public extension ExtrinsicBuilderProtocol {
+    func with(shouldUseAtomicBatch: Bool) -> Self {
+        with(batchType: shouldUseAtomicBatch ? .atomic : .untilFail)
+    }
+}
+
 public enum ExtrinsicBuilderError: Error {
     case missingCall
     case missingNonce
@@ -62,7 +68,7 @@ public class ExtrinsicBuilder {
     private var tip: BigUInt
     private var signature: ExtrinsicSignature?
     private var signaturePayloadFormat: ExtrinsicSignaturePayloadFormat = .regular
-    private var shouldUseAtomicBatch: Bool = true
+    private var batchType: ExtrinsicBatch = .atomic
     private var runtimeJsonContext: RuntimeJsonContext?
     private var additionalExtensions: [ExtrinsicExtension] = []
 
@@ -90,14 +96,17 @@ public class ExtrinsicBuilder {
 
         let callName: String
 
-        if shouldUseAtomicBatch {
+        switch batchType {
+        case .atomic:
             if metadata.getCall(from: KnowRuntimeModule.Utility.name, with: KnowRuntimeModule.Utility.batchAll) != nil {
                 callName = KnowRuntimeModule.Utility.batchAll
             } else {
                 callName = KnowRuntimeModule.Utility.batchAtomic
             }
-        } else {
+        case .untilFail:
             callName = KnowRuntimeModule.Utility.batch
+        case .ignoreFails:
+            callName = KnowRuntimeModule.Utility.forceBatch
         }
 
         let call = RuntimeCall(moduleName: KnowRuntimeModule.Utility.name,
@@ -239,8 +248,8 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         return self
     }
 
-    public func with(shouldUseAtomicBatch: Bool) -> Self {
-        self.shouldUseAtomicBatch = shouldUseAtomicBatch
+    public func with(batchType: ExtrinsicBatch) -> Self {
+        self.batchType = batchType
         return self
     }
 
