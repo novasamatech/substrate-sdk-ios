@@ -6,5 +6,6 @@ public struct KnowRuntimeModule {
         public static let batch = "batch"
         public static let batchAll = "batch_all"
         public static let batchAtomic = "batch_atomic"
+        public static let forceBatch = "force_batch"
     }
 }
