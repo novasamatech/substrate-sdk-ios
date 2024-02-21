@@ -20,12 +20,12 @@ PODS:
     - IrohaCrypto/blake2
     - IrohaCrypto/Common
   - keccak.c (0.1.3)
+  - Operation-iOS (1.0.0)
   - ReachabilitySwift (5.0.0)
-  - RobinHood (2.6.0)
   - scrypt.c (0.1.1)
   - secp256k1.c (0.1.2)
   - Starscream (4.0.4)
-  - SubstrateSdk (1.16.1):
+  - SubstrateSdk (2.0.0):
     - BigInt (~> 5.0)
     - IrohaCrypto/ed25519 (~> 0.9.0)
     - IrohaCrypto/Scrypt (~> 0.9.0)
@@ -33,8 +33,8 @@ PODS:
     - IrohaCrypto/sr25519 (~> 0.9.0)
     - IrohaCrypto/ss58 (~> 0.9.0)
     - keccak.c (~> 0.1.0)
+    - Operation-iOS (~> 1.0.0)
     - ReachabilitySwift (~> 5.0)
-    - RobinHood (~> 2.6.0)
     - Starscream
     - TweetNacl (~> 1.0.0)
     - xxHash-Swift (~> 1.0.0)
@@ -43,6 +43,7 @@ PODS:
   - xxHash-Swift (1.0.13)
 
 DEPENDENCIES:
+  - Operation-iOS (from `https://github.com/novasamatech/Operation-iOS.git`, tag `1.0.0`)
   - Starscream (from `https://github.com/ERussel/Starscream.git`, branch `feature/without-origin`)
   - SubstrateSdk (from `../`)
   - SwiftLint
@@ -53,7 +54,6 @@ SPEC REPOS:
     - IrohaCrypto
     - keccak.c
     - ReachabilitySwift
-    - RobinHood
     - scrypt.c
     - secp256k1.c
     - SwiftLint
@@ -61,6 +61,9 @@ SPEC REPOS:
     - xxHash-Swift
 
 EXTERNAL SOURCES:
+  Operation-iOS:
+    :git: https://github.com/novasamatech/Operation-iOS.git
+    :tag: 1.0.0
   Starscream:
     :branch: feature/without-origin
     :git: https://github.com/ERussel/Starscream.git
@@ -68,6 +71,9 @@ EXTERNAL SOURCES:
     :path: "../"
 
 CHECKOUT OPTIONS:
+  Operation-iOS:
+    :git: https://github.com/novasamatech/Operation-iOS.git
+    :tag: 1.0.0
   Starscream:
     :commit: b9e69390d96e71427463469f47cdafb8c0db1b21
     :git: https://github.com/ERussel/Starscream.git
@@ -76,16 +82,16 @@ SPEC CHECKSUMS:
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
   IrohaCrypto: 6be75a4268cd1f5cec4231c6d3f95cb03f723fd3
   keccak.c: 859583afdaccb4e4fcc0f0096064d101580313f4
+  Operation-iOS: 4aa0bf086d30854483e55370e80889c8c18ecd23
   ReachabilitySwift: 985039c6f7b23a1da463388634119492ff86c825
-  RobinHood: f8628c9841dc1a082f4565247f6b598e82157b28
   scrypt.c: b42ae06183251329d2b2c620c226fb541a4a3592
   secp256k1.c: db47b726585d80f027423682eb369729e61b3b20
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
-  SubstrateSdk: 15ba30c832d76d336c4986acb3a57b10065ff8ab
+  SubstrateSdk: 088b59d0dc799c4f27c070f043daa2c6e0cf9977
   SwiftLint: 4fa9579c63416865179bc416f0a92d55f009600d
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   xxHash-Swift: 30bd6a7507b3b7348a277c49b1cb6346c2905ec7
 
-PODFILE CHECKSUM: 127a69a1fa3e3f206edb8f13a28659b4816f7d4c
+PODFILE CHECKSUM: eba92a8d2c26783167f47da9f37b936c06c8c69c
 
-COCOAPODS: 1.13.0
+COCOAPODS: 1.15.2
