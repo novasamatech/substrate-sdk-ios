@@ -18,7 +18,7 @@ public protocol RuntimeMetadataProtocol {
     func getEventForModuleIndex(_ moduleIndex: UInt8, eventIndex: UInt32) -> EventMetadata?
 
     func getSignedExtensions() -> [String]
-    
+
     func getSignedExtensionType(for identifier: String) -> String?
 }
 
