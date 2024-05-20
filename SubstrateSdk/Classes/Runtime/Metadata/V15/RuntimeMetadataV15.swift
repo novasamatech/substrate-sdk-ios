@@ -1,16 +1,16 @@
 import Foundation
 import BigInt
 
-public struct RuntimeMetadataV14 {
+struct RuntimeMetadataV15 {
     public let types: RuntimeTypesLookup
-    public let pallets: [PalletMetadataV14]
-    public let extrinsic: ExtrinsicMetadataV14
+    public let pallets: [PalletMetadataV15]
+    public let extrinsic: ExtrinsicMetadataV15
     public let runtimeType: SiLookupId
-
+    
     public init(
         types: RuntimeTypesLookup,
-        pallets: [PalletMetadataV14],
-        extrinsic: ExtrinsicMetadataV14,
+        pallets: [PalletMetadataV15],
+        extrinsic: ExtrinsicMetadataV15,
         runtimeType: SiLookupId
     ) {
         self.types = types
@@ -20,7 +20,7 @@ public struct RuntimeMetadataV14 {
     }
 }
 
-extension RuntimeMetadataV14: PostV14RuntimeMetadataProtocol {
+extension RuntimeMetadataV15: PostV14RuntimeMetadataProtocol {
     public var postV14Pallets: [PostV14PalletMetadataProtocol] {
         pallets
     }
@@ -30,7 +30,7 @@ extension RuntimeMetadataV14: PostV14RuntimeMetadataProtocol {
     }
 }
 
-extension RuntimeMetadataV14: ScaleCodable {
+extension RuntimeMetadataV15: ScaleCodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
         try types.encode(scaleEncoder: scaleEncoder)
         try pallets.encode(scaleEncoder: scaleEncoder)
@@ -40,8 +40,8 @@ extension RuntimeMetadataV14: ScaleCodable {
 
     public init(scaleDecoder: ScaleDecoding) throws {
         types = try RuntimeTypesLookup(scaleDecoder: scaleDecoder)
-        pallets = try [PalletMetadataV14](scaleDecoder: scaleDecoder)
-        extrinsic = try ExtrinsicMetadataV14(scaleDecoder: scaleDecoder)
+        pallets = try [PalletMetadataV15](scaleDecoder: scaleDecoder)
+        extrinsic = try ExtrinsicMetadataV15(scaleDecoder: scaleDecoder)
         runtimeType = try SiLookupId(BigUInt(scaleDecoder: scaleDecoder))
     }
 }

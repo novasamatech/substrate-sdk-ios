@@ -27,6 +27,8 @@ extension ExtrinsicMetadataV14: ScaleCodable {
     }
 }
 
+extension ExtrinsicMetadataV14: PostV14ExtrinsicMetadataProtocol {}
+
 public struct SignedExtensionV14 {
     public let identifier: String
     public let type: SiLookupId
