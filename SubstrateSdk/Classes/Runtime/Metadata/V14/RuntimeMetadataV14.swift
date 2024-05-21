@@ -24,7 +24,7 @@ extension RuntimeMetadataV14: PostV14RuntimeMetadataProtocol {
     public var postV14Pallets: [PostV14PalletMetadataProtocol] {
         pallets
     }
-    
+
     public var postV14Extrinsic: PostV14ExtrinsicMetadataProtocol {
         extrinsic
     }

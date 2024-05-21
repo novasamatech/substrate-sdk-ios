@@ -68,7 +68,7 @@ public extension TypeRegistryCatalog {
 
     static func createFromSiDefinition(
         versioningData: Data,
-        runtimeMetadata: RuntimeMetadataV14,
+        runtimeMetadata: PostV14RuntimeMetadataProtocol,
         additionalNodes: [Node] = [],
         customExtensions: [ExtrinsicExtensionCoder] = [],
         customTypeMapper: SiTypeMapping? = nil,
@@ -87,7 +87,7 @@ public extension TypeRegistryCatalog {
     }
 
     static func createFromSiDefinition(
-        runtimeMetadata: RuntimeMetadataV14,
+        runtimeMetadata: PostV14RuntimeMetadataProtocol,
         versionedJsons: [UInt64: JSON] = [:],
         additionalNodes: [Node] = [],
         customExtensions: [ExtrinsicExtensionCoder] = [],

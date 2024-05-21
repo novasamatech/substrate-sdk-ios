@@ -72,7 +72,7 @@ extension RuntimeMetadataContainer {
 
         // skip metadata len
         let metadataLength = try BigUInt(scaleDecoder: scaleDecoder)
-        
+
         guard metadataLength <= scaleDecoder.remained else {
             throw RuntimeMetadataContainerError.invalidMetadataLength
         }

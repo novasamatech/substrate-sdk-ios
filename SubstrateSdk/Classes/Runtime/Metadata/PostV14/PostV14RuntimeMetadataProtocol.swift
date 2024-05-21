@@ -131,14 +131,14 @@ public extension PostV14RuntimeMetadataProtocol {
     func getSignedExtensions() -> [String] {
         postV14Extrinsic.signedExtensions.map { $0.identifier }
     }
-    
+
     func getSignedExtensionType(for identifier: String) -> String? {
         guard let signedExtension = postV14Extrinsic.signedExtensions.first(
             where: { $0.identifier == identifier}
         ) else {
             return nil
         }
-        
+
         return String(signedExtension.type)
     }
 
