@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0CE840E92BFBFB60003C2B7A /* polkadot-v15 in Resources */ = {isa = PBXBuildFile; fileRef = 0CE840E82BFBFB60003C2B7A /* polkadot-v15 */; };
+		0CE840FA2BFCA0F3003C2B7A /* RuntimeMetadataV15Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE840F92BFCA0F3003C2B7A /* RuntimeMetadataV15Tests.swift */; };
 		0CE92A6F2B2C5906009A21E9 /* kusama-v14-metadata-latest in Resources */ = {isa = PBXBuildFile; fileRef = 0CE92A6E2B2C5906009A21E9 /* kusama-v14-metadata-latest */; };
 		6976AE87036D532DDD11B3D9 /* Pods_SubstrateSdkExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00060C8DD6432907D485E325 /* Pods_SubstrateSdkExample.framework */; };
 		841D528A25C4A11900DFA15B /* RegexParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D528925C4A11900DFA15B /* RegexParserTests.swift */; };
@@ -139,6 +140,7 @@
 /* Begin PBXFileReference section */
 		00060C8DD6432907D485E325 /* Pods_SubstrateSdkExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SubstrateSdkExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0CE840E82BFBFB60003C2B7A /* polkadot-v15 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "polkadot-v15"; sourceTree = "<group>"; };
+		0CE840F92BFCA0F3003C2B7A /* RuntimeMetadataV15Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeMetadataV15Tests.swift; sourceTree = "<group>"; };
 		0CE92A6E2B2C5906009A21E9 /* kusama-v14-metadata-latest */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "kusama-v14-metadata-latest"; sourceTree = "<group>"; };
 		27A1BEB05AA8335CF4053A81 /* Pods_SubstrateSdkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SubstrateSdkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E305CB3E5589CF7DC3BD962 /* Pods-SubstrateSdkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdkTests.debug.xcconfig"; path = "Target Support Files/Pods-SubstrateSdkTests/Pods-SubstrateSdkTests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -363,6 +365,7 @@
 				84F439BB25DBF8D600AEDA56 /* TypeRegistryNetworkValidationTests.swift */,
 				84F43A2325DC124600AEDA56 /* TypeRegistryCatalogTests.swift */,
 				84AF376C271A3AE5007408D6 /* RuntimeMetadataV14Tests.swift */,
+				0CE840F92BFCA0F3003C2B7A /* RuntimeMetadataV15Tests.swift */,
 				84AF3779271DA9A2007408D6 /* ScaleRegistryTests.swift */,
 			);
 			path = Runtime;
@@ -914,6 +917,7 @@
 				849E0AA825C96AD600B33506 /* CompactNodeFactoryTests.swift in Sources */,
 				849E0B3025CBD1CC00B33506 /* TypeRegistryCatalogValidationTests.swift in Sources */,
 				84DA3B4324C8CE5A00B5E27F /* ScaleStringTests.swift in Sources */,
+				0CE840FA2BFCA0F3003C2B7A /* RuntimeMetadataV15Tests.swift in Sources */,
 				84AF376D271A3AE5007408D6 /* RuntimeMetadataV14Tests.swift in Sources */,
 				84DA3B4224C8CE5A00B5E27F /* ScaleUInt64Tests.swift in Sources */,
 				849E0A7A25C94E3F00B33506 /* EnumMappingFactoryTests.swift in Sources */,

@@ -21,7 +21,7 @@ final class ScaleInfoHelper {
         switch container.runtimeMetadata {
         case .v14(let metadata):
             return metadata
-        case .v13:
+        case .v13, .v15:
             throw RuntimeHelperError.unexpectedMetadata
         }
     }

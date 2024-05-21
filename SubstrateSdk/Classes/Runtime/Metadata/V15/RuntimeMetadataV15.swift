@@ -1,12 +1,12 @@
 import Foundation
 import BigInt
 
-struct RuntimeMetadataV15 {
+public struct RuntimeMetadataV15 {
     public let types: RuntimeTypesLookup
     public let pallets: [PalletMetadataV15]
     public let extrinsic: ExtrinsicMetadataV15
     public let runtimeType: SiLookupId
-    
+
     public init(
         types: RuntimeTypesLookup,
         pallets: [PalletMetadataV15],
@@ -24,7 +24,7 @@ extension RuntimeMetadataV15: PostV14RuntimeMetadataProtocol {
     public var postV14Pallets: [PostV14PalletMetadataProtocol] {
         pallets
     }
-    
+
     public var postV14Extrinsic: PostV14ExtrinsicMetadataProtocol {
         extrinsic
     }
