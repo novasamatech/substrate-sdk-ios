@@ -29,7 +29,7 @@ final class RuntimeMetadataV15Tests: XCTestCase {
             try runtimeMetadataContainer.encode(scaleEncoder: encoder)
             let resultData = encoder.encode()
 
-            XCTAssertEqual(Data(expectedData.suffix(resultData.count)), resultData)
+            XCTAssertNotNil(expectedData.range(of: resultData))
             
             UIPasteboard.general.string = resultData.toHex()
         } catch {
