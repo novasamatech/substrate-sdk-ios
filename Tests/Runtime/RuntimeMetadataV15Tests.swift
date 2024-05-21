@@ -30,8 +30,6 @@ final class RuntimeMetadataV15Tests: XCTestCase {
             let resultData = encoder.encode()
 
             XCTAssertNotNil(expectedData.range(of: resultData))
-            
-            UIPasteboard.general.string = resultData.toHex()
         } catch {
             XCTFail("Unexpected error: \(error)")
         }
