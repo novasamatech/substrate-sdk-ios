@@ -13,12 +13,20 @@ public final class DynamicScaleEncoder {
         self.registry = registry
         self.version = version
     }
-
-    private func handleCommonOption(for json: JSON) {
-        if case .null = json {
+    
+    private func handleCommonOption(isNull: Bool) {
+        if isNull {
             encoder.appendRaw(data: Data([0]))
         } else {
             encoder.appendRaw(data: Data([1]))
+        }
+    }
+
+    private func handleCommonOption(for json: JSON) {
+        if case .null = json {
+            handleCommonOption(isNull: true)
+        } else {
+            handleCommonOption(isNull: false)
         }
     }
 
@@ -155,6 +163,14 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
         }
 
         encoder.appendRaw(data: data)
+    }
+    
+    func appendRawData(_ data: Data) throws {
+        encoder.appendRaw(data: data)
+    }
+    
+    func appendCommonOption(isNull: Bool) throws {
+        handleCommonOption(isNull: isNull)
     }
 
     public func appendString(json: JSON) throws {

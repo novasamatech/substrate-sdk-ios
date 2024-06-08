@@ -12,7 +12,7 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func with(signaturePayloadFormat: ExtrinsicSignaturePayloadFormat) -> Self
     func adding<T: RuntimeCallable>(call: T) throws -> Self
     func adding(rawCall: Data) throws -> Self
-    func adding(extrinsicExtension: ExtrinsicExtension) -> Self
+    func adding(extrinsicSignedExtension: ExtrinsicSignedExtending) -> Self
     func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self
     func getCalls() -> [JSON]
     func reset() -> Self
@@ -70,7 +70,7 @@ public class ExtrinsicBuilder {
     private var signaturePayloadFormat: ExtrinsicSignaturePayloadFormat = .regular
     private var batchType: ExtrinsicBatch = .atomic
     private var runtimeJsonContext: RuntimeJsonContext?
-    private var additionalExtensions: [ExtrinsicExtension] = []
+    private var additionalExtensions: [ExtrinsicSignedExtending] = []
 
     public init(specVersion: UInt32,
                 transactionVersion: UInt32,

@@ -1,6 +1,6 @@
 import Foundation
 
-open class DefaultExtrinsicExtensionCoder: ExtrinsicExtensionCoder {
+open class DefaultExtrinsicSignedExtensionCoder: ExtrinsicSignedExtensionCoding {
     public let name: String
     public let extraType: String
 
