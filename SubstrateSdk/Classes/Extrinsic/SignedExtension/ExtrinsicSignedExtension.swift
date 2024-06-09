@@ -2,10 +2,10 @@ import Foundation
 
 public enum ExtrinsicSignedExtension {}
 
-public protocol ExtrinsicSignedExtending: AnyObject {
-    static var signedExtensionId: String { get }
+public protocol ExtrinsicSignedExtending {
+    var signedExtensionId: String { get }
 
-    func setIncludedInExtrinsic(to extraStore: inout ExtrinsicExtra, context: [CodingUserInfoKey: Any]?)
+    func setIncludedInExtrinsic(to extraStore: inout ExtrinsicExtra, context: [CodingUserInfoKey: Any]?) throws
     func includeInSignature(encoder: DynamicScaleEncoding, context: [CodingUserInfoKey: Any]?) throws
 }
 
@@ -17,9 +17,11 @@ public extension OnlyExtrinsicSignedExtending {
 
 public extension OnlyExtrinsicSignedExtending where Self: Codable {
     func setIncludedInExtrinsic(to extraStore: inout ExtrinsicExtra, context: [CodingUserInfoKey: Any]?) {
-        extraStore[Self.name] = try? self.toScaleCompatibleJSON(with: context)
+        extraStore[signedExtensionId] = try? self.toScaleCompatibleJSON(with: context)
     }
 }
+
+public protocol OnlyExtrinsicSignatureExtending: ExtrinsicSignedExtending {}
 
 public extension OnlyExtrinsicSignatureExtending {
     func setIncludedInExtrinsic(to extraStore: inout ExtrinsicExtra, context: [CodingUserInfoKey: Any]?) {}

@@ -165,11 +165,11 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
         encoder.appendRaw(data: data)
     }
     
-    func appendRawData(_ data: Data) throws {
+    public func appendRawData(_ data: Data) throws {
         encoder.appendRaw(data: data)
     }
     
-    func appendCommonOption(isNull: Bool) throws {
+    public func appendCommonOption(isNull: Bool) throws {
         handleCommonOption(isNull: isNull)
     }
 

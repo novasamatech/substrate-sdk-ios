@@ -5,13 +5,41 @@ public enum ExtrinsicExtraNodeError: Error {
 }
 
 public class ExtrinsicExtraNode: Node {
+    static let defaultExtensions: [ExtrinsicSignedExtensionCoding] = [
+        DefaultExtrinsicSignedExtensionCoder(
+            signedExtensionId: Extrinsic.SignedExtensionId.mortality.rawValue,
+            extraType: GenericType.era.name
+        ),
+        
+        CompactExtrinsicSignedExtensionCoder(
+            signedExtensionId: Extrinsic.SignedExtensionId.nonce.rawValue,
+            extraType: KnownType.index.name
+        ),
+        
+        CompactExtrinsicSignedExtensionCoder(
+            signedExtensionId: Extrinsic.SignedExtensionId.txPayment.rawValue,
+            extraType: KnownType.balance.name
+        ),
+        
+        CheckMetadataHashCoder()
+    ]
+    
     public var typeName: String { GenericType.extrinsicExtra.name }
     public let runtimeMetadata: RuntimeMetadataProtocol
-    public let customExtensions: [ExtrinsicExtensionCoder]
+    public let customExtensions: [ExtrinsicSignedExtensionCoding]
 
-    public init(runtimeMetadata: RuntimeMetadataProtocol, customExtensions: [ExtrinsicExtensionCoder]) {
+    public init(
+        runtimeMetadata: RuntimeMetadataProtocol,
+        customExtensions: [ExtrinsicSignedExtensionCoding]
+    ) {
         self.runtimeMetadata = runtimeMetadata
         self.customExtensions = customExtensions
+    }
+    
+    private func getCoders() -> [String: ExtrinsicSignedExtensionCoding] {
+        (Self.defaultExtensions + customExtensions).reduce(into: [String: ExtrinsicSignedExtensionCoding]()) {
+            $0[$1.signedExtensionId] = $1
+        }
     }
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
@@ -19,55 +47,18 @@ public class ExtrinsicExtraNode: Node {
             throw DynamicScaleEncoderError.dictExpected(json: value)
         }
 
+        let coders = getCoders()
+        
         for checkString in runtimeMetadata.getSignedExtensions() {
-            let check = ExtrinsicCheck(rawValue: checkString)
-
-            switch check {
-            case .mortality:
-                guard let era = params[KnownExtrinsicExtraKey.era] else {
-                    throw ExtrinsicExtraNodeError.invalidParams
-                }
-
-                try encoder.append(json: era, type: GenericType.era.name)
-            case .nonce:
-                guard let nonce = params[KnownExtrinsicExtraKey.nonce] else {
-                    throw ExtrinsicExtraNodeError.invalidParams
-                }
-
-                try encoder.appendCompact(json: nonce, type: KnownType.index.name)
-            case .txPayment:
-                guard let tip = params[KnownExtrinsicExtraKey.tip] else {
-                    throw ExtrinsicExtraNodeError.invalidParams
-                }
-
-                try encoder.appendCompact(json: tip, type: KnownType.balance.name)
-            default:
-                if let customExtension = customExtensions.first(where: { $0.name == checkString }) {
-                    try customExtension.encodeAdditionalExtra(from: params, encoder: encoder)
-                }
-            }
+            try coders[checkString]?.encodeIncludedInExtrinsic(from: params, encoder: encoder)
         }
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+        let coders = getCoders()
+        
         let extra = try runtimeMetadata.getSignedExtensions().reduce(into: [String: JSON]()) { (result, item) in
-                let check = ExtrinsicCheck(rawValue: item)
-
-                switch check {
-                case .mortality:
-                    let era = try decoder.read(type: GenericType.era.rawValue)
-                    result[KnownExtrinsicExtraKey.era] = era
-                case .nonce:
-                    let nonce = try decoder.readCompact(type: KnownType.index.rawValue)
-                    result[KnownExtrinsicExtraKey.nonce] = nonce
-                case .txPayment:
-                    let tip = try decoder.readCompact(type: KnownType.balance.rawValue)
-                    result[KnownExtrinsicExtraKey.tip] = tip
-                default:
-                    if let customExtension = customExtensions.first(where: { $0.name == item }) {
-                        try customExtension.decodeAdditionalExtra(to: &result, decoder: decoder)
-                    }
-                }
+            try coders[item]?.decodeIncludedInExtrinsic(to: &result, decoder: decoder)
         }
 
         return .dictionaryValue(extra)
