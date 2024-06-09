@@ -31,11 +31,11 @@ class ExtrinsicExtensionsTests: XCTestCase {
 
         let extrinsic = try decoder.read(type: GenericType.extrinsic.name).map(to: Extrinsic.self, with: nil)
 
-        let era = try! extrinsic.signature!.extra[Extrinsic.SignedExtensionId.mortality.rawValue]!.map(
+        let era = try! extrinsic.signature!.extra[Extrinsic.SignedExtensionId.mortality]!.map(
             to: Era.self
         )
         
-        let nonce = try! extrinsic.signature!.extra[Extrinsic.SignedExtensionId.nonce.rawValue]!.map(
+        let nonce = try! extrinsic.signature!.extra[Extrinsic.SignedExtensionId.nonce]!.map(
             to: StringScaleMapper<UInt32>.self
         ).value
         

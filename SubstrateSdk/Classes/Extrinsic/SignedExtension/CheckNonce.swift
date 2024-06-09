@@ -2,7 +2,7 @@ import Foundation
 
 public extension ExtrinsicSignedExtension {
     struct  CheckNonce: Codable, OnlyExtrinsicSignedExtending {
-        public var signedExtensionId: String { Extrinsic.SignedExtensionId.nonce.rawValue }
+        public var signedExtensionId: String { Extrinsic.SignedExtensionId.nonce }
         
         public let nonce: UInt32
         

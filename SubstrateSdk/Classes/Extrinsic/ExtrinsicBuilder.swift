@@ -127,28 +127,30 @@ public class ExtrinsicBuilder {
             accum[item.signedExtensionId] = item
         }
         
-        let mortalityId = Extrinsic.SignedExtensionId.mortality.rawValue
-        store[mortalityId] = ExtrinsicSignedExtension.CheckMortality(
+        store[Extrinsic.SignedExtensionId.mortality] = ExtrinsicSignedExtension.CheckMortality(
             era: era,
             blockHash: blockHash
         )
         
-        let checkGenesisId = Extrinsic.SignedExtensionId.genesis.rawValue
-        store[checkGenesisId] = ExtrinsicSignedExtension.CheckGenesis(genesisHash: genesisHash)
+        store[Extrinsic.SignedExtensionId.genesis] = ExtrinsicSignedExtension.CheckGenesis(
+            genesisHash: genesisHash
+        )
         
-        let checkTxVersionId = Extrinsic.SignedExtensionId.txVersion.rawValue
-        store[checkTxVersionId] = ExtrinsicSignedExtension.CheckTxVersion(transactionVersion: transactionVersion)
+        store[Extrinsic.SignedExtensionId.txVersion] = ExtrinsicSignedExtension.CheckTxVersion(
+            transactionVersion: transactionVersion
+        )
         
-        let checkSpecVersionId = Extrinsic.SignedExtensionId.specVersion.rawValue
-        store[checkSpecVersionId] = ExtrinsicSignedExtension.CheckSpecVersion(specVersion: specVersion)
+        store[Extrinsic.SignedExtensionId.specVersion] = ExtrinsicSignedExtension.CheckSpecVersion(
+            specVersion: specVersion
+        )
         
-        let nonceId = Extrinsic.SignedExtensionId.nonce.rawValue
-        store[nonceId] = ExtrinsicSignedExtension.CheckNonce(nonce: nonce)
+        store[Extrinsic.SignedExtensionId.nonce] = ExtrinsicSignedExtension.CheckNonce(nonce: nonce)
         
-        let txPaymentId = Extrinsic.SignedExtensionId.txPayment.rawValue
-        store[txPaymentId] = ExtrinsicSignedExtension.ChargeTransactionPayment(tip: tip)
+        store[Extrinsic.SignedExtensionId.txPayment] = ExtrinsicSignedExtension.ChargeTransactionPayment(
+            tip: tip
+        )
         
-        let metadataHashId = Extrinsic.SignedExtensionId.checkMetadataHash.rawValue
+        let metadataHashId = Extrinsic.SignedExtensionId.checkMetadataHash
         if let metadataHash = metadataHash {
             store[metadataHashId] = ExtrinsicSignedExtension.CheckMetadataHash(mode: .enabled(metadataHash))
         } else {

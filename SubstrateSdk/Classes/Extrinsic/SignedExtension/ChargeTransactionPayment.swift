@@ -3,7 +3,7 @@ import BigInt
 
 public extension ExtrinsicSignedExtension {
     struct ChargeTransactionPayment: Codable, OnlyExtrinsicSignedExtending {
-        public var signedExtensionId: String { Extrinsic.SignedExtensionId.txPayment.rawValue }
+        public var signedExtensionId: String { Extrinsic.SignedExtensionId.txPayment }
 
         public let tip: BigUInt
 

@@ -7,7 +7,7 @@ public extension ExtrinsicSignedExtension {
             case disabled
         }
         
-        public var signedExtensionId: String { Extrinsic.SignedExtensionId.checkMetadataHash.rawValue }
+        public var signedExtensionId: String { Extrinsic.SignedExtensionId.checkMetadataHash }
         
         public let mode: Mode
         
@@ -40,7 +40,7 @@ extension ExtrinsicSignedExtension.CheckMetadataHash: ExtrinsicSignedExtending {
 
 
 public final class CheckMetadataHashCoder: ExtrinsicSignedExtensionCoding {
-    public var signedExtensionId: String { Extrinsic.SignedExtensionId.checkMetadataHash.rawValue }
+    public var signedExtensionId: String { Extrinsic.SignedExtensionId.checkMetadataHash }
     
     public func encodeIncludedInExtrinsic(from extra: ExtrinsicExtra, encoder: DynamicScaleEncoding) throws {
         guard let index = extra[signedExtensionId] else {

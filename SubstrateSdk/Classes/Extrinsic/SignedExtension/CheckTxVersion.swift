@@ -2,7 +2,7 @@ import Foundation
 
 public extension ExtrinsicSignedExtension {
     struct CheckTxVersion: Codable, OnlyExtrinsicSignatureExtending {
-        public var signedExtensionId: String { Extrinsic.SignedExtensionId.txVersion.rawValue }
+        public var signedExtensionId: String { Extrinsic.SignedExtensionId.txVersion }
         
         public let transactionVersion: UInt32
         

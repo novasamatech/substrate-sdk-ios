@@ -2,7 +2,7 @@ import Foundation
 
 public extension ExtrinsicSignedExtension {
     struct CheckGenesis: Codable, OnlyExtrinsicSignatureExtending {
-        public var signedExtensionId: String { Extrinsic.SignedExtensionId.genesis.rawValue }
+        public var signedExtensionId: String { Extrinsic.SignedExtensionId.genesis }
         
         public let genesisHash: String
         

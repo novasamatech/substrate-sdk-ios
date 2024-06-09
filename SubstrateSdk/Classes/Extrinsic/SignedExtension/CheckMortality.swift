@@ -2,7 +2,7 @@ import Foundation
 
 public extension ExtrinsicSignedExtension {
     struct CheckMortality: Codable, ExtrinsicSignedExtending {
-        public var signedExtensionId: String { Extrinsic.SignedExtensionId.mortality.rawValue }
+        public var signedExtensionId: String { Extrinsic.SignedExtensionId.mortality }
         
         public let era: Era
         public let blockHash: String

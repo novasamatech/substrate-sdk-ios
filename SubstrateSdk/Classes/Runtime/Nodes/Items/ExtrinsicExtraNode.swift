@@ -7,17 +7,17 @@ public enum ExtrinsicExtraNodeError: Error {
 public class ExtrinsicExtraNode: Node {
     static let defaultExtensions: [ExtrinsicSignedExtensionCoding] = [
         DefaultExtrinsicSignedExtensionCoder(
-            signedExtensionId: Extrinsic.SignedExtensionId.mortality.rawValue,
+            signedExtensionId: Extrinsic.SignedExtensionId.mortality,
             extraType: GenericType.era.name
         ),
         
         CompactExtrinsicSignedExtensionCoder(
-            signedExtensionId: Extrinsic.SignedExtensionId.nonce.rawValue,
+            signedExtensionId: Extrinsic.SignedExtensionId.nonce,
             extraType: KnownType.index.name
         ),
         
         CompactExtrinsicSignedExtensionCoder(
-            signedExtensionId: Extrinsic.SignedExtensionId.txPayment.rawValue,
+            signedExtensionId: Extrinsic.SignedExtensionId.txPayment,
             extraType: KnownType.balance.name
         ),
         
