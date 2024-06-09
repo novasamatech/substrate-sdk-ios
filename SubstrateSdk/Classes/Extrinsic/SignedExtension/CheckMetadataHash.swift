@@ -21,9 +21,9 @@ extension ExtrinsicSignedExtension.CheckMetadataHash: ExtrinsicSignedExtending {
     public func setIncludedInExtrinsic(to extraStore: inout ExtrinsicExtra, context: [CodingUserInfoKey: Any]?) {
         switch mode {
         case .enabled:
-            extraStore[signedExtensionId] = JSON.unsignedIntValue(1)
+            extraStore[signedExtensionId] = JSON.stringValue("1")
         case .disabled:
-            extraStore[signedExtensionId] = JSON.unsignedIntValue(0)
+            extraStore[signedExtensionId] = JSON.stringValue("0")
         }
     }
     
