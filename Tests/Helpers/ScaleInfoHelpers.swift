@@ -29,7 +29,7 @@ final class ScaleInfoHelper {
     static func createTypeRegistry(
         from fileName: String,
         networkFilename: String = "common-v14",
-        customExtensions: [ExtrinsicExtensionCoder] = []
+        customExtensions: [ExtrinsicSignedExtensionCoding] = []
     ) throws -> TypeRegistryCatalog {
         let runtimeMetadata = try Self.createScaleInfoMetadata(for: fileName)
 
@@ -52,7 +52,7 @@ final class ScaleInfoHelper {
     
     static func createTypeRegistryWithoutVersioning(
         from fileName: String,
-        customExtensions: [ExtrinsicExtensionCoder] = []
+        customExtensions: [ExtrinsicSignedExtensionCoding] = []
     ) throws -> TypeRegistryCatalog {
         let runtimeMetadata = try Self.createScaleInfoMetadata(for: fileName)
         

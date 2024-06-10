@@ -7,12 +7,13 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func with(nonce: UInt32) -> Self
     func with(era: Era, blockHash: String) -> Self
     func with(tip: BigUInt) -> Self
+    func with(metadataHash: Data) -> Self
     func with(batchType: ExtrinsicBatch) -> Self
     func with(runtimeJsonContext: RuntimeJsonContext) -> Self
     func with(signaturePayloadFormat: ExtrinsicSignaturePayloadFormat) -> Self
     func adding<T: RuntimeCallable>(call: T) throws -> Self
     func adding(rawCall: Data) throws -> Self
-    func adding(extrinsicExtension: ExtrinsicExtension) -> Self
+    func adding(extrinsicSignedExtension: ExtrinsicSignedExtending) -> Self
     func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self
     func getCalls() -> [JSON]
     func reset() -> Self
@@ -68,9 +69,10 @@ public class ExtrinsicBuilder {
     private var tip: BigUInt
     private var signature: ExtrinsicSignature?
     private var signaturePayloadFormat: ExtrinsicSignaturePayloadFormat = .regular
+    private var metadataHash: Data?
     private var batchType: ExtrinsicBatch = .atomic
     private var runtimeJsonContext: RuntimeJsonContext?
-    private var additionalExtensions: [ExtrinsicExtension] = []
+    private var additionalExtensions: [ExtrinsicSignedExtending] = []
 
     public init(specVersion: UInt32,
                 transactionVersion: UInt32,
@@ -119,15 +121,52 @@ public class ExtrinsicBuilder {
 
         return try call.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
     }
+    
+    private func getExtensions() -> [String: ExtrinsicSignedExtending] {
+        var store = additionalExtensions.reduce(into: [String: ExtrinsicSignedExtending]()) { accum, item in
+            accum[item.signedExtensionId] = item
+        }
+        
+        store[Extrinsic.SignedExtensionId.mortality] = ExtrinsicSignedExtension.CheckMortality(
+            era: era,
+            blockHash: blockHash
+        )
+        
+        store[Extrinsic.SignedExtensionId.genesis] = ExtrinsicSignedExtension.CheckGenesis(
+            genesisHash: genesisHash
+        )
+        
+        store[Extrinsic.SignedExtensionId.txVersion] = ExtrinsicSignedExtension.CheckTxVersion(
+            transactionVersion: transactionVersion
+        )
+        
+        store[Extrinsic.SignedExtensionId.specVersion] = ExtrinsicSignedExtension.CheckSpecVersion(
+            specVersion: specVersion
+        )
+        
+        store[Extrinsic.SignedExtensionId.nonce] = ExtrinsicSignedExtension.CheckNonce(nonce: nonce)
+        
+        store[Extrinsic.SignedExtensionId.txPayment] = ExtrinsicSignedExtension.ChargeTransactionPayment(
+            tip: tip
+        )
+        
+        let metadataHashId = Extrinsic.SignedExtensionId.checkMetadataHash
+        if let metadataHash = metadataHash {
+            store[metadataHashId] = ExtrinsicSignedExtension.CheckMetadataHash(mode: .enabled(metadataHash))
+        } else {
+            store[metadataHashId] = ExtrinsicSignedExtension.CheckMetadataHash(mode: .disabled)
+        }
+        
+        return store
+    }
 
     private func createExtra() throws -> ExtrinsicExtra {
         var extra = ExtrinsicExtra()
-        try extra.setEra(era)
-        extra.setNonce(nonce)
-        extra.setTip(tip)
-
-        for extrinsicExtension in additionalExtensions {
-            extrinsicExtension.setAdditionalExtra(to: &extra, context: runtimeJsonContext?.toRawContext())
+    
+        let signedExtensions = getExtensions()
+        
+        for signedExtension in signedExtensions.values {
+            try signedExtension.setIncludedInExtrinsic(to: &extra, context: runtimeJsonContext?.toRawContext())
         }
 
         return extra
@@ -142,23 +181,13 @@ public class ExtrinsicBuilder {
         encodingBy encoder: DynamicScaleEncoding,
         metadata: RuntimeMetadataProtocol
     ) throws {
+        let signedExtensions = getExtensions()
+        
         for checkString in metadata.getSignedExtensions() {
-            guard let check = ExtrinsicCheck(rawValue: checkString) else {
-                continue
-            }
-
-            switch check {
-            case .genesis:
-                try encoder.appendBytes(json: .stringValue(genesisHash))
-            case .mortality:
-                try encoder.appendBytes(json: .stringValue(blockHash))
-            case .specVersion:
-                try encoder.append(encodable: specVersion)
-            case .txVersion:
-                try encoder.append(encodable: transactionVersion)
-            default:
-                continue
-            }
+            try signedExtensions[checkString]?.includeInSignature(
+                encoder: encoder,
+                context: runtimeJsonContext?.toRawContext()
+            )
         }
     }
 
@@ -247,6 +276,12 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
 
         return self
     }
+    
+    public func with(metadataHash: Data) -> Self {
+        self.metadataHash = metadataHash
+        
+        return self
+    }
 
     public func with(batchType: ExtrinsicBatch) -> Self {
         self.batchType = batchType
@@ -277,8 +312,8 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         return self
     }
 
-    public func adding(extrinsicExtension: ExtrinsicExtension) -> Self {
-        additionalExtensions.append(extrinsicExtension)
+    public func adding(extrinsicSignedExtension: ExtrinsicSignedExtending) -> Self {
+        additionalExtensions.append(extrinsicSignedExtension)
         return self
     }
 

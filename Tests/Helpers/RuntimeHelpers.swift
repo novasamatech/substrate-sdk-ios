@@ -33,7 +33,7 @@ final class RuntimeHelper {
     static func createTypeRegistry(
         from name: String,
         runtimeMetadataName: String,
-        customExtensions: [ExtrinsicExtensionCoder] = []
+        customExtensions: [ExtrinsicSignedExtensionCoding] = []
     ) throws -> TypeRegistry {
         guard let url = Bundle(for: self).url(forResource: name, withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogBaseName
@@ -53,7 +53,7 @@ final class RuntimeHelper {
     static func createTypeRegistryCatalog(from baseName: String,
                                           networkName: String,
                                           runtimeMetadataName: String,
-                                          customExtensions: [ExtrinsicExtensionCoder] = []
+                                          customExtensions: [ExtrinsicSignedExtensionCoding] = []
     )
     throws -> TypeRegistryCatalog {
         let runtimeMetadata = try Self.createRuntimeMetadata(runtimeMetadataName)
@@ -67,7 +67,7 @@ final class RuntimeHelper {
     static func createTypeRegistryCatalog(
         from baseName: String,
         runtimeMetadataName: String,
-        customExtensions: [ExtrinsicExtensionCoder] = []
+        customExtensions: [ExtrinsicSignedExtensionCoding] = []
     ) throws -> TypeRegistryCatalog {
         let runtimeMetadata = try Self.createRuntimeMetadata(runtimeMetadataName)
 
@@ -81,7 +81,7 @@ final class RuntimeHelper {
     static func createTypeRegistryCatalog(from baseName: String,
                                           networkName: String,
                                           runtimeMetadata: RuntimeMetadata,
-                                          customExtensions: [ExtrinsicExtensionCoder] = [])
+                                          customExtensions: [ExtrinsicSignedExtensionCoding] = [])
     throws -> TypeRegistryCatalog {
         guard let baseUrl = Bundle(for: self).url(forResource: baseName, withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogBaseName
@@ -108,7 +108,7 @@ final class RuntimeHelper {
     static func createTypeRegistryCatalog(
         from baseName: String,
         runtimeMetadata: RuntimeMetadata,
-        customExtensions: [ExtrinsicExtensionCoder] = []
+        customExtensions: [ExtrinsicSignedExtensionCoding] = []
     ) throws -> TypeRegistryCatalog {
         guard let baseUrl = Bundle(for: self).url(forResource: baseName, withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogBaseName
