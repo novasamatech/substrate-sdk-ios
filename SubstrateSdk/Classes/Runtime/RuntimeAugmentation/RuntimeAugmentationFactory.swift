@@ -1,8 +1,8 @@
 import Foundation
 
 public protocol RuntimeAugmentationFactoryProtocol: AnyObject {
-    func createSubstrateAugmentation(for runtime: RuntimeMetadataV14) -> RuntimeAugmentationResult
-    func createEthereumBasedAugmentation(for runtime: RuntimeMetadataV14) -> RuntimeAugmentationResult
+    func createSubstrateAugmentation(for runtime: PostV14RuntimeMetadataProtocol) -> RuntimeAugmentationResult
+    func createEthereumBasedAugmentation(for runtime: PostV14RuntimeMetadataProtocol) -> RuntimeAugmentationResult
 }
 
 public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtocol {
@@ -14,7 +14,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
         types: [String],
         fromType: String,
         additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14,
+        runtime: PostV14RuntimeMetadataProtocol,
         mode: RuntimeTypeMatchingMode
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         for type in types {
@@ -31,7 +31,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
         types: [String],
         toType: String,
         additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14,
+        runtime: PostV14RuntimeMetadataProtocol,
         mode: RuntimeTypeMatchingMode
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         for type in types {
@@ -46,7 +46,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
 
     private func addingEventPhaseNode(
         to additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14
+        runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         addingAdditionalOneOfTo(
             types: ["frame_system.Phase"],
@@ -59,7 +59,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
 
     private func addingSubstrateAddressNode(
         to additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14
+        runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         if let addressType = RuntimeMetadataSearchEngine.findParameterType(
             for: Self.uncheckedExtrinsicModuleName,
@@ -76,7 +76,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
 
     private func addingEthereumBasedAddressNode(
         to additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14
+        runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         addingAdditionalOneOfTo(
             types: ["AccountId20"],
@@ -89,7 +89,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
 
     private func addingSubstrateSignatureNode(
         to additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14
+        runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         if let signatureType = RuntimeMetadataSearchEngine.findParameterType(
             for: Self.uncheckedExtrinsicModuleName,
@@ -105,8 +105,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
     }
 
     private func addingEthereumBasedSignatureNode(
-        to additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime _: RuntimeMetadataV14
+        to additionalNodes: RuntimeAugmentationResult.AdditionalNodes
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         let node = StructNode(
             typeName: KnownType.signature.name,
@@ -122,7 +121,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
 
     private func addingSubstrateAccountIdNode(
         to additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14
+        runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         addingAdditionalOneOfFrom(
             types: ["AccountId32"],
@@ -135,7 +134,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
 
     private func addingPalletIdentityDataNode(
         to additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14
+        runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         addingAdditionalOneOfFrom(
             types: ["pallet_identity.Data"],
@@ -148,7 +147,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
 
     private func addingRuntimeEventNode(
         to additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14
+        runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         addingAdditionalOneOfFrom(
             types: ["RuntimeEvent", "Event"],
@@ -161,7 +160,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
 
     private func addingRuntimeCallNode(
         to additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14
+        runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         addingAdditionalOneOfFrom(
             types: ["RuntimeCall", "Call"],
@@ -174,7 +173,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
 
     private func addingRuntimeDispatchNode(
         to additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14
+        runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         let feeType = KnownType.runtimeDispatchInfo.name
         let runtimeType = "frame_support.dispatch.DispatchInfo"
@@ -216,7 +215,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
     }
 
     private func getCommonAdditionalNodes(
-        for runtime: RuntimeMetadataV14
+        for runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         var additionalNodes = RuntimeAugmentationResult.AdditionalNodes(
             nodes: [
@@ -238,7 +237,7 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
 
     private func addingSubstrateSpecificNodes(
         to additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14
+        runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         var updatedNodes = additionalNodes
         updatedNodes = addingSubstrateAddressNode(to: updatedNodes, runtime: runtime)
@@ -249,25 +248,27 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
 
     private func addingEthereumBasedSpecificNodes(
         to additionalNodes: RuntimeAugmentationResult.AdditionalNodes,
-        runtime: RuntimeMetadataV14
+        runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult.AdditionalNodes {
         var updatedNodes = additionalNodes
         updatedNodes = addingEthereumBasedAddressNode(to: updatedNodes, runtime: runtime)
-        updatedNodes = addingEthereumBasedSignatureNode(to: updatedNodes, runtime: runtime)
+        updatedNodes = addingEthereumBasedSignatureNode(to: updatedNodes)
 
         return updatedNodes
     }
 }
 
 extension RuntimeAugmentationFactory {
-    public func createSubstrateAugmentation(for runtime: RuntimeMetadataV14) -> RuntimeAugmentationResult {
+    public func createSubstrateAugmentation(for runtime: PostV14RuntimeMetadataProtocol) -> RuntimeAugmentationResult {
         var additionalNodes = getCommonAdditionalNodes(for: runtime)
         additionalNodes = addingSubstrateSpecificNodes(to: additionalNodes, runtime: runtime)
 
         return RuntimeAugmentationResult(additionalNodes: additionalNodes)
     }
 
-    public func createEthereumBasedAugmentation(for runtime: RuntimeMetadataV14) -> RuntimeAugmentationResult {
+    public func createEthereumBasedAugmentation(
+        for runtime: PostV14RuntimeMetadataProtocol
+    ) -> RuntimeAugmentationResult {
         var additionalNodes = getCommonAdditionalNodes(for: runtime)
         additionalNodes = addingEthereumBasedSpecificNodes(to: additionalNodes, runtime: runtime)
 

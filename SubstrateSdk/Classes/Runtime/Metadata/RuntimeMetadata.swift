@@ -91,7 +91,7 @@ public struct RuntimeMetadata: RuntimeMetadataProtocol {
     public func getSignedExtensions() -> [String] {
         extrinsic.signedExtensions
     }
-    
+
     public func getSignedExtensionType(for identifier: String) -> String? {
         // types are not stored onchain for pre 14 runtime
         nil

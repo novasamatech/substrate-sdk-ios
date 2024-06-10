@@ -1,6 +1,6 @@
 import Foundation
 
-public struct PalletMetadataV14 {
+public struct PalletMetadataV15 {
     public let name: String
     public let storage: StorageMetadataV14?
     public let calls: CallMetadataV14?
@@ -8,6 +8,7 @@ public struct PalletMetadataV14 {
     public let constants: [ConstantMetadataV14]
     public let errors: ErrorMetadataV14?
     public let index: UInt8
+    public let docs: [String]
 
     public init(
         name: String,
@@ -16,7 +17,8 @@ public struct PalletMetadataV14 {
         events: EventMetadataV14?,
         constants: [ConstantMetadataV14],
         errors: ErrorMetadataV14?,
-        index: UInt8
+        index: UInt8,
+        docs: [String]
     ) {
         self.name = name
         self.storage = storage
@@ -25,12 +27,13 @@ public struct PalletMetadataV14 {
         self.constants = constants
         self.errors = errors
         self.index = index
+        self.docs = docs
     }
 }
 
-extension PalletMetadataV14: PostV14PalletMetadataProtocol {}
+extension PalletMetadataV15: PostV14PalletMetadataProtocol {}
 
-extension PalletMetadataV14: ScaleCodable {
+extension PalletMetadataV15: ScaleCodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
         try name.encode(scaleEncoder: scaleEncoder)
         try ScaleOption(value: storage).encode(scaleEncoder: scaleEncoder)
@@ -39,6 +42,7 @@ extension PalletMetadataV14: ScaleCodable {
         try constants.encode(scaleEncoder: scaleEncoder)
         try ScaleOption(value: errors).encode(scaleEncoder: scaleEncoder)
         try index.encode(scaleEncoder: scaleEncoder)
+        try docs.encode(scaleEncoder: scaleEncoder)
     }
 
     public init(scaleDecoder: ScaleDecoding) throws {
@@ -49,5 +53,6 @@ extension PalletMetadataV14: ScaleCodable {
         constants = try [ConstantMetadataV14](scaleDecoder: scaleDecoder)
         errors = try ScaleOption(scaleDecoder: scaleDecoder).value
         index = try UInt8(scaleDecoder: scaleDecoder)
+        docs = try [String](scaleDecoder: scaleDecoder)
     }
 }
