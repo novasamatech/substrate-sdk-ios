@@ -100,7 +100,7 @@ extension JSONRPCOperation: SchedulerDelegate {
     func didTrigger(scheduler: SchedulerProtocol) {
         mutex.lock()
 
-        clearScheduler()
+        self.scheduler = nil
         cancelRequest()
 
         let closure = pendingRequest?.callback
