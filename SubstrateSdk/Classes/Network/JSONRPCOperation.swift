@@ -1,16 +1,25 @@
 import Foundation
-import RobinHood
+import Operation_iOS
 
 enum JSONRPCOperationError: Error {
     case timeout
 }
 
 public class JSONRPCOperation<P: Encodable, T: Decodable>: BaseOperation<T> {
+    struct PendingRequest {
+        let requestId: UInt16
+        let callback: (Result<T, Error>) -> Void
+    }
+
     public let engine: JSONRPCEngine
-    private(set) var requestId: UInt16?
     public let method: String
     public var parameters: P?
     public let timeout: Int
+
+    private let mutex = NSLock()
+
+    private var pendingRequest: PendingRequest?
+    private var scheduler: SchedulerProtocol?
 
     public init(engine: JSONRPCEngine, method: String, parameters: P? = nil, timeout: Int = 10) {
         self.engine = engine
@@ -21,64 +30,85 @@ public class JSONRPCOperation<P: Encodable, T: Decodable>: BaseOperation<T> {
         super.init()
     }
 
-    public override func main() {
-        super.main()
+    override public func performAsync(_ callback: @escaping (Result<T, Error>) -> Void) throws {
+        mutex.lock()
 
-        if isCancelled {
-            return
+        defer {
+            mutex.unlock()
         }
 
-        if result != nil {
-            return
-        }
+        let requestId = try engine.callMethod(method, params: parameters) { (result: Result<T, Error>) in
+            self.mutex.lock()
 
-        do {
-            let semaphore = DispatchSemaphore(value: 0)
-
-            var optionalCallResult: Result<T, Error>?
-
-            requestId = try engine.callMethod(method, params: parameters) { (result: Result<T, Error>) in
-                optionalCallResult = result
-
-                semaphore.signal()
-            }
-
-            let status = semaphore.wait(timeout: .now() + .seconds(timeout))
-
-            if status == .timedOut {
-                result = .failure(JSONRPCOperationError.timeout)
+            guard self.pendingRequest != nil else {
                 return
             }
 
-            guard let callResult = optionalCallResult else {
-                return
-            }
+            self.pendingRequest = nil
+            self.clearScheduler()
 
             if
-                case let .failure(error) = callResult,
+                case let .failure(error) = result,
                 let jsonRPCEngineError = error as? JSONRPCEngineError,
                 jsonRPCEngineError == .clientCancelled {
                 return
             }
 
-            switch callResult {
-            case let .success(response):
-                result = .success(response)
-            case let .failure(error):
-                result = .failure(error)
-            }
+            self.mutex.unlock()
 
-        } catch {
-            result = .failure(error)
+            callback(result)
+        }
+
+        if isExecuting {
+            pendingRequest = .init(requestId: requestId, callback: callback)
+            startScheduler(for: timeout)
         }
     }
 
     public override func cancel() {
-        if let requestId = requestId {
-            engine.cancelForIdentifier(requestId)
-        }
+        mutex.lock()
+
+        clearScheduler()
+
+        cancelRequest()
+
+        self.pendingRequest = nil
+
+        mutex.unlock()
 
         super.cancel()
+    }
+
+    private func cancelRequest() {
+        if let requestId = pendingRequest?.requestId {
+            engine.cancelForIdentifier(requestId)
+        }
+    }
+
+    private func startScheduler(for timeout: Int) {
+        scheduler = Scheduler(with: self)
+        scheduler?.notifyAfter(TimeInterval(timeout))
+    }
+
+    private func clearScheduler() {
+        scheduler?.cancel()
+        scheduler = nil
+    }
+}
+
+extension JSONRPCOperation: SchedulerDelegate {
+    func didTrigger(scheduler: SchedulerProtocol) {
+        mutex.lock()
+
+        self.scheduler = nil
+        cancelRequest()
+
+        let closure = pendingRequest?.callback
+        self.pendingRequest = nil
+
+        mutex.unlock()
+
+        closure?(.failure(JSONRPCOperationError.timeout))
     }
 }
 
