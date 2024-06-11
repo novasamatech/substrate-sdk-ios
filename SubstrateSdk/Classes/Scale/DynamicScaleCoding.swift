@@ -7,6 +7,8 @@ public protocol DynamicScaleEncoding {
     func appendCompact(json: JSON, type: String) throws
     func appendFixedArray(json: JSON, type: String) throws
     func appendBytes(json: JSON) throws
+    func appendRawData(_ data: Data) throws
+    func appendCommonOption(isNull: Bool) throws
     func appendString(json: JSON) throws
     func appendU8(json: JSON) throws
     func appendU16(json: JSON) throws
