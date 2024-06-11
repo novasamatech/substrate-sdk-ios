@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   s.dependency 'IrohaCrypto/Scrypt', '~> 0.9.0'
   s.dependency 'IrohaCrypto/ss58', '~> 0.9.0'
   s.dependency 'ReachabilitySwift', '~> 5.0'
-  s.dependency 'Operation-iOS', '~> 2.0.0'
+  s.dependency 'Operation-iOS', '~> 2.0.1'
   s.dependency 'Starscream'
   s.dependency 'TweetNacl', '~> 1.0.0'
   s.dependency 'BigInt', '~> 5.0'
