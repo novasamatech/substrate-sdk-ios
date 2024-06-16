@@ -24,11 +24,11 @@ public protocol WebSocketEngineDelegate: AnyObject {
 }
 
 public final class WebSocketEngine {
-    public enum State {
+    public enum State: Equatable {
         case notConnected
         case connecting
         case waitingReconnection
-        case connected
+        case connected(url: URL)
     }
 
     public private(set) var urls: [URL]
