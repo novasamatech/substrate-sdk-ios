@@ -230,8 +230,12 @@ public final class WebSocketEngine {
             logger?.debug("(\(chainName):\(selectedURL)) Cancel socket connection")
 
         case .waitingReconnection:
-            logger?.debug("(\(chainName):\(selectedURL)) Cancel reconnection scheduler due to disconnection")
+            state = .notConnected
+
+            forceConnectionReset()
             reconnectionScheduler.cancel()
+            
+            logger?.debug("(\(chainName):\(selectedURL)) Cancel reconnection scheduler due to disconnection")
         default:
             logger?.debug("(\(chainName):\(selectedURL)) Already disconnected from socket")
         }
