@@ -104,7 +104,7 @@ extension WebSocketEngine: WebSocketDelegate {
         logger?.debug("(\(chainName):\(selectedURL)) connection established")
 
         updateReconnectionAttempts(0, for: selectedURL)
-        changeState(.connected)
+        changeState(.connected(url: selectedURL))
         sendAllPendingRequests()
 
         schedulePingIfNeeded()
