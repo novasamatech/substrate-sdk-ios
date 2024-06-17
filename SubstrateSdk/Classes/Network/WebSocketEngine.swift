@@ -170,6 +170,8 @@ public final class WebSocketEngine {
             processingQueue: self.processingQueue,
             connectionTimeout: connectionTimeout
         )
+        
+        connection.delegate = self
 
         logger?.debug("(\(chainName)) Did set new urls: \(newUrls)")
 
