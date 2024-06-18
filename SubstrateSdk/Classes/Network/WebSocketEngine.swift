@@ -25,9 +25,9 @@ public protocol WebSocketEngineDelegate: AnyObject {
 
 public final class WebSocketEngine {
     public enum State: Equatable {
-        case notConnected
-        case connecting
-        case waitingReconnection
+        case notConnected(url: URL?)
+        case connecting(url: URL)
+        case waitingReconnection(url: URL)
         case connected(url: URL)
     }
 
@@ -43,7 +43,7 @@ public final class WebSocketEngine {
     public let pingInterval: TimeInterval
     public let connectionTimeout: TimeInterval
 
-    public private(set) var state: State = .notConnected {
+    public private(set) var state: State = .notConnected(url: nil) {
         didSet {
             if let delegate = delegate {
                 let oldState = oldValue
@@ -170,6 +170,7 @@ public final class WebSocketEngine {
             processingQueue: self.processingQueue,
             connectionTimeout: connectionTimeout
         )
+        connection.delegate = self
 
         logger?.debug("(\(chainName)) Did set new urls: \(newUrls)")
 
@@ -204,7 +205,7 @@ public final class WebSocketEngine {
 
         switch state {
         case .connected:
-            state = .notConnected
+            state = .notConnected(url: selectedURL)
 
             let cancelledRequests = resetInProgress()
 
@@ -223,14 +224,14 @@ public final class WebSocketEngine {
 
             logger?.debug("(\(chainName):\(selectedURL)) Did start disconnect from socket")
         case .connecting:
-            state = .notConnected
+            state = .notConnected(url: selectedURL)
 
             forceConnectionReset()
 
             logger?.debug("(\(chainName):\(selectedURL)) Cancel socket connection")
 
         case .waitingReconnection:
-            state = .notConnected
+            state = .notConnected(url: selectedURL)
 
             forceConnectionReset()
             reconnectionScheduler.cancel()
@@ -666,7 +667,7 @@ extension WebSocketEngine {
 
         if let reconnectionStrategy = reconnectionStrategy,
            let nextDelay = reconnectionStrategy.reconnectAfter(attempt: actualAttempt) {
-            state = .waitingReconnection
+            state = .waitingReconnection(url: selectedURL)
 
             let chainName = "\(chainName):\(selectedURL)"
             logger?.debug(
@@ -675,7 +676,7 @@ extension WebSocketEngine {
 
             reconnectionScheduler.notifyAfter(nextDelay)
         } else {
-            state = .notConnected
+            state = .notConnected(url: selectedURL)
 
             // notify pendings about error because there is no chance to reconnect
 
@@ -789,7 +790,7 @@ extension WebSocketEngine {
         logger?.debug("(\(chainName):\(selectedURL)) Start connecting with attempt: \(attempt)")
 
         updateReconnectionAttempts(attempt, for: selectedURL)
-        state = .connecting
+        state = .connecting(url: selectedURL)
 
         connection.connect()
     }
