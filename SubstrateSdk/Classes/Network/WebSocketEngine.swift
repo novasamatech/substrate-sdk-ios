@@ -43,7 +43,7 @@ public final class WebSocketEngine {
     public let pingInterval: TimeInterval
     public let connectionTimeout: TimeInterval
 
-    public private(set) var state: State {
+    public private(set) var state: State = .notConnected(url: nil) {
         didSet {
             if let delegate = delegate {
                 let oldState = oldValue
@@ -124,7 +124,6 @@ public final class WebSocketEngine {
         self.pingInterval = pingInterval
         self.connectionTimeout = connectionTimeout
         self.selectedURLIndex = 0
-        self.state = .notConnected(url: urls[selectedURLIndex])
 
         guard let url = urls.first else {
             return nil
