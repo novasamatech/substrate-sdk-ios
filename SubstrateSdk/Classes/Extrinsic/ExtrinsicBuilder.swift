@@ -93,7 +93,7 @@ public class ExtrinsicBuilder {
         self.nonce = 0
         self.calls = []
     }
-    
+
     init(memo: ExtrinsicBuilderMemo) {
         self.specVersion = memo.specVersion
         self.transactionVersion = memo.transactionVersion
@@ -452,7 +452,7 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         
         let includedInSignatureExtraEncoder = encoder.newEncoder()
         try appendAdditionalSigned(encodingBy: includedInSignatureExtraEncoder, metadata: metadata)
-        let encodedSignatureExtra = try includedInExtrinsicExtraEncoder.encode()
+        let encodedSignatureExtra = try includedInSignatureExtraEncoder.encode()
         
         return ExtrinsicSignatureParams(
             encodedCall: encodedCall,
