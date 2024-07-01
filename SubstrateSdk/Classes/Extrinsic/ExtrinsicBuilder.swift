@@ -40,6 +40,13 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     ) throws -> Data
 
     func build(encodingBy encoder: DynamicScaleEncoding, metadata: RuntimeMetadataProtocol) throws -> Data
+    
+    func buildExtrinsicSignatureParams(
+        encodingBy encoder: DynamicScaleEncoding,
+        metadata: RuntimeMetadataProtocol
+    ) throws -> ExtrinsicSignatureParams
+    
+    func makeMemo() -> ExtrinsicBuilderMemoProtocol
 }
 
 public extension ExtrinsicBuilderProtocol {
@@ -85,6 +92,24 @@ public class ExtrinsicBuilder {
         self.tip = 0
         self.nonce = 0
         self.calls = []
+    }
+
+    init(memo: ExtrinsicBuilderMemo) {
+        self.specVersion = memo.specVersion
+        self.transactionVersion = memo.transactionVersion
+        self.genesisHash = memo.genesisHash
+        self.calls = memo.calls
+        self.blockHash = memo.blockHash
+        self.address = memo.address
+        self.nonce = memo.nonce
+        self.era = memo.era
+        self.tip = memo.tip
+        self.signature = memo.signature
+        self.signaturePayloadFormat = memo.signaturePayloadFormat
+        self.metadataHash = memo.metadataHash
+        self.batchType = memo.batchType
+        self.runtimeJsonContext = memo.runtimeJsonContext
+        self.additionalExtensions = memo.additionalExtensions
     }
 
     private func prepareExtrinsicCall(for metadata: RuntimeMetadataProtocol) throws -> JSON {
@@ -410,5 +435,49 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         try encoder.append(extrinsic, ofType: GenericType.extrinsic.name, with: runtimeJsonContext?.toRawContext())
 
         return try encoder.encode()
+    }
+    
+    public func buildExtrinsicSignatureParams(
+        encodingBy encoder: DynamicScaleEncoding,
+        metadata: RuntimeMetadataProtocol
+    ) throws -> ExtrinsicSignatureParams {
+        let callEncoder = encoder.newEncoder()
+        let call = try prepareExtrinsicCall(for: metadata)
+        try callEncoder.append(json: call, type: KnownType.call.name)
+        let encodedCall = try callEncoder.encode()
+        
+        let includedInExtrinsicExtraEncoder = encoder.newEncoder()
+        try appendExtraToPayload(encodingBy: includedInExtrinsicExtraEncoder)
+        let encodedExtrinsicExtra = try includedInExtrinsicExtraEncoder.encode()
+        
+        let includedInSignatureExtraEncoder = encoder.newEncoder()
+        try appendAdditionalSigned(encodingBy: includedInSignatureExtraEncoder, metadata: metadata)
+        let encodedSignatureExtra = try includedInSignatureExtraEncoder.encode()
+        
+        return ExtrinsicSignatureParams(
+            encodedCall: encodedCall,
+            includedInExtrinsicExtra: encodedExtrinsicExtra,
+            includedInSignatureExtra: encodedSignatureExtra
+        )
+    }
+    
+    public func makeMemo() -> ExtrinsicBuilderMemoProtocol {
+        ExtrinsicBuilderMemo(
+            specVersion: specVersion,
+            transactionVersion: transactionVersion,
+            genesisHash: genesisHash,
+            calls: calls,
+            blockHash: blockHash,
+            address: address,
+            nonce: nonce,
+            era: era,
+            tip: tip,
+            signature: signature,
+            signaturePayloadFormat: signaturePayloadFormat,
+            metadataHash: metadataHash,
+            batchType: batchType,
+            runtimeJsonContext: runtimeJsonContext,
+            additionalExtensions: additionalExtensions
+        )
     }
 }
