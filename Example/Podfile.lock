@@ -25,7 +25,7 @@ PODS:
   - scrypt.c (0.1.1)
   - secp256k1.c (0.1.2)
   - Starscream (4.0.4)
-  - SubstrateSdk (3.2.0):
+  - SubstrateSdk (3.2.1):
     - BigInt (~> 5.0)
     - IrohaCrypto/ed25519 (~> 0.9.0)
     - IrohaCrypto/Scrypt (~> 0.9.0)
@@ -87,7 +87,7 @@ SPEC CHECKSUMS:
   scrypt.c: b42ae06183251329d2b2c620c226fb541a4a3592
   secp256k1.c: db47b726585d80f027423682eb369729e61b3b20
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
-  SubstrateSdk: a4190b1ec093bd09490c7ff20e1e03e2d4c45760
+  SubstrateSdk: fe20689ad3f1bc680318a338c9e7dcde53e9c36b
   SwiftLint: 4fa9579c63416865179bc416f0a92d55f009600d
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   xxHash-Swift: 30bd6a7507b3b7348a277c49b1cb6346c2905ec7
