@@ -12,6 +12,7 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func with(runtimeJsonContext: RuntimeJsonContext) -> Self
     func with(signaturePayloadFormat: ExtrinsicSignaturePayloadFormat) -> Self
     func adding<T: RuntimeCallable>(call: T) throws -> Self
+    func adding<T: RuntimeCallable>(call: T, at index: Int) throws -> Self
     func adding(rawCall: Data) throws -> Self
     func adding(extrinsicSignedExtension: ExtrinsicSignedExtending) -> Self
     func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self
@@ -61,6 +62,7 @@ public enum ExtrinsicBuilderError: Error {
     case missingAddress
     case unsupportedSignedExtension(_ value: String)
     case unsupportedBatch
+    case indexOutOfBounds
 }
 
 public class ExtrinsicBuilder {
@@ -327,6 +329,17 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         let json = try call.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
         calls.append(json)
 
+        return self
+    }
+    
+    public func adding<T: RuntimeCallable>(call: T, at index: Int) throws -> Self {
+        guard index <= calls.count else {
+            throw ExtrinsicBuilderError.indexOutOfBounds
+        }
+        
+        let json = try call.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
+        calls.insert(json, at: index)
+        
         return self
     }
 
