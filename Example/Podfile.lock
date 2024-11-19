@@ -1,31 +1,43 @@
 PODS:
   - BigInt (5.2.0)
-  - IrohaCrypto/BIP39 (0.9.0):
+  - IrohaCrypto (0.9.1):
+    - IrohaCrypto/BIP39 (= 0.9.1)
+    - IrohaCrypto/blake2 (= 0.9.1)
+    - IrohaCrypto/Common (= 0.9.1)
+    - IrohaCrypto/ed25519 (= 0.9.1)
+    - IrohaCrypto/Iroha (= 0.9.1)
+    - IrohaCrypto/Scrypt (= 0.9.1)
+    - IrohaCrypto/secp256k1 (= 0.9.1)
+    - IrohaCrypto/sr25519 (= 0.9.1)
+    - IrohaCrypto/ss58 (= 0.9.1)
+  - IrohaCrypto/BIP39 (0.9.1):
     - IrohaCrypto/Common
-  - IrohaCrypto/blake2 (0.9.0)
-  - IrohaCrypto/Common (0.9.0)
-  - IrohaCrypto/ed25519 (0.9.0):
+  - IrohaCrypto/blake2 (0.9.1)
+  - IrohaCrypto/Common (0.9.1)
+  - IrohaCrypto/ed25519 (0.9.1):
     - IrohaCrypto/Common
-  - IrohaCrypto/Scrypt (0.9.0):
+  - IrohaCrypto/Iroha (0.9.1):
+    - IrohaCrypto/Common
+  - IrohaCrypto/Scrypt (0.9.1):
     - IrohaCrypto/Common
     - scrypt.c (~> 0.1)
-  - IrohaCrypto/secp256k1 (0.9.0):
+  - IrohaCrypto/secp256k1 (0.9.1):
     - IrohaCrypto/Common
     - secp256k1.c (~> 0.1)
-  - IrohaCrypto/sr25519 (0.9.0):
+  - IrohaCrypto/sr25519 (0.9.1):
     - IrohaCrypto/BIP39
     - IrohaCrypto/blake2
     - IrohaCrypto/Common
-  - IrohaCrypto/ss58 (0.9.0):
+  - IrohaCrypto/ss58 (0.9.1):
     - IrohaCrypto/blake2
     - IrohaCrypto/Common
   - keccak.c (0.1.3)
   - Operation-iOS (2.0.1)
   - ReachabilitySwift (5.2.4)
   - scrypt.c (0.1.1)
-  - secp256k1.c (0.1.2)
+  - secp256k1.c (0.1.3)
   - Starscream (4.0.4)
-  - SubstrateSdk (3.3.2):
+  - SubstrateSdk (3.4.0):
     - BigInt (~> 5.0)
     - IrohaCrypto/ed25519 (~> 0.9.0)
     - IrohaCrypto/Scrypt (~> 0.9.0)
@@ -43,7 +55,9 @@ PODS:
   - xxHash-Swift (1.0.13)
 
 DEPENDENCIES:
+  - IrohaCrypto (from `https://github.com/novasamatech/IrohaCrypto`, tag `0.9.1`)
   - Operation-iOS (from `https://github.com/novasamatech/Operation-iOS.git`, tag `2.0.1`)
+  - secp256k1.c (from `https://github.com/novasamatech/secp256k1.c`, tag `0.1.3`)
   - Starscream (from `https://github.com/ERussel/Starscream.git`, branch `feature/without-origin`)
   - SubstrateSdk (from `../`)
   - SwiftLint
@@ -51,19 +65,23 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - BigInt
-    - IrohaCrypto
     - keccak.c
     - ReachabilitySwift
     - scrypt.c
-    - secp256k1.c
     - SwiftLint
     - TweetNacl
     - xxHash-Swift
 
 EXTERNAL SOURCES:
+  IrohaCrypto:
+    :git: https://github.com/novasamatech/IrohaCrypto
+    :tag: 0.9.1
   Operation-iOS:
     :git: https://github.com/novasamatech/Operation-iOS.git
     :tag: 2.0.1
+  secp256k1.c:
+    :git: https://github.com/novasamatech/secp256k1.c
+    :tag: 0.1.3
   Starscream:
     :branch: feature/without-origin
     :git: https://github.com/ERussel/Starscream.git
@@ -71,27 +89,33 @@ EXTERNAL SOURCES:
     :path: "../"
 
 CHECKOUT OPTIONS:
+  IrohaCrypto:
+    :git: https://github.com/novasamatech/IrohaCrypto
+    :tag: 0.9.1
   Operation-iOS:
     :git: https://github.com/novasamatech/Operation-iOS.git
     :tag: 2.0.1
+  secp256k1.c:
+    :git: https://github.com/novasamatech/secp256k1.c
+    :tag: 0.1.3
   Starscream:
     :commit: b9e69390d96e71427463469f47cdafb8c0db1b21
     :git: https://github.com/ERussel/Starscream.git
 
 SPEC CHECKSUMS:
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  IrohaCrypto: 6be75a4268cd1f5cec4231c6d3f95cb03f723fd3
+  IrohaCrypto: b53a7f16c839a1a76936402ffe35f496eaa8cbb0
   keccak.c: 859583afdaccb4e4fcc0f0096064d101580313f4
   Operation-iOS: 5f1c2cb82bf10f46b92faefc92d5821550b14eb5
   ReachabilitySwift: 32793e867593cfc1177f5d16491e3a197d2fccda
   scrypt.c: b42ae06183251329d2b2c620c226fb541a4a3592
-  secp256k1.c: db47b726585d80f027423682eb369729e61b3b20
+  secp256k1.c: 9df12a79da0a6735022c5d996d2df6a6e57e1d99
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
-  SubstrateSdk: a5af2260b57982600f2f852f53e9408a024f8cbb
+  SubstrateSdk: ee92f2ede60ffc3a80c73d57870c2cea05741ab4
   SwiftLint: 4fa9579c63416865179bc416f0a92d55f009600d
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   xxHash-Swift: 30bd6a7507b3b7348a277c49b1cb6346c2905ec7
 
-PODFILE CHECKSUM: 157538d05d1fb55023eefa284e3e1237dbd4e2e6
+PODFILE CHECKSUM: 62e174568457e9c60da708e29cfd1993e7b3c847
 
 COCOAPODS: 1.15.2

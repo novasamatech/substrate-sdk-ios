@@ -28,6 +28,10 @@ extension RuntimeMetadataV14: PostV14RuntimeMetadataProtocol {
     public var postV14Extrinsic: PostV14ExtrinsicMetadataProtocol {
         extrinsic
     }
+    
+    public func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiMethodMetadata? {
+        nil
+    }
 }
 
 extension RuntimeMetadataV14: ScaleCodable {

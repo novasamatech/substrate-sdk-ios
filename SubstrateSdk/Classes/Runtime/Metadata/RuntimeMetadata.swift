@@ -16,6 +16,8 @@ public protocol RuntimeMetadataProtocol {
     func getConstant(in moduleName: String, constantName: String) -> ModuleConstantMetadata?
 
     func getEventForModuleIndex(_ moduleIndex: UInt8, eventIndex: UInt32) -> EventMetadata?
+    
+    func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiMethodMetadata?
 
     func getSignedExtensions() -> [String]
 
@@ -94,6 +96,10 @@ public struct RuntimeMetadata: RuntimeMetadataProtocol {
 
     public func getSignedExtensionType(for identifier: String) -> String? {
         // types are not stored onchain for pre 14 runtime
+        nil
+    }
+    
+    public func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiMethodMetadata? {
         nil
     }
 }
