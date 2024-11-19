@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SubstrateSdk'
-  s.version          = '3.2.2'
+  s.version          = '3.3.2'
   s.summary          = 'Utility library that implements clients specific logic to interact with substrate based networks'
 
   s.homepage         = 'https://github.com/nova-wallet/substrate-sdk-ios'
@@ -27,7 +27,7 @@ Pod::Spec.new do |s|
   s.dependency 'IrohaCrypto/secp256k1', '~> 0.9.0'
   s.dependency 'IrohaCrypto/Scrypt', '~> 0.9.0'
   s.dependency 'IrohaCrypto/ss58', '~> 0.9.0'
-  s.dependency 'ReachabilitySwift', '~> 5.0'
+  s.dependency 'ReachabilitySwift', '~> 5.2.4'
   s.dependency 'Operation-iOS', '~> 2.0.1'
   s.dependency 'Starscream'
   s.dependency 'TweetNacl', '~> 1.0.0'
