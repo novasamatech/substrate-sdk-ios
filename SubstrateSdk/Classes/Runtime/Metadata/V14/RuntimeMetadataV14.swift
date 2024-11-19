@@ -29,7 +29,7 @@ extension RuntimeMetadataV14: PostV14RuntimeMetadataProtocol {
         extrinsic
     }
     
-    public func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiMethodMetadata? {
+    public func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiQueryResult? {
         nil
     }
 }

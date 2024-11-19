@@ -17,7 +17,7 @@ public protocol RuntimeMetadataProtocol {
 
     func getEventForModuleIndex(_ moduleIndex: UInt8, eventIndex: UInt32) -> EventMetadata?
     
-    func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiMethodMetadata?
+    func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiQueryResult?
 
     func getSignedExtensions() -> [String]
 
@@ -99,7 +99,7 @@ public struct RuntimeMetadata: RuntimeMetadataProtocol {
         nil
     }
     
-    public func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiMethodMetadata? {
+    public func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiQueryResult? {
         nil
     }
 }
