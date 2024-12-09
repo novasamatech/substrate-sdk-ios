@@ -13,7 +13,7 @@ public protocol GeneralTransactionBuilderProtocol {
 }
 
 public final class GeneralTransactionBuilder {
-    let version: UInt8
+    let extensionVersion: UInt8
     
     private var runtimeJsonContext: RuntimeJsonContext?
     private var calls: [JSON]
@@ -21,12 +21,12 @@ public final class GeneralTransactionBuilder {
     private var transactionExtensions: [String: TransactionExtending]
     
     init(
-        version: UInt8,
+        extensionVersion: UInt8 = ExtrinsicConstants.extensionVersion,
         calls: [JSON] = [],
         batchType: ExtrinsicBatch = .atomic,
         transactionExtensions: [TransactionExtending] = []
     ) {
-        self.version = version
+        self.extensionVersion = extensionVersion
         self.calls = calls
         self.batchType = batchType
         self.transactionExtensions = transactionExtensions.reduce(into: [:]) { $0[$1.extensionId] = $1 }
@@ -143,8 +143,8 @@ extension GeneralTransactionBuilder: GeneralTransactionBuilderProtocol {
             accum[explicit.extensionId] = explicit.value
         }
 
-        let transaction = GenericTransaction(
-            version: version,
+        let transaction = Extrinsic.General(
+            extensionVersion: extensionVersion,
             call: implication.call,
             explicits: explicits
         )

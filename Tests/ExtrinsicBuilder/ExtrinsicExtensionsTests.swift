@@ -29,11 +29,11 @@ class ExtrinsicExtensionsTests: XCTestCase {
             version: UInt64(specVersion)
         )
 
-        let extrinsic = try decoder.read(type: GenericType.extrinsic.name).map(to: Extrinsic.self, with: nil)
+        let extrinsic = try decoder.read(type: GenericType.extrinsic.name).map(to: Extrinsic.self, with: nil).getSignedExtrinsic()!
 
-        let era = extrinsic.signature!.extra.getEra()!
+        let era = extrinsic.signature.extra.getEra()!
         
-        let nonce = extrinsic.signature!.extra.getNonce()!
+        let nonce = extrinsic.signature.extra.getNonce()!
         
         var builder = try ExtrinsicBuilder(
             specVersion: specVersion,
@@ -44,7 +44,7 @@ class ExtrinsicExtensionsTests: XCTestCase {
                 era: era,
                 blockHash: "dd7532c5c01242696001e57cded1bc1326379059300287552a9c344e5bea1070"
         )
-            .with(address: extrinsic.signature!.address)
+            .with(address: extrinsic.signature.address)
             .with(nonce: nonce)
 
         let recepientAccountId = try SS58AddressFactory().accountId(
@@ -66,7 +66,7 @@ class ExtrinsicExtensionsTests: XCTestCase {
         let signatureEncoder = DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion))
 
         builder = try builder.signing(
-            by: { _ in extrinsic.signature!.signature },
+            by: { _ in extrinsic.signature.signature },
             using: signatureEncoder,
             metadata: metadata
         )

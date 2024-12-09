@@ -443,9 +443,21 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
                       metadata: RuntimeMetadataProtocol) throws -> Data {
         let call = try prepareExtrinsicCall(for: metadata)
 
-        let extrinsic = Extrinsic(signature: signature, call: call)
-
-        try encoder.append(extrinsic, ofType: GenericType.extrinsic.name, with: runtimeJsonContext?.toRawContext())
+        let extrinsic: Extrinsic
+        
+        if let signature {
+            let signed = Extrinsic.Signed(signature: signature, call: call)
+            extrinsic = .signed(signed)
+        } else {
+            let bare = Extrinsic.Bare(extrinsicVersion: ExtrinsicConstants.legacyExtrinsicFormatVersion, call: call)
+            extrinsic = .bare(bare)
+        }
+        
+        try encoder.append(
+            extrinsic,
+            ofType: GenericType.extrinsic.name,
+            with: runtimeJsonContext?.toRawContext()
+        )
 
         return try encoder.encode()
     }

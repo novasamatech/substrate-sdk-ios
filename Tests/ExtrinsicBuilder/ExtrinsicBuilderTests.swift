@@ -167,11 +167,13 @@ class ExtrinsicBuilderTests: XCTestCase {
                                                   version: UInt64(specVersion))
 
             let extrinsic: Extrinsic = try decoder.read(of: GenericType.extrinsic.name)
-
+            let bareExtrinsic = extrinsic.getBareExtrinsic()
+            
             let expectedCall = try call.toScaleCompatibleJSON()
 
-            XCTAssertNil(extrinsic.signature)
-            XCTAssertEqual(expectedCall, extrinsic.call)
+            XCTAssertNotNil(bareExtrinsic)
+            
+            XCTAssertEqual(expectedCall, bareExtrinsic?.call)
             XCTAssertTrue(decoder.remained == 0)
         } catch {
             XCTFail("Unexpected error: \(error)")
@@ -339,10 +341,11 @@ class ExtrinsicBuilderTests: XCTestCase {
 
         let expectedAddress = try MultiAddress.accoundId(accountId).toScaleCompatibleJSON()
 
-        XCTAssertEqual(expectedAddress, extrinsic.signature?.address)
+        let signed = extrinsic.getSignedExtrinsic()
+        XCTAssertEqual(expectedAddress, signed?.signature.address)
 
         if let expectedCall = expectedCall {
-            XCTAssertEqual(expectedCall, extrinsic.call)
+            XCTAssertEqual(expectedCall, signed?.call)
         }
 
         XCTAssertTrue(decoder.remained == 0)

@@ -1,9 +1,14 @@
 import Foundation
 
 final class VerifySignatureExtension {
+    let extensionVersion: UInt8
     let usability: VerifySignatureExtension.Usability
     
-    init(usability: VerifySignatureExtension.Usability) {
+    init(
+        extensionVersion: UInt8 = ExtrinsicConstants.extensionVersion,
+        usability: VerifySignatureExtension.Usability
+    ) {
+        self.extensionVersion = extensionVersion
         self.usability = usability
     }
 }
@@ -22,7 +27,6 @@ extension VerifySignatureExtension {
     }
     
     struct SigningParams {
-        let extensionVersion: UInt8
         let account: JSON
         let cryptoType: CryptoType
     }
@@ -62,7 +66,7 @@ extension VerifySignatureExtension: TransactionExtending {
             )
         case .toSign(let signer, let signingParams):
             let encoder = try encodingFactory.createEncoder()
-            try encoder.append(encodable: signingParams.extensionVersion)
+            try encoder.append(encodable: extensionVersion)
             try encoder.append(json: implication.call, type: GenericType.call.name)
             
             try implication.explicits.forEach { explicit in
