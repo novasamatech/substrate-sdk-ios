@@ -7,10 +7,10 @@ class ExtrinsicExtensionsTests: XCTestCase {
     func testChargeAssetExtension() throws {
         let expected = "0x45028400fdc41550fb5186d71cae699c31731b3e1baa10680c7bd6b3831a6d222cf4d1680045ba1f9d291fff7dddf36f7ec060405d5e87ac8fab8832cfcc66858e6975141748ce89c41bda6c3a84204d3c6f929b928702168ca38bbed69b172044b599a10ab5038800000a0000bcc5ecf679ebd776866a04c212a4ec5dc45cefab57d7aa858c389844e212693f0700e40b5402"
 
-        let extrinsicExtension = ExtrinsicSignedExtension.ChargeAssetTxPayment()
-        let extensionCoder = DefaultExtrinsicSignedExtensionCoder(
-            signedExtensionId: extrinsicExtension.signedExtensionId,
-            extraType: "pallet_asset_tx_payment.ChargeAssetTxPayment"
+        let extrinsicExtension = TransactionExtension.ChargeAssetTxPayment()
+        let extensionCoder = DefaultTransactionExtensionCoder(
+            txExtensionId: extrinsicExtension.txExtensionId,
+            extensionExplicitType: "pallet_asset_tx_payment.ChargeAssetTxPayment"
         )
 
         let catalog = try ScaleInfoHelper.createTypeRegistry(
@@ -61,20 +61,23 @@ class ExtrinsicExtensionsTests: XCTestCase {
         )
 
         builder = try builder.adding(call: call)
-        builder = builder.adding(extrinsicSignedExtension: extrinsicExtension)
+        builder = builder.adding(transactionExtension: extrinsicExtension)
 
         let signatureEncoder = DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion))
 
         builder = try builder.signing(
             by: { _ in extrinsic.signature.signature },
-            using: signatureEncoder,
+            using: WrappedDynamicScaleEncoderFactory(encoder: signatureEncoder),
             metadata: metadata
         )
 
         let builderEncoder = DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion))
 
         let actual = try builder
-            .build(encodingBy: builderEncoder, metadata: metadata).toHex(includePrefix: true)
+            .build(
+                using: WrappedDynamicScaleEncoderFactory(encoder: builderEncoder),
+                metadata: metadata
+            ).toHex(includePrefix: true)
 
         XCTAssertEqual(actual, expected)
     }

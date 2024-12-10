@@ -5,7 +5,7 @@ public extension TypeRegistryCatalog {
                                          versioningData: Data,
                                          runtimeMetadata: RuntimeMetadata,
                                          customNodes: [Node] = [],
-                                         customExtensions: [ExtrinsicSignedExtensionCoding] = [])
+                                         customExtensions: [TransactionExtensionCoding] = [])
     throws -> TypeRegistryCatalog {
         let versionedJsons = try prepareVersionedJsons(from: versioningData)
 
@@ -22,7 +22,7 @@ public extension TypeRegistryCatalog {
         _ definitionData: Data,
         runtimeMetadata: RuntimeMetadata,
         customNodes: [Node] = [],
-        customExtensions: [ExtrinsicSignedExtensionCoding] = []
+        customExtensions: [TransactionExtensionCoding] = []
     ) throws -> TypeRegistryCatalog {
         try createFromTypeDefinition(
             definitionData,
@@ -37,7 +37,7 @@ public extension TypeRegistryCatalog {
                                          versionedJsons: [UInt64: JSON],
                                          runtimeMetadata: RuntimeMetadata,
                                          customNodes: [Node],
-                                         customExtensions: [ExtrinsicSignedExtensionCoding])
+                                         customExtensions: [TransactionExtensionCoding])
     throws -> TypeRegistryCatalog {
         let allNodes = BasisNodes.allNodes(for: runtimeMetadata, customExtensions: customExtensions)
         let additonalNodes = allNodes + customNodes
@@ -70,7 +70,7 @@ public extension TypeRegistryCatalog {
         versioningData: Data,
         runtimeMetadata: PostV14RuntimeMetadataProtocol,
         additionalNodes: [Node] = [],
-        customExtensions: [ExtrinsicSignedExtensionCoding] = [],
+        customExtensions: [TransactionExtensionCoding] = [],
         customTypeMapper: SiTypeMapping? = nil,
         customNameMapper: SiNameMapping? = nil
     ) throws -> TypeRegistryCatalog {
@@ -90,7 +90,7 @@ public extension TypeRegistryCatalog {
         runtimeMetadata: PostV14RuntimeMetadataProtocol,
         versionedJsons: [UInt64: JSON] = [:],
         additionalNodes: [Node] = [],
-        customExtensions: [ExtrinsicSignedExtensionCoding] = [],
+        customExtensions: [TransactionExtensionCoding] = [],
         customTypeMapper: SiTypeMapping? = nil,
         customNameMapper: SiNameMapping? = nil
     ) throws -> TypeRegistryCatalog {

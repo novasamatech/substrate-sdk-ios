@@ -160,7 +160,10 @@ class ExtrinsicBuilderTests: XCTestCase {
                                                      transactionVersion: 4,
                                                      genesisHash: genesisHash)
                     .adding(call: call)
-                    .build(encodingBy: encoder.newEncoder(), metadata: metadata)
+                    .build(
+                        using: WrappedDynamicScaleEncoderFactory(encoder: encoder),
+                        metadata: metadata
+                    )
 
             let decoder = try DynamicScaleDecoder(data: extrinsicData,
                                                   registry: catalog,
@@ -329,9 +332,12 @@ class ExtrinsicBuilderTests: XCTestCase {
         let extrinsicData = try builderClosure(initialBuilder)
             .signing(by: signingClosure,
                      of: cryptoType,
-                     using: encoder.newEncoder(),
+                     using: WrappedDynamicScaleEncoderFactory(encoder: encoder),
                      metadata: metadata)
-            .build(encodingBy: encoder.newEncoder(), metadata: metadata)
+            .build(
+                using: WrappedDynamicScaleEncoderFactory(encoder: encoder),
+                metadata: metadata
+            )
 
         let decoder = try DynamicScaleDecoder(data: extrinsicData,
                                               registry: catalog,
@@ -425,13 +431,17 @@ class ExtrinsicBuilderTests: XCTestCase {
         let processedBuilder = try builderClosure(initialBuilder)
 
         let originalData = try processedBuilder.buildSignaturePayload(
-            encoder: DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion)),
+            encodingFactory: WrappedDynamicScaleEncoderFactory(
+                encoder: DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion))
+            ),
             metadata: metadata
         )
 
         let rawSignature = try processedBuilder.buildRawSignature(
             using: signingClosure,
-            encoder: DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion)),
+            encodingFactory: WrappedDynamicScaleEncoderFactory(
+                encoder: DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion))
+            ),
             metadata: metadata
         )
 

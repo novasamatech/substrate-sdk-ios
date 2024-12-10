@@ -4,7 +4,7 @@ public enum TransactionExtension {
     public struct Explicit {
         let extensionId: String
         let value: JSON
-        let customEncoder: ExtrinsicSignedExtensionCoding
+        let customEncoder: TransactionExtensionCoding
         
         func encode(to encoder: DynamicScaleEncoding) throws {
             try customEncoder.encodeIncludedInExtrinsic(
@@ -23,6 +23,9 @@ public enum TransactionExtension {
     }
 }
 
+public enum TransactionExtensionError: Error {
+    case typeNotFound(String)
+}
 
 extension TransactionExtension.Implication {
     func adding(
@@ -33,5 +36,34 @@ extension TransactionExtension.Implication {
         let newImplicits = implicit.map { [$0] + implicits } ?? implicits
         
         return TransactionExtension.Implication(call: call, explicits: newExplicits, implicits: newImplicits)
+    }
+}
+
+public extension TransactionExtension.Explicit {
+    init(
+        from value: JSON,
+        txExtensionId: String,
+        metadata: RuntimeMetadataProtocol
+    ) throws {
+        guard let extensionExplicitType = metadata.getSignedExtensionType(for: txExtensionId) else {
+            throw TransactionExtensionError.typeNotFound(txExtensionId)
+        }
+        
+        self.extensionId = txExtensionId
+        self.value = value
+        self.customEncoder = DefaultTransactionExtensionCoder(
+            txExtensionId: txExtensionId,
+            extensionExplicitType: extensionExplicitType
+        )
+    }
+}
+
+extension Array where Element == TransactionExtension.Explicit {
+    func toExtrinsicExplicits() -> ExtrinsicExtra {
+        reduce(
+            into: ExtrinsicExtra()
+        ) { accum, explicit in
+            accum[explicit.extensionId] = explicit.value
+        }
     }
 }

@@ -5,7 +5,7 @@ public typealias ExtrinsicExtra = [String: JSON]
 
 public extension ExtrinsicExtra {
     func getTip() -> BigUInt? {
-        guard let tipJson = self[Extrinsic.SignedExtensionId.txPayment] else {
+        guard let tipJson = self[Extrinsic.TransactionExtensionId.txPayment] else {
             return nil
         }
 
@@ -17,7 +17,7 @@ public extension ExtrinsicExtra {
     }
     
     func getNonce() -> UInt32? {
-        guard let nonceJson = self[Extrinsic.SignedExtensionId.nonce] else {
+        guard let nonceJson = self[Extrinsic.TransactionExtensionId.nonce] else {
             return nil
         }
 
@@ -29,7 +29,7 @@ public extension ExtrinsicExtra {
     }
     
     func getEra() -> Era? {
-        guard let eraJson = self[Extrinsic.SignedExtensionId.mortality] else {
+        guard let eraJson = self[Extrinsic.TransactionExtensionId.mortality] else {
             return nil
         }
 

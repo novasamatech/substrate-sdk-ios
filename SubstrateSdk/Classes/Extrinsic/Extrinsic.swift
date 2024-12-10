@@ -68,3 +68,10 @@ public enum Extrinsic: Codable {
         }
     }
 }
+
+public extension Extrinsic {
+    enum Version {
+        case V4
+        case V5(extensionVersion: UInt8)
+    }
+}

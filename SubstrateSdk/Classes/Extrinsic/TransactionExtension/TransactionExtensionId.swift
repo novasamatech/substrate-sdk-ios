@@ -1,7 +1,7 @@
 import Foundation
 
 public extension Extrinsic {
-    enum SignedExtensionId {
+    enum TransactionExtensionId {
         public static let specVersion = "CheckSpecVersion"
         public static let txVersion = "CheckTxVersion"
         public static let nonce = "CheckNonce"
@@ -12,5 +12,6 @@ public extension Extrinsic {
         public static let checkMetadataHash = "CheckMetadataHash"
         public static let weight = "CheckWeight"
         public static let attests = "PrevalidateAttests"
+        public static let verifySignature = "VerifySignature"
     }
 }

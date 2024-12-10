@@ -6,21 +6,14 @@ public protocol ExtrinsicBuilderMemoProtocol {
 }
 
 struct ExtrinsicBuilderMemo {
-    let specVersion: UInt32
-    let transactionVersion: UInt32
-    let genesisHash: String
-    let calls: [JSON]
-    let blockHash: String
+    let extrinsicVersion: Extrinsic.Version
+    let extrinsic: Extrinsic?
     let address: JSON?
-    let nonce: UInt32
-    let era: Era
-    let tip: BigUInt
-    let signature: ExtrinsicSignature?
+    let calls: [JSON]
+    let batchType: ExtrinsicBatch = .atomic
+    let transactionExtensions: [String: TransactionExtending]
     let signaturePayloadFormat: ExtrinsicSignaturePayloadFormat
-    let metadataHash: Data?
-    let batchType: ExtrinsicBatch
     let runtimeJsonContext: RuntimeJsonContext?
-    let additionalExtensions: [ExtrinsicSignedExtending]
 }
 
 extension ExtrinsicBuilderMemo: ExtrinsicBuilderMemoProtocol {
