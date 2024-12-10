@@ -5,7 +5,7 @@ class ScaleRegistryTests: XCTestCase {
     func testShouldResolveStruct() throws {
         // given
 
-        let registry = try ScaleInfoHelper.createTypeRegistry(from: "kusama-v14-metadata")
+        let registry = try PostV14RuntimeHelper.createTypeRegistry(from: "kusama-v14-metadata")
 
         // when
 
@@ -25,7 +25,7 @@ class ScaleRegistryTests: XCTestCase {
     func testShouldResolvePredefinedTypes() throws {
         // given
         
-        let registry = try ScaleInfoHelper.createTypeRegistryWithoutVersioning(from: "kusama-v14-metadata-latest")
+        let registry = try PostV14RuntimeHelper.createTypeRegistryWithoutVersioning(from: "kusama-v14-metadata-latest")
         
         // when
         

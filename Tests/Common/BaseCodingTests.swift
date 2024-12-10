@@ -67,9 +67,9 @@ class BaseCodingTests: XCTestCase {
             let registry: TypeRegistryCatalog
             
             if shouldUseDefaultVersioning {
-                registry = try ScaleInfoHelper.createTypeRegistry(from: runtimeFilename)
+                registry = try PostV14RuntimeHelper.createTypeRegistry(from: runtimeFilename)
             } else {
-                registry = try ScaleInfoHelper.createTypeRegistryWithoutVersioning(from: runtimeFilename)
+                registry = try PostV14RuntimeHelper.createTypeRegistryWithoutVersioning(from: runtimeFilename)
             }
             
             let encoder = DynamicScaleEncoder(registry: registry, version: 0)

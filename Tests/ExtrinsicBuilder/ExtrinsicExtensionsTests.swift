@@ -13,13 +13,13 @@ class ExtrinsicExtensionsTests: XCTestCase {
             extensionExplicitType: "pallet_asset_tx_payment.ChargeAssetTxPayment"
         )
 
-        let catalog = try ScaleInfoHelper.createTypeRegistry(
+        let catalog = try PostV14RuntimeHelper.createTypeRegistry(
             from: "statemine-v14-metadata",
             networkFilename: "statemine",
             customExtensions: [extensionCoder]
         )
 
-        let metadata = try ScaleInfoHelper.createScaleInfoMetadata(for: "statemine-v14-metadata")
+        let metadata = try PostV14RuntimeHelper.createMetadata(for: "statemine-v14-metadata")
 
         let specVersion: UInt32 = 601
 
