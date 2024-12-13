@@ -25,7 +25,7 @@ public extension TransactionExtension.VerifySignature {
         case disabled
         case signed(SignedModel)
         
-        func encode(to encoder: Encoder) throws {
+        public func encode(to encoder: Encoder) throws {
             var container = encoder.unkeyedContainer()
             
             switch self {
@@ -42,8 +42,8 @@ public extension TransactionExtension.VerifySignature {
             case signed
         }
         
-        init(from decoder: any Decoder) throws {
-            let container = try decoder.unkeyedContainer()
+        public init(from decoder: any Decoder) throws {
+            var container = try decoder.unkeyedContainer()
             
             let modeString = try container.decode(String.self)
             
@@ -53,6 +53,11 @@ public extension TransactionExtension.VerifySignature {
             case "Signed":
                 let signedModel = try container.decode(SignedModel.self)
                 self = .signed(signedModel)
+            default:
+                throw DecodingError.dataCorruptedError(
+                    in: container,
+                    debugDescription: "Unknown mode \(modeString)."
+                )
             }
         }
     }
@@ -106,7 +111,7 @@ extension TransactionExtension.VerifySignature: TransactionExtending {
             let signature = try signer.createSignature(from: payload, context: context)
             
             let value = try Mode
-                .signed(signature: signature, account: signingParams.account)
+                .signed(.init(signature: signature, account: signingParams.account))
                 .toScaleCompatibleJSON(with: context?.toRawContext())
             
             return try TransactionExtension.Explicit(
