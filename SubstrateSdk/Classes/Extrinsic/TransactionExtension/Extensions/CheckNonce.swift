@@ -21,10 +21,14 @@ public extension TransactionExtension {
             return TransactionExtension.Explicit(
                 extensionId: txExtensionId,
                 value: value,
-                customEncoder: DefaultTransactionExtensionCoder(
-                    txExtensionId: txExtensionId,
-                    extensionExplicitType: KnownType.index.name
-                )
+                customEncoder: Self.getTransactionExtensionCoder()
+            )
+        }
+        
+        public static func getTransactionExtensionCoder() -> TransactionExtensionCoding {
+            CompactTransactionExtensionCoder(
+                txExtensionId: Extrinsic.TransactionExtensionId.nonce,
+                extensionExplicitType: KnownType.index.name
             )
         }
     }

@@ -107,7 +107,7 @@ extension TransactionExtension.VerifySignature: TransactionExtending {
                 using: encodingFactory
             )
             
-            let payload = try ExtrinsicSignatureConverter.convertExtrinsicPayloadToRegular(message)
+            let payload = try message.blake2b32()
             
             let signature = try signer.createSignature(from: payload, context: context)
             

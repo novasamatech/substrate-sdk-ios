@@ -33,10 +33,14 @@ public extension TransactionExtension {
             return TransactionExtension.Explicit(
                 extensionId: txExtensionId,
                 value: value,
-                customEncoder: DefaultTransactionExtensionCoder(
-                    txExtensionId: txExtensionId,
-                    extensionExplicitType: GenericType.era.name
-                )
+                customEncoder: Self.getTransactionExtensionCoder()
+            )
+        }
+        
+        public static func getTransactionExtensionCoder() -> TransactionExtensionCoding {
+            DefaultTransactionExtensionCoder(
+                txExtensionId: Extrinsic.TransactionExtensionId.mortality,
+                extensionExplicitType: GenericType.era.name
             )
         }
     }

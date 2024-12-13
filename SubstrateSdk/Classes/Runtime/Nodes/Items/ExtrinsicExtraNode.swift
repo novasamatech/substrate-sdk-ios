@@ -6,21 +6,9 @@ public enum ExtrinsicExtraNodeError: Error {
 
 public class ExtrinsicExtraNode: Node {
     static let defaultExtensions: [TransactionExtensionCoding] = [
-        DefaultTransactionExtensionCoder(
-            txExtensionId: Extrinsic.TransactionExtensionId.mortality,
-            extensionExplicitType: GenericType.era.name
-        ),
-        
-        CompactTransactionExtensionCoder(
-            txExtensionId: Extrinsic.TransactionExtensionId.nonce,
-            extensionExplicitType: KnownType.index.name
-        ),
-        
-        CompactTransactionExtensionCoder(
-            txExtensionId: Extrinsic.TransactionExtensionId.txPayment,
-            extensionExplicitType: KnownType.balance.name
-        ),
-        
+        TransactionExtension.CheckMortality.getTransactionExtensionCoder(),
+        TransactionExtension.CheckNonce.getTransactionExtensionCoder(),
+        TransactionExtension.ChargeTransactionPayment.getTransactionExtensionCoder(),
         CheckMetadataHashCoder()
     ]
     

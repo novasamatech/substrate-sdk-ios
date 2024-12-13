@@ -22,10 +22,14 @@ public extension TransactionExtension {
             return TransactionExtension.Explicit(
                 extensionId: txExtensionId,
                 value: value,
-                customEncoder: DefaultTransactionExtensionCoder(
-                    txExtensionId: txExtensionId,
-                    extensionExplicitType: KnownType.balance.name
-                )
+                customEncoder: Self.getTransactionExtensionCoder()
+            )
+        }
+        
+        public static func getTransactionExtensionCoder() -> TransactionExtensionCoding {
+            CompactTransactionExtensionCoder(
+                txExtensionId: Extrinsic.TransactionExtensionId.txPayment,
+                extensionExplicitType: KnownType.balance.name
             )
         }
     }
