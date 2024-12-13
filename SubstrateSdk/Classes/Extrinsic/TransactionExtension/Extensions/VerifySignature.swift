@@ -31,6 +31,7 @@ public extension TransactionExtension.VerifySignature {
             switch self {
             case .disabled:
                 try container.encode("Disabled")
+                try container.encode(JSON.null)
             case let .signed(model):
                 try container.encode("Signed")
                 try container.encode(model)
