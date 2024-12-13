@@ -181,7 +181,7 @@ private extension ExtrinsicBuilder {
         
         let requiredExtensions = metadata.getSignedExtensions()
         
-        return try requiredExtensions.reduce(initialImplication) { implication, extensionId in
+        return try requiredExtensions.reversed().reduce(initialImplication) { implication, extensionId in
             if let transactionExtension = transactionExtensions[extensionId] {
                 let implicit = try transactionExtension.implicit(
                     using: encodingFactory,
