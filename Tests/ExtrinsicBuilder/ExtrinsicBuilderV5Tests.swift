@@ -3,7 +3,7 @@ import SubstrateSdk
 import IrohaCrypto
 
 final class ExtrinsicBuilderV5Tests: XCTestCase {
-    func testV5ExtrinsicBuilder() throws {
+    func testV5ExtrinsicGenerateEncodeDecode() throws {
         let data = Data(repeating: 8, count: 32)
         let keypair = try SR25519KeypairFactory().createKeypairFromSeed(data, chaincodeList: [])
 

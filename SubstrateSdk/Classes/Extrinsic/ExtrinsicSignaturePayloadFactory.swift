@@ -20,7 +20,7 @@ extension ExtrinsicSignaturePayloadFactory: ExtrinsicSignaturePayloadFactoryProt
         from implication: TransactionExtension.Implication,
         using encodingFactory: DynamicScaleEncodingFactoryProtocol
     ) throws -> Data {
-        let encoder = try encodingFactory.createEncoder()
+        let encoder = encodingFactory.createEncoder()
         
         switch extrinsicVersion {
         case let .V5(extensionVersion):

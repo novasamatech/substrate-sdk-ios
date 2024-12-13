@@ -52,8 +52,10 @@ public class ExtrinsicExtraNode: Node {
         for checkString in runtimeMetadata.getSignedExtensions() {
             if let includer = coders[checkString] {
                 try includer.encodeIncludedInExtrinsic(from: params, encoder: encoder)
-            } else if let type = runtimeMetadata.getSignedExtensionType(for: checkString) {
-                try? encoder.append(json: JSON.null, type: type)
+            } else if
+                let type = runtimeMetadata.getSignedExtensionType(for: checkString),
+                encoder.canEncodeOptional(for: type) {
+                try encoder.append(json: JSON.null, type: type)
             }
         }
     }

@@ -43,7 +43,7 @@ extension TransactionExtension.CheckMetadataHash: TransactionExtending {
         metadata: RuntimeMetadataProtocol,
         context: RuntimeJsonContext?
     ) throws -> Data? {
-        let encoder = try encodingFactory.createEncoder()
+        let encoder = encodingFactory.createEncoder()
         
         switch mode {
         case let .enabled(data):

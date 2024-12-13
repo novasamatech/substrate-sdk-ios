@@ -2,7 +2,6 @@ import Foundation
 import BigInt
 
 public struct ExtrinsicConstants {
-    static let extensionVersion: UInt8 = 0
     static let extrinsicFormatVersion: UInt8 = 5
     static let legacyExtrinsicFormatVersion: UInt8 = 4
     static let signedExtrinsicType: UInt8 = 1 << 7
@@ -70,7 +69,7 @@ public enum Extrinsic: Codable {
 }
 
 public extension Extrinsic {
-    public enum Version {
+    enum Version {
         case V4
         case V5(extensionVersion: UInt8)
     }

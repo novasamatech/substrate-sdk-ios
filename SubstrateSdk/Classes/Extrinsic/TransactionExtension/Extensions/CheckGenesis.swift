@@ -15,7 +15,7 @@ public extension TransactionExtension {
             metadata: RuntimeMetadataProtocol,
             context: RuntimeJsonContext?
         ) throws -> Data? {
-            let encoder = try encodingFactory.createEncoder()
+            let encoder = encodingFactory.createEncoder()
             
             try encoder.appendBytes(json: .stringValue(genesisHash))
             

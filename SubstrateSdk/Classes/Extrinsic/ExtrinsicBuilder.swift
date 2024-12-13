@@ -198,8 +198,23 @@ private extension ExtrinsicBuilder {
                 
                 return implication.adding(explicit: explicit, implicit: implicit)
             } else {
-                // TODO: Implement default encoding
-                return implication
+                // add default implementation in case explicit is either empty or null acceptable
+                
+                let coder = encodingFactory.createEncoder()
+                
+                if
+                    let extensionType = metadata.getSignedExtensionType(for: extensionId),
+                    coder.canEncodeOptional(for: extensionType) {
+                    let explicit = try TransactionExtension.Explicit(
+                        from: JSON.null,
+                        txExtensionId: extensionId,
+                        metadata: metadata
+                    )
+                    
+                    return implication.adding(explicit: explicit, implicit: nil)
+                } else {
+                    return implication
+                }
             }
         }
     }

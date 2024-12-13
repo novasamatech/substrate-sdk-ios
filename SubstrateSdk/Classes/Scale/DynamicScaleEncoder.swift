@@ -244,6 +244,20 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
     public func newEncoder() -> DynamicScaleEncoding {
         DynamicScaleEncoder(registry: registry, version: version)
     }
+    
+    public func canEncodeOptional(for type: String) -> Bool {
+        guard let node = registry.node(for: type, version: version) else {
+            return false
+        }
+
+        if let proxyNode = node as? ProxyNode {
+            return canEncodeOptional(for: proxyNode.typeName)
+        } else if let aliasNode = node as? AliasNode {
+            return canEncodeOptional(for: aliasNode.underlyingTypeName)
+        } else {
+            return node is OptionNode
+        }
+    }
 
     public func encode() throws -> Data {
         encoder.encode()
