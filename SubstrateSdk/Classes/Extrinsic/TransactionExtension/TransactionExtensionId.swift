@@ -12,6 +12,6 @@ public extension Extrinsic {
         public static let checkMetadataHash = "CheckMetadataHash"
         public static let weight = "CheckWeight"
         public static let attests = "PrevalidateAttests"
-        public static let verifySignature = "VerifySignature"
+        public static let verifySignature = "VerifyMultiSignature"
     }
 }

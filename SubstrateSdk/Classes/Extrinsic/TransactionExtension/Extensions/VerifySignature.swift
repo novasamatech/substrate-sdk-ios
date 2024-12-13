@@ -16,9 +16,45 @@ public extension TransactionExtension {
 }
 
 public extension TransactionExtension.VerifySignature {
+    struct SignedModel: Codable {
+        let signature: JSON
+        let account: JSON
+    }
+    
     enum Mode: Codable {
         case disabled
-        case enabled(signature: JSON, account: JSON)
+        case signed(SignedModel)
+        
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.unkeyedContainer()
+            
+            switch self {
+            case .disabled:
+                try container.encode("Disabled")
+            case let .signed(model):
+                try container.encode("Signed")
+                try container.encode(model)
+            }
+        }
+        
+        enum CodingKeys: CodingKey {
+            case disabled
+            case signed
+        }
+        
+        init(from decoder: any Decoder) throws {
+            let container = try decoder.unkeyedContainer()
+            
+            let modeString = try container.decode(String.self)
+            
+            switch modeString {
+            case "Disabled":
+                self = .disabled
+            case "Signed":
+                let signedModel = try container.decode(SignedModel.self)
+                self = .signed(signedModel)
+            }
+        }
     }
     
     typealias Signer = ExtrinsicSignatureFactoryProtocol
@@ -70,7 +106,7 @@ extension TransactionExtension.VerifySignature: TransactionExtending {
             let signature = try signer.createSignature(from: payload, context: context)
             
             let value = try Mode
-                .enabled(signature: signature, account: signingParams.account)
+                .signed(signature: signature, account: signingParams.account)
                 .toScaleCompatibleJSON(with: context?.toRawContext())
             
             return try TransactionExtension.Explicit(
