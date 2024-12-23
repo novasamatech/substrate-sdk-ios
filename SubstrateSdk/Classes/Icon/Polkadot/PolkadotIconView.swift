@@ -15,7 +15,7 @@ public final class PolkadotIconView: UIView {
         setNeedsDisplay()
     }
 
-    public override func draw(_ rect: CGRect) {
+    override public func draw(_ rect: CGRect) {
         super.draw(rect)
 
         if let context = UIGraphicsGetCurrentContext() {

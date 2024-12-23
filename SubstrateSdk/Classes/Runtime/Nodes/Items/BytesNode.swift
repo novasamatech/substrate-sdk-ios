@@ -6,8 +6,10 @@ public class BytesNode: Node {
     public init() {}
 
     public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
-        try encoder.appendVector(json: value,
-                                 type: PrimitiveType.u8.name)
+        try encoder.appendVector(
+            json: value,
+            type: PrimitiveType.u8.name
+        )
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {

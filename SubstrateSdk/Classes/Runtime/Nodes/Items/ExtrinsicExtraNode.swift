@@ -11,7 +11,7 @@ public class ExtrinsicExtraNode: Node {
         TransactionExtension.ChargeTransactionPayment.getTransactionExtensionCoder(),
         CheckMetadataHashCoder()
     ]
-    
+
     public var typeName: String { GenericType.extrinsicExtra.name }
     public let runtimeMetadata: RuntimeMetadataProtocol
     public let customExtensions: [TransactionExtensionCoding]
@@ -23,7 +23,7 @@ public class ExtrinsicExtraNode: Node {
         self.runtimeMetadata = runtimeMetadata
         self.customExtensions = customExtensions
     }
-    
+
     private func getCoders() -> [String: TransactionExtensionCoding] {
         (Self.defaultExtensions + customExtensions).reduce(into: [String: TransactionExtensionCoding]()) {
             $0[$1.txExtensionId] = $1
@@ -36,7 +36,7 @@ public class ExtrinsicExtraNode: Node {
         }
 
         let coders = getCoders()
-        
+
         for checkString in runtimeMetadata.getSignedExtensions() {
             if let includer = coders[checkString] {
                 try includer.encodeIncludedInExtrinsic(from: params, encoder: encoder)
@@ -54,8 +54,8 @@ public class ExtrinsicExtraNode: Node {
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
         let coders = getCoders()
-        
-        let extra = try runtimeMetadata.getSignedExtensions().reduce(into: [String: JSON]()) { (result, item) in
+
+        let extra = try runtimeMetadata.getSignedExtensions().reduce(into: [String: JSON]()) { result, item in
             if let coder = coders[item] {
                 try coder.decodeIncludedInExtrinsic(to: &result, decoder: decoder)
             } else if let type = runtimeMetadata.getSignedExtensionType(for: item) {

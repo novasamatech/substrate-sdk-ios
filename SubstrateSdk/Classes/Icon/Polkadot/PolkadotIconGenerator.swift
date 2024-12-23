@@ -7,26 +7,40 @@ private struct Scheme {
 }
 
 extension Scheme {
-    static let target = Scheme(colors: [0, 28, 0, 0, 28, 0, 0, 28, 0, 0, 28, 0, 0, 28, 0, 0, 28, 0, 1],
-                               freq: 1)
+    static let target = Scheme(
+        colors: [0, 28, 0, 0, 28, 0, 0, 28, 0, 0, 28, 0, 0, 28, 0, 0, 28, 0, 1],
+        freq: 1
+    )
 
-    static let cube = Scheme(colors: [0, 1, 3, 2, 4, 3, 0, 1, 3, 2, 4, 3, 0, 1, 3, 2, 4, 3, 5],
-                             freq: 20)
+    static let cube = Scheme(
+        colors: [0, 1, 3, 2, 4, 3, 0, 1, 3, 2, 4, 3, 0, 1, 3, 2, 4, 3, 5],
+        freq: 20
+    )
 
-    static let quazar = Scheme(colors: [1, 2, 3, 1, 2, 4, 5, 5, 4, 1, 2, 3, 1, 2, 4, 5, 5, 4, 0],
-                               freq: 16)
+    static let quazar = Scheme(
+        colors: [1, 2, 3, 1, 2, 4, 5, 5, 4, 1, 2, 3, 1, 2, 4, 5, 5, 4, 0],
+        freq: 16
+    )
 
-    static let flower = Scheme(colors: [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3],
-                               freq: 32)
+    static let flower = Scheme(
+        colors: [0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2, 3],
+        freq: 32
+    )
 
-    static let cyclic = Scheme(colors: [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 6],
-                               freq: 32)
+    static let cyclic = Scheme(
+        colors: [0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 0, 1, 2, 3, 4, 5, 6],
+        freq: 32
+    )
 
-    static let vmirror = Scheme(colors: [0, 1, 2, 3, 4, 5, 3, 4, 2, 0, 1, 6, 7, 8, 9, 7, 8, 6, 10],
-                                freq: 128)
+    static let vmirror = Scheme(
+        colors: [0, 1, 2, 3, 4, 5, 3, 4, 2, 0, 1, 6, 7, 8, 9, 7, 8, 6, 10],
+        freq: 128
+    )
 
-    static let hmirror = Scheme(colors: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 8, 6, 7, 5, 3, 4, 2, 11],
-                                freq: 128)
+    static let hmirror = Scheme(
+        colors: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 8, 6, 7, 5, 3, 4, 2, 11],
+        freq: 128
+    )
 
     static let all: [Scheme] = [
         .target,
@@ -65,14 +79,18 @@ public class PolkadotIconGenerator: IconGenerating {
         let colors = try getColorsForData(internalId)
         let centers = generateCircleCenters()
 
-        let circles = (0..<centers.count).map { index in
-            PolkadotIcon.Circle(origin: centers[index],
-                              color: colors[index],
-                              radius: Self.circleRadius)
+        let circles = (0 ..< centers.count).map { index in
+            PolkadotIcon.Circle(
+                origin: centers[index],
+                color: colors[index],
+                radius: Self.circleRadius
+            )
         }
 
-        return PolkadotIcon(radius: Self.diameter / 2.0,
-                            circles: circles)
+        return PolkadotIcon(
+            radius: Self.diameter / 2.0,
+            circles: circles
+        )
     }
 
     private func deriveInternalIdFromAccountId(_ accountId: Data) throws -> Data {
@@ -80,7 +98,7 @@ public class PolkadotIconGenerator: IconGenerating {
 
         var bytes: [UInt8] = try (accountId as NSData).blake2b(64).map { $0 }
 
-        for index in (0..<zero.count) {
+        for index in 0 ..< zero.count {
             let value = UInt(bytes[index])
             bytes[index] = UInt8((value + 256 - UInt(zero[index])) % 256)
         }
@@ -89,7 +107,7 @@ public class PolkadotIconGenerator: IconGenerating {
     }
 
     private func getColorsForData(_ data: Data) throws -> [UIColor] {
-        let total: UInt = Scheme.all.reduce(UInt(0)) { (result, scheme) in
+        let total: UInt = Scheme.all.reduce(UInt(0)) { result, scheme in
             result + scheme.freq
         }
 
@@ -115,15 +133,17 @@ public class PolkadotIconGenerator: IconGenerating {
                 let hue: CGFloat = floor(CGFloat(colorParam % 64) * 360.0 / 64.0)
                 let lightness: CGFloat = [53.0, 15.0, 35.0, 75.0][Int(floor(CGFloat(colorParam) / 64.0))]
 
-                let color = UIColor.colorWithHSL(hue: hue,
-                                                 saturation: CGFloat(sat) * 0.01 ,
-                                                 lightness: CGFloat(lightness) * 0.01)
+                let color = UIColor.colorWithHSL(
+                    hue: hue,
+                    saturation: CGFloat(sat) * 0.01,
+                    lightness: CGFloat(lightness) * 0.01
+                )
 
                 palette.append(color)
             }
         }
 
-        return (0..<scheme.colors.count).map { index in
+        return (0 ..< scheme.colors.count).map { index in
             palette[Int(scheme.colors[index < 18 ? (index + Int(rot)) % 18 : 18])]
         }
     }
@@ -176,11 +196,13 @@ public class PolkadotIconGenerator: IconGenerating {
         let ro4 = r / 4.0
         let r3o4 = r * 3.0 / 4.0
 
-        return Rotation(r: r,
-                        ro2: ro2,
-                        r3o4: r3o4,
-                        ro4: ro4,
-                        rroot3o2: rroot3o2,
-                        rroot3o4: rroot3o4)
+        return Rotation(
+            r: r,
+            ro2: ro2,
+            r3o4: r3o4,
+            ro4: ro4,
+            rroot3o2: rroot3o2,
+            rroot3o4: rroot3o4
+        )
     }
 }

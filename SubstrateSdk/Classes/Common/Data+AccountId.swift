@@ -6,14 +6,14 @@ public extension Data {
             return true
         }
 
-        return accountId == (try? self.blake2b32())
+        return accountId == (try? blake2b32())
     }
 
     func publicKeyToAccountId() throws -> Data {
-        guard self.count != 32 else {
+        guard count != 32 else {
             return self
         }
 
-        return try self.blake2b32()
+        return try blake2b32()
     }
 }

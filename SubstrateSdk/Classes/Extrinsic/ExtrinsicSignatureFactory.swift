@@ -10,12 +10,12 @@ public protocol ExtrinsicSignatureFactoryProtocol {
 public final class MultiSignatureExtrinsicFactory: ExtrinsicSignatureFactoryProtocol {
     public let signer: (Data) throws -> Data
     public let cryptoType: CryptoType
-    
+
     public init(signer: @escaping (Data) throws -> Data, cryptoType: CryptoType) {
         self.signer = signer
         self.cryptoType = cryptoType
     }
-    
+
     public func createSignature(
         from payload: Data,
         context: RuntimeJsonContext?
@@ -39,12 +39,12 @@ public final class MultiSignatureExtrinsicFactory: ExtrinsicSignatureFactoryProt
 
 public class ClosureSignatureExtrinsicFactory: ExtrinsicSignatureFactoryProtocol {
     public let signer: (Data) throws -> JSON
-    
-    init (signer: @escaping (Data) throws -> JSON) {
+
+    init(signer: @escaping (Data) throws -> JSON) {
         self.signer = signer
     }
-    
-    public func createSignature(from payload: Data, context: RuntimeJsonContext?) throws -> JSON {
+
+    public func createSignature(from payload: Data, context _: RuntimeJsonContext?) throws -> JSON {
         try signer(payload)
     }
 }

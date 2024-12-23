@@ -8,13 +8,13 @@ public enum StorageEntryType {
 
     public var typeName: String {
         switch self {
-        case .plain(let value):
+        case let .plain(value):
             return value
-        case .map(let singleMap):
+        case let .map(singleMap):
             return singleMap.value
-        case .doubleMap(let doubleMap):
+        case let .doubleMap(doubleMap):
             return doubleMap.value
-        case .nMap(let nMap):
+        case let .nMap(nMap):
             return nMap.value
         }
     }
@@ -23,16 +23,16 @@ public enum StorageEntryType {
 extension StorageEntryType: ScaleCodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
         switch self {
-        case .plain(let value):
+        case let .plain(value):
             try UInt8(0).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
-        case .map(let value):
+        case let .map(value):
             try UInt8(1).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
-        case .doubleMap(let value):
+        case let .doubleMap(value):
             try UInt8(2).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
-        case .nMap(let value):
+        case let .nMap(value):
             try UInt8(3).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
         }
@@ -97,11 +97,13 @@ public struct DoubleMapEntry {
     public let value: String
     public let key2Hasher: StorageHasher
 
-    public init(hasher: StorageHasher,
-                key1: String,
-                key2: String,
-                value: String,
-                key2Hasher: StorageHasher) {
+    public init(
+        hasher: StorageHasher,
+        key1: String,
+        key2: String,
+        value: String,
+        key2Hasher: StorageHasher
+    ) {
         self.hasher = hasher
         self.key1 = key1
         self.key2 = key2
@@ -133,9 +135,11 @@ public struct NMapEntry {
     public let hashers: [StorageHasher]
     public let value: String
 
-    public init(keyVec: [String],
-                hashers: [StorageHasher],
-                value: String) {
+    public init(
+        keyVec: [String],
+        hashers: [StorageHasher],
+        value: String
+    ) {
         self.keyVec = keyVec
         self.hashers = hashers
         self.value = value

@@ -1,7 +1,7 @@
 import Foundation
 import BigInt
 
-private struct EncodingThreshold {
+private enum EncodingThreshold {
     static let minUInt16: UInt = (1 << 6)
     static let minUInt32: UInt = (1 << 14)
     static let minUIntBig: UInt = (1 << 30)
@@ -26,9 +26,9 @@ extension BigUInt: ScaleEncodable {
             }
 
         } else if self < EncodingThreshold.minUInt32 {
-            data = Data((((self << 2) | 0b01).serialize()).reversed())
+            data = Data(((self << 2) | 0b01).serialize().reversed())
         } else if self < EncodingThreshold.minUIntBig {
-            var serialized = Data((((self << 2) | 0b10).serialize()).reversed())
+            var serialized = Data(((self << 2) | 0b10).serialize().reversed())
 
             if serialized.count < 4 {
                 serialized.append(0)
@@ -37,7 +37,7 @@ extension BigUInt: ScaleEncodable {
             data = serialized
 
         } else {
-            let serialized = self.serialize()
+            let serialized = serialize()
             let headerValue = ((serialized.count - 4) << 2) | 0b11
 
             guard headerValue < 256 else {
@@ -54,7 +54,7 @@ extension BigUInt: ScaleEncodable {
 extension BigUInt: ScaleDecodable {
     public init(scaleDecoder: ScaleDecoding) throws {
         let byte = try scaleDecoder.read(count: 1)
-        let byteValue = UInt8(littleEndian: byte.withUnsafeBytes({ $0.load(as: UInt8.self) }))
+        let byteValue = UInt8(littleEndian: byte.withUnsafeBytes { $0.load(as: UInt8.self) })
         let mode: UInt8 = byteValue & 0b11
 
         if mode == 0b00 {
@@ -71,7 +71,7 @@ extension BigUInt: ScaleDecodable {
             try scaleDecoder.confirm(count: 4)
         } else {
             let header = try scaleDecoder.read(count: 1)
-            let headerValue = UInt8(littleEndian: header.withUnsafeBytes({ $0.load(as: UInt8.self) }))
+            let headerValue = UInt8(littleEndian: header.withUnsafeBytes { $0.load(as: UInt8.self) })
             let count = (headerValue >> 2) + 4
             try scaleDecoder.confirm(count: 1)
 

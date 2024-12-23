@@ -2,9 +2,10 @@ use_frameworks!
 
 target 'SubstrateSdkExample' do
   pod 'SubstrateSdk', :path => '../'
-  pod 'Operation-iOS', :git => 'https://github.com/novasamatech/Operation-iOS.git', :tag => '2.0.1'
+  pod 'Operation-iOS', :git => 'https://github.com/novasamatech/Operation-iOS.git', :tag => '2.1.0'
   pod 'Starscream', :git => 'https://github.com/ERussel/Starscream.git', :branch => 'feature/without-origin'
   pod 'SwiftLint'
+  pod 'SwiftFormat/CLI', '~> 0.47.13'
   pod 'IrohaCrypto', :git => 'https://github.com/novasamatech/IrohaCrypto', :tag => '0.9.1'
   pod 'secp256k1.c', :git => 'https://github.com/novasamatech/secp256k1.c', :tag => '0.1.3'
 

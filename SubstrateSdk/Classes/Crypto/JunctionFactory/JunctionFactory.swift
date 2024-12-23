@@ -30,7 +30,7 @@ public class JunctionFactory {
     static let softSeparator = "/"
 
     private func parseChaincodesFromJunctionPath(_ junctionsPath: String) throws -> [Chaincode] {
-        return try junctionsPath
+        try junctionsPath
             .components(separatedBy: Self.hardSeparator)
             .map { component in
 
@@ -54,12 +54,12 @@ public class JunctionFactory {
                 chaincodes.append(contentsOf: softJunctions)
 
                 return chaincodes
-            }.reduce([Chaincode]()) { (result, chaincodes) in
-                return result + chaincodes
+            }.reduce([Chaincode]()) { result, chaincodes in
+                result + chaincodes
             }
     }
 
-    internal func createChaincodeFromJunction(_ junction: String, type: ChaincodeType) throws -> Chaincode {
+    internal func createChaincodeFromJunction(_: String, type _: ChaincodeType) throws -> Chaincode {
         fatalError("This function should be overriden")
     }
 }

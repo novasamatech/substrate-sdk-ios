@@ -17,7 +17,7 @@ public protocol ExtrinsicBuilderProtocol {
     func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self
     func getCalls() -> [JSON]
     func resetCalls() -> Self
-    
+
     func signing(
         by signer: @escaping (Data) throws -> Data,
         of type: CryptoType,
@@ -41,12 +41,12 @@ public protocol ExtrinsicBuilderProtocol {
         encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol
     ) throws -> Data
-    
+
     func build(
         using encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol
     ) throws -> Data
-    
+
     func makeMemo() -> ExtrinsicBuilderMemoProtocol
 }
 
@@ -66,7 +66,7 @@ public enum ExtrinsicBuilderError: Error {
 
 public final class ExtrinsicBuilder {
     let extrinsicVersion: Extrinsic.Version
-    
+
     private var address: JSON?
     private var runtimeJsonContext: RuntimeJsonContext?
     private var calls: [JSON]
@@ -74,7 +74,7 @@ public final class ExtrinsicBuilder {
     private var transactionExtensions: [String: TransactionExtending]
     private var signaturePayloadFormat: ExtrinsicSignaturePayloadFormat = .regular
     private var extrinsic: Extrinsic?
-    
+
     public init(
         extrinsicVersion: Extrinsic.Version = .V4,
         specVersion: UInt32,
@@ -82,9 +82,9 @@ public final class ExtrinsicBuilder {
         genesisHash: String
     ) {
         self.extrinsicVersion = extrinsicVersion
-        self.calls = []
-        
-        self.transactionExtensions = [
+        calls = []
+
+        transactionExtensions = [
             Extrinsic.TransactionExtensionId.specVersion: TransactionExtension.CheckSpecVersion(
                 specVersion: specVersion
             ),
@@ -108,9 +108,8 @@ public final class ExtrinsicBuilder {
                 usability: .disabled
             )
         ]
-        
     }
-    
+
     public init(
         extrinsicVersion: Extrinsic.Version = .V4,
         calls: [JSON] = [],
@@ -120,16 +119,16 @@ public final class ExtrinsicBuilder {
         self.calls = calls
         self.transactionExtensions = transactionExtensions.reduce(into: [:]) { $0[$1.txExtensionId] = $1 }
     }
-    
+
     init(memo: ExtrinsicBuilderMemo) {
-        self.extrinsicVersion = memo.extrinsicVersion
-        self.extrinsic = memo.extrinsic
-        self.address = memo.address
-        self.calls = memo.calls
-        self.batchType = memo.batchType
-        self.transactionExtensions = memo.transactionExtensions
-        self.signaturePayloadFormat = memo.signaturePayloadFormat
-        self.runtimeJsonContext = memo.runtimeJsonContext
+        extrinsicVersion = memo.extrinsicVersion
+        extrinsic = memo.extrinsic
+        address = memo.address
+        calls = memo.calls
+        batchType = memo.batchType
+        transactionExtensions = memo.transactionExtensions
+        signaturePayloadFormat = memo.signaturePayloadFormat
+        runtimeJsonContext = memo.runtimeJsonContext
     }
 }
 
@@ -160,9 +159,11 @@ private extension ExtrinsicBuilder {
             callName = KnowRuntimeModule.Utility.forceBatch
         }
 
-        let call = RuntimeCall(moduleName: KnowRuntimeModule.Utility.name,
-                               callName: callName,
-                               args: BatchArgs(calls: calls))
+        let call = RuntimeCall(
+            moduleName: KnowRuntimeModule.Utility.name,
+            callName: callName,
+            args: BatchArgs(calls: calls)
+        )
 
         guard metadata.getCall(from: call.moduleName, with: call.callName) != nil else {
             throw ExtrinsicBuilderError.unsupportedBatch
@@ -170,17 +171,17 @@ private extension ExtrinsicBuilder {
 
         return try call.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
     }
-    
+
     private func prepareImplication(
         using encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol
     ) throws -> TransactionExtension.Implication {
         let call = try prepareTransactionCall(for: metadata)
-        
+
         let initialImplication = TransactionExtension.Implication(call: call, explicits: [], implicits: [])
-        
+
         let requiredExtensions = metadata.getSignedExtensions()
-        
+
         return try requiredExtensions.reversed().reduce(initialImplication) { implication, extensionId in
             if let transactionExtension = transactionExtensions[extensionId] {
                 let implicit = try transactionExtension.implicit(
@@ -188,20 +189,20 @@ private extension ExtrinsicBuilder {
                     metadata: metadata,
                     context: runtimeJsonContext
                 )
-                
+
                 let explicit = try transactionExtension.explicit(
                     for: implication,
                     encodingFactory: encodingFactory,
                     metadata: metadata,
                     context: runtimeJsonContext
                 )
-                
+
                 return implication.adding(explicit: explicit, implicit: implicit)
             } else {
                 // add default implementation in case explicit is either empty or null acceptable
-                
+
                 let coder = encodingFactory.createEncoder()
-                
+
                 if
                     let extensionType = metadata.getSignedExtensionType(for: extensionId),
                     coder.canEncodeOptional(for: extensionType) {
@@ -210,7 +211,7 @@ private extension ExtrinsicBuilder {
                         txExtensionId: extensionId,
                         metadata: metadata
                     )
-                    
+
                     return implication.adding(explicit: explicit, implicit: nil)
                 } else {
                     return implication
@@ -218,7 +219,7 @@ private extension ExtrinsicBuilder {
             }
         }
     }
-    
+
     private func prepareParitySignerSignaturePayload(
         implication: TransactionExtension.Implication,
         encodingFactory: DynamicScaleEncodingFactoryProtocol
@@ -240,7 +241,7 @@ private extension ExtrinsicBuilder {
         encodingFactory: DynamicScaleEncodingFactoryProtocol
     ) throws -> Data {
         let signaturePayloadFactory = ExtrinsicSignaturePayloadFactory(extrinsicVersion: extrinsicVersion)
-        
+
         return try signaturePayloadFactory.createPayload(
             from: implication,
             using: encodingFactory
@@ -260,7 +261,7 @@ private extension ExtrinsicBuilder {
             return try prepareNotHashedSignaturePayload(implication: implication, encodingFactory: encodingFactory)
         }
     }
-    
+
     private func prepareV4SignedExtrinsic(
         account: JSON,
         signatureFactory: ExtrinsicSignatureFactoryProtocol,
@@ -269,23 +270,23 @@ private extension ExtrinsicBuilder {
     ) throws -> Extrinsic {
         let implication = try prepareImplication(using: encodingFactory, metadata: metadata)
         let payload = try prepareSignaturePayload(implication: implication, encodingFactory: encodingFactory)
-        
+
         let sigJson = try signatureFactory.createSignature(from: payload, context: runtimeJsonContext)
 
         let explicits = implication.explicits.toExtrinsicExplicits()
         let signature = ExtrinsicSignature(address: account, signature: sigJson, extra: explicits)
         let signed = Extrinsic.Signed(signature: signature, call: implication.call)
-        
+
         return .signed(signed)
     }
-    
+
     private func prepareV5SignedExtrinsic(
         extensionVersion: UInt8,
         encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol
     ) throws -> Extrinsic {
         let implication = try prepareImplication(using: encodingFactory, metadata: metadata)
-        
+
         let explicits = implication.explicits.toExtrinsicExplicits()
 
         let general = Extrinsic.General(
@@ -293,10 +294,10 @@ private extension ExtrinsicBuilder {
             call: implication.call,
             explicits: explicits
         )
-        
+
         return .generalTransaction(general)
     }
-    
+
     private func prepareSignedExtrinsic(
         account: JSON,
         signatureFactory: ExtrinsicSignatureFactoryProtocol,
@@ -315,14 +316,14 @@ private extension ExtrinsicBuilder {
             let signingParams = TransactionExtension.VerifySignature.SigningParams(
                 account: account
             )
-            
+
             let verifySignature = TransactionExtension.VerifySignature(
                 extrinsicVersion: extrinsicVersion,
                 usability: .toSign(signatureFactory, signingParams)
             )
-            
+
             transactionExtensions[Extrinsic.TransactionExtensionId.verifySignature] = verifySignature
-            
+
             return try prepareV5SignedExtrinsic(
                 extensionVersion: extensionVersion,
                 encodingFactory: encodingFactory,
@@ -330,7 +331,7 @@ private extension ExtrinsicBuilder {
             )
         }
     }
-    
+
     private func setupOrCreateExtrinsic(
         using encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol
@@ -338,7 +339,7 @@ private extension ExtrinsicBuilder {
         if let extrinsic {
             return extrinsic
         }
-        
+
         switch extrinsicVersion {
         case let .V5(extensionVersion):
             let extrinsic = try prepareV5SignedExtrinsic(
@@ -346,9 +347,9 @@ private extension ExtrinsicBuilder {
                 encodingFactory: encodingFactory,
                 metadata: metadata
             )
-            
+
             self.extrinsic = extrinsic
-            
+
             return extrinsic
         case .V4:
             let call = try prepareTransactionCall(for: metadata)
@@ -388,13 +389,13 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
 
         return self
     }
-    
+
     public func with(metadataHash: Data) -> Self {
         let txExtensionId = Extrinsic.TransactionExtensionId.checkMetadataHash
         transactionExtensions[txExtensionId] = TransactionExtension.CheckMetadataHash(
             mode: .enabled(metadataHash)
         )
-        
+
         return self
     }
 
@@ -409,15 +410,15 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
 
         return self
     }
-    
+
     public func adding<T: RuntimeCallable>(call: T, at index: Int) throws -> Self {
         guard index <= calls.count else {
             throw ExtrinsicBuilderError.indexOutOfBounds
         }
-        
+
         let json = try call.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
         calls.insert(json, at: index)
-        
+
         return self
     }
 
@@ -427,28 +428,28 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
 
         return self
     }
-    
+
     public func with(batchType: ExtrinsicBatch) -> Self {
         self.batchType = batchType
 
         return self
     }
-    
+
     public func with(runtimeJsonContext: RuntimeJsonContext) -> Self {
         self.runtimeJsonContext = runtimeJsonContext
-        
+
         return self
     }
-    
+
     public func adding(transactionExtension: TransactionExtending) -> Self {
         transactionExtensions[transactionExtension.txExtensionId] = transactionExtension
-        
+
         return self
     }
-    
+
     public func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self {
         let newCalls = try calls.map { try mapClosure($0) }
-        self.calls = newCalls
+        calls = newCalls
         return self
     }
 
@@ -470,7 +471,7 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         guard let account = address else {
             throw ExtrinsicBuilderError.missingAddress
         }
-        
+
         extrinsic = try prepareSignedExtrinsic(
             account: account,
             signatureFactory: MultiSignatureExtrinsicFactory(signer: signer, cryptoType: type),
@@ -524,14 +525,14 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         metadata: RuntimeMetadataProtocol
     ) throws -> Data {
         let extrinsic = try setupOrCreateExtrinsic(using: encodingFactory, metadata: metadata)
-        
+
         let encoder = encodingFactory.createEncoder()
-        
+
         try encoder.append(extrinsic, ofType: GenericType.extrinsic.name, with: runtimeJsonContext?.toRawContext())
-        
+
         return try encoder.encode()
     }
-    
+
     public func makeMemo() -> any ExtrinsicBuilderMemoProtocol {
         ExtrinsicBuilderMemo(
             extrinsicVersion: extrinsicVersion,

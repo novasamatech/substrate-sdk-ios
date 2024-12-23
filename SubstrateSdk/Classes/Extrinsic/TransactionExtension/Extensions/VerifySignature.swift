@@ -4,7 +4,7 @@ public extension TransactionExtension {
     final class VerifySignature {
         public let usability: VerifySignature.Usability
         public let signaturePayloadFactory: ExtrinsicSignaturePayloadFactoryProtocol
-        
+
         public init(
             extrinsicVersion: Extrinsic.Version,
             usability: Usability
@@ -20,14 +20,14 @@ public extension TransactionExtension.VerifySignature {
         let signature: JSON
         let account: JSON
     }
-    
+
     enum Mode: Codable {
         case disabled
         case signed(SignedModel)
-        
+
         public func encode(to encoder: Encoder) throws {
             var container = encoder.unkeyedContainer()
-            
+
             switch self {
             case .disabled:
                 try container.encode("Disabled")
@@ -37,17 +37,17 @@ public extension TransactionExtension.VerifySignature {
                 try container.encode(model)
             }
         }
-        
+
         enum CodingKeys: CodingKey {
             case disabled
             case signed
         }
-        
+
         public init(from decoder: any Decoder) throws {
             var container = try decoder.unkeyedContainer()
-            
+
             let modeString = try container.decode(String.self)
-            
+
             switch modeString {
             case "Disabled":
                 self = .disabled
@@ -62,14 +62,14 @@ public extension TransactionExtension.VerifySignature {
             }
         }
     }
-    
+
     typealias Signer = ExtrinsicSignatureFactoryProtocol
-    
+
     enum Usability {
         case disabled
         case toSign(Signer, SigningParams)
     }
-    
+
     struct SigningParams {
         let account: JSON
     }
@@ -77,15 +77,15 @@ public extension TransactionExtension.VerifySignature {
 
 extension TransactionExtension.VerifySignature: TransactionExtending {
     public var txExtensionId: String { Extrinsic.TransactionExtensionId.verifySignature }
-    
+
     public func implicit(
-        using encodingFactory: DynamicScaleEncodingFactoryProtocol,
-        metadata: RuntimeMetadataProtocol,
-        context: RuntimeJsonContext?
+        using _: DynamicScaleEncodingFactoryProtocol,
+        metadata _: RuntimeMetadataProtocol,
+        context _: RuntimeJsonContext?
     ) throws -> Data? {
         nil
     }
-    
+
     public func explicit(
         for implication: TransactionExtension.Implication,
         encodingFactory: DynamicScaleEncodingFactoryProtocol,
@@ -95,26 +95,26 @@ extension TransactionExtension.VerifySignature: TransactionExtending {
         switch usability {
         case .disabled:
             let value = try Mode.disabled.toScaleCompatibleJSON(with: context?.toRawContext())
-            
+
             return try TransactionExtension.Explicit(
                 from: value,
                 txExtensionId: txExtensionId,
                 metadata: metadata
             )
-        case .toSign(let signer, let signingParams):
+        case let .toSign(signer, signingParams):
             let message = try signaturePayloadFactory.createPayload(
                 from: implication,
                 using: encodingFactory
             )
-            
+
             let payload = try message.blake2b32()
-            
+
             let signature = try signer.createSignature(from: payload, context: context)
-            
+
             let value = try Mode
                 .signed(.init(signature: signature, account: signingParams.account))
                 .toScaleCompatibleJSON(with: context?.toRawContext())
-            
+
             return try TransactionExtension.Explicit(
                 from: value,
                 txExtensionId: txExtensionId,

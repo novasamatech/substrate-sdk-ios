@@ -11,7 +11,7 @@ public final class JSONRRPCodeNodeSwitcher: JSONRPCNodeSwitching {
         self.codes = codes
     }
 
-    public func shouldInterceptAndSwitchNode(for error: JSONRPCError, identifier: UInt16) -> Bool {
+    public func shouldInterceptAndSwitchNode(for error: JSONRPCError, identifier _: UInt16) -> Bool {
         codes.contains(error.code)
     }
 }

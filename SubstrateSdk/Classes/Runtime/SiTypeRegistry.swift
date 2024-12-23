@@ -34,7 +34,7 @@ public class SiTypeRegistry: TypeRegistryProtocol {
     }
 
     init(typesLookup: RuntimeTypesLookup, baseNodes: [Node], nodeFactory: ScaleInfoNodeFactoryProtocol) {
-        let pathDuplications: [String: Int] = typesLookup.types.reduce(into: [:]) { (result, item) in
+        let pathDuplications: [String: Int] = typesLookup.types.reduce(into: [:]) { result, item in
             guard let pathBasedName = item.type.pathBasedName else {
                 return
             }
@@ -46,7 +46,7 @@ public class SiTypeRegistry: TypeRegistryProtocol {
             }
         }
 
-        types = typesLookup.types.reduce(into: [:]) { (result, item) in
+        types = typesLookup.types.reduce(into: [:]) { result, item in
             let key = String(item.identifier)
             result[key] = item.type
 
@@ -61,14 +61,14 @@ public class SiTypeRegistry: TypeRegistryProtocol {
             }
 
             result[pathBasedName] = item.type
-         }
+        }
 
-        let baseKeys = Set(baseNodes.map({ $0.typeName }))
+        let baseKeys = Set(baseNodes.map(\.typeName))
 
         allKeys = Set(types.keys).union(baseKeys)
 
         self.nodeFactory = nodeFactory
-        self.baseNodes = baseNodes.reduce(into: [:]) { (result, item) in
+        self.baseNodes = baseNodes.reduce(into: [:]) { result, item in
             result[item.typeName] = item
         }
     }

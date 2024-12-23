@@ -12,7 +12,7 @@ class TupleNodeFactory: TypeNodeFactoryProtocol {
             return nil
         }
 
-        let internalTypeNames = children.compactMap { $0.stringValue }
+        let internalTypeNames = children.compactMap(\.stringValue)
 
         guard internalTypeNames.count == children.count else {
             return nil

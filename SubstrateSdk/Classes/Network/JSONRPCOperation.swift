@@ -65,14 +65,14 @@ public class JSONRPCOperation<P: Encodable, T: Decodable>: BaseOperation<T> {
         }
     }
 
-    public override func cancel() {
+    override public func cancel() {
         mutex.lock()
 
         clearScheduler()
 
         cancelRequest()
 
-        self.pendingRequest = nil
+        pendingRequest = nil
 
         mutex.unlock()
 
@@ -97,14 +97,14 @@ public class JSONRPCOperation<P: Encodable, T: Decodable>: BaseOperation<T> {
 }
 
 extension JSONRPCOperation: SchedulerDelegate {
-    func didTrigger(scheduler: SchedulerProtocol) {
+    func didTrigger(scheduler _: SchedulerProtocol) {
         mutex.lock()
 
-        self.scheduler = nil
+        scheduler = nil
         cancelRequest()
 
         let closure = pendingRequest?.callback
-        self.pendingRequest = nil
+        pendingRequest = nil
 
         mutex.unlock()
 

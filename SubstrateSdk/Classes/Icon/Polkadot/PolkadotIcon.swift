@@ -30,30 +30,38 @@ extension PolkadotIcon: DrawableIcon {
         let translation = CGPoint(x: size.width / 2.0, y: size.height / 2.0)
 
         let transformedCircles: [Circle] = circles.map { circle in
-            let center = CGPoint(x: circle.origin.x * scale + translation.x,
-                                 y: circle.origin.y * scale + translation.y)
+            let center = CGPoint(
+                x: circle.origin.x * scale + translation.x,
+                y: circle.origin.y * scale + translation.y
+            )
 
-            return Circle(origin: center,
-                          color: circle.color,
-                          radius: circle.radius * scale)
+            return Circle(
+                origin: center,
+                color: circle.color,
+                radius: circle.radius * scale
+            )
         }
 
-        context.addArc(center: CGPoint(x: size.width / 2.0, y: size.height / 2.0),
-                       radius: targetRadius,
-                       startAngle: 0.0,
-                       endAngle: 2.0 * CGFloat.pi,
-                       clockwise: true)
+        context.addArc(
+            center: CGPoint(x: size.width / 2.0, y: size.height / 2.0),
+            radius: targetRadius,
+            startAngle: 0.0,
+            endAngle: 2.0 * CGFloat.pi,
+            clockwise: true
+        )
 
         context.setFillColor(fillColor.cgColor)
 
         context.fillPath()
 
         for circle in transformedCircles {
-            context.addArc(center: circle.origin,
-                           radius: circle.radius,
-                           startAngle: 0.0,
-                           endAngle: 2.0 * CGFloat.pi,
-                           clockwise: true)
+            context.addArc(
+                center: circle.origin,
+                radius: circle.radius,
+                startAngle: 0.0,
+                endAngle: 2.0 * CGFloat.pi,
+                clockwise: true
+            )
 
             context.setFillColor(circle.color.cgColor)
 

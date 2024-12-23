@@ -1,7 +1,7 @@
 import Foundation
 import BigInt
 
-public struct ExtrinsicConstants {
+public enum ExtrinsicConstants {
     static let extrinsicFormatVersion: UInt8 = 5
     static let legacyExtrinsicFormatVersion: UInt8 = 4
     static let signedExtrinsicType: UInt8 = 1 << 7
@@ -21,24 +21,23 @@ public enum Extrinsic: Codable {
             self.call = call
         }
     }
-    
+
     public struct General: Codable {
         public let extensionVersion: UInt8
         public let call: JSON
         public let explicits: ExtrinsicExtra
-        
+
         public init(extensionVersion: UInt8, call: JSON, explicits: ExtrinsicExtra) {
             self.extensionVersion = extensionVersion
             self.call = call
             self.explicits = explicits
         }
-        
     }
-    
+
     public struct Bare: Codable {
         public let extrinsicVersion: UInt8
         public let call: JSON
-        
+
         public init(extrinsicVersion: UInt8, call: JSON) {
             self.extrinsicVersion = extrinsicVersion
             self.call = call
@@ -48,7 +47,7 @@ public enum Extrinsic: Codable {
     case bare(Bare)
     case signed(Signed)
     case generalTransaction(General)
-    
+
     public func getSignedExtrinsic() -> Signed? {
         switch self {
         case .bare, .generalTransaction:
@@ -57,7 +56,7 @@ public enum Extrinsic: Codable {
             signed
         }
     }
-    
+
     public func getBareExtrinsic() -> Bare? {
         switch self {
         case let .bare(bare):

@@ -30,7 +30,7 @@ public extension ScaleDecoding {
 }
 
 public final class ScaleEncoder: ScaleEncoding {
-    var data: Data = Data()
+    var data = Data()
 
     public init() {}
 
@@ -39,7 +39,7 @@ public final class ScaleEncoder: ScaleEncoding {
     }
 
     public func encode() -> Data {
-        return data
+        data
     }
 }
 
@@ -65,7 +65,7 @@ public final class ScaleDecoder: ScaleDecoding {
             throw ScaleDecoderError.outOfBounds
         }
 
-        return Data(data[pointer..<(pointer + count)])
+        return Data(data[pointer ..< (pointer + count)])
     }
 
     public func confirm(count: Int) throws {

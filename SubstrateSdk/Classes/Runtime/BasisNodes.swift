@@ -1,6 +1,6 @@
 import Foundation
 
-public struct BasisNodes {
+public enum BasisNodes {
     public static func allNodes(
         for runtimeMetadata: RuntimeMetadataProtocol,
         customExtensions: [TransactionExtensionCoding]
@@ -66,5 +66,4 @@ public struct BasisNodes {
             AliasNode(typeName: GenericType.voteWeight.rawValue, underlyingTypeName: PrimitiveType.u64.rawValue)
         ]
     }
-
 }

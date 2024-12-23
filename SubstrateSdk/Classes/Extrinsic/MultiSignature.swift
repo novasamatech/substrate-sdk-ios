@@ -23,7 +23,7 @@ public enum MultiSignature: Codable {
         if let dataRepresentation = try? container.decode(Data.self) {
             data = dataRepresentation
         } else {
-            let byteArray = try container.decode([StringScaleMapper<UInt8>].self).map { $0.value }
+            let byteArray = try container.decode([StringScaleMapper<UInt8>].self).map(\.value)
             data = Data(byteArray)
         }
 
@@ -43,13 +43,13 @@ public enum MultiSignature: Codable {
         var container = encoder.unkeyedContainer()
 
         switch self {
-        case .sr25519(let data):
+        case let .sr25519(data):
             try container.encode(Self.sr25519Field)
             try container.encode(data)
-        case .ed25519(let data):
+        case let .ed25519(data):
             try container.encode(Self.ed25519Field)
             try container.encode(data)
-        case .ecdsa(let data):
+        case let .ecdsa(data):
             try container.encode(Self.ecdsaField)
             try container.encode(data)
         }

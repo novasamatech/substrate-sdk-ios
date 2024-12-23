@@ -15,7 +15,7 @@ public extension ExtrinsicExtra {
             return nil
         }
     }
-    
+
     func getNonce() -> UInt32? {
         guard let nonceJson = self[Extrinsic.TransactionExtensionId.nonce] else {
             return nil
@@ -27,7 +27,7 @@ public extension ExtrinsicExtra {
             return nil
         }
     }
-    
+
     func getEra() -> Era? {
         guard let eraJson = self[Extrinsic.TransactionExtensionId.mortality] else {
             return nil

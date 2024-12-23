@@ -2,14 +2,14 @@ import Foundation
 import BigInt
 import IrohaCrypto
 
-final public class SubstrateJunctionFactory: JunctionFactory {
+public final class SubstrateJunctionFactory: JunctionFactory {
     static let chaincodeLength = 32
 
-    public override init() {
+    override public init() {
         super.init()
     }
 
-    internal override func createChaincodeFromJunction(_ junction: String, type: ChaincodeType) throws -> Chaincode {
+    override internal func createChaincodeFromJunction(_ junction: String, type: ChaincodeType) throws -> Chaincode {
         var serialized = try serialize(junction: junction)
 
         if serialized.count < Self.chaincodeLength {

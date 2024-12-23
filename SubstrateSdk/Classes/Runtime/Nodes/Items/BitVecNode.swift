@@ -29,7 +29,7 @@ public class BitVecNode: Node {
 
         try encoder.append(encodable: BigUInt(length))
 
-        let value = bits.enumerated().reduce(BigUInt(0)) { (result, item) in
+        let value = bits.enumerated().reduce(BigUInt(0)) { result, item in
             if item.element {
                 return (result | (BigUInt(1) << item.offset))
             } else {
@@ -64,7 +64,7 @@ public class BitVecNode: Node {
         let data = try Data(hexString: hex)
         let value = BigUInt(Data(data.reversed()))
 
-        let bits: [JSON] = (0..<bitCount).map { index in
+        let bits: [JSON] = (0 ..< bitCount).map { index in
             let mask = BigUInt(1) << index
 
             if (value & mask) == 0 {

@@ -29,7 +29,7 @@ public final class SiClosureTypeMapper: SiTypeMapping {
         self.closure = closure
     }
 
-    public func map(type: RuntimeType, identifier: String) -> Node? {
+    public func map(type: RuntimeType, identifier _: String) -> Node? {
         closure(type)
     }
 }
@@ -59,7 +59,7 @@ public final class SiSetTypeMapper: SiTypeMapping {
             return nil
         }
 
-        guard case .composite(let value) = type.typeDefinition, let type = value.fields.first?.type else {
+        guard case let .composite(value) = type.typeDefinition, let type = value.fields.first?.type else {
             return SetNode(typeName: identifier, bitVector: Set(), itemType: NullNode())
         }
 
@@ -73,11 +73,11 @@ public final class SiCompositeNoneToAliasMapper: SiTypeMapping {
 
     public func map(type: RuntimeType, identifier: String) -> Node? {
         guard
-            case .composite(let compositeValue) = type.typeDefinition,
+            case let .composite(compositeValue) = type.typeDefinition,
             compositeValue.fields.count == 1,
             let field = compositeValue.fields.first,
             field.name == nil
-            else {
+        else {
             return nil
         }
 

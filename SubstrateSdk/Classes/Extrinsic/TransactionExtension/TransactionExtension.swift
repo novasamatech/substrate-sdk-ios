@@ -5,7 +5,7 @@ public enum TransactionExtension {
         let extensionId: String
         let value: JSON
         let customEncoder: TransactionExtensionCoding
-        
+
         func encode(to encoder: DynamicScaleEncoding) throws {
             try customEncoder.encodeIncludedInExtrinsic(
                 from: [extensionId: value],
@@ -15,7 +15,7 @@ public enum TransactionExtension {
     }
 
     public typealias Implicit = Data
-    
+
     public struct Implication {
         let call: JSON
         let explicits: [Explicit]
@@ -34,7 +34,7 @@ extension TransactionExtension.Implication {
     ) -> TransactionExtension.Implication {
         let newExplicits = explicit.map { [$0] + explicits } ?? explicits
         let newImplicits = implicit.map { [$0] + implicits } ?? implicits
-        
+
         return TransactionExtension.Implication(call: call, explicits: newExplicits, implicits: newImplicits)
     }
 }
@@ -48,10 +48,10 @@ public extension TransactionExtension.Explicit {
         guard let extensionExplicitType = metadata.getSignedExtensionType(for: txExtensionId) else {
             throw TransactionExtensionError.typeNotFound(txExtensionId)
         }
-        
-        self.extensionId = txExtensionId
+
+        extensionId = txExtensionId
         self.value = value
-        self.customEncoder = DefaultTransactionExtensionCoder(
+        customEncoder = DefaultTransactionExtensionCoder(
             txExtensionId: txExtensionId,
             extensionExplicitType: extensionExplicitType
         )

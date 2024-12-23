@@ -5,9 +5,11 @@ public class TypeValuesParser: TypeParser {
     public let preprocessor: ParserPreproccessing?
     public let postprocessor: ParserPostprocessing?
 
-    public init(type: String,
-                preprocessor: ParserPreproccessing?,
-                postprocessor: ParserPostprocessing?) {
+    public init(
+        type: String,
+        preprocessor: ParserPreproccessing?,
+        postprocessor: ParserPostprocessing?
+    ) {
         self.type = type
         self.preprocessor = preprocessor
         self.postprocessor = postprocessor
@@ -29,7 +31,7 @@ public class TypeValuesParser: TypeParser {
         }
 
         let validFields = fields.allSatisfy { field in
-            return field.stringValue != nil
+            field.stringValue != nil
         }
 
         guard validFields else {
@@ -44,8 +46,10 @@ public extension TypeValuesParser {
     static func enumeration() -> TypeValuesParser {
         let postprocessor = TrimProcessor(charset: .whitespaces)
 
-        return TypeValuesParser(type: "enum",
-                                preprocessor: nil,
-                                postprocessor: postprocessor)
+        return TypeValuesParser(
+            type: "enum",
+            preprocessor: nil,
+            postprocessor: postprocessor
+        )
     }
 }
