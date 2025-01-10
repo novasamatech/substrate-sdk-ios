@@ -4,6 +4,7 @@ import BigInt
 public protocol ExtrinsicBuilderProtocol {
     func with<A: Codable>(address: A) throws -> Self
     func with(nonce: UInt32) -> Self
+    func getNonce() -> UInt32?
     func with(era: Era, blockHash: String) -> Self
     func with(tip: BigUInt) -> Self
     func with(metadataHash: Data) -> Self
@@ -370,6 +371,11 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         transactionExtensions[Extrinsic.TransactionExtensionId.nonce] = TransactionExtension.CheckNonce(nonce: nonce)
 
         return self
+    }
+    
+    public func getNonce() -> UInt32? {
+        let nonceExtension = transactionExtensions[Extrinsic.TransactionExtensionId.nonce] as? TransactionExtension.CheckNonce
+        return nonceExtension?.nonce
     }
 
     public func with(era: Era, blockHash: String) -> Self {
