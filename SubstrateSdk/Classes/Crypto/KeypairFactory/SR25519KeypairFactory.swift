@@ -1,5 +1,5 @@
 import Foundation
-import IrohaCrypto
+import NovaCrypto
 
 public struct SR25519KeypairFactory: DerivableKeypairFactoryProtocol {
     let internalFactory = SNKeyFactory()

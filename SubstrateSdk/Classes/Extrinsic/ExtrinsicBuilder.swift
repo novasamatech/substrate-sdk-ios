@@ -1,5 +1,6 @@
 import Foundation
 import BigInt
+import NovaCrypto
 
 public protocol ExtrinsicBuilderProtocol {
     func with<A: Codable>(address: A) throws -> Self
@@ -372,7 +373,7 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
 
         return self
     }
-    
+
     public func getNonce() -> UInt32? {
         let nonceExtension = transactionExtensions[Extrinsic.TransactionExtensionId.nonce] as? TransactionExtension.CheckNonce
         return nonceExtension?.nonce

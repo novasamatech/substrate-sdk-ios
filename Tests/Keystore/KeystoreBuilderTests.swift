@@ -1,6 +1,6 @@
 import XCTest
 import SubstrateSdk
-import IrohaCrypto
+import NovaCrypto
 
 class KeystoreBuilderTests: XCTestCase {
     func testOnSr25519Json() {

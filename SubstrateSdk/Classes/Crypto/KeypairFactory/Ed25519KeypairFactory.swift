@@ -1,5 +1,5 @@
 import Foundation
-import IrohaCrypto
+import NovaCrypto
 
 public struct Ed25519KeypairFactory: DerivableSeedFactoryProtocol {
     static let hdkdPrefix = "Ed25519HDKD"

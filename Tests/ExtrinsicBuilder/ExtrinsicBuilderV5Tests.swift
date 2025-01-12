@@ -1,6 +1,6 @@
 import XCTest
 import SubstrateSdk
-import IrohaCrypto
+import NovaCrypto
 
 final class ExtrinsicBuilderV5Tests: XCTestCase {
     func testV5ExtrinsicGenerateEncodeDecode() throws {

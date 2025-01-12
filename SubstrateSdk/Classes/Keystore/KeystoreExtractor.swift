@@ -1,5 +1,5 @@
 import Foundation
-import IrohaCrypto
+import NovaCrypto
 import TweetNacl
 
 public class KeystoreExtractor: KeystoreExtracting {

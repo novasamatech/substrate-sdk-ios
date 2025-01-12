@@ -12,7 +12,8 @@
 		0CE840E92BFBFB60003C2B7A /* polkadot-v15 in Resources */ = {isa = PBXBuildFile; fileRef = 0CE840E82BFBFB60003C2B7A /* polkadot-v15 */; };
 		0CE840FA2BFCA0F3003C2B7A /* RuntimeMetadataV15Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE840F92BFCA0F3003C2B7A /* RuntimeMetadataV15Tests.swift */; };
 		0CE92A6F2B2C5906009A21E9 /* kusama-v14-metadata-latest in Resources */ = {isa = PBXBuildFile; fileRef = 0CE92A6E2B2C5906009A21E9 /* kusama-v14-metadata-latest */; };
-		6976AE87036D532DDD11B3D9 /* Pods_SubstrateSdkExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00060C8DD6432907D485E325 /* Pods_SubstrateSdkExample.framework */; };
+		15AC67EE17EB4F597880B382 /* Pods_SubstrateSdkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09BC7EB7C9803A0197349CF7 /* Pods_SubstrateSdkTests.framework */; };
+		3F88A2B008827D064C85BA9A /* Pods_SubstrateSdkExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0F7B80DA53E579258D30500 /* Pods_SubstrateSdkExample.framework */; };
 		841D528A25C4A11900DFA15B /* RegexParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D528925C4A11900DFA15B /* RegexParserTests.swift */; };
 		841D52B425C6BAE600DFA15B /* ComponentsParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D52B325C6BAE600DFA15B /* ComponentsParserTests.swift */; };
 		841D52E625C6DD1E00DFA15B /* TypeMappingParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 841D52E525C6DD1E00DFA15B /* TypeMappingParserTests.swift */; };
@@ -126,7 +127,6 @@
 		AE425FBA26D3726900547303 /* BIP32KeypairDerivationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE425FB926D3726900547303 /* BIP32KeypairDerivationTests.swift */; };
 		AE4B521426CBA71B00A66D2C /* BIP32HDKDEtalon.json in Resources */ = {isa = PBXBuildFile; fileRef = AE4B521326CBA71B00A66D2C /* BIP32HDKDEtalon.json */; };
 		AE4B521826CE127200A66D2C /* BIP32HDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = AE4B521726CE127200A66D2C /* BIP32HDKD.json */; };
-		F1BF07A279997490AFC5278E /* Pods_SubstrateSdkTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 27A1BEB05AA8335CF4053A81 /* Pods_SubstrateSdkTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,18 +140,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		00060C8DD6432907D485E325 /* Pods_SubstrateSdkExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SubstrateSdkExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		069A839D9A83C1D20293529A /* Pods-SubstrateSdkAll-SubstrateSdkExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdkAll-SubstrateSdkExample.debug.xcconfig"; path = "Target Support Files/Pods-SubstrateSdkAll-SubstrateSdkExample/Pods-SubstrateSdkAll-SubstrateSdkExample.debug.xcconfig"; sourceTree = "<group>"; };
+		09BC7EB7C9803A0197349CF7 /* Pods_SubstrateSdkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SubstrateSdkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0C0387772D08B52E000A2F24 /* westend-v15-metadata */ = {isa = PBXFileReference; lastKnownFileType = text; path = "westend-v15-metadata"; sourceTree = "<group>"; };
 		0C0387792D08B5AD000A2F24 /* ExtrinsicBuilderV5Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrinsicBuilderV5Tests.swift; sourceTree = "<group>"; };
 		0CE840E82BFBFB60003C2B7A /* polkadot-v15 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "polkadot-v15"; sourceTree = "<group>"; };
 		0CE840F92BFCA0F3003C2B7A /* RuntimeMetadataV15Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeMetadataV15Tests.swift; sourceTree = "<group>"; };
 		0CE92A6E2B2C5906009A21E9 /* kusama-v14-metadata-latest */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "kusama-v14-metadata-latest"; sourceTree = "<group>"; };
-		27A1BEB05AA8335CF4053A81 /* Pods_SubstrateSdkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SubstrateSdkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2E305CB3E5589CF7DC3BD962 /* Pods-SubstrateSdkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdkTests.debug.xcconfig"; path = "Target Support Files/Pods-SubstrateSdkTests/Pods-SubstrateSdkTests.debug.xcconfig"; sourceTree = "<group>"; };
+		3243233F8BCC053F9BF67E8A /* Pods-SubstrateSdk-SubstrateSdkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdk-SubstrateSdkTests.debug.xcconfig"; path = "Target Support Files/Pods-SubstrateSdk-SubstrateSdkTests/Pods-SubstrateSdk-SubstrateSdkTests.debug.xcconfig"; sourceTree = "<group>"; };
 		3DC3C61E2550AB6A7358DB29 /* Pods-SubstrateSdkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdkTests.release.xcconfig"; path = "Target Support Files/Pods-SubstrateSdkTests/Pods-SubstrateSdkTests.release.xcconfig"; sourceTree = "<group>"; };
 		60654FCEF77A2B707A129454 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		607FACD01AFB9204008FA782 /* SubstrateSdkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SubstrateSdkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		607FACE51AFB9204008FA782 /* SubstrateSdkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SubstrateSdkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		618BE7C38808AF17467E2B07 /* Pods-SubstrateSdkExample-SubstrateSdkTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdkExample-SubstrateSdkTests.debug.xcconfig"; path = "Target Support Files/Pods-SubstrateSdkExample-SubstrateSdkTests/Pods-SubstrateSdkExample-SubstrateSdkTests.debug.xcconfig"; sourceTree = "<group>"; };
 		84060E992726870E0070F2E4 /* SubstrateSdk.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = SubstrateSdk.podspec; path = ../SubstrateSdk.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		841D528925C4A11900DFA15B /* RegexParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegexParserTests.swift; sourceTree = "<group>"; };
 		841D52B325C6BAE600DFA15B /* ComponentsParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComponentsParserTests.swift; sourceTree = "<group>"; };
@@ -267,8 +269,14 @@
 		AE425FB926D3726900547303 /* BIP32KeypairDerivationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP32KeypairDerivationTests.swift; sourceTree = "<group>"; };
 		AE4B521326CBA71B00A66D2C /* BIP32HDKDEtalon.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BIP32HDKDEtalon.json; sourceTree = "<group>"; };
 		AE4B521726CE127200A66D2C /* BIP32HDKD.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BIP32HDKD.json; sourceTree = "<group>"; };
+		B1CEC5492F8F9CA59EE22706 /* Pods-SubstrateSdk-SubstrateSdkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdk-SubstrateSdkTests.release.xcconfig"; path = "Target Support Files/Pods-SubstrateSdk-SubstrateSdkTests/Pods-SubstrateSdk-SubstrateSdkTests.release.xcconfig"; sourceTree = "<group>"; };
+		C1E349D5D6C43FCAEA7F0E58 /* Pods-SubstrateSdkExample-SubstrateSdkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdkExample-SubstrateSdkTests.release.xcconfig"; path = "Target Support Files/Pods-SubstrateSdkExample-SubstrateSdkTests/Pods-SubstrateSdkExample-SubstrateSdkTests.release.xcconfig"; sourceTree = "<group>"; };
 		D001BA2CA89E91B69692B8CB /* Pods-SubstrateSdkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdkExample.release.xcconfig"; path = "Target Support Files/Pods-SubstrateSdkExample/Pods-SubstrateSdkExample.release.xcconfig"; sourceTree = "<group>"; };
+		D51045ADB2A00AA4D676850C /* Pods-SubstrateSdk-SubstrateSdkExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdk-SubstrateSdkExample.debug.xcconfig"; path = "Target Support Files/Pods-SubstrateSdk-SubstrateSdkExample/Pods-SubstrateSdk-SubstrateSdkExample.debug.xcconfig"; sourceTree = "<group>"; };
+		DBC8FB3DFB2DE889D69B5E2C /* Pods-SubstrateSdkAll-SubstrateSdkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdkAll-SubstrateSdkExample.release.xcconfig"; path = "Target Support Files/Pods-SubstrateSdkAll-SubstrateSdkExample/Pods-SubstrateSdkAll-SubstrateSdkExample.release.xcconfig"; sourceTree = "<group>"; };
 		DBD8662893B1E1373B778CC2 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		EC3F300FC0D1907E584E1457 /* Pods-SubstrateSdk-SubstrateSdkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdk-SubstrateSdkExample.release.xcconfig"; path = "Target Support Files/Pods-SubstrateSdk-SubstrateSdkExample/Pods-SubstrateSdk-SubstrateSdkExample.release.xcconfig"; sourceTree = "<group>"; };
+		F0F7B80DA53E579258D30500 /* Pods_SubstrateSdkExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SubstrateSdkExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1DFAE04C5FF8ABD1496FDF5 /* Pods-SubstrateSdkExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdkExample.debug.xcconfig"; path = "Target Support Files/Pods-SubstrateSdkExample/Pods-SubstrateSdkExample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -277,7 +285,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6976AE87036D532DDD11B3D9 /* Pods_SubstrateSdkExample.framework in Frameworks */,
+				3F88A2B008827D064C85BA9A /* Pods_SubstrateSdkExample.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -285,7 +293,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F1BF07A279997490AFC5278E /* Pods_SubstrateSdkTests.framework in Frameworks */,
+				15AC67EE17EB4F597880B382 /* Pods_SubstrateSdkTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,8 +303,8 @@
 		5F63183C721A51C0AA2EF0EB /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				00060C8DD6432907D485E325 /* Pods_SubstrateSdkExample.framework */,
-				27A1BEB05AA8335CF4053A81 /* Pods_SubstrateSdkTests.framework */,
+				09BC7EB7C9803A0197349CF7 /* Pods_SubstrateSdkTests.framework */,
+				F0F7B80DA53E579258D30500 /* Pods_SubstrateSdkExample.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -640,6 +648,14 @@
 				D001BA2CA89E91B69692B8CB /* Pods-SubstrateSdkExample.release.xcconfig */,
 				2E305CB3E5589CF7DC3BD962 /* Pods-SubstrateSdkTests.debug.xcconfig */,
 				3DC3C61E2550AB6A7358DB29 /* Pods-SubstrateSdkTests.release.xcconfig */,
+				618BE7C38808AF17467E2B07 /* Pods-SubstrateSdkExample-SubstrateSdkTests.debug.xcconfig */,
+				C1E349D5D6C43FCAEA7F0E58 /* Pods-SubstrateSdkExample-SubstrateSdkTests.release.xcconfig */,
+				D51045ADB2A00AA4D676850C /* Pods-SubstrateSdk-SubstrateSdkExample.debug.xcconfig */,
+				EC3F300FC0D1907E584E1457 /* Pods-SubstrateSdk-SubstrateSdkExample.release.xcconfig */,
+				3243233F8BCC053F9BF67E8A /* Pods-SubstrateSdk-SubstrateSdkTests.debug.xcconfig */,
+				B1CEC5492F8F9CA59EE22706 /* Pods-SubstrateSdk-SubstrateSdkTests.release.xcconfig */,
+				069A839D9A83C1D20293529A /* Pods-SubstrateSdkAll-SubstrateSdkExample.debug.xcconfig */,
+				DBC8FB3DFB2DE889D69B5E2C /* Pods-SubstrateSdkAll-SubstrateSdkExample.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -853,12 +869,14 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-SubstrateSdkExample/Pods-SubstrateSdkExample-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/BigInt/BigInt.framework",
-				"${BUILT_PRODUCTS_DIR}/IrohaCrypto/IrohaCrypto.framework",
+				"${BUILT_PRODUCTS_DIR}/NovaCrypto/NovaCrypto.framework",
 				"${BUILT_PRODUCTS_DIR}/Operation-iOS/Operation_iOS.framework",
 				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Starscream/Starscream.framework",
 				"${BUILT_PRODUCTS_DIR}/SubstrateSdk/SubstrateSdk.framework",
 				"${BUILT_PRODUCTS_DIR}/TweetNacl/TweetNacl.framework",
+				"${BUILT_PRODUCTS_DIR}/blake2.c/blake2.framework",
+				"${BUILT_PRODUCTS_DIR}/ed25519.c/ed25519.framework",
 				"${BUILT_PRODUCTS_DIR}/keccak.c/keccak.framework",
 				"${BUILT_PRODUCTS_DIR}/scrypt.c/scrypt.framework",
 				"${BUILT_PRODUCTS_DIR}/secp256k1.c/secp256k1.framework",
@@ -867,12 +885,14 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BigInt.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IrohaCrypto.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NovaCrypto.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Operation_iOS.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Starscream.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SubstrateSdk.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TweetNacl.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/blake2.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ed25519.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/keccak.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/scrypt.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/secp256k1.framework",
@@ -1136,8 +1156,8 @@
 			baseConfigurationReference = F1DFAE04C5FF8ABD1496FDF5 /* Pods-SubstrateSdkExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = SubstrateSdk/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1154,8 +1174,8 @@
 			baseConfigurationReference = D001BA2CA89E91B69692B8CB /* Pods-SubstrateSdkExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = SubstrateSdk/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -1173,7 +1193,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1185,6 +1204,10 @@
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/sr25519.c\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
@@ -1199,7 +1222,6 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
-				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(PLATFORM_DIR)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1207,6 +1229,10 @@
 				INFOPLIST_FILE = Tests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"${PODS_XCFRAMEWORKS_BUILD_DIR}/sr25519.c\"",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
