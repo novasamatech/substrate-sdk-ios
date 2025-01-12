@@ -60,7 +60,7 @@ PODS:
 DEPENDENCIES:
   - blake2.c (from `https://github.com/novasamatech/blake2.c`, tag `0.1.0`)
   - ed25519.c (from `https://github.com/novasamatech/ed25519.c`, tag `0.1.1`)
-  - NovaCrypto (from `https://github.com/novasamatech/Crypto-iOS.git`, commit `c60957339004bc9ceb9dcf4e205e10428549e782`)
+  - NovaCrypto (from `https://github.com/novasamatech/Crypto-iOS.git`, tag `0.1.0`)
   - Operation-iOS (from `https://github.com/novasamatech/Operation-iOS.git`, tag `2.1.0`)
   - secp256k1.c (from `https://github.com/novasamatech/secp256k1.c`, tag `0.1.3`)
   - sr25519.c (from `https://github.com/novasamatech/sr25519.c`, tag `0.1.0`)
@@ -86,8 +86,8 @@ EXTERNAL SOURCES:
     :git: https://github.com/novasamatech/ed25519.c
     :tag: 0.1.1
   NovaCrypto:
-    :commit: c60957339004bc9ceb9dcf4e205e10428549e782
     :git: https://github.com/novasamatech/Crypto-iOS.git
+    :tag: 0.1.0
   Operation-iOS:
     :git: https://github.com/novasamatech/Operation-iOS.git
     :tag: 2.1.0
@@ -111,8 +111,8 @@ CHECKOUT OPTIONS:
     :git: https://github.com/novasamatech/ed25519.c
     :tag: 0.1.1
   NovaCrypto:
-    :commit: c60957339004bc9ceb9dcf4e205e10428549e782
     :git: https://github.com/novasamatech/Crypto-iOS.git
+    :tag: 0.1.0
   Operation-iOS:
     :git: https://github.com/novasamatech/Operation-iOS.git
     :tag: 2.1.0
@@ -143,6 +143,6 @@ SPEC CHECKSUMS:
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   xxHash-Swift: 30bd6a7507b3b7348a277c49b1cb6346c2905ec7
 
-PODFILE CHECKSUM: 00503c6052c3bcb890d3e94f2e31e246a2191631
+PODFILE CHECKSUM: be20cdbc4710aac254a319e829348418f4dad201
 
 COCOAPODS: 1.15.2

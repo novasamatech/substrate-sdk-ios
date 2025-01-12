@@ -6,7 +6,7 @@ target 'SubstrateSdkExample' do
   pod 'Operation-iOS', :git => 'https://github.com/novasamatech/Operation-iOS.git', :tag => '2.1.0'
   pod 'Starscream', :git => 'https://github.com/ERussel/Starscream.git', :branch => 'feature/without-origin'
   pod 'SwiftLint'
-  pod 'NovaCrypto', :git => 'https://github.com/novasamatech/Crypto-iOS.git', :commit => 'c60957339004bc9ceb9dcf4e205e10428549e782'
+  pod 'NovaCrypto', :git => 'https://github.com/novasamatech/Crypto-iOS.git', :tag => '0.1.0'
   pod 'secp256k1.c', :git => 'https://github.com/novasamatech/secp256k1.c', :tag => '0.1.3'
   pod 'sr25519.c', :git => 'https://github.com/novasamatech/sr25519.c', :tag => '0.1.0'
   pod 'ed25519.c', :git => 'https://github.com/novasamatech/ed25519.c', :tag => '0.1.1'
