@@ -1,6 +1,6 @@
 import XCTest
 import SubstrateSdk
-import IrohaCrypto
+import NovaCrypto
 
 class SeedFactoryTests: XCTestCase {
     func testGeneratedSeedMatchesDerived() throws {

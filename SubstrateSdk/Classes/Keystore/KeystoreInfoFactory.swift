@@ -1,5 +1,5 @@
 import Foundation
-import IrohaCrypto
+import NovaCrypto
 
 public protocol KeystoreInfoFactoryProtocol {
     func createInfo(from definition: KeystoreDefinition) throws -> KeystoreInfo

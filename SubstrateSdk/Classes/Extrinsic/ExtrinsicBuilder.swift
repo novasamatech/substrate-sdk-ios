@@ -1,6 +1,6 @@
 import Foundation
 import BigInt
-import IrohaCrypto
+import NovaCrypto
 
 public protocol ExtrinsicBuilderProtocol: AnyObject {
     func with<A: Codable>(address: A) throws -> Self

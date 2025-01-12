@@ -1,5 +1,5 @@
 import Foundation
-import IrohaCrypto
+import NovaCrypto
 
 public struct EcdsaKeypairFactory: DerivableSeedFactoryProtocol {
     static let hdkdPrefix = "Secp256k1HDKD"

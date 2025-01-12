@@ -1,6 +1,6 @@
 import XCTest
 import SubstrateSdk
-import IrohaCrypto
+import NovaCrypto
 import BigInt
 
 class ScaleCompactIntTests: XCTestCase {
