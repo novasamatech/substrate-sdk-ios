@@ -1,5 +1,5 @@
 import Foundation
-import IrohaCrypto
+import NovaCrypto
 
 open class SubstrateQREncoder: SubstrateQREncodable {
     let separator: String

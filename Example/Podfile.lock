@@ -1,51 +1,54 @@
 PODS:
   - BigInt (5.2.0)
-  - IrohaCrypto (0.9.1):
-    - IrohaCrypto/BIP39 (= 0.9.1)
-    - IrohaCrypto/blake2 (= 0.9.1)
-    - IrohaCrypto/Common (= 0.9.1)
-    - IrohaCrypto/ed25519 (= 0.9.1)
-    - IrohaCrypto/Iroha (= 0.9.1)
-    - IrohaCrypto/Scrypt (= 0.9.1)
-    - IrohaCrypto/secp256k1 (= 0.9.1)
-    - IrohaCrypto/sr25519 (= 0.9.1)
-    - IrohaCrypto/ss58 (= 0.9.1)
-  - IrohaCrypto/BIP39 (0.9.1):
-    - IrohaCrypto/Common
-  - IrohaCrypto/blake2 (0.9.1)
-  - IrohaCrypto/Common (0.9.1)
-  - IrohaCrypto/ed25519 (0.9.1):
-    - IrohaCrypto/Common
-  - IrohaCrypto/Iroha (0.9.1):
-    - IrohaCrypto/Common
-  - IrohaCrypto/Scrypt (0.9.1):
-    - IrohaCrypto/Common
-    - scrypt.c (~> 0.1)
-  - IrohaCrypto/secp256k1 (0.9.1):
-    - IrohaCrypto/Common
-    - secp256k1.c (~> 0.1)
-  - IrohaCrypto/sr25519 (0.9.1):
-    - IrohaCrypto/BIP39
-    - IrohaCrypto/blake2
-    - IrohaCrypto/Common
-  - IrohaCrypto/ss58 (0.9.1):
-    - IrohaCrypto/blake2
-    - IrohaCrypto/Common
+  - blake2.c (0.1.0)
+  - ed25519.c (0.1.1)
   - keccak.c (0.1.3)
-  - Operation-iOS (2.0.1)
+  - NovaCrypto (0.1.0):
+    - NovaCrypto/BIP39 (= 0.1.0)
+    - NovaCrypto/blake2 (= 0.1.0)
+    - NovaCrypto/Common (= 0.1.0)
+    - NovaCrypto/ed25519 (= 0.1.0)
+    - NovaCrypto/Scrypt (= 0.1.0)
+    - NovaCrypto/secp256k1 (= 0.1.0)
+    - NovaCrypto/sr25519 (= 0.1.0)
+    - NovaCrypto/ss58 (= 0.1.0)
+  - NovaCrypto/BIP39 (0.1.0):
+    - NovaCrypto/Common
+  - NovaCrypto/blake2 (0.1.0):
+    - blake2.c (~> 0.1.0)
+  - NovaCrypto/Common (0.1.0)
+  - NovaCrypto/ed25519 (0.1.0):
+    - ed25519.c (~> 0.1.0)
+    - NovaCrypto/Common
+  - NovaCrypto/Scrypt (0.1.0):
+    - NovaCrypto/Common
+    - scrypt.c (~> 0.1)
+  - NovaCrypto/secp256k1 (0.1.0):
+    - NovaCrypto/Common
+    - secp256k1.c (~> 0.1)
+  - NovaCrypto/sr25519 (0.1.0):
+    - NovaCrypto/BIP39
+    - NovaCrypto/blake2
+    - NovaCrypto/Common
+    - sr25519.c (~> 0.1.0)
+  - NovaCrypto/ss58 (0.1.0):
+    - NovaCrypto/blake2
+    - NovaCrypto/Common
+  - Operation-iOS (2.1.0)
   - ReachabilitySwift (5.2.4)
   - scrypt.c (0.1.1)
   - secp256k1.c (0.1.3)
+  - sr25519.c (0.1.0)
   - Starscream (4.0.4)
-  - SubstrateSdk (3.4.0):
+  - SubstrateSdk (3.7.0):
     - BigInt (~> 5.0)
-    - IrohaCrypto/ed25519 (~> 0.9.0)
-    - IrohaCrypto/Scrypt (~> 0.9.0)
-    - IrohaCrypto/secp256k1 (~> 0.9.0)
-    - IrohaCrypto/sr25519 (~> 0.9.0)
-    - IrohaCrypto/ss58 (~> 0.9.0)
     - keccak.c (~> 0.1.0)
-    - Operation-iOS (~> 2.0.1)
+    - NovaCrypto/ed25519 (~> 0.1.0)
+    - NovaCrypto/Scrypt (~> 0.1.0)
+    - NovaCrypto/secp256k1 (~> 0.1.0)
+    - NovaCrypto/sr25519 (~> 0.1.0)
+    - NovaCrypto/ss58 (~> 0.1.0)
+    - Operation-iOS (~> 2.1.0)
     - ReachabilitySwift (~> 5.2.4)
     - Starscream
     - TweetNacl (~> 1.0.0)
@@ -55,9 +58,12 @@ PODS:
   - xxHash-Swift (1.0.13)
 
 DEPENDENCIES:
-  - IrohaCrypto (from `https://github.com/novasamatech/IrohaCrypto`, tag `0.9.1`)
-  - Operation-iOS (from `https://github.com/novasamatech/Operation-iOS.git`, tag `2.0.1`)
+  - blake2.c (from `https://github.com/novasamatech/blake2.c`, tag `0.1.0`)
+  - ed25519.c (from `https://github.com/novasamatech/ed25519.c`, tag `0.1.1`)
+  - NovaCrypto (from `https://github.com/novasamatech/Crypto-iOS.git`, tag `0.1.0`)
+  - Operation-iOS (from `https://github.com/novasamatech/Operation-iOS.git`, tag `2.1.0`)
   - secp256k1.c (from `https://github.com/novasamatech/secp256k1.c`, tag `0.1.3`)
+  - sr25519.c (from `https://github.com/novasamatech/sr25519.c`, tag `0.1.0`)
   - Starscream (from `https://github.com/ERussel/Starscream.git`, branch `feature/without-origin`)
   - SubstrateSdk (from `../`)
   - SwiftLint
@@ -73,15 +79,24 @@ SPEC REPOS:
     - xxHash-Swift
 
 EXTERNAL SOURCES:
-  IrohaCrypto:
-    :git: https://github.com/novasamatech/IrohaCrypto
-    :tag: 0.9.1
+  blake2.c:
+    :git: https://github.com/novasamatech/blake2.c
+    :tag: 0.1.0
+  ed25519.c:
+    :git: https://github.com/novasamatech/ed25519.c
+    :tag: 0.1.1
+  NovaCrypto:
+    :git: https://github.com/novasamatech/Crypto-iOS.git
+    :tag: 0.1.0
   Operation-iOS:
     :git: https://github.com/novasamatech/Operation-iOS.git
-    :tag: 2.0.1
+    :tag: 2.1.0
   secp256k1.c:
     :git: https://github.com/novasamatech/secp256k1.c
     :tag: 0.1.3
+  sr25519.c:
+    :git: https://github.com/novasamatech/sr25519.c
+    :tag: 0.1.0
   Starscream:
     :branch: feature/without-origin
     :git: https://github.com/ERussel/Starscream.git
@@ -89,33 +104,45 @@ EXTERNAL SOURCES:
     :path: "../"
 
 CHECKOUT OPTIONS:
-  IrohaCrypto:
-    :git: https://github.com/novasamatech/IrohaCrypto
-    :tag: 0.9.1
+  blake2.c:
+    :git: https://github.com/novasamatech/blake2.c
+    :tag: 0.1.0
+  ed25519.c:
+    :git: https://github.com/novasamatech/ed25519.c
+    :tag: 0.1.1
+  NovaCrypto:
+    :git: https://github.com/novasamatech/Crypto-iOS.git
+    :tag: 0.1.0
   Operation-iOS:
     :git: https://github.com/novasamatech/Operation-iOS.git
-    :tag: 2.0.1
+    :tag: 2.1.0
   secp256k1.c:
     :git: https://github.com/novasamatech/secp256k1.c
     :tag: 0.1.3
+  sr25519.c:
+    :git: https://github.com/novasamatech/sr25519.c
+    :tag: 0.1.0
   Starscream:
     :commit: b9e69390d96e71427463469f47cdafb8c0db1b21
     :git: https://github.com/ERussel/Starscream.git
 
 SPEC CHECKSUMS:
   BigInt: f668a80089607f521586bbe29513d708491ef2f7
-  IrohaCrypto: b53a7f16c839a1a76936402ffe35f496eaa8cbb0
+  blake2.c: 49d32e8c358161437c30a04d325be708233d221e
+  ed25519.c: ef3089bbe0f9206085dbf00b32080bfdfc0c443e
   keccak.c: 859583afdaccb4e4fcc0f0096064d101580313f4
-  Operation-iOS: 5f1c2cb82bf10f46b92faefc92d5821550b14eb5
+  NovaCrypto: bf2afb5b00bc3b9c956b1ae13fd09716c2a21e1d
+  Operation-iOS: 29111118f2bc5049f7bdc4e27c3967f5acc61802
   ReachabilitySwift: 32793e867593cfc1177f5d16491e3a197d2fccda
   scrypt.c: b42ae06183251329d2b2c620c226fb541a4a3592
   secp256k1.c: 9df12a79da0a6735022c5d996d2df6a6e57e1d99
+  sr25519.c: 6c5d747682f45fd081c1e34d54cd322acee321b5
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
-  SubstrateSdk: ee92f2ede60ffc3a80c73d57870c2cea05741ab4
+  SubstrateSdk: c434ebab9612d4d2b3ce9d55800eca04a04cfea4
   SwiftLint: 4fa9579c63416865179bc416f0a92d55f009600d
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   xxHash-Swift: 30bd6a7507b3b7348a277c49b1cb6346c2905ec7
 
-PODFILE CHECKSUM: 62e174568457e9c60da708e29cfd1993e7b3c847
+PODFILE CHECKSUM: be20cdbc4710aac254a319e829348418f4dad201
 
 COCOAPODS: 1.15.2

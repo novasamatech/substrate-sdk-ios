@@ -1,5 +1,5 @@
 import Foundation
-import IrohaCrypto
+import NovaCrypto
 
 public struct BIP32SeedFactory: SeedFactoryProtocol {
     private let seedFactory: SNBIP39SeedCreatorProtocol = SNBIP39SeedCreator()

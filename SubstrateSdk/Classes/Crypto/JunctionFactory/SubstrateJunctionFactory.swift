@@ -1,6 +1,6 @@
 import Foundation
 import BigInt
-import IrohaCrypto
+import NovaCrypto
 
 final public class SubstrateJunctionFactory: JunctionFactory {
     static let chaincodeLength = 32

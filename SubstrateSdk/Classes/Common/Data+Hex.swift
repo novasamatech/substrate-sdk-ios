@@ -1,5 +1,5 @@
 import Foundation
-import IrohaCrypto
+import NovaCrypto
 
 public extension Data {
     func toHex(includePrefix: Bool = false) -> String {
