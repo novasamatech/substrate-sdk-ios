@@ -50,7 +50,11 @@ public class ExtrinsicExtraNode: Node {
         let coders = getCoders()
         
         for checkString in runtimeMetadata.getSignedExtensions() {
-            try coders[checkString]?.encodeIncludedInExtrinsic(from: params, encoder: encoder)
+            if let includer = coders[checkString] {
+                try includer.encodeIncludedInExtrinsic(from: params, encoder: encoder)
+            } else if let type = runtimeMetadata.getSignedExtensionType(for: checkString) {
+                try? encoder.append(json: JSON.null, type: type)
+            }
         }
     }
 
@@ -58,7 +62,11 @@ public class ExtrinsicExtraNode: Node {
         let coders = getCoders()
         
         let extra = try runtimeMetadata.getSignedExtensions().reduce(into: [String: JSON]()) { (result, item) in
-            try coders[item]?.decodeIncludedInExtrinsic(to: &result, decoder: decoder)
+            if let coder = coders[item] {
+                try coder.decodeIncludedInExtrinsic(to: &result, decoder: decoder)
+            } else if let type = runtimeMetadata.getSignedExtensionType(for: item) {
+                result[item] = try decoder.read(type: type)
+            }
         }
 
         return .dictionaryValue(extra)
