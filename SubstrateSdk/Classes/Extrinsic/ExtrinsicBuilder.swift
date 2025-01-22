@@ -66,7 +66,59 @@ public enum ExtrinsicBuilderError: Error {
     case noSignature
 }
 
+///
+/// A class that provides an interface for building extrinsics.
+///
+/// ## Supported Extrinsic Types
+/// - **Bare Extrinsics**:
+///   - Bare extrinsics are unsigned and consist of:
+///     - `Version`: Specifies the extrinsic version.
+///     - `Call`: The function to be executed.
+///   - These are the simplest type of extrinsics and do not define a call origin.
+///
+/// - **Versioned Extrinsics**:
+///   - Extrinsics that define the call origin are versioned. Supported types:
+///     - **V4 (Legacy)**:
+///       - Always defines a signed origin.
+///       - Requires a signature from the account on whose behalf the extrinsic is executed.
+///       - Components:
+///         - `Version`: Specifies the extrinsic version.
+///         - `Signature`: The signature of the executing account.
+///         - `Signed Extension Parameters`: Additional parameters for the extrinsic.
+///         - `Call`: The function to be executed.
+///
+///     - **V5 (General Transactions)**:
+///       - Uses transaction extensions to define the origin.
+///       - Example: A signed origin can be defined using the `VerifySignature` transaction extension. But it is not needed to provide
+///       the extension manually as builder automatically configures when signing function is called.
+///       - More flexible than V4 extrinsics, as it supports any origin via transaction extensions.
+///       - Components:
+///         - `Version`: Specifies the extrinsic version.
+///         - `Extension Version`: Indicates the transaction extension version.
+///         - `Transaction Extension Parameters`: Define the origin and transaction-specific details.
+///         - `Call`: The function to be executed.
+///
+/// ## Using the Builder
+/// 1. **Select the Extrinsic Version**:
+///    - Choose between `V4` or `V5` extrinsics.
+///    - For bare extrinsics, any version can be used.
+/// 2. **Initialize the Builder**:
+///    - Provide the necessary parameters, such as:
+///      - `Nonce`
+///      - `Metadata Hash`
+///      - Other parameters, depending on the use case.
+/// 3. **Specify Calls**:
+///    - Add the calls to be executed as part of the extrinsic.
+///    - Multiple calls can be grouped into a batch, with configurable batch types.
+/// 4. **Set Execution Type**:
+///    - Choose between signing the extrinsic or using transaction extensions.
+///    - Example:
+///      - If a call requires a specific origin different from the signed one, provide appropriate transaction extension parameters instead of signing the extrinsic.
+///
+///
 public final class ExtrinsicBuilder {
+    
+    
     let extrinsicVersion: Extrinsic.Version
 
     private var address: JSON?
