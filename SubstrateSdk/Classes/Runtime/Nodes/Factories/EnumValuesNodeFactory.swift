@@ -7,7 +7,7 @@ class EnumValuesNodeFactory: TypeNodeFactoryProtocol {
         self.parser = parser
     }
 
-    func buildNode(from json: JSON, typeName: String, mediator: TypeRegistering) throws -> Node? {
+    func buildNode(from json: JSON, typeName: String, mediator _: TypeRegistering) throws -> Node? {
         guard let children = parser.parse(json: json) else {
             return nil
         }

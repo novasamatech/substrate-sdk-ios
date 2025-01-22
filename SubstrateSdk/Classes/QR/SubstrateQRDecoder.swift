@@ -37,7 +37,7 @@ open class SubstrateQRDecoder: SubstrateQRDecodable {
 
         if let addressFormat = addressFormat {
             switch addressFormat {
-            case .substrate(let type):
+            case let .substrate(type):
                 let accountId = try addressFactory.accountId(fromAddress: address, type: type)
 
                 guard publicKey.matchPublicKeyToAccountId(accountId) else {

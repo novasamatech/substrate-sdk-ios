@@ -2,11 +2,11 @@ import Foundation
 
 extension HTTPEngine: JSONRPCEngine {
     public func subscribe<P, T>(
-        _ method: String,
-        params: P?,
-        unsubscribeMethod: String,
-        updateClosure: @escaping (T) -> Void,
-        failureClosure: @escaping (Error, Bool) -> Void
+        _: String,
+        params _: P?,
+        unsubscribeMethod _: String,
+        updateClosure _: @escaping (T) -> Void,
+        failureClosure _: @escaping (Error, Bool) -> Void
     ) throws -> UInt16 where P: Encodable, T: Decodable {
         throw JSONRPCEngineError.unsupportedMethod
     }

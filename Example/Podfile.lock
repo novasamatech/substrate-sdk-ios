@@ -53,6 +53,7 @@ PODS:
     - Starscream
     - TweetNacl (~> 1.0.0)
     - xxHash-Swift (~> 1.0.0)
+  - SwiftFormat/CLI (0.47.13)
   - SwiftLint (0.42.0)
   - TweetNacl (1.0.2)
   - xxHash-Swift (1.0.13)
@@ -66,6 +67,7 @@ DEPENDENCIES:
   - sr25519.c (from `https://github.com/novasamatech/sr25519.c`, tag `0.1.0`)
   - Starscream (from `https://github.com/ERussel/Starscream.git`, branch `feature/without-origin`)
   - SubstrateSdk (from `../`)
+  - SwiftFormat/CLI (~> 0.47.13)
   - SwiftLint
 
 SPEC REPOS:
@@ -74,6 +76,7 @@ SPEC REPOS:
     - keccak.c
     - ReachabilitySwift
     - scrypt.c
+    - SwiftFormat
     - SwiftLint
     - TweetNacl
     - xxHash-Swift
@@ -139,10 +142,11 @@ SPEC CHECKSUMS:
   sr25519.c: 6c5d747682f45fd081c1e34d54cd322acee321b5
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
   SubstrateSdk: c434ebab9612d4d2b3ce9d55800eca04a04cfea4
+  SwiftFormat: 73573b89257437c550b03d934889725fbf8f75e5
   SwiftLint: 4fa9579c63416865179bc416f0a92d55f009600d
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   xxHash-Swift: 30bd6a7507b3b7348a277c49b1cb6346c2905ec7
 
-PODFILE CHECKSUM: be20cdbc4710aac254a319e829348418f4dad201
+PODFILE CHECKSUM: 95e41cee22af123f0f797d92dbe2fda014bf86c4
 
 COCOAPODS: 1.15.2

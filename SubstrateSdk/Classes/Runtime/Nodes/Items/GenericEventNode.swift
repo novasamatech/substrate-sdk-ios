@@ -31,8 +31,8 @@ public class GenericEventNode: Node {
         }
 
         guard let event = runtimeMetadata.getEventForModuleIndex(
-                UInt8(eventModule),
-                eventIndex: UInt32(eventIndex)
+            UInt8(eventModule),
+            eventIndex: UInt32(eventIndex)
         ) else {
             throw GenericEventNodeError.unexpectedEventIndex(value: UInt32(eventIndex))
         }
@@ -40,14 +40,16 @@ public class GenericEventNode: Node {
         let arguments = event.arguments
 
         guard arguments.count == params.count else {
-            throw GenericEventNodeError.argumentsNotMatchingParams(arguments: arguments,
-                                                                   params: params)
+            throw GenericEventNodeError.argumentsNotMatchingParams(
+                arguments: arguments,
+                params: params
+            )
         }
 
         try encoder.appendU8(json: .stringValue(String(eventModule)))
         try encoder.appendU8(json: .stringValue(String(eventIndex)))
 
-        for index in 0..<arguments.count {
+        for index in 0 ..< arguments.count {
             try encoder.append(json: params[index], type: arguments[index])
         }
     }
@@ -69,7 +71,7 @@ public class GenericEventNode: Node {
 
         let arguments = event.arguments
 
-        let params: [JSON] = try arguments.map { try decoder.read(type: $0)}
+        let params: [JSON] = try arguments.map { try decoder.read(type: $0) }
 
         return .arrayValue([
             .unsignedIntValue(UInt64(eventModule)),

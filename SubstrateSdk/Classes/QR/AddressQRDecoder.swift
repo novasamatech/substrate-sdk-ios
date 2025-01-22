@@ -22,8 +22,8 @@ open class AddressQRDecoder: AddressQRDecodable {
                 format: addressFormat,
                 addressFactory: addressFactory
             ) else {
-                throw AddressQRCoderError.invalidAddress
-            }
+            throw AddressQRCoderError.invalidAddress
+        }
 
         return addressString
     }

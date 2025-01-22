@@ -5,9 +5,11 @@ public class TypeSetParser: TypeParser {
     public let preprocessor: ParserPreproccessing?
     public let postprocessor: ParserPostprocessing?
 
-    public init(type: String,
-                preprocessor: ParserPreproccessing?,
-                postprocessor: ParserPostprocessing?) {
+    public init(
+        type: String,
+        preprocessor: ParserPreproccessing?,
+        postprocessor: ParserPostprocessing?
+    ) {
         self.type = type
         self.preprocessor = preprocessor
         self.postprocessor = postprocessor
@@ -32,7 +34,7 @@ public class TypeSetParser: TypeParser {
             return nil
         }
 
-        let resultFields = [type] + fields.reduce([JSON]()) { (result, item) in
+        let resultFields = [type] + fields.reduce([JSON]()) { result, item in
             let json: JSON = .arrayValue([.stringValue(item.key), item.value])
             return result + [json]
         }
@@ -41,12 +43,14 @@ public class TypeSetParser: TypeParser {
     }
 }
 
-extension TypeSetParser {
-    public static func generic() -> TypeSetParser {
+public extension TypeSetParser {
+    static func generic() -> TypeSetParser {
         let postprocessor = TrimProcessor(charset: .whitespaces)
 
-        return TypeSetParser(type: "set",
-                             preprocessor: nil,
-                             postprocessor: postprocessor)
+        return TypeSetParser(
+            type: "set",
+            preprocessor: nil,
+            postprocessor: postprocessor
+        )
     }
 }

@@ -11,14 +11,14 @@ public enum JSON {
     case null
 
     public var stringValue: String? {
-        if case .stringValue(let str) = self {
+        if case let .stringValue(str) = self {
             return str
         }
         return nil
     }
 
     public var arrayValue: [JSON]? {
-        if case .arrayValue(let value) = self {
+        if case let .arrayValue(value) = self {
             return value
         }
 
@@ -26,7 +26,7 @@ public enum JSON {
     }
 
     public var dictValue: [String: JSON]? {
-        if case .dictionaryValue(let value) = self {
+        if case let .dictionaryValue(value) = self {
             return value
         }
 
@@ -34,7 +34,7 @@ public enum JSON {
     }
 
     public var unsignedIntValue: UInt64? {
-        if case .unsignedIntValue(let value) = self {
+        if case let .unsignedIntValue(value) = self {
             return value
         }
 
@@ -42,7 +42,7 @@ public enum JSON {
     }
 
     public var signedIntValue: Int64? {
-        if case .signedIntValue(let value) = self {
+        if case let .signedIntValue(value) = self {
             return value
         }
 
@@ -50,7 +50,7 @@ public enum JSON {
     }
 
     public var boolValue: Bool? {
-        if case .boolValue(let value) = self {
+        if case let .boolValue(value) = self {
             return value
         }
 
@@ -112,17 +112,17 @@ extension JSON: Codable {
 
     public func encode(to encoder: Encoder) throws {
         switch self {
-        case .unsignedIntValue(let value):
+        case let .unsignedIntValue(value):
             try value.encode(to: encoder)
-        case .signedIntValue(let value):
+        case let .signedIntValue(value):
             try value.encode(to: encoder)
-        case .boolValue(let value):
+        case let .boolValue(value):
             try value.encode(to: encoder)
-        case .stringValue(let value):
+        case let .stringValue(value):
             try value.encode(to: encoder)
-        case .dictionaryValue(let value):
+        case let .dictionaryValue(value):
             try value.encode(to: encoder)
-        case .arrayValue(let value):
+        case let .arrayValue(value):
             try value.encode(to: encoder)
         case .null:
             try (JSON?).none.encode(to: encoder)

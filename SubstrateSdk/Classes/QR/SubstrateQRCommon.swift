@@ -6,10 +6,12 @@ public struct SubstrateQRInfo: Equatable {
     public let rawPublicKey: Data
     public let username: String?
 
-    public init(prefix: String = SubstrateQR.prefix,
-                address: String,
-                rawPublicKey: Data,
-                username: String?) {
+    public init(
+        prefix: String = SubstrateQR.prefix,
+        address: String,
+        rawPublicKey: Data,
+        username: String?
+    ) {
         self.prefix = prefix
         self.address = address
         self.rawPublicKey = rawPublicKey
@@ -36,7 +38,7 @@ public enum SubstrateQRDecoderError: Error, Equatable {
     case accountIdMismatch
 }
 
-public struct SubstrateQR {
+public enum SubstrateQR {
     public static let prefix: String = "substrate"
     public static let fieldsSeparator: String = ":"
 

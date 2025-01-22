@@ -1,9 +1,9 @@
 import Foundation
 import BigInt
 
-public extension ExtrinsicSignedExtension {
-    struct ChargeAssetTxPayment: Codable, OnlyExtrinsicSignedExtending {
-        public var signedExtensionId: String { Extrinsic.SignedExtensionId.assetTxPayment }
+public extension TransactionExtension {
+    struct ChargeAssetTxPayment: Codable, OnlyExplicitTransactionExtending {
+        public var txExtensionId: String { Extrinsic.TransactionExtensionId.assetTxPayment }
 
         @StringCodable public var tip: BigUInt
         @OptionStringCodable public var assetId: UInt32?

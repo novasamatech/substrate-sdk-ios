@@ -9,10 +9,10 @@ public enum StorageEntryTypeV14 {
 extension StorageEntryTypeV14: ScaleCodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
         switch self {
-        case .plain(let value):
+        case let .plain(value):
             try UInt8(0).encode(scaleEncoder: scaleEncoder)
             try BigUInt(value).encode(scaleEncoder: scaleEncoder)
-        case .map(let value):
+        case let .map(value):
             try UInt8(1).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
         }

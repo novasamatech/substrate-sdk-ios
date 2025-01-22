@@ -17,11 +17,13 @@ public class ComponentsParser: TypeParser {
     public let preprocessor: ParserPreproccessing?
     public let postprocessor: ParserPostprocessing?
 
-    public init(mainBracket: Bracket,
-                separator: Character,
-                internalBrackets: Set<Bracket>,
-                preprocessor: ParserPreproccessing?,
-                postprocessor: ParserPostprocessing?) {
+    public init(
+        mainBracket: Bracket,
+        separator: Character,
+        internalBrackets: Set<Bracket>,
+        preprocessor: ParserPreproccessing?,
+        postprocessor: ParserPostprocessing?
+    ) {
         self.mainBracket = mainBracket
         self.separator = separator
         self.internalBrackets = internalBrackets
@@ -45,7 +47,7 @@ public class ComponentsParser: TypeParser {
         var partial: String = ""
         var waiting: [Bracket] = []
 
-        for (index, token) in tokens.enumerated() where (index > 0 && index < tokens.count - 1) {
+        for (index, token) in tokens.enumerated() where index > 0 && index < tokens.count - 1 {
             if token == separator {
                 if waiting.isEmpty {
                     components.append(partial)
@@ -86,14 +88,16 @@ public class ComponentsParser: TypeParser {
 public extension ComponentsParser {
     static func tuple() -> ComponentsParser {
         let trimProcessor = TrimProcessor(charset: .whitespaces)
-        return ComponentsParser(mainBracket: Bracket(left: "(", right: ")"),
-                                separator: ",",
-                                internalBrackets: [
-                                    Bracket(left: "(", right: ")"),
-                                    Bracket(left: "<", right: ">"),
-                                    Bracket(left: "[", right: "]")
-                                ],
-                                preprocessor: trimProcessor,
-                                postprocessor: trimProcessor)
+        return ComponentsParser(
+            mainBracket: Bracket(left: "(", right: ")"),
+            separator: ",",
+            internalBrackets: [
+                Bracket(left: "(", right: ")"),
+                Bracket(left: "<", right: ">"),
+                Bracket(left: "[", right: "]")
+            ],
+            preprocessor: trimProcessor,
+            postprocessor: trimProcessor
+        )
     }
 }

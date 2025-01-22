@@ -258,15 +258,15 @@ public final class RuntimeAugmentationFactory: RuntimeAugmentationFactoryProtoco
     }
 }
 
-extension RuntimeAugmentationFactory {
-    public func createSubstrateAugmentation(for runtime: PostV14RuntimeMetadataProtocol) -> RuntimeAugmentationResult {
+public extension RuntimeAugmentationFactory {
+    func createSubstrateAugmentation(for runtime: PostV14RuntimeMetadataProtocol) -> RuntimeAugmentationResult {
         var additionalNodes = getCommonAdditionalNodes(for: runtime)
         additionalNodes = addingSubstrateSpecificNodes(to: additionalNodes, runtime: runtime)
 
         return RuntimeAugmentationResult(additionalNodes: additionalNodes)
     }
 
-    public func createEthereumBasedAugmentation(
+    func createEthereumBasedAugmentation(
         for runtime: PostV14RuntimeMetadataProtocol
     ) -> RuntimeAugmentationResult {
         var additionalNodes = getCommonAdditionalNodes(for: runtime)

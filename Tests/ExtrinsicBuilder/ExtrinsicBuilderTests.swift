@@ -160,18 +160,23 @@ class ExtrinsicBuilderTests: XCTestCase {
                                                      transactionVersion: 4,
                                                      genesisHash: genesisHash)
                     .adding(call: call)
-                    .build(encodingBy: encoder.newEncoder(), metadata: metadata)
+                    .build(
+                        using: WrappedDynamicScaleEncoderFactory(encoder: encoder),
+                        metadata: metadata
+                    )
 
             let decoder = try DynamicScaleDecoder(data: extrinsicData,
                                                   registry: catalog,
                                                   version: UInt64(specVersion))
 
             let extrinsic: Extrinsic = try decoder.read(of: GenericType.extrinsic.name)
-
+            let bareExtrinsic = extrinsic.getBareExtrinsic()
+            
             let expectedCall = try call.toScaleCompatibleJSON()
 
-            XCTAssertNil(extrinsic.signature)
-            XCTAssertEqual(expectedCall, extrinsic.call)
+            XCTAssertNotNil(bareExtrinsic)
+            
+            XCTAssertEqual(expectedCall, bareExtrinsic?.call)
             XCTAssertTrue(decoder.remained == 0)
         } catch {
             XCTFail("Unexpected error: \(error)")
@@ -327,9 +332,12 @@ class ExtrinsicBuilderTests: XCTestCase {
         let extrinsicData = try builderClosure(initialBuilder)
             .signing(by: signingClosure,
                      of: cryptoType,
-                     using: encoder.newEncoder(),
+                     using: WrappedDynamicScaleEncoderFactory(encoder: encoder),
                      metadata: metadata)
-            .build(encodingBy: encoder.newEncoder(), metadata: metadata)
+            .build(
+                using: WrappedDynamicScaleEncoderFactory(encoder: encoder),
+                metadata: metadata
+            )
 
         let decoder = try DynamicScaleDecoder(data: extrinsicData,
                                               registry: catalog,
@@ -339,10 +347,11 @@ class ExtrinsicBuilderTests: XCTestCase {
 
         let expectedAddress = try MultiAddress.accoundId(accountId).toScaleCompatibleJSON()
 
-        XCTAssertEqual(expectedAddress, extrinsic.signature?.address)
+        let signed = extrinsic.getSignedExtrinsic()
+        XCTAssertEqual(expectedAddress, signed?.signature.address)
 
         if let expectedCall = expectedCall {
-            XCTAssertEqual(expectedCall, extrinsic.call)
+            XCTAssertEqual(expectedCall, signed?.call)
         }
 
         XCTAssertTrue(decoder.remained == 0)
@@ -422,13 +431,17 @@ class ExtrinsicBuilderTests: XCTestCase {
         let processedBuilder = try builderClosure(initialBuilder)
 
         let originalData = try processedBuilder.buildSignaturePayload(
-            encoder: DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion)),
+            encodingFactory: WrappedDynamicScaleEncoderFactory(
+                encoder: DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion))
+            ),
             metadata: metadata
         )
 
         let rawSignature = try processedBuilder.buildRawSignature(
             using: signingClosure,
-            encoder: DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion)),
+            encodingFactory: WrappedDynamicScaleEncoderFactory(
+                encoder: DynamicScaleEncoder(registry: catalog, version: UInt64(specVersion))
+            ),
             metadata: metadata
         )
 

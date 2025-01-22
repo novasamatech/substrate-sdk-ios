@@ -38,21 +38,27 @@ public class FixedArrayParser: TypeParser {
 public extension FixedArrayParser {
     static func generic() -> FixedArrayParser {
         let trimProcessor = TrimProcessor(charset: .whitespaces)
-        let componentsParser = ComponentsParser(mainBracket: Bracket(left: "[", right: "]"),
-                                                separator: ";",
-                                                internalBrackets: [
-                                                    Bracket(left: "[", right: "]"),
-                                                    Bracket(left: "(", right: ")"),
-                                                    Bracket(left: "<", right: ">")
-                                                ],
-                                                preprocessor: trimProcessor,
-                                                postprocessor: trimProcessor)
+        let componentsParser = ComponentsParser(
+            mainBracket: Bracket(left: "[", right: "]"),
+            separator: ";",
+            internalBrackets: [
+                Bracket(left: "[", right: "]"),
+                Bracket(left: "(", right: ")"),
+                Bracket(left: "<", right: ">")
+            ],
+            preprocessor: trimProcessor,
+            postprocessor: trimProcessor
+        )
 
-        let lengthParser = RegexParser(pattern: "^(0|(?:[1-9]\\d*))$",
-                                       preprocessor: trimProcessor,
-                                       postprocessor: trimProcessor)
+        let lengthParser = RegexParser(
+            pattern: "^(0|(?:[1-9]\\d*))$",
+            preprocessor: trimProcessor,
+            postprocessor: trimProcessor
+        )
 
-        return FixedArrayParser(componentsParser: componentsParser,
-                                lengthParser: lengthParser)
+        return FixedArrayParser(
+            componentsParser: componentsParser,
+            lengthParser: lengthParser
+        )
     }
 }

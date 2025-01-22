@@ -14,7 +14,7 @@ public struct RuntimeJsonContext {
         if let prefersRawAddress = rawContext[Self.addressPrefsKey] as? Bool {
             self.prefersRawAddress = prefersRawAddress
         } else {
-            self.prefersRawAddress = false
+            prefersRawAddress = false
         }
     }
 

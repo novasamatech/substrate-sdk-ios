@@ -16,7 +16,7 @@ public protocol RuntimeMetadataProtocol {
     func getConstant(in moduleName: String, constantName: String) -> ModuleConstantMetadata?
 
     func getEventForModuleIndex(_ moduleIndex: UInt8, eventIndex: UInt32) -> EventMetadata?
-    
+
     func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiQueryResult?
 
     func getSignedExtensions() -> [String]
@@ -61,7 +61,7 @@ public struct RuntimeMetadata: RuntimeMetadataProtocol {
 
     public func getCallIndex(in moduleName: String, callName: String) -> UInt8? {
         guard let index = modules.first(where: { $0.name == moduleName })?.calls?
-                .firstIndex(where: { $0.name == callName}) else {
+            .firstIndex(where: { $0.name == callName }) else {
             return nil
         }
 
@@ -70,12 +70,12 @@ public struct RuntimeMetadata: RuntimeMetadataProtocol {
 
     public func getStorageMetadata(in moduleName: String, storageName: String) -> StorageEntryMetadata? {
         modules.first(where: { $0.name == moduleName })?
-            .storage?.entries.first(where: { $0.name == storageName})
+            .storage?.entries.first(where: { $0.name == storageName })
     }
 
     public func getConstant(in moduleName: String, constantName: String) -> ModuleConstantMetadata? {
         modules.first(where: { $0.name == moduleName })?
-            .constants.first(where: { $0.name == constantName})
+            .constants.first(where: { $0.name == constantName })
     }
 
     public func getEventForModuleIndex(_ moduleIndex: UInt8, eventIndex: UInt32) -> EventMetadata? {
@@ -94,12 +94,12 @@ public struct RuntimeMetadata: RuntimeMetadataProtocol {
         extrinsic.signedExtensions
     }
 
-    public func getSignedExtensionType(for identifier: String) -> String? {
+    public func getSignedExtensionType(for _: String) -> String? {
         // types are not stored onchain for pre 14 runtime
         nil
     }
-    
-    public func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiQueryResult? {
+
+    public func getRuntimeApiMethod(for _: String, methodName _: String) -> RuntimeApiQueryResult? {
         nil
     }
 }
@@ -111,7 +111,7 @@ extension RuntimeMetadata: ScaleCodable {
     }
 
     public init(scaleDecoder: ScaleDecoding) throws {
-        self.modules = try [ModuleMetadata](scaleDecoder: scaleDecoder)
-        self.extrinsic = try ExtrinsicMetadata(scaleDecoder: scaleDecoder)
+        modules = try [ModuleMetadata](scaleDecoder: scaleDecoder)
+        extrinsic = try ExtrinsicMetadata(scaleDecoder: scaleDecoder)
     }
 }

@@ -19,21 +19,21 @@ final class ScaleInfoNodeFactory: ScaleInfoNodeFactoryProtocol {
         }
 
         switch type.typeDefinition {
-        case .composite(let value):
+        case let .composite(value):
             return buildCompositeNode(from: value, identifier: identifier)
-        case .variant(let value):
+        case let .variant(value):
             return buildVariantNode(from: value, identifier: identifier)
-        case .sequence(let value):
+        case let .sequence(value):
             return buildSequenceNode(from: value, identifier: identifier)
-        case .array(let value):
+        case let .array(value):
             return buildArrayNode(from: value, identifier: identifier)
-        case .tuple(let value):
+        case let .tuple(value):
             return buildTupleNode(from: value, identifier: identifier)
-        case .bitsequence(let value):
+        case let .bitsequence(value):
             return buildBitsequenceNode(from: value, identifier: identifier)
-        case .compact(let value):
+        case let .compact(value):
             return buildCompactNode(from: value, identifier: identifier)
-        case .primitive(let value):
+        case let .primitive(value):
             return buildPrimitiveNode(from: value, identifier: identifier)
         }
     }
@@ -87,8 +87,8 @@ final class ScaleInfoNodeFactory: ScaleInfoNodeFactoryProtocol {
     }
 
     private func buildBitsequenceNode(
-        from value: RuntimeTypeBitSequence,
-        identifier: String
+        from _: RuntimeTypeBitSequence,
+        identifier _: String
     ) -> Node {
         BitVecNode()
     }

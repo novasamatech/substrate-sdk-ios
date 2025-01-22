@@ -14,17 +14,19 @@ public class SessionKeysSubstrateNode: Node {
         }
 
         guard Self.fieldNames.count == fieldValues.count else {
-            throw DynamicScaleEncoderError.unexpectedStructFields(json: value,
-                                                                  expectedFields: Self.fieldNames)
+            throw DynamicScaleEncoderError.unexpectedStructFields(
+                json: value,
+                expectedFields: Self.fieldNames
+            )
         }
 
-        for index in 0..<Self.fieldNames.count {
+        for index in 0 ..< Self.fieldNames.count {
             try encoder.append(json: fieldValues[index], type: Self.fieldTypeName)
         }
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        let jsons = try Self.fieldNames.reduce([JSON]()) { (result, _) in
+        let jsons = try Self.fieldNames.reduce([JSON]()) { result, _ in
             let json = try decoder.read(type: Self.fieldTypeName)
             return result + [json]
         }

@@ -16,7 +16,7 @@ public enum ScaleOption<T: ScaleCodable> {
         switch self {
         case .none:
             return nil
-        case .some(let value):
+        case let .some(value):
             return value
         }
     }
@@ -33,7 +33,7 @@ extension ScaleOption: ScaleEncodable {
         switch self {
         case .none:
             scaleEncoder.appendRaw(data: Data([0]))
-        case .some(let value):
+        case let .some(value):
             scaleEncoder.appendRaw(data: Data([1]))
             try value.encode(scaleEncoder: scaleEncoder)
         }
@@ -49,7 +49,7 @@ extension ScaleOption: ScaleDecodable {
         case 0:
             self = .none
         case 1:
-            let value = try T.init(scaleDecoder: scaleDecoder)
+            let value = try T(scaleDecoder: scaleDecoder)
             self = .some(value: value)
         default:
             throw ScaleOptionDecodingError.invalidPrefix

@@ -6,7 +6,7 @@ public enum AddressQRCoderError: Error {
 }
 
 public enum AddressQRValidator {
-    static public func isAddressValid(
+    public static func isAddressValid(
         _ address: String,
         format: QRAddressFormat,
         addressFactory: SS58AddressFactoryProtocol

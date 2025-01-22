@@ -15,17 +15,19 @@ public class TupleNode: Node {
         }
 
         guard components.count == innerNodes.count else {
-            throw DynamicScaleEncoderError.unexpectedTupleComponents(count: components.count,
-                                                                     actual: innerNodes.count)
+            throw DynamicScaleEncoderError.unexpectedTupleComponents(
+                count: components.count,
+                actual: innerNodes.count
+            )
         }
 
-        for index in 0..<innerNodes.count {
+        for index in 0 ..< innerNodes.count {
             try encoder.append(json: components[index], type: innerNodes[index].typeName)
         }
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        let jsons = try innerNodes.reduce([JSON]()) { (result, item) in
+        let jsons = try innerNodes.reduce([JSON]()) { result, item in
             let json = try decoder.read(type: item.typeName)
             return result + [json]
         }

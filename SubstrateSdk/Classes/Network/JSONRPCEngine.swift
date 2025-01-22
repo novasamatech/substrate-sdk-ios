@@ -46,7 +46,7 @@ public struct JSONRPCRequest: Equatable {
 struct JSONRPCResponseHandler<T: Decodable>: JSONRPCResponseHandling {
     public let completionClosure: (Result<T, Error>) -> Void
 
-    func handle(data: Data, for identifier: UInt16) {
+    func handle(data: Data, for _: UInt16) {
         do {
             let decoder = JSONDecoder()
             let response = try decoder.decode(JSONRPCData<T>.self, from: data)
@@ -58,7 +58,7 @@ struct JSONRPCResponseHandler<T: Decodable>: JSONRPCResponseHandling {
         }
     }
 
-    func handle(error: Error, for identifier: UInt16) {
+    func handle(error: Error, for _: UInt16) {
         completionClosure(.failure(error))
     }
 }

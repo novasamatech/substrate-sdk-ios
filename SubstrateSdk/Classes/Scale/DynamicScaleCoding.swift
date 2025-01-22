@@ -27,6 +27,8 @@ public protocol DynamicScaleEncoding {
 
     func newEncoder() -> DynamicScaleEncoding
 
+    func canEncodeOptional(for type: String) -> Bool
+
     func encode() throws -> Data
 }
 

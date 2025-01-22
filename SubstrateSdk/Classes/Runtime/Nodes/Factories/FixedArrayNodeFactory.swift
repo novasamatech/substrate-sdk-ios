@@ -22,8 +22,10 @@ class FixedArrayNodeFactory: TypeNodeFactoryProtocol {
 
         let childNode = mediator.register(typeName: childTypeName, json: childType)
 
-        return FixedArrayNode(typeName: typeName,
-                              elementType: childNode,
-                              length: length)
+        return FixedArrayNode(
+            typeName: typeName,
+            elementType: childNode,
+            length: length
+        )
     }
 }

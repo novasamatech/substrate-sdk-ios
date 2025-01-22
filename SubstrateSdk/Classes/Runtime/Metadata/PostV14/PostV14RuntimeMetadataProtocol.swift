@@ -13,12 +13,12 @@ public extension PostV14RuntimeMetadataProtocol {
         }
 
         guard let callsTypeId = pallet.calls?.type, let callType = types.types
-                .first(where: { $0.identifier == callsTypeId }) else {
+            .first(where: { $0.identifier == callsTypeId }) else {
             return nil
         }
 
         guard
-            case .variant(let calls) = callType.type.typeDefinition,
+            case let .variant(calls) = callType.type.typeDefinition,
             let call = calls.variants.first(where: { $0.name == name }) else {
             return nil
         }
@@ -32,12 +32,12 @@ public extension PostV14RuntimeMetadataProtocol {
         }
 
         guard let callsTypeId = pallet.calls?.type, let callType = types.types
-                .first(where: { $0.identifier == callsTypeId }) else {
+            .first(where: { $0.identifier == callsTypeId }) else {
             return nil
         }
 
         guard
-            case .variant(let calls) = callType.type.typeDefinition,
+            case let .variant(calls) = callType.type.typeDefinition,
             let call = calls.variants.first(where: { $0.index == callIndex }) else {
             return nil
         }
@@ -59,12 +59,12 @@ public extension PostV14RuntimeMetadataProtocol {
         }
 
         guard let callsTypeId = pallet.calls?.type, let callType = types.types
-                .first(where: { $0.identifier == callsTypeId }) else {
+            .first(where: { $0.identifier == callsTypeId }) else {
             return nil
         }
 
         guard
-            case .variant(let calls) = callType.type.typeDefinition,
+            case let .variant(calls) = callType.type.typeDefinition,
             let call = calls.variants.first(where: { $0.name == callName }) else {
             return nil
         }
@@ -117,8 +117,8 @@ public extension PostV14RuntimeMetadataProtocol {
         guard
             let pallet = postV14Pallets.first(where: { $0.index == moduleIndex }),
             let eventsType = pallet.events?.type,
-            let events = types.types.first(where: { $0.identifier == eventsType}),
-            case .variant(let variant) = events.type.typeDefinition,
+            let events = types.types.first(where: { $0.identifier == eventsType }),
+            case let .variant(variant) = events.type.typeDefinition,
             let event = variant.variants.first(where: { $0.index == eventIndex }) else {
             return nil
         }
@@ -129,12 +129,12 @@ public extension PostV14RuntimeMetadataProtocol {
     }
 
     func getSignedExtensions() -> [String] {
-        postV14Extrinsic.signedExtensions.map { $0.identifier }
+        postV14Extrinsic.signedExtensions.map(\.identifier)
     }
 
     func getSignedExtensionType(for identifier: String) -> String? {
         guard let signedExtension = postV14Extrinsic.signedExtensions.first(
-            where: { $0.identifier == identifier}
+            where: { $0.identifier == identifier }
         ) else {
             return nil
         }
@@ -155,9 +155,9 @@ public extension PostV14RuntimeMetadataProtocol {
 
     private func convert(entry: StorageEntryTypeV14) -> StorageEntryType? {
         switch entry {
-        case .plain(let entryType):
+        case let .plain(entryType):
             return StorageEntryType.plain(String(entryType))
-        case .map(let entryType):
+        case let .map(entryType):
             if entryType.hashers.count == 1 {
                 let mapEntry = MapEntry(
                     hasher: entryType.hashers[0],
@@ -205,7 +205,7 @@ public extension PostV14RuntimeMetadataProtocol {
     private func extractKeysFromTupleId(_ tupleId: SiLookupId) -> [SiLookupId]? {
         guard
             let keysType = types.types.first(where: { $0.identifier == tupleId }),
-            case .tuple(let value) = keysType.type.typeDefinition else {
+            case let .tuple(value) = keysType.type.typeDefinition else {
             return nil
         }
 

@@ -30,8 +30,8 @@ public class GenericCallNode: Node {
             guard let call = runtimeMetadata.getCall(from: callInfo.moduleName, with: callInfo.callName),
                   let moduleIndex = runtimeMetadata.getModuleIndex(callInfo.moduleName),
                   let callIndex = runtimeMetadata.getCallIndex(
-                    in: callInfo.moduleName,
-                    callName: callInfo.callName
+                      in: callInfo.moduleName,
+                      callName: callInfo.callName
                   ) else {
                 throw GenericCallNodeError.unexpectedParams
             }
@@ -43,7 +43,7 @@ public class GenericCallNode: Node {
             try encoder.appendU8(json: .stringValue(String(moduleIndex)))
             try encoder.appendU8(json: .stringValue(String(callIndex)))
 
-            for index in 0..<call.arguments.count {
+            for index in 0 ..< call.arguments.count {
                 guard let param = args[call.arguments[index].name] else {
                     throw GenericCallNodeError.unexpectedParams
                 }
@@ -72,7 +72,7 @@ public class GenericCallNode: Node {
             throw GenericCallNodeError.unexpectedCallFunction(value: callIndex)
         }
 
-        let params = try call.arguments.reduce(into: [String: JSON]()) { (result, item) in
+        let params = try call.arguments.reduce(into: [String: JSON]()) { result, item in
             let param = try decoder.read(type: item.type)
             result[item.name] = param
         }

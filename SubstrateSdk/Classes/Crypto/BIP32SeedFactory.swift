@@ -9,8 +9,10 @@ public struct BIP32SeedFactory: SeedFactoryProtocol {
         mnemonicCreator = IRMnemonicCreator(language: mnemonicLanguage)
     }
 
-    public func createSeed(from password: String,
-                           strength: IRMnemonicStrength) throws -> SeedFactoryResult {
+    public func createSeed(
+        from password: String,
+        strength: IRMnemonicStrength
+    ) throws -> SeedFactoryResult {
         let mnemonic = try mnemonicCreator.randomMnemonic(strength)
         let normalizedPassphrase = createNormalizedPassphraseFrom(mnemonic)
         let seed = try seedFactory.deriveSeed(from: normalizedPassphrase, passphrase: password)
@@ -18,8 +20,10 @@ public struct BIP32SeedFactory: SeedFactoryProtocol {
         return SeedFactoryResult(seed: seed, mnemonic: mnemonic)
     }
 
-    public func deriveSeed(from mnemonicWords: String,
-                           password: String) throws -> SeedFactoryResult {
+    public func deriveSeed(
+        from mnemonicWords: String,
+        password: String
+    ) throws -> SeedFactoryResult {
         let mnemonic = try mnemonicCreator.mnemonic(fromList: mnemonicWords)
         let normalizedPassphrase = createNormalizedPassphraseFrom(mnemonic)
         let seed = try seedFactory.deriveSeed(from: normalizedPassphrase, passphrase: password)

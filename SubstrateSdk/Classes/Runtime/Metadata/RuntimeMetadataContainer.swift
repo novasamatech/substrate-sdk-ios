@@ -25,9 +25,9 @@ extension RuntimeMetadataContainer: ScaleCodable {
         try runtimeMetadataVersion.encode(scaleEncoder: scaleEncoder)
 
         switch runtimeMetadata {
-        case .v13(let metadata):
+        case let .v13(metadata):
             try metadata.encode(scaleEncoder: scaleEncoder)
-        case .v14(let metadata):
+        case let .v14(metadata):
             try metadata.encode(scaleEncoder: scaleEncoder)
         case let .v15(metadata):
             try metadata.encode(scaleEncoder: scaleEncoder)
@@ -35,8 +35,8 @@ extension RuntimeMetadataContainer: ScaleCodable {
     }
 
     public init(scaleDecoder: ScaleDecoding) throws {
-        self.metaReserved = try UInt32(scaleDecoder: scaleDecoder)
-        self.runtimeMetadataVersion = try UInt8(scaleDecoder: scaleDecoder)
+        metaReserved = try UInt32(scaleDecoder: scaleDecoder)
+        runtimeMetadataVersion = try UInt8(scaleDecoder: scaleDecoder)
 
         if runtimeMetadataVersion < 14 {
             let metadata = try RuntimeMetadata(scaleDecoder: scaleDecoder)
@@ -56,12 +56,12 @@ public enum RuntimeMetadataContainerError: Error {
     case invalidMetadataLength
 }
 
-extension RuntimeMetadataContainer {
+public extension RuntimeMetadataContainer {
     /**
      * Can be used to read Option<OpaqueMetadata>, which is the response of
      * runtime call metadata_versionedMetadata()
      */
-    public static func createFromOpaque(data: Data) throws -> RuntimeMetadataContainer {
+    static func createFromOpaque(data: Data) throws -> RuntimeMetadataContainer {
         let scaleDecoder = try ScaleDecoder(data: data)
 
         let exists = try Bool(scaleDecoder: scaleDecoder)

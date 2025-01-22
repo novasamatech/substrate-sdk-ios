@@ -110,28 +110,28 @@ public enum RuntimeTypeDefinition {
 extension RuntimeTypeDefinition: ScaleCodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
         switch self {
-        case .composite(let value):
+        case let .composite(value):
             try UInt8(0).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
-        case .variant(let value):
+        case let .variant(value):
             try UInt8(1).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
-        case .sequence(let value):
+        case let .sequence(value):
             try UInt8(2).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
-        case .array(let value):
+        case let .array(value):
             try UInt8(3).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
-        case .tuple(let value):
+        case let .tuple(value):
             try UInt8(4).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
-        case .primitive(let value):
+        case let .primitive(value):
             try UInt8(5).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
-        case .compact(let value):
+        case let .compact(value):
             try UInt8(6).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
-        case .bitsequence(let value):
+        case let .bitsequence(value):
             try UInt8(7).encode(scaleEncoder: scaleEncoder)
             try value.encode(scaleEncoder: scaleEncoder)
         }
@@ -327,7 +327,7 @@ public struct RuntimeTypeTuple {
 
 extension RuntimeTypeTuple: ScaleCodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
-        try components.map({ BigUInt($0) }).encode(scaleEncoder: scaleEncoder)
+        try components.map { BigUInt($0) }.encode(scaleEncoder: scaleEncoder)
     }
 
     public init(scaleDecoder: ScaleDecoding) throws {

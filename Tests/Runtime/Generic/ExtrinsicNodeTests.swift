@@ -27,4 +27,38 @@ class ExtrinsicNodeTests: XCTestCase {
             XCTFail("Unexpected error: \(error)")
         }
     }
+    
+    func testV5ExtrinsicDecoding() throws {
+        let extrinsicHex = "0xc04500b503880000040000340a806419d5e278172e45cb0e50da1b031795366c99ddfe0a680bd53b142c630700e40b5402"
+        let extrinsicData = try Data(hexString: extrinsicHex)
+        
+        let metadata = try PostV14RuntimeHelper.createMetadata(for: "westend-v15-metadata", isOpaque: true)
+        
+        let augmentationFactory = RuntimeAugmentationFactory()
+        let result = augmentationFactory.createSubstrateAugmentation(for: metadata)
+        
+        let catalog = try TypeRegistryCatalog.createFromSiDefinition(
+            runtimeMetadata: metadata,
+            additionalNodes: result.additionalNodes.nodes
+        )
+        
+        let decoder = try DynamicScaleDecoder(
+            data: extrinsicData,
+            registry: catalog,
+            version: 0
+        )
+        
+        let extrinsic: Extrinsic = try decoder.read(of: GenericType.extrinsic.rawValue)
+        
+        let encoder = DynamicScaleEncoder(
+            registry: catalog,
+            version: 0
+        )
+        
+        try encoder.append(extrinsic, ofType: GenericType.extrinsic.rawValue)
+        
+        let encodedExtrinsic = try encoder.encode()
+        
+        XCTAssertEqual(extrinsicData, encodedExtrinsic)
+    }
 }

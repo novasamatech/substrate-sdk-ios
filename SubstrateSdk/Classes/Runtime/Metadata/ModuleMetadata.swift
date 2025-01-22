@@ -9,13 +9,15 @@ public struct ModuleMetadata {
     public let errors: [ErrorMetadata]
     public let index: UInt8
 
-    public init(name: String,
-                storage: StorageMetadata?,
-                calls: [CallMetadata]?,
-                events: [EventMetadata]?,
-                constants: [ModuleConstantMetadata],
-                errors: [ErrorMetadata],
-                index: UInt8) {
+    public init(
+        name: String,
+        storage: StorageMetadata?,
+        calls: [CallMetadata]?,
+        events: [EventMetadata]?,
+        constants: [ModuleConstantMetadata],
+        errors: [ErrorMetadata],
+        index: UInt8
+    ) {
         self.name = name
         self.storage = storage
         self.calls = calls

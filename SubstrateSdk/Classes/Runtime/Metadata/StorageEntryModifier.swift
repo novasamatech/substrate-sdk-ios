@@ -13,7 +13,7 @@ extension StorageEntryModifier: ScaleCodable {
     public init(scaleDecoder: ScaleDecoding) throws {
         let rawValue = try UInt8(scaleDecoder: scaleDecoder)
 
-        guard let value = StorageEntryModifier(rawValue: rawValue)  else {
+        guard let value = StorageEntryModifier(rawValue: rawValue) else {
             throw ScaleCodingError.unexpectedDecodedValue
         }
 

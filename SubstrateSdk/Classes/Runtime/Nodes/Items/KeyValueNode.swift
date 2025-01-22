@@ -12,7 +12,7 @@ public class KeyValueNode: Node {
             throw DynamicScaleEncoderError.dictExpected(json: value)
         }
 
-        let tuples: [ScaleTuple<String, String>] = try mapping.enumerated().map { (_, element) in
+        let tuples: [ScaleTuple<String, String>] = try mapping.enumerated().map { _, element in
             guard let value = element.value.stringValue else {
                 throw DynamicScaleEncoderError.stringExpected(json: element.value)
             }
@@ -26,7 +26,7 @@ public class KeyValueNode: Node {
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
         let tuples: [ScaleTuple<String, String>] = try decoder.read()
 
-        let mapping = tuples.reduce(into: [String: JSON]()) { (result, item) in
+        let mapping = tuples.reduce(into: [String: JSON]()) { result, item in
             result[item.first] = .stringValue(item.second)
         }
 

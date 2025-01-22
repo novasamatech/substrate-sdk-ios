@@ -16,6 +16,6 @@ public class ProxyNode: Node {
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        return try decoder.read(type: typeName)
+        try decoder.read(type: typeName)
     }
 }

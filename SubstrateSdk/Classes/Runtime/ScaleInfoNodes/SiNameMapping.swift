@@ -14,7 +14,7 @@ public final class ScaleInfoCamelCaseMapper: SiNameMapping {
             return name
         }
 
-        let otherComponents = components.suffix(from: 1).map { $0.capitalized }
+        let otherComponents = components.suffix(from: 1).map(\.capitalized)
 
         return ([String(firstComponent)] + otherComponents).joined()
     }

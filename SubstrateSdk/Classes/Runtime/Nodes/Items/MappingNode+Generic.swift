@@ -7,7 +7,8 @@ public extension MappingNode {
             typeMapping: [
                 NamedType(name: "engineId", type: GenericType.consensusEngineId.name),
                 NamedType(name: "data", type: GenericType.bytes.rawValue)
-            ])
+            ]
+        )
     }
 
     static var seal: MappingNode {
@@ -16,7 +17,8 @@ public extension MappingNode {
             typeMapping: [
                 NamedType(name: "engineId", type: GenericType.consensusEngineId.name),
                 NamedType(name: "data", type: GenericType.bytes.rawValue)
-            ])
+            ]
+        )
     }
 
     static var sealv0: MappingNode {
@@ -25,7 +27,8 @@ public extension MappingNode {
             typeMapping: [
                 NamedType(name: "slot", type: PrimitiveType.u64.rawValue),
                 NamedType(name: "signature", type: GenericType.signature.rawValue)
-            ])
+            ]
+        )
     }
 
     static var preRuntime: MappingNode {
@@ -34,6 +37,7 @@ public extension MappingNode {
             typeMapping: [
                 NamedType(name: "engineId", type: GenericType.consensusEngineId.name),
                 NamedType(name: "data", type: GenericType.bytes.rawValue)
-            ])
+            ]
+        )
     }
 }

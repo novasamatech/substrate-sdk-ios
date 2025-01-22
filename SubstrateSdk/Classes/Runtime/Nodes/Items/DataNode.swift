@@ -53,19 +53,19 @@ public class DataNode: Node {
         switch chainData {
         case .none:
             return .arrayValue([.unsignedIntValue(0)])
-        case .raw(let data):
+        case let .raw(data):
             let hex = data.toHex(includePrefix: true)
             return .arrayValue([.unsignedIntValue(1), .arrayValue([.stringValue(hex)])])
-        case .blakeTwo256(let hash):
+        case let .blakeTwo256(hash):
             let hex = hash.value.toHex(includePrefix: true)
             return .arrayValue([.unsignedIntValue(2), .arrayValue([.stringValue(hex)])])
-        case .sha256(let hash):
+        case let .sha256(hash):
             let hex = hash.value.toHex(includePrefix: true)
             return .arrayValue([.unsignedIntValue(3), .arrayValue([.stringValue(hex)])])
-        case .keccak256(let hash):
+        case let .keccak256(hash):
             let hex = hash.value.toHex(includePrefix: true)
             return .arrayValue([.unsignedIntValue(4), .arrayValue([.stringValue(hex)])])
-        case .shaThree256(let hash):
+        case let .shaThree256(hash):
             let hex = hash.value.toHex(includePrefix: true)
             return .arrayValue([.unsignedIntValue(5), .arrayValue([.stringValue(hex)])])
         }

@@ -48,10 +48,12 @@ public class TypeRegistry: TypeRegistryProtocol {
     public var registeredTypes: [Node] { graph.keys.compactMap { graph[$0] } }
     public var registeredTypeNames: Set<String> { allKeys }
 
-    init(json: JSON,
-         nodeFactory: TypeNodeFactoryProtocol,
-         typeResolver: TypeResolving,
-         additionalNodes: [Node]) throws {
+    init(
+        json: JSON,
+        nodeFactory: TypeNodeFactoryProtocol,
+        typeResolver: TypeResolving,
+        additionalNodes: [Node]
+    ) throws {
         self.nodeFactory = nodeFactory
         self.typeResolver = typeResolver
 
@@ -94,7 +96,7 @@ public class TypeRegistry: TypeRegistryProtocol {
 
         let keyParser = TermParser.generic()
 
-        let refinedDict = try dict.reduce(into: [String: JSON]()) { (result, item) in
+        let refinedDict = try dict.reduce(into: [String: JSON]()) { result, item in
             if let type = keyParser.parse(json: .stringValue(item.key))?.first?.stringValue {
                 result[type] = item.value
             } else {
@@ -107,9 +109,11 @@ public class TypeRegistry: TypeRegistryProtocol {
         }
 
         for item in refinedDict {
-            if let node = try nodeFactory.buildNode(from: item.value,
-                                                    typeName: item.key,
-                                                    mediator: self) {
+            if let node = try nodeFactory.buildNode(
+                from: item.value,
+                typeName: item.key,
+                mediator: self
+            ) {
                 graph[item.key] = node
             }
         }
@@ -122,8 +126,10 @@ public class TypeRegistry: TypeRegistryProtocol {
         let nonGenericTypeNames = allTypeNames.subtracting(genericTypeNames)
 
         for genericTypeName in genericTypeNames {
-            if let resolvedKey = typeResolver.resolve(typeName: genericTypeName,
-                                                      using: nonGenericTypeNames) {
+            if let resolvedKey = typeResolver.resolve(
+                typeName: genericTypeName,
+                using: nonGenericTypeNames
+            ) {
                 graph[genericTypeName] = ProxyNode(typeName: resolvedKey)
             }
         }

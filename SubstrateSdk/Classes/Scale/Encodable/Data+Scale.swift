@@ -18,6 +18,6 @@ public extension Data {
     }
 
     init(scaleByteArray: [StringScaleMapper<UInt8>]) {
-        self.init(scaleByteArray.map { $0.value })
+        self.init(scaleByteArray.map(\.value))
     }
 }

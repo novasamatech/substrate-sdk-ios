@@ -2,5 +2,9 @@ disabled_rules:
   - identifier_name
   - inclusive_language
   - function_parameter_count
+  - switch_case_alignment
 included:
   - "../SubstrateSdk/Classes"
+nesting:
+  type_level: 3
+  statement_level: 3

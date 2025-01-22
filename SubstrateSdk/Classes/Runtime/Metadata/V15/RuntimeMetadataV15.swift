@@ -31,16 +31,16 @@ extension RuntimeMetadataV15: PostV14RuntimeMetadataProtocol {
     public var postV14Extrinsic: PostV14ExtrinsicMetadataProtocol {
         extrinsic
     }
-    
+
     public func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiQueryResult? {
         guard let api = apis.first(where: { $0.name == runtimeApiName }) else {
             return nil
         }
-        
+
         guard let method = api.methods.first(where: { $0.name == methodName }) else {
             return nil
         }
-        
+
         return .init(callName: runtimeApiName + "_" + methodName, method: method)
     }
 }

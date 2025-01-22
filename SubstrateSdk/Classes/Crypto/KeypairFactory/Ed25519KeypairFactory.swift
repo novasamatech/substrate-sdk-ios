@@ -8,21 +8,27 @@ public struct Ed25519KeypairFactory: DerivableSeedFactoryProtocol {
 
     public init() {}
 
-    public func createKeypairFromSeed(_ seed: Data,
-                                      chaincodeList: [Chaincode]) throws -> IRCryptoKeypairProtocol {
-        let childSeed = try deriveChildSeedFromParent(seed,
-                                                      chaincodeList: chaincodeList)
+    public func createKeypairFromSeed(
+        _ seed: Data,
+        chaincodeList: [Chaincode]
+    ) throws -> IRCryptoKeypairProtocol {
+        let childSeed = try deriveChildSeedFromParent(
+            seed,
+            chaincodeList: chaincodeList
+        )
 
         return try internalFactory.derive(fromSeed: childSeed)
     }
 
-    public func deriveChildSeedFromParent(_ seed: Data,
-                                          chaincodeList: [Chaincode]) throws -> Data {
+    public func deriveChildSeedFromParent(
+        _ seed: Data,
+        chaincodeList: [Chaincode]
+    ) throws -> Data {
         let scaleEncoder = ScaleEncoder()
         try Self.hdkdPrefix.encode(scaleEncoder: scaleEncoder)
         let prefix = scaleEncoder.encode()
 
-        return try chaincodeList.reduce(seed) { (currentSeed, chaincode) in
+        return try chaincodeList.reduce(seed) { currentSeed, chaincode in
             guard chaincode.type == .hard else {
                 throw KeypairFactoryError.unsupportedChaincodeType
             }

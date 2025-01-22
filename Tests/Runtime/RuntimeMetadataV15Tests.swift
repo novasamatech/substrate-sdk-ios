@@ -6,6 +6,10 @@ final class RuntimeMetadataV15Tests: XCTestCase {
         performOpaqueV15MetadataTest(filename: "polkadot-v15")
     }
     
+    func testWestendV15MetadataParsing() {
+        performOpaqueV15MetadataTest(filename: "westend-v15-metadata")
+    }
+    
     private func performOpaqueV15MetadataTest(filename: String) {
         do {
             guard let url = Bundle(for: type(of: self))

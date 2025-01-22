@@ -10,11 +10,15 @@ public protocol KeypairFactoryProtocol {
 }
 
 public protocol DerivableKeypairFactoryProtocol: KeypairFactoryProtocol {
-    func deriveChildKeypairFromParent(_ keypair: IRCryptoKeypairProtocol,
-                                      chaincodeList: [Chaincode]) throws -> IRCryptoKeypairProtocol
+    func deriveChildKeypairFromParent(
+        _ keypair: IRCryptoKeypairProtocol,
+        chaincodeList: [Chaincode]
+    ) throws -> IRCryptoKeypairProtocol
 }
 
 public protocol DerivableSeedFactoryProtocol: KeypairFactoryProtocol {
-    func deriveChildSeedFromParent(_ seed: Data,
-                                   chaincodeList: [Chaincode]) throws -> Data
+    func deriveChildSeedFromParent(
+        _ seed: Data,
+        chaincodeList: [Chaincode]
+    ) throws -> Data
 }

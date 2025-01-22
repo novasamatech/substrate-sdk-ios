@@ -10,9 +10,11 @@ public class RegexReplaceResolver: TypeResolving {
     }
 
     public func resolve(typeName: String, using availableNames: Set<String>) -> String? {
-        let newTypeName = typeName.replacingOccurrences(of: pattern,
-                                                        with: replacement,
-                                                        options: .regularExpression)
+        let newTypeName = typeName.replacingOccurrences(
+            of: pattern,
+            with: replacement,
+            options: .regularExpression
+        )
 
         return availableNames.contains(newTypeName) ? newTypeName : nil
     }

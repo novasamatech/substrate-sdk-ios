@@ -28,6 +28,6 @@ public extension RuntimeCall where T == NoRuntimeArgs {
     init(moduleName: String, callName: String) {
         self.moduleName = moduleName
         self.callName = callName
-        self.args = NoRuntimeArgs()
+        args = NoRuntimeArgs()
     }
 }

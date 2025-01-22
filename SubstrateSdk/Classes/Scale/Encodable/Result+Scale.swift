@@ -3,10 +3,10 @@ import Foundation
 extension Result: ScaleCodable where Success: ScaleCodable, Failure: ScaleCodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
         switch self {
-        case .success(let value):
+        case let .success(value):
             scaleEncoder.appendRaw(data: Data([0]))
             try value.encode(scaleEncoder: scaleEncoder)
-        case .failure(let error):
+        case let .failure(error):
             scaleEncoder.appendRaw(data: Data([1]))
             try error.encode(scaleEncoder: scaleEncoder)
         }
@@ -18,10 +18,10 @@ extension Result: ScaleCodable where Success: ScaleCodable, Failure: ScaleCodabl
 
         switch mode {
         case 0:
-            let value = try Success.init(scaleDecoder: scaleDecoder)
+            let value = try Success(scaleDecoder: scaleDecoder)
             self = .success(value)
         case 1:
-            let error = try Failure.init(scaleDecoder: scaleDecoder)
+            let error = try Failure(scaleDecoder: scaleDecoder)
             self = .failure(error)
         default:
             throw ScaleOptionDecodingError.invalidPrefix

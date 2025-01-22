@@ -7,11 +7,13 @@ public struct StorageEntryMetadata {
     public let defaultValue: Data
     public let documentation: [String]
 
-    public init(name: String,
-                modifier: StorageEntryModifier,
-                type: StorageEntryType,
-                defaultValue: Data,
-                documentation: [String]) {
+    public init(
+        name: String,
+        modifier: StorageEntryModifier,
+        type: StorageEntryType,
+        defaultValue: Data,
+        documentation: [String]
+    ) {
         self.name = name
         self.modifier = modifier
         self.type = type

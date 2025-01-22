@@ -47,7 +47,7 @@ public struct StringCodable<T: LosslessStringConvertible & Equatable>: Codable, 
 
         guard let value = T(strValue) else {
             throw DecodingError
-            .dataCorrupted(.init(codingPath: container.codingPath, debugDescription: ""))
+                .dataCorrupted(.init(codingPath: container.codingPath, debugDescription: ""))
         }
 
         wrappedValue = value
@@ -77,7 +77,7 @@ public struct OptionStringCodable<T: LosslessStringConvertible & Equatable>: Cod
 
             guard let value = T(strValue) else {
                 throw DecodingError
-                .dataCorrupted(.init(codingPath: container.codingPath, debugDescription: ""))
+                    .dataCorrupted(.init(codingPath: container.codingPath, debugDescription: ""))
             }
 
             wrappedValue = value

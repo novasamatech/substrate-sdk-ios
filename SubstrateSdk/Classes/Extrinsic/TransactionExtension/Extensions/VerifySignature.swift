@@ -1,0 +1,125 @@
+import Foundation
+
+public extension TransactionExtension {
+    final class VerifySignature {
+        public let usability: VerifySignature.Usability
+        public let signaturePayloadFactory: ExtrinsicSignaturePayloadFactoryProtocol
+
+        public init(
+            extrinsicVersion: Extrinsic.Version,
+            usability: Usability
+        ) {
+            self.usability = usability
+            signaturePayloadFactory = ExtrinsicSignaturePayloadFactory(extrinsicVersion: extrinsicVersion)
+        }
+    }
+}
+
+public extension TransactionExtension.VerifySignature {
+    struct SignedModel: Codable {
+        let signature: JSON
+        let account: JSON
+    }
+
+    enum Mode: Codable {
+        case disabled
+        case signed(SignedModel)
+
+        public func encode(to encoder: Encoder) throws {
+            var container = encoder.unkeyedContainer()
+
+            switch self {
+            case .disabled:
+                try container.encode("Disabled")
+                try container.encode(JSON.null)
+            case let .signed(model):
+                try container.encode("Signed")
+                try container.encode(model)
+            }
+        }
+
+        enum CodingKeys: CodingKey {
+            case disabled
+            case signed
+        }
+
+        public init(from decoder: any Decoder) throws {
+            var container = try decoder.unkeyedContainer()
+
+            let modeString = try container.decode(String.self)
+
+            switch modeString {
+            case "Disabled":
+                self = .disabled
+            case "Signed":
+                let signedModel = try container.decode(SignedModel.self)
+                self = .signed(signedModel)
+            default:
+                throw DecodingError.dataCorruptedError(
+                    in: container,
+                    debugDescription: "Unknown mode \(modeString)."
+                )
+            }
+        }
+    }
+
+    typealias Signer = ExtrinsicSignatureFactoryProtocol
+
+    enum Usability {
+        case disabled
+        case toSign(Signer, SigningParams)
+    }
+
+    struct SigningParams {
+        let account: JSON
+    }
+}
+
+extension TransactionExtension.VerifySignature: TransactionExtending {
+    public var txExtensionId: String { Extrinsic.TransactionExtensionId.verifySignature }
+
+    public func implicit(
+        using _: DynamicScaleEncodingFactoryProtocol,
+        metadata _: RuntimeMetadataProtocol,
+        context _: RuntimeJsonContext?
+    ) throws -> Data? {
+        nil
+    }
+
+    public func explicit(
+        for implication: TransactionExtension.Implication,
+        encodingFactory: DynamicScaleEncodingFactoryProtocol,
+        metadata: RuntimeMetadataProtocol,
+        context: RuntimeJsonContext?
+    ) throws -> TransactionExtension.Explicit? {
+        switch usability {
+        case .disabled:
+            let value = try Mode.disabled.toScaleCompatibleJSON(with: context?.toRawContext())
+
+            return try TransactionExtension.Explicit(
+                from: value,
+                txExtensionId: txExtensionId,
+                metadata: metadata
+            )
+        case let .toSign(signer, signingParams):
+            let message = try signaturePayloadFactory.createPayload(
+                from: implication,
+                using: encodingFactory
+            )
+
+            let payload = try message.blake2b32()
+
+            let signature = try signer.createSignature(from: payload, context: context)
+
+            let value = try Mode
+                .signed(.init(signature: signature, account: signingParams.account))
+                .toScaleCompatibleJSON(with: context?.toRawContext())
+
+            return try TransactionExtension.Explicit(
+                from: value,
+                txExtensionId: txExtensionId,
+                metadata: metadata
+            )
+        }
+    }
+}
