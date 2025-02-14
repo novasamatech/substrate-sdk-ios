@@ -1,6 +1,7 @@
 import Foundation
+import NovaCrypto
 
-struct KeypairDeriviation: Decodable {
+public struct KeypairDeriviation: Decodable {
     enum CodingKeys: String, CodingKey {
         case publicKey = "pk"
         case path
@@ -8,13 +9,13 @@ struct KeypairDeriviation: Decodable {
         case seed
     }
 
-    let mnemonic: String
-    let publicKey: String
-    let path: String
-    let seed: String
+    public let mnemonic: String
+    public let publicKey: String
+    public let path: String
+    public let seed: String
 }
 
-enum KnownChainType: UInt16 {
+public enum KnownChainType: UInt16 {
     case polkadotMain = 0
     case polkadotSecondary = 1
     case kusamaMain = 2

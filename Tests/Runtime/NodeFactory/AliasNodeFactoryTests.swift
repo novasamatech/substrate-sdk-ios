@@ -1,5 +1,5 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
 
 class AliasNodeFactoryTests: XCTestCase {
     func testValidAliasFactory() throws {

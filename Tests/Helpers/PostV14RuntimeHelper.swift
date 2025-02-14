@@ -7,7 +7,13 @@ enum PostV14RuntimeHelperError: Error {
 
 final class PostV14RuntimeHelper {
     static func createMetadata(for fileName: String, isOpaque: Bool = false) throws -> PostV14RuntimeMetadataProtocol {
-        guard let metadataUrl = Bundle(for: self).url(forResource: fileName, withExtension: "") else {
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: self)
+#endif
+        guard let metadataUrl = bundle.url(forResource: fileName, withExtension: "") else {
             throw PostV14RuntimeHelperError.invalidMetadataFilename
         }
 
@@ -34,7 +40,7 @@ final class PostV14RuntimeHelper {
         }
     }
 
-    static func createTypeRegistry(
+    public static func createTypeRegistry(
         from fileName: String,
         networkFilename: String = "common-v14",
         isOpaque: Bool = false,
@@ -43,7 +49,13 @@ final class PostV14RuntimeHelper {
     ) throws -> TypeRegistryCatalog {
         let runtimeMetadata = try Self.createMetadata(for: fileName, isOpaque: isOpaque)
 
-        guard let networkUrl = Bundle(for: self).url(
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: self)
+#endif
+        guard let networkUrl = bundle.url(
                 forResource: networkFilename,
                 withExtension: "json"
         ) else {
@@ -61,7 +73,7 @@ final class PostV14RuntimeHelper {
         )
     }
     
-    static func createTypeRegistryWithoutVersioning(
+    public static func createTypeRegistryWithoutVersioning(
         from fileName: String,
         isOpaque: Bool = false,
         customExtensions: [TransactionExtensionCoding] = []

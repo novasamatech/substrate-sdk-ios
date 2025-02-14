@@ -1,13 +1,19 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
+#if canImport(TestHelpers)
+import TestHelpers
+#endif
+
 
 class BaseCodingTests: XCTestCase {
-    func performTest<T: Codable & Equatable>(value: T,
-                                                     type: String,
-                                                     baseRegistryName: String = "default",
-                                                     networkName: String = "westend",
-                                                     runtimeMetadataName: String = "westend-metadata",
-                                                     version: UInt64 = 48) {
+    func performTest<T: Codable & Equatable>(
+        value: T,
+        type: String,
+        baseRegistryName: String = "default",
+        networkName: String = "westend",
+        runtimeMetadataName: String = "westend-metadata",
+        version: UInt64 = 48
+    ) {
         do {
             let catalog = try RuntimeHelper.createTypeRegistryCatalog(from: baseRegistryName,
                                                                       networkName: networkName,

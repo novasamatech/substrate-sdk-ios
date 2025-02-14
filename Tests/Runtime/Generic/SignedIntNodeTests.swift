@@ -1,6 +1,10 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
 import BigInt
+#if canImport(TestHelpers)
+import TestHelpers
+#endif
+
 
 class SignedIntNodeTests: XCTestCase {
     let typeRegistry = try! RuntimeHelper.createTypeRegistryCatalog(

@@ -1,12 +1,12 @@
 import Foundation
 import SubstrateSdk
 
-enum JSONHelperError: Error {
+public enum JSONHelperError: Error {
     case invalidString
 }
 
 extension JSON {
-    static func from(string: String) throws -> JSON {
+    public static func from(string: String) throws -> JSON {
         guard let data = string.data(using: .utf8) else {
             throw JSONHelperError.invalidString
         }
