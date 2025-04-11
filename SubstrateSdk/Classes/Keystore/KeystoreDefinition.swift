@@ -6,10 +6,12 @@ public struct KeystoreDefinition: Codable {
     public let encoding: KeystoreEncoding
     public let meta: KeystoreMeta?
 
-    public init(address: String?,
-                encoded: String,
-                encoding: KeystoreEncoding,
-                meta: KeystoreMeta?) {
+    public init(
+        address: String?,
+        encoded: String,
+        encoding: KeystoreEncoding,
+        meta: KeystoreMeta?
+    ) {
         self.address = address
         self.encoded = encoded
         self.encoding = encoding

@@ -32,12 +32,14 @@ extension KeystoreBuilder: KeystoreBuilding {
         let scryptData: Data = try scryptData(from: password)
 
         let encryptionKey = try IRScryptKeyDeriviation()
-            .deriveKey(from: scryptData,
-                       salt: scryptParameters.salt,
-                       scryptN: UInt(scryptParameters.scryptN),
-                       scryptP: UInt(scryptParameters.scryptP),
-                       scryptR: UInt(scryptParameters.scryptR),
-                       length: UInt(KeystoreConstants.encryptionKeyLength))
+            .deriveKey(
+                from: scryptData,
+                salt: scryptParameters.salt,
+                scryptN: UInt(scryptParameters.scryptN),
+                scryptP: UInt(scryptParameters.scryptP),
+                scryptR: UInt(scryptParameters.scryptR),
+                length: UInt(KeystoreConstants.encryptionKeyLength)
+            )
 
         let nonce = try Data.generateRandomBytes(of: KeystoreConstants.nonceLength)
 
@@ -60,18 +62,24 @@ extension KeystoreBuilder: KeystoreBuilding {
 
         let encodingType = [KeystoreEncodingType.scrypt.rawValue, KeystoreEncodingType.xsalsa.rawValue]
         let encodingContent = [KeystoreEncodingContent.pkcs8.rawValue, data.secretType.rawValue]
-        let keystoreEncoding = KeystoreEncoding(content: encodingContent,
-                                                type: encodingType,
-                                                version: String(KeystoreConstants.version))
+        let keystoreEncoding = KeystoreEncoding(
+            content: encodingContent,
+            type: encodingType,
+            version: String(KeystoreConstants.version)
+        )
 
-        let meta = KeystoreMeta(name: name,
-                                createdAt: Int64(creationDate.timeIntervalSince1970),
-                                genesisHash: genesisHash)
+        let meta = KeystoreMeta(
+            name: name,
+            createdAt: Int64(creationDate.timeIntervalSince1970),
+            genesisHash: genesisHash
+        )
 
-        return KeystoreDefinition(address: data.address,
-                                  encoded: encoded.base64EncodedString(),
-                                  encoding: keystoreEncoding,
-                                  meta: meta)
+        return KeystoreDefinition(
+            address: data.address,
+            encoded: encoded.base64EncodedString(),
+            encoding: keystoreEncoding,
+            meta: meta
+        )
     }
 
     private func scryptData(from password: String?) throws -> Data {

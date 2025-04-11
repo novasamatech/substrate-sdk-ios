@@ -60,7 +60,7 @@ class JSONRPCRequestFactory {
         completion closure: (([Result<JSON, Error>]) -> Void)?
     ) throws -> JSONRPCRequest {
         let jsonList = try batchItems.map { try jsonDecoder.decode(JSON.self, from: $0.data) }
-        let itemIds = batchItems.map { $0.requestId }
+        let itemIds = batchItems.map(\.requestId)
 
         let data = try jsonEncoder.encode(JSON.arrayValue(jsonList))
 

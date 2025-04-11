@@ -16,7 +16,7 @@ public enum MultiAddress: Equatable {
 
     public var accountId: Data? {
         switch self {
-        case .accoundId(let value):
+        case let .accoundId(value):
             return value
         case .accountIndex, .raw, .address32, .address20:
             return nil
@@ -71,8 +71,10 @@ extension MultiAddress: Codable {
         case Self.indexField:
             let intStr = try container.decode(String.self)
             guard let value = BigUInt(intStr) else {
-                throw DecodingError.dataCorruptedError(in: container,
-                                                       debugDescription: "Unexpected big int value")
+                throw DecodingError.dataCorruptedError(
+                    in: container,
+                    debugDescription: "Unexpected big int value"
+                )
             }
 
             return .accountIndex(value)
@@ -86,8 +88,10 @@ extension MultiAddress: Codable {
             let data = try decodeMultiAddressData(from: &container)
             return .address20(data)
         default:
-            throw DecodingError.dataCorruptedError(in: container,
-                                                   debugDescription: "Unexpected type")
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "Unexpected type"
+            )
         }
     }
 
@@ -111,19 +115,19 @@ extension MultiAddress: Codable {
         var container = encoder.unkeyedContainer()
 
         switch self {
-        case .accoundId(let value):
+        case let .accoundId(value):
             try container.encode(Self.accountIdField)
             try container.encode(value)
-        case .accountIndex(let value):
+        case let .accountIndex(value):
             try container.encode(Self.indexField)
             try container.encode(String(value))
-        case .raw(let value):
+        case let .raw(value):
             try container.encode(Self.rawField)
             try container.encode(value)
-        case .address32(let value):
+        case let .address32(value):
             try container.encode(Self.address32Field)
             try container.encode(value)
-        case .address20(let value):
+        case let .address20(value):
             try container.encode(Self.address20Field)
             try container.encode(value)
         }

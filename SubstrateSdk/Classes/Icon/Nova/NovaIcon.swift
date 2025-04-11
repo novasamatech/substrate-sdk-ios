@@ -11,7 +11,7 @@ public struct NovaIcon {
 }
 
 extension NovaIcon: DrawableIcon {
-    public func drawInContext(_ context: CGContext, fillColor: UIColor, size: CGSize) {
+    public func drawInContext(_ context: CGContext, fillColor _: UIColor, size: CGSize) {
         let targetRadius = min(size.width, size.height) / 2.0
         let centerX = size.width / 2.0
         let centerY = size.height / 2.0

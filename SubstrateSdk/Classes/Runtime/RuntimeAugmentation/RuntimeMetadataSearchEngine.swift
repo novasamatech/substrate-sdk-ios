@@ -9,11 +9,11 @@ public enum RuntimeMetadataSearchEngine {
         switch mode {
         case .full:
             let path = RuntimeType.pathFromName(type)
-            return metadata.types.types.filter({ $0.type.path == path })
+            return metadata.types.types.filter { $0.type.path == path }
         case .lastComponent:
             let component = RuntimeType.pathFromName(type).last
 
-            return metadata.types.types.filter({ $0.type.path.last == component })
+            return metadata.types.types.filter { $0.type.path.last == component }
         case .firstLastComponents:
             let path = RuntimeType.pathFromName(type)
             let first = path.first

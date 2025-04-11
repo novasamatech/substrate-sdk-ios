@@ -5,40 +5,28 @@ public enum ExtrinsicExtraNodeError: Error {
 }
 
 public class ExtrinsicExtraNode: Node {
-    static let defaultExtensions: [ExtrinsicSignedExtensionCoding] = [
-        DefaultExtrinsicSignedExtensionCoder(
-            signedExtensionId: Extrinsic.SignedExtensionId.mortality,
-            extraType: GenericType.era.name
-        ),
-        
-        CompactExtrinsicSignedExtensionCoder(
-            signedExtensionId: Extrinsic.SignedExtensionId.nonce,
-            extraType: KnownType.index.name
-        ),
-        
-        CompactExtrinsicSignedExtensionCoder(
-            signedExtensionId: Extrinsic.SignedExtensionId.txPayment,
-            extraType: KnownType.balance.name
-        ),
-        
+    static let defaultExtensions: [TransactionExtensionCoding] = [
+        TransactionExtension.CheckMortality.getTransactionExtensionCoder(),
+        TransactionExtension.CheckNonce.getTransactionExtensionCoder(),
+        TransactionExtension.ChargeTransactionPayment.getTransactionExtensionCoder(),
         CheckMetadataHashCoder()
     ]
-    
+
     public var typeName: String { GenericType.extrinsicExtra.name }
     public let runtimeMetadata: RuntimeMetadataProtocol
-    public let customExtensions: [ExtrinsicSignedExtensionCoding]
+    public let customExtensions: [TransactionExtensionCoding]
 
     public init(
         runtimeMetadata: RuntimeMetadataProtocol,
-        customExtensions: [ExtrinsicSignedExtensionCoding]
+        customExtensions: [TransactionExtensionCoding]
     ) {
         self.runtimeMetadata = runtimeMetadata
         self.customExtensions = customExtensions
     }
-    
-    private func getCoders() -> [String: ExtrinsicSignedExtensionCoding] {
-        (Self.defaultExtensions + customExtensions).reduce(into: [String: ExtrinsicSignedExtensionCoding]()) {
-            $0[$1.signedExtensionId] = $1
+
+    private func getCoders() -> [String: TransactionExtensionCoding] {
+        (Self.defaultExtensions + customExtensions).reduce(into: [String: TransactionExtensionCoding]()) {
+            $0[$1.txExtensionId] = $1
         }
     }
 
@@ -48,20 +36,26 @@ public class ExtrinsicExtraNode: Node {
         }
 
         let coders = getCoders()
-        
+
         for checkString in runtimeMetadata.getSignedExtensions() {
             if let includer = coders[checkString] {
                 try includer.encodeIncludedInExtrinsic(from: params, encoder: encoder)
-            } else if let type = runtimeMetadata.getSignedExtensionType(for: checkString) {
-                try? encoder.append(json: JSON.null, type: type)
+            } else if
+                let extensionParams = params[checkString],
+                let type = runtimeMetadata.getSignedExtensionType(for: checkString) {
+                try encoder.append(json: extensionParams, type: type)
+            } else if
+                let type = runtimeMetadata.getSignedExtensionType(for: checkString),
+                encoder.canEncodeOptional(for: type) {
+                try encoder.append(json: JSON.null, type: type)
             }
         }
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
         let coders = getCoders()
-        
-        let extra = try runtimeMetadata.getSignedExtensions().reduce(into: [String: JSON]()) { (result, item) in
+
+        let extra = try runtimeMetadata.getSignedExtensions().reduce(into: [String: JSON]()) { result, item in
             if let coder = coders[item] {
                 try coder.decodeIncludedInExtrinsic(to: &result, decoder: decoder)
             } else if let type = runtimeMetadata.getSignedExtensionType(for: item) {

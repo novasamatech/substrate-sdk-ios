@@ -9,7 +9,7 @@ public class CallBytesNode: Node {
         try encoder.appendBytes(json: value)
     }
 
-    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+    public func accept(decoder _: DynamicScaleDecoding) throws -> JSON {
         throw DynamicScaleCoderError.notImplemented
     }
 }

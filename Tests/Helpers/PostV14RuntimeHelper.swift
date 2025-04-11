@@ -1,27 +1,35 @@
 import Foundation
 import SubstrateSdk
 
-enum ScaleInfoHelperError: Error {
+enum PostV14RuntimeHelperError: Error {
     case invalidMetadataFilename
 }
 
-final class ScaleInfoHelper {
-    static func createScaleInfoMetadata(for fileName: String) throws -> RuntimeMetadataV14 {
+final class PostV14RuntimeHelper {
+    static func createMetadata(for fileName: String, isOpaque: Bool = false) throws -> PostV14RuntimeMetadataProtocol {
         guard let metadataUrl = Bundle(for: self).url(forResource: fileName, withExtension: "") else {
-            throw ScaleInfoHelperError.invalidMetadataFilename
+            throw PostV14RuntimeHelperError.invalidMetadataFilename
         }
 
         let hex = try String(contentsOf: metadataUrl)
             .trimmingCharacters(in: CharacterSet.whitespacesAndNewlines)
         let data = try Data(hexString: hex)
 
-        let decoder = try ScaleDecoder(data: data)
-        let container = try RuntimeMetadataContainer(scaleDecoder: decoder)
+        let container: RuntimeMetadataContainer
+        
+        if isOpaque {
+            container = try RuntimeMetadataContainer.createFromOpaque(data: data)
+        } else {
+            let decoder = try ScaleDecoder(data: data)
+            container = try RuntimeMetadataContainer(scaleDecoder: decoder)
+        }
 
         switch container.runtimeMetadata {
         case .v14(let metadata):
             return metadata
-        case .v13, .v15:
+        case .v15(let metadata):
+            return metadata
+        case .v13:
             throw RuntimeHelperError.unexpectedMetadata
         }
     }
@@ -29,9 +37,11 @@ final class ScaleInfoHelper {
     static func createTypeRegistry(
         from fileName: String,
         networkFilename: String = "common-v14",
-        customExtensions: [ExtrinsicSignedExtensionCoding] = []
+        isOpaque: Bool = false,
+        customExtensions: [TransactionExtensionCoding] = [],
+        additionalNodes: [Node] = []
     ) throws -> TypeRegistryCatalog {
-        let runtimeMetadata = try Self.createScaleInfoMetadata(for: fileName)
+        let runtimeMetadata = try Self.createMetadata(for: fileName, isOpaque: isOpaque)
 
         guard let networkUrl = Bundle(for: self).url(
                 forResource: networkFilename,
@@ -45,6 +55,7 @@ final class ScaleInfoHelper {
         return try TypeRegistryCatalog.createFromSiDefinition(
             versioningData: networdData,
             runtimeMetadata: runtimeMetadata,
+            additionalNodes: additionalNodes,
             customExtensions: customExtensions,
             customNameMapper: ScaleInfoCamelCaseMapper()
         )
@@ -52,9 +63,10 @@ final class ScaleInfoHelper {
     
     static func createTypeRegistryWithoutVersioning(
         from fileName: String,
-        customExtensions: [ExtrinsicSignedExtensionCoding] = []
+        isOpaque: Bool = false,
+        customExtensions: [TransactionExtensionCoding] = []
     ) throws -> TypeRegistryCatalog {
-        let runtimeMetadata = try Self.createScaleInfoMetadata(for: fileName)
+        let runtimeMetadata = try Self.createMetadata(for: fileName, isOpaque: isOpaque)
         
         let predefinedNodes = RuntimeAugmentationFactory().createSubstrateAugmentation(for: runtimeMetadata)
 

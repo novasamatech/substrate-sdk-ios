@@ -10,7 +10,7 @@ import UIKit
 import SubstrateSdk
 
 class ViewController: UIViewController {
-    private struct Constants {
+    private enum Constants {
         static let address = "Fewyw2YrQgjtnuRsYQXfeHoTMoazKJKkfKkT8hc1WLjPsUP"
         static let radius: CGFloat = 128.0
     }
@@ -26,8 +26,8 @@ class ViewController: UIViewController {
         return stackView
     }()
 
-    private var iconView: PolkadotIconView = PolkadotIconView()
-    private var novaIconView: PolkadotIconView = PolkadotIconView()
+    private var iconView = PolkadotIconView()
+    private var novaIconView = PolkadotIconView()
 
     override func loadView() {
         let view = UIView()
@@ -38,7 +38,6 @@ class ViewController: UIViewController {
         stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         stackView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
         stackView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
-
 
         stackView.addArrangedSubview(iconView)
         stackView.addArrangedSubview(novaIconView)

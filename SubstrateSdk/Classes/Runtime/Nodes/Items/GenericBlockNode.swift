@@ -5,11 +5,11 @@ public class GenericBlockNode: Node {
 
     public init() {}
 
-    public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {
+    public func accept(encoder _: DynamicScaleEncoding, value _: JSON) throws {
         throw DynamicScaleCoderError.unresolverType(name: typeName)
     }
 
-    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+    public func accept(decoder _: DynamicScaleDecoding) throws -> JSON {
         throw DynamicScaleCoderError.unresolverType(name: typeName)
     }
 }

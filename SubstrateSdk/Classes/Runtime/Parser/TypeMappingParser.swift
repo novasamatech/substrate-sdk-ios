@@ -5,9 +5,11 @@ public class TypeMappingParser: TypeParser {
     public let preprocessor: ParserPreproccessing?
     public let postprocessor: ParserPostprocessing?
 
-    public init(type: String,
-                preprocessor: ParserPreproccessing?,
-                postprocessor: ParserPostprocessing?) {
+    public init(
+        type: String,
+        preprocessor: ParserPreproccessing?,
+        postprocessor: ParserPostprocessing?
+    ) {
         self.type = type
         self.preprocessor = preprocessor
         self.postprocessor = postprocessor
@@ -52,16 +54,20 @@ public extension TypeMappingParser {
     static func structure() -> TypeMappingParser {
         let postprocessor = TrimProcessor(charset: .whitespaces)
 
-        return TypeMappingParser(type: "struct",
-                                 preprocessor: nil,
-                                 postprocessor: postprocessor)
+        return TypeMappingParser(
+            type: "struct",
+            preprocessor: nil,
+            postprocessor: postprocessor
+        )
     }
 
     static func enumeration() -> TypeMappingParser {
         let postprocessor = TrimProcessor(charset: .whitespaces)
 
-        return TypeMappingParser(type: "enum",
-                                 preprocessor: nil,
-                                 postprocessor: postprocessor)
+        return TypeMappingParser(
+            type: "enum",
+            preprocessor: nil,
+            postprocessor: postprocessor
+        )
     }
 }

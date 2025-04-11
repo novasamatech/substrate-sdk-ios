@@ -3,12 +3,14 @@ import BigInt
 
 public extension Decimal {
     static var decimalToBigUIntHandler: NSDecimalNumberHandler {
-        NSDecimalNumberHandler(roundingMode: .down,
-                               scale: 0,
-                               raiseOnExactness: false,
-                               raiseOnOverflow: false,
-                               raiseOnUnderflow: false,
-                               raiseOnDivideByZero: false)
+        NSDecimalNumberHandler(
+            roundingMode: .down,
+            scale: 0,
+            raiseOnExactness: false,
+            raiseOnOverflow: false,
+            raiseOnUnderflow: false,
+            raiseOnDivideByZero: false
+        )
     }
 
     static func fromSubstrateAmount(_ value: BigUInt, precision: Int16) -> Decimal? {

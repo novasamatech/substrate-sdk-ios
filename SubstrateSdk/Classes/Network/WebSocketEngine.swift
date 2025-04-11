@@ -111,7 +111,7 @@ public final class WebSocketEngine {
         logger: SDKLoggerProtocol? = nil
     ) {
         self.connectionFactory = connectionFactory
-        self.requestFactory = JSONRPCRequestFactory(version: version)
+        requestFactory = JSONRPCRequestFactory(version: version)
         self.customNodeSwitcher = customNodeSwitcher
         self.logger = logger
         self.reconnectionStrategy = reconnectionStrategy
@@ -123,7 +123,7 @@ public final class WebSocketEngine {
         self.processingQueue = processingQueue ?? JSONRPCEngineShared.processingQueue
         self.pingInterval = pingInterval
         self.connectionTimeout = connectionTimeout
-        self.selectedURLIndex = 0
+        selectedURLIndex = 0
 
         guard let url = urls.first else {
             return nil
@@ -161,13 +161,13 @@ public final class WebSocketEngine {
 
         mutex.lock()
 
-        self.urls = newUrls
+        urls = newUrls
         reconnectionAttempts = [:]
         selectedURLIndex = 0
 
         connection = connectionFactory.createConnection(
             for: selectedURL,
-            processingQueue: self.processingQueue,
+            processingQueue: processingQueue,
             connectionTimeout: connectionTimeout
         )
         connection.delegate = self
@@ -235,7 +235,7 @@ public final class WebSocketEngine {
 
             forceConnectionReset()
             reconnectionScheduler.cancel()
-            
+
             logger?.debug("(\(chainName):\(selectedURL)) Cancel reconnection scheduler due to disconnection")
         default:
             logger?.debug("(\(chainName):\(selectedURL)) Already disconnected from socket")
@@ -395,7 +395,7 @@ extension WebSocketEngine {
 
                 let batchResponses = try jsonDecoder.decode([JSON].self, from: data)
 
-                let singleItemResponses = try batchResponses.reduce(into: [UInt16: Data]()) { (accum, response) in
+                let singleItemResponses = try batchResponses.reduce(into: [UInt16: Data]()) { accum, response in
                     // ignore undefined responses without ids
                     guard let identifier = response.id?.unsignedIntValue else {
                         logger?.error(
@@ -434,7 +434,6 @@ extension WebSocketEngine {
                 let errorJson = jsonResponse.error,
                 let error = try? errorJson.map(to: JSONRPCError.self),
                 let identifier = jsonResponse.id?.unsignedIntValue {
-
                 if processErrorAndResetIfNeeded(for: UInt16(identifier), error: error) {
                     return true
                 }
@@ -449,7 +448,6 @@ extension WebSocketEngine {
         if
             let customNodeSwitcher = customNodeSwitcher,
             customNodeSwitcher.shouldInterceptAndSwitchNode(for: error, identifier: identifier) {
-
             resetRequestsAndSwitchNode()
 
             return true
@@ -485,7 +483,7 @@ extension WebSocketEngine {
     func generateRequestId() -> UInt16 {
         let pendingItems = pendingRequests.flatMap(\.requestId.itemIds) + inProgressRequests.map(\.key)
         let partialBatches = partialBatches.values.flatMap { batch in
-            batch.map { $0.requestId }
+            batch.map(\.requestId)
         }
 
         let existingIds: Set<UInt16> = Set(pendingItems + partialBatches)
@@ -527,7 +525,7 @@ extension WebSocketEngine {
                 method: method,
                 params: [remoteId],
                 options: JSONRPCOptions()
-            ) { [weak self] (result: (Result<Bool, Error>)) in
+            ) { [weak self] (result: Result<Bool, Error>) in
                 self?.provideUnsubscriptionResult(result, remoteId: remoteId)
             }
 
@@ -537,7 +535,7 @@ extension WebSocketEngine {
         }
     }
 
-    func provideUnsubscriptionResult(_ result: (Result<Bool, Error>), remoteId: String) {
+    func provideUnsubscriptionResult(_ result: Result<Bool, Error>, remoteId: String) {
         switch result {
         case let .success(isSuccess):
             logger?.debug("(\(chainName):\(selectedURL)) Unsubscription request completed \(remoteId): \(isSuccess)")

@@ -23,8 +23,10 @@ extension Era: Codable {
             let phase = try container.decode(UInt64.self)
             self = .mortal(period: period, phase: phase)
         default:
-            throw DecodingError.dataCorruptedError(in: container,
-                                                   debugDescription: "unsupported type")
+            throw DecodingError.dataCorruptedError(
+                in: container,
+                debugDescription: "unsupported type"
+            )
         }
     }
 
@@ -34,7 +36,7 @@ extension Era: Codable {
         switch self {
         case .immortal:
             try container.encode(UInt8(0))
-        case .mortal(let period, let phase):
+        case let .mortal(period, phase):
             try container.encode(UInt8(1))
             try container.encode(period)
             try container.encode(phase)
@@ -73,7 +75,7 @@ extension Era: ScaleCodable {
         switch self {
         case .immortal:
             try UInt8(0).encode(scaleEncoder: scaleEncoder)
-        case .mortal(let period, let phase):
+        case let .mortal(period, phase):
             guard period >= 4 else {
                 throw EraCodingError.invalidPeriod
             }
