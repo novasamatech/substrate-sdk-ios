@@ -73,3 +73,16 @@ public extension Extrinsic {
         case V5(extensionVersion: UInt8)
     }
 }
+
+public extension Extrinsic {
+    var call: JSON {
+        switch self {
+        case let .bare(bare):
+            bare.call
+        case let .signed(signed):
+            signed.call
+        case let .generalTransaction(general):
+            general.call
+        }
+    }
+}
