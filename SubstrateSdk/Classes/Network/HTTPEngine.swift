@@ -36,6 +36,7 @@ public final class HTTPEngine {
     public let timeout: TimeInterval
     public let customNodeSwitcher: JSONRPCNodeSwitching?
     public let maxAttemptsPerNode: Int
+    public let requestModifier: NetworkRequestModifierProtocol?
 
     public var chainName: String { name ?? "unknown" }
 
@@ -65,6 +66,7 @@ public final class HTTPEngine {
         timeout: TimeInterval = 60,
         completionQueue: DispatchQueue? = nil,
         name: String? = nil,
+        requestModifier: NetworkRequestModifierProtocol? = nil,
         logger: SDKLoggerProtocol? = nil
     ) {
         guard !urls.isEmpty else {
@@ -80,6 +82,7 @@ public final class HTTPEngine {
         self.operationQueue = operationQueue
         self.timeout = timeout
         self.name = name
+        self.requestModifier = requestModifier
         self.logger = logger
     }
 
@@ -347,6 +350,7 @@ public final class HTTPEngine {
         let resultFactory = createResultFactory(for: request, encoder: encoder, decoder: decoder)
 
         let operation = NetworkOperation(requestFactory: requestFactory, resultFactory: resultFactory)
+        operation.requestModifier = requestModifier
 
         operation.completionBlock = {
             self.completionQueue.async {
