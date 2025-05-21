@@ -41,7 +41,10 @@ public final class NovaIconGenerator {
         let colors = Self.allColorPairs
 
         let accountId: [UInt8] = data.map { $0 }
-        let index = (UInt(accountId[30]) + UInt(accountId[31]) * 256) % UInt(colors.count)
+        
+        let lastByteIndex = accountId.endIndex - 1
+
+        let index = (UInt(accountId[lastByteIndex - 1]) + UInt(accountId[lastByteIndex]) * 256) % UInt(colors.count)
 
         return colors[Int(index)]
     }
