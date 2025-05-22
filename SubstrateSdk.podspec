@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SubstrateSdk'
-  s.version          = '3.7.1'
+  s.version          = '3.7.2'
   s.summary          = 'Utility library that implements clients specific logic to interact with substrate based networks'
 
   s.homepage         = 'https://github.com/nova-wallet/substrate-sdk-ios'
