@@ -5,8 +5,8 @@ enum PostV14RuntimeHelperError: Error {
     case invalidMetadataFilename
 }
 
-final class PostV14RuntimeHelper {
-    static func createMetadata(for fileName: String, isOpaque: Bool = false) throws -> PostV14RuntimeMetadataProtocol {
+public final class PostV14RuntimeHelper {
+    public static func createMetadata(for fileName: String, isOpaque: Bool = false) throws -> PostV14RuntimeMetadataProtocol {
         let bundle: Bundle
 #if SWIFT_PACKAGE
         bundle = Bundle.module

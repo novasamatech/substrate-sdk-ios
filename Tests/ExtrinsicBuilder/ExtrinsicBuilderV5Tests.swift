@@ -1,6 +1,9 @@
 import XCTest
 import SubstrateSdk
 import NovaCrypto
+#if canImport(TestHelpers)
+import TestHelpers
+#endif
 
 final class ExtrinsicBuilderV5Tests: XCTestCase {
     func testV5ExtrinsicGenerateEncodeDecode() throws {

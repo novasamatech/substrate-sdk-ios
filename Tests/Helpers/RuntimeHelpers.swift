@@ -8,8 +8,8 @@ public enum RuntimeHelperError: Error {
     case unexpectedMetadata
 }
 
-final class RuntimeHelper {
-    static func createRuntimeMetadata(_ name: String) throws -> RuntimeMetadata {
+public final class RuntimeHelper {
+    public static func createRuntimeMetadata(_ name: String) throws -> RuntimeMetadata {
         let bundle: Bundle
 #if SWIFT_PACKAGE
         bundle = Bundle.module
@@ -62,7 +62,7 @@ final class RuntimeHelper {
         return registry
     }
 
-    static func createTypeRegistryCatalog(from baseName: String,
+    public static func createTypeRegistryCatalog(from baseName: String,
                                           networkName: String,
                                           runtimeMetadataName: String,
                                           customExtensions: [TransactionExtensionCoding] = []

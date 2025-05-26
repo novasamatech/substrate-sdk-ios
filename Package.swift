@@ -12,7 +12,7 @@ let package = Package(
             targets: ["SubstrateSdk"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.1.2"),
+        .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.1.1"),
         .package(url: "https://github.com/novasamatech/Operation-iOS", exact: "2.1.1"),
         .package(url: "https://github.com/ashleymills/Reachability.swift", exact: "5.2.4"),
         .package(url: "https://github.com/novasamatech/Starscream.git", exact: "4.0.12"),
@@ -130,7 +130,7 @@ let package = Package(
             path: "Tests/Scale"
         )
     ],
-    swiftLanguageVersions: [.v5]
+    swiftLanguageModes: [.v5]
 )
 
 
@@ -160,6 +160,7 @@ enum Resources {
                 "../Resources/Runtime/test-metadata",
                 "../Resources/Runtime/westend-metadata",
                 "../Resources/Runtime/westend-v14-metadata",
+                "../Resources/Runtime/westend-v15-metadata",
                 "../Resources/Runtime/westend.json"
             ]
         case .keystore:

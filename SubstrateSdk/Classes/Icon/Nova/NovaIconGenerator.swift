@@ -58,6 +58,7 @@ public final class NovaIconGenerator {
     private func deriveColors(from data: Data) -> (UIColor, UIColor) {
         let colors = Self.allColorPairs
         
+        let accountId: [UInt8] = data.map { $0 }
         let lastByteIndex = accountId.endIndex - 1
         
         let index = (UInt(accountId[lastByteIndex - 1]) + UInt(accountId[lastByteIndex]) * 256) % UInt(colors.count)
