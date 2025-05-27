@@ -15,7 +15,7 @@ let package = Package(
         .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.1.1"),
         .package(url: "https://github.com/novasamatech/Operation-iOS", exact: "2.1.1"),
         .package(url: "https://github.com/ashleymills/Reachability.swift", exact: "5.2.4"),
-        .package(url: "https://github.com/novasamatech/Starscream.git", exact: "4.0.12"),
+        .package(url: "https://github.com/novasamatech/Starscream.git", exact: "4.0.13"),
         .package(url: "https://github.com/bitmark-inc/tweetnacl-swiftwrap", exact: "1.1.0"),
         .package(url: "https://github.com/attaswift/BigInt", exact: "5.5.1"),
         .package(url: "https://github.com/daisuke-t-jp/xxHash-Swift", exact: "1.1.1"),
