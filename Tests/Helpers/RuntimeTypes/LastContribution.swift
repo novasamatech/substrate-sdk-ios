@@ -1,10 +1,10 @@
 import Foundation
 import SubstrateSdk
 
-enum LastContribution: Equatable {
-    static let neverField = "Never"
-    static let preEndingField = "PreEnding"
-    static let endingField = "Ending"
+public enum LastContribution: Equatable {
+    public static let neverField = "Never"
+    public static let preEndingField = "PreEnding"
+    public static let endingField = "Ending"
 
     case never
     case preEnding(value: UInt32)

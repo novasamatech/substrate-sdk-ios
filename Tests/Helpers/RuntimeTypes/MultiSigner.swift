@@ -1,10 +1,10 @@
 import Foundation
 import SubstrateSdk
 
-enum MultiSigner: Equatable {
-    static let ed25519Field = "Ed25519"
-    static let sr25519Field = "Sr25519"
-    static let ecdsaField = "Ecdsa"
+public enum MultiSigner: Equatable {
+    public static let ed25519Field = "Ed25519"
+    public static let sr25519Field = "Sr25519"
+    public static let ecdsaField = "Ecdsa"
 
     case ed25519(_ data: Data)
     case sr25519(_ data: Data)

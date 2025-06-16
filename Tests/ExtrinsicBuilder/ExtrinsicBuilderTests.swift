@@ -1,7 +1,11 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
 import NovaCrypto
 import BigInt
+#if canImport(TestHelpers)
+import TestHelpers
+#endif
+
 
 typealias ExtrinsicBuilderClosure = (ExtrinsicBuilderProtocol) throws -> ExtrinsicBuilderProtocol
 

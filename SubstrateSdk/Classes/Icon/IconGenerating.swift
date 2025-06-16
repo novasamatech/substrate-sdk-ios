@@ -1,5 +1,7 @@
 import Foundation
 import NovaCrypto
+import CoreGraphics.CGContext
+import UIKit.UIColor
 
 public protocol DrawableIcon {
     func drawInContext(_ context: CGContext, fillColor: UIColor, size: CGSize)

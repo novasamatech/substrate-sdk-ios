@@ -1,16 +1,22 @@
 import Foundation
 import SubstrateSdk
 
-enum RuntimeHelperError: Error {
+public enum RuntimeHelperError: Error {
     case invalidCatalogBaseName
     case invalidCatalogNetworkName
     case invalidCatalogMetadataName
     case unexpectedMetadata
 }
 
-final class RuntimeHelper {
-    static func createRuntimeMetadata(_ name: String) throws -> RuntimeMetadata {
-        guard let metadataUrl = Bundle(for: self).url(forResource: name,
+public final class RuntimeHelper {
+    public static func createRuntimeMetadata(_ name: String) throws -> RuntimeMetadata {
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: self)
+#endif
+        guard let metadataUrl = bundle.url(forResource: name,
                                                       withExtension: "") else {
             throw RuntimeHelperError.invalidCatalogMetadataName
         }
@@ -30,12 +36,18 @@ final class RuntimeHelper {
         }
     }
 
-    static func createTypeRegistry(
+    public static func createTypeRegistry(
         from name: String,
         runtimeMetadataName: String,
         customExtensions: [TransactionExtensionCoding] = []
     ) throws -> TypeRegistry {
-        guard let url = Bundle(for: self).url(forResource: name, withExtension: "json") else {
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: self)
+#endif
+        guard let url = bundle.url(forResource: name, withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogBaseName
         }
 
@@ -50,7 +62,7 @@ final class RuntimeHelper {
         return registry
     }
 
-    static func createTypeRegistryCatalog(from baseName: String,
+    public static func createTypeRegistryCatalog(from baseName: String,
                                           networkName: String,
                                           runtimeMetadataName: String,
                                           customExtensions: [TransactionExtensionCoding] = []
@@ -64,7 +76,7 @@ final class RuntimeHelper {
                                              customExtensions: customExtensions)
     }
 
-    static func createTypeRegistryCatalog(
+    public static func createTypeRegistryCatalog(
         from baseName: String,
         runtimeMetadataName: String,
         customExtensions: [TransactionExtensionCoding] = []
@@ -78,16 +90,22 @@ final class RuntimeHelper {
         )
     }
 
-    static func createTypeRegistryCatalog(from baseName: String,
+    public static func createTypeRegistryCatalog(from baseName: String,
                                           networkName: String,
                                           runtimeMetadata: RuntimeMetadata,
                                           customExtensions: [TransactionExtensionCoding] = [])
     throws -> TypeRegistryCatalog {
-        guard let baseUrl = Bundle(for: self).url(forResource: baseName, withExtension: "json") else {
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: self)
+#endif
+        guard let baseUrl = bundle.url(forResource: baseName, withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogBaseName
         }
 
-        guard let networkUrl = Bundle(for: self).url(forResource: networkName,
+        guard let networkUrl = bundle.url(forResource: networkName,
                                                      withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogNetworkName
         }
@@ -105,12 +123,18 @@ final class RuntimeHelper {
         return registry
     }
 
-    static func createTypeRegistryCatalog(
+    public static func createTypeRegistryCatalog(
         from baseName: String,
         runtimeMetadata: RuntimeMetadata,
         customExtensions: [TransactionExtensionCoding] = []
     ) throws -> TypeRegistryCatalog {
-        guard let baseUrl = Bundle(for: self).url(forResource: baseName, withExtension: "json") else {
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: self)
+#endif
+        guard let baseUrl = bundle.url(forResource: baseName, withExtension: "json") else {
             throw RuntimeHelperError.invalidCatalogBaseName
         }
 
@@ -124,28 +148,34 @@ final class RuntimeHelper {
 
         return registry
     }
-
-    static let dummyRuntimeMetadata: RuntimeMetadata = {
-        RuntimeMetadata(modules: [
-                            ModuleMetadata(name: "A",
-                                           storage: StorageMetadata(prefix: "_A", entries: []),
-                                           calls: [
-                                            CallMetadata(name: "B",
-                                                             arguments: [
-                                                                CallArgumentMetadata(name: "arg1", type: "bool"),
-                                                                CallArgumentMetadata(name: "arg2", type: "u8")
-                                                             ], documentation: [])
-                                           ],
-                                           events: [
-                                            EventMetadata(name: "A",
-                                                          arguments: ["bool", "u8"],
-                                                          documentation: [])
-                                           ],
-                                           constants: [],
-                                           errors: [],
-                                           index: 1)
-                        ],
-                        extrinsic: ExtrinsicMetadata(version: 1,
-                                                     signedExtensions: []))
+    
+    public static let dummyRuntimeMetadata: RuntimeMetadata = {
+        RuntimeMetadata(
+            modules: [
+                ModuleMetadata(
+                    name: "A",
+                    storage: StorageMetadata(prefix: "_A", entries: []),
+                    calls: [
+                        CallMetadata(
+                            name: "B",
+                            arguments: [
+                                CallArgumentMetadata(name: "arg1", type: "bool"),
+                                CallArgumentMetadata(name: "arg2", type: "u8")
+                            ], documentation: []
+                        )
+                    ],
+                    events: [
+                        EventMetadata(
+                            name: "A",
+                            arguments: ["bool", "u8"],
+                            documentation: []
+                        )
+                    ],
+                    constants: [],
+                    errors: [],
+                    index: 1)
+            ],
+            extrinsic: ExtrinsicMetadata(version: 1, signedExtensions: [])
+        )
     }()
 }

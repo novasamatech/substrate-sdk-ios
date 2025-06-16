@@ -1,5 +1,5 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
 
 class OptionNodeFactoryTests: XCTestCase {
     func testValidOptionFactory() throws {

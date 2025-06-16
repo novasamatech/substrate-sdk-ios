@@ -1,5 +1,5 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
 
 class RuntimeMetadataV14Tests: XCTestCase {
     func testWestendMetadataParsing() {
@@ -21,8 +21,14 @@ class RuntimeMetadataV14Tests: XCTestCase {
     // MARK: Private
 
     private func performRuntimeMetadataTest(filename: String) {
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: type(of: self))
+#endif
         do {
-            guard let url = Bundle(for: type(of: self))
+            guard let url = bundle
                     .url(forResource: filename, withExtension: "") else {
                 XCTFail("Can't find metadata file")
                 return

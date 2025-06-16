@@ -2,7 +2,12 @@ import Foundation
 import SubstrateSdk
 import BigInt
 
-struct TransferArgs: Codable {
-    var dest: MultiAddress
-    @StringCodable var value: BigUInt
+public struct TransferArgs: Codable {
+    public var dest: MultiAddress
+    @StringCodable public var value: BigUInt
+    
+    public init(dest: MultiAddress, value: BigUInt) {
+        self.dest = dest
+        self.value = value
+    }
 }

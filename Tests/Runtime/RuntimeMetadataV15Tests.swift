@@ -1,5 +1,5 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
 
 final class RuntimeMetadataV15Tests: XCTestCase {
     func testPolkadotV15MetadataParsing() {
@@ -11,8 +11,14 @@ final class RuntimeMetadataV15Tests: XCTestCase {
     }
     
     private func performOpaqueV15MetadataTest(filename: String) {
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: type(of: self))
+#endif
         do {
-            guard let url = Bundle(for: type(of: self))
+            guard let url = bundle
                     .url(forResource: filename, withExtension: "") else {
                 XCTFail("Can't find metadata file")
                 return
