@@ -19,7 +19,7 @@ let package = Package(
         .package(url: "https://github.com/bitmark-inc/tweetnacl-swiftwrap", exact: "1.1.0"),
         .package(url: "https://github.com/attaswift/BigInt", exact: "5.5.1"),
         .package(url: "https://github.com/daisuke-t-jp/xxHash-Swift", exact: "1.1.1"),
-        .package(url: "https://github.com/novasamatech/keccak.c", branch: "master"),
+        .package(url: "https://github.com/novasamatech/keccak.c", exact: "0.1.3"),
     ],
     targets: [
         .target(
