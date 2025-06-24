@@ -3,51 +3,51 @@ PODS:
   - blake2.c (0.1.0)
   - ed25519.c (0.1.1)
   - keccak.c (0.1.3)
-  - NovaCrypto (0.1.0):
-    - NovaCrypto/BIP39 (= 0.1.0)
-    - NovaCrypto/blake2 (= 0.1.0)
-    - NovaCrypto/Common (= 0.1.0)
-    - NovaCrypto/ed25519 (= 0.1.0)
-    - NovaCrypto/Scrypt (= 0.1.0)
-    - NovaCrypto/secp256k1 (= 0.1.0)
-    - NovaCrypto/sr25519 (= 0.1.0)
-    - NovaCrypto/ss58 (= 0.1.0)
-  - NovaCrypto/BIP39 (0.1.0):
+  - NovaCrypto (0.2.0):
+    - NovaCrypto/BIP39 (= 0.2.0)
+    - NovaCrypto/blake2 (= 0.2.0)
+    - NovaCrypto/Common (= 0.2.0)
+    - NovaCrypto/ed25519 (= 0.2.0)
+    - NovaCrypto/Scrypt (= 0.2.0)
+    - NovaCrypto/secp256k1 (= 0.2.0)
+    - NovaCrypto/sr25519 (= 0.2.0)
+    - NovaCrypto/ss58 (= 0.2.0)
+  - NovaCrypto/BIP39 (0.2.0):
     - NovaCrypto/Common
-  - NovaCrypto/blake2 (0.1.0):
+  - NovaCrypto/blake2 (0.2.0):
     - blake2.c (~> 0.1.0)
-  - NovaCrypto/Common (0.1.0)
-  - NovaCrypto/ed25519 (0.1.0):
+  - NovaCrypto/Common (0.2.0)
+  - NovaCrypto/ed25519 (0.2.0):
     - ed25519.c (~> 0.1.0)
     - NovaCrypto/Common
-  - NovaCrypto/Scrypt (0.1.0):
+  - NovaCrypto/Scrypt (0.2.0):
     - NovaCrypto/Common
     - scrypt.c (~> 0.1)
-  - NovaCrypto/secp256k1 (0.1.0):
+  - NovaCrypto/secp256k1 (0.2.0):
     - NovaCrypto/Common
     - secp256k1.c (~> 0.1)
-  - NovaCrypto/sr25519 (0.1.0):
+  - NovaCrypto/sr25519 (0.2.0):
     - NovaCrypto/BIP39
     - NovaCrypto/blake2
     - NovaCrypto/Common
-    - sr25519.c (~> 0.1.0)
-  - NovaCrypto/ss58 (0.1.0):
+    - sr25519c (~> 0.2.0)
+  - NovaCrypto/ss58 (0.2.0):
     - NovaCrypto/blake2
     - NovaCrypto/Common
   - Operation-iOS (2.1.0)
   - ReachabilitySwift (5.2.4)
   - scrypt.c (0.1.1)
   - secp256k1.c (0.1.3)
-  - sr25519.c (0.1.0)
+  - sr25519c (0.2.0)
   - Starscream (4.0.4)
-  - SubstrateSdk (4.0.3):
+  - SubstrateSdk (4.2.0):
     - BigInt (~> 5.0)
-    - keccak.c (~> 0.1.0)
-    - NovaCrypto/ed25519 (~> 0.1.0)
-    - NovaCrypto/Scrypt (~> 0.1.0)
-    - NovaCrypto/secp256k1 (~> 0.1.0)
-    - NovaCrypto/sr25519 (~> 0.1.0)
-    - NovaCrypto/ss58 (~> 0.1.0)
+    - keccak.c (~> 0.1.3)
+    - NovaCrypto/ed25519 (~> 0.2.0)
+    - NovaCrypto/Scrypt (~> 0.2.0)
+    - NovaCrypto/secp256k1 (~> 0.2.0)
+    - NovaCrypto/sr25519 (~> 0.2.0)
+    - NovaCrypto/ss58 (~> 0.2.0)
     - Operation-iOS (~> 2.1.0)
     - ReachabilitySwift (~> 5.2.4)
     - Starscream
@@ -61,10 +61,10 @@ PODS:
 DEPENDENCIES:
   - blake2.c (from `https://github.com/novasamatech/blake2.c`, tag `0.1.0`)
   - ed25519.c (from `https://github.com/novasamatech/ed25519.c`, tag `0.1.1`)
-  - NovaCrypto (from `https://github.com/novasamatech/Crypto-iOS.git`, tag `0.1.0`)
+  - NovaCrypto (from `https://github.com/novasamatech/Crypto-iOS.git`, tag `0.2.0`)
   - Operation-iOS (from `https://github.com/novasamatech/Operation-iOS.git`, tag `2.1.0`)
   - secp256k1.c (from `https://github.com/novasamatech/secp256k1.c`, tag `0.1.3`)
-  - sr25519.c (from `https://github.com/novasamatech/sr25519.c`, tag `0.1.0`)
+  - sr25519c (from `https://github.com/novasamatech/sr25519.c`, tag `0.2.0`)
   - Starscream (from `https://github.com/ERussel/Starscream.git`, branch `feature/without-origin`)
   - SubstrateSdk (from `../`)
   - SwiftFormat/CLI (~> 0.47.13)
@@ -90,16 +90,16 @@ EXTERNAL SOURCES:
     :tag: 0.1.1
   NovaCrypto:
     :git: https://github.com/novasamatech/Crypto-iOS.git
-    :tag: 0.1.0
+    :tag: 0.2.0
   Operation-iOS:
     :git: https://github.com/novasamatech/Operation-iOS.git
     :tag: 2.1.0
   secp256k1.c:
     :git: https://github.com/novasamatech/secp256k1.c
     :tag: 0.1.3
-  sr25519.c:
+  sr25519c:
     :git: https://github.com/novasamatech/sr25519.c
-    :tag: 0.1.0
+    :tag: 0.2.0
   Starscream:
     :branch: feature/without-origin
     :git: https://github.com/ERussel/Starscream.git
@@ -115,16 +115,16 @@ CHECKOUT OPTIONS:
     :tag: 0.1.1
   NovaCrypto:
     :git: https://github.com/novasamatech/Crypto-iOS.git
-    :tag: 0.1.0
+    :tag: 0.2.0
   Operation-iOS:
     :git: https://github.com/novasamatech/Operation-iOS.git
     :tag: 2.1.0
   secp256k1.c:
     :git: https://github.com/novasamatech/secp256k1.c
     :tag: 0.1.3
-  sr25519.c:
+  sr25519c:
     :git: https://github.com/novasamatech/sr25519.c
-    :tag: 0.1.0
+    :tag: 0.2.0
   Starscream:
     :commit: b9e69390d96e71427463469f47cdafb8c0db1b21
     :git: https://github.com/ERussel/Starscream.git
@@ -134,19 +134,19 @@ SPEC CHECKSUMS:
   blake2.c: 49d32e8c358161437c30a04d325be708233d221e
   ed25519.c: ef3089bbe0f9206085dbf00b32080bfdfc0c443e
   keccak.c: 859583afdaccb4e4fcc0f0096064d101580313f4
-  NovaCrypto: bf2afb5b00bc3b9c956b1ae13fd09716c2a21e1d
+  NovaCrypto: 6f691086f6ae1c9fa4b844e70ff62d8fd0f8cf8c
   Operation-iOS: 29111118f2bc5049f7bdc4e27c3967f5acc61802
   ReachabilitySwift: 32793e867593cfc1177f5d16491e3a197d2fccda
   scrypt.c: b42ae06183251329d2b2c620c226fb541a4a3592
   secp256k1.c: 9df12a79da0a6735022c5d996d2df6a6e57e1d99
-  sr25519.c: 6c5d747682f45fd081c1e34d54cd322acee321b5
+  sr25519c: 296fca27b68d685ef515473c4a6dfe7325195688
   Starscream: 5178aed56b316f13fa3bc55694e583d35dd414d9
-  SubstrateSdk: a2c04c7b06152e0fc8cc1f21f97835e94a5330a1
+  SubstrateSdk: 6950a5835413a0ef8575cf604c6f20ae5a61acd4
   SwiftFormat: 73573b89257437c550b03d934889725fbf8f75e5
   SwiftLint: 4fa9579c63416865179bc416f0a92d55f009600d
   TweetNacl: 3abf4d1d2082b0114e7a67410e300892448951e6
   xxHash-Swift: 30bd6a7507b3b7348a277c49b1cb6346c2905ec7
 
-PODFILE CHECKSUM: 95e41cee22af123f0f797d92dbe2fda014bf86c4
+PODFILE CHECKSUM: 7476bd6eed0fbac697d6ebf92aeeaedb5da0d06d
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.16.2
