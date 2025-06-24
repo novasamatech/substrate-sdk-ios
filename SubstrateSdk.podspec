@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'SubstrateSdk'
-  s.version          = '4.1.0'
+  s.version          = '4.2.0'
   s.summary          = 'Utility library that implements clients specific logic to interact with substrate based networks'
 
   s.homepage         = 'https://github.com/nova-wallet/substrate-sdk-ios'
@@ -20,11 +20,11 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '14.0'
 
   s.source_files = 'SubstrateSdk/Classes/**/*'
-  s.dependency 'NovaCrypto/sr25519', '~> 0.1.0'
-  s.dependency 'NovaCrypto/ed25519', '~> 0.1.0'
-  s.dependency 'NovaCrypto/secp256k1', '~> 0.1.0'
-  s.dependency 'NovaCrypto/Scrypt', '~> 0.1.0'
-  s.dependency 'NovaCrypto/ss58', '~> 0.1.0'
+  s.dependency 'NovaCrypto/sr25519', '~> 0.2.0'
+  s.dependency 'NovaCrypto/ed25519', '~> 0.2.0'
+  s.dependency 'NovaCrypto/secp256k1', '~> 0.2.0'
+  s.dependency 'NovaCrypto/Scrypt', '~> 0.2.0'
+  s.dependency 'NovaCrypto/ss58', '~> 0.2.0'
   s.dependency 'ReachabilitySwift', '~> 5.2.4'
   s.dependency 'Operation-iOS', '~> 2.1.0'
   s.dependency 'Starscream'
