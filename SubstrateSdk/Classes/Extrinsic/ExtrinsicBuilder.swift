@@ -16,6 +16,7 @@ public protocol ExtrinsicBuilderProtocol: AnyObject {
     func adding(rawCall: Data) throws -> Self
     func adding(extrinsicSignedExtension: ExtrinsicSignedExtending) -> Self
     func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self
+    func batchingCalls(with metadata: RuntimeMetadataProtocol) throws -> Self
     func getCalls() -> [JSON]
     func reset() -> Self
     func signing(by signer: (Data) throws -> Data,
@@ -358,6 +359,14 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
     public func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self {
         let newCalls = try calls.map { try mapClosure($0) }
         self.calls = newCalls
+        return self
+    }
+    
+    public func batchingCalls(with metadata: RuntimeMetadataProtocol) throws -> Self {
+        let batchedCall = try prepareExtrinsicCall(for: metadata)
+
+        calls = [batchedCall]
+        
         return self
     }
 
