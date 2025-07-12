@@ -39,6 +39,11 @@ public protocol ExtrinsicBuilderProtocol {
         metadata: RuntimeMetadataProtocol
     ) throws -> Data
 
+    func buildExtrinsicSignatureParams(
+        encodingFactory: DynamicScaleEncodingFactoryProtocol,
+        metadata: RuntimeMetadataProtocol
+    ) throws -> ExtrinsicSignatureParams
+    
     func buildSignaturePayload(
         encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol
@@ -577,6 +582,17 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
     ) throws -> Data {
         let implication = try prepareImplication(using: encodingFactory, metadata: metadata)
         return try prepareSignaturePayload(implication: implication, encodingFactory: encodingFactory)
+    }
+    
+    public func buildExtrinsicSignatureParams(
+        encodingFactory: DynamicScaleEncodingFactoryProtocol,
+        metadata: RuntimeMetadataProtocol
+    ) throws -> ExtrinsicSignatureParams {
+        let implication = try prepareImplication(using: encodingFactory, metadata: metadata)
+        
+        return ExtrinsicSignatureParams(
+            encodedCall: implication.call,
+            includedInExtrinsicExtra: <#T##Data#>, includedInSignatureExtra: <#T##Data#>)
     }
 
     public func build(
