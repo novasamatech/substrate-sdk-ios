@@ -1,7 +1,7 @@
 import Foundation
 import Operation_iOS
 
-enum JSONRPCOperationError: Error {
+public enum JSONRPCOperationError: Error {
     case timeout
 }
 
