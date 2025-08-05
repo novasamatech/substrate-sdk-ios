@@ -20,6 +20,40 @@ public enum TransactionExtension {
         let call: JSON
         let explicits: [Explicit]
         let implicits: [Implicit]
+        
+        func encodeImplicits(
+            using encodingFactory: DynamicScaleEncodingFactoryProtocol
+        ) throws -> Data {
+            let encoder = encodingFactory.createEncoder()
+            
+            for implicit in implicits {
+                try encoder.appendRawData(implicit)
+            }
+            
+            return try encoder.encode()
+        }
+        
+        func encodeExplicits(
+            using encodingFactory: DynamicScaleEncodingFactoryProtocol
+        ) throws -> Data {
+            let encoder = encodingFactory.createEncoder()
+            
+            for explicit in explicits {
+                try explicit.encode(to: encoder)
+            }
+            
+            return try encoder.encode()
+        }
+        
+        func encodeCall(
+            using encodingFactory: DynamicScaleEncodingFactoryProtocol
+        ) throws -> Data {
+            let encoder = encodingFactory.createEncoder()
+            
+            try encoder.append(json: call, type: GenericType.call.name)
+            
+            return try encoder.encode()
+        }
     }
 }
 
