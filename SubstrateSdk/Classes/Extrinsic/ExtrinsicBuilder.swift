@@ -17,6 +17,7 @@ public protocol ExtrinsicBuilderProtocol {
     func adding(transactionExtension: TransactionExtending) -> Self
     func with(runtimeJsonContext: RuntimeJsonContext) -> Self
     func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self
+    func batchingCalls(with metadata: RuntimeMetadataProtocol) throws -> Self
     func getCalls() -> [JSON]
     func resetCalls() -> Self
 
@@ -514,6 +515,14 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
     public func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self {
         let newCalls = try calls.map { try mapClosure($0) }
         calls = newCalls
+        return self
+    }
+    
+    public func batchingCalls(with metadata: RuntimeMetadataProtocol) throws -> Self {
+        let reducedCall = try prepareTransactionCall(for: metadata)
+        
+        calls = [reducedCall]
+        
         return self
     }
 
