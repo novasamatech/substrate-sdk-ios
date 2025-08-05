@@ -1,7 +1,7 @@
 import Foundation
 import BigInt
 
-extension Array: ScaleCodable where Element: ScaleCodable {
+extension Array: ScaleEncodable where Element: ScaleEncodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
         try BigUInt(count).encode(scaleEncoder: scaleEncoder)
 
@@ -9,7 +9,9 @@ extension Array: ScaleCodable where Element: ScaleCodable {
             try item.encode(scaleEncoder: scaleEncoder)
         }
     }
+}
 
+extension Array: ScaleDecodable where Element: ScaleDecodable {
     public init(scaleDecoder: ScaleDecoding) throws {
         let count = UInt(try BigUInt(scaleDecoder: scaleDecoder))
 
