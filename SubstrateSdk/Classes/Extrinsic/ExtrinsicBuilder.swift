@@ -590,9 +590,33 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
     ) throws -> ExtrinsicSignatureParams {
         let implication = try prepareImplication(using: encodingFactory, metadata: metadata)
         
+        let callEncoder = encodingFactory.createEncoder()
+        
+        try callEncoder.append(json: implication.call, type: GenericType.call.name)
+        
+        let encodedCall = try callEncoder.encode()
+        
+        let extrinsicExtraEncoder = encodingFactory.createEncoder()
+        
+        for explicit in implication.explicits {
+            try explicit.encode(to: extrinsicExtraEncoder)
+        }
+        
+        let includedInExtrinsicExtra = try extrinsicExtraEncoder.encode()
+        
+        let signatureExtraEncoder = encodingFactory.createEncoder()
+        
+        for implicit in implication.implicits {
+            try signatureExtraEncoder.appendRawData(implicit)
+        }
+        
+        let includedInSignatureExtra = try signatureExtraEncoder.encode()
+        
         return ExtrinsicSignatureParams(
-            encodedCall: implication.call,
-            includedInExtrinsicExtra: <#T##Data#>, includedInSignatureExtra: <#T##Data#>)
+            encodedCall: encodedCall,
+            includedInExtrinsicExtra: includedInExtrinsicExtra,
+            includedInSignatureExtra: includedInSignatureExtra
+        )
     }
 
     public func build(
