@@ -17,6 +17,7 @@ public protocol ExtrinsicBuilderProtocol {
     func adding(transactionExtension: TransactionExtending) -> Self
     func with(runtimeJsonContext: RuntimeJsonContext) -> Self
     func wrappingCalls(for mapClosure: (JSON) throws -> JSON) throws -> Self
+    func batchingCalls(with metadata: RuntimeMetadataProtocol) throws -> Self
     func getCalls() -> [JSON]
     func resetCalls() -> Self
 
@@ -39,6 +40,11 @@ public protocol ExtrinsicBuilderProtocol {
         metadata: RuntimeMetadataProtocol
     ) throws -> Data
 
+    func buildExtrinsicSignatureParams(
+        encodingFactory: DynamicScaleEncodingFactoryProtocol,
+        metadata: RuntimeMetadataProtocol
+    ) throws -> ExtrinsicSignatureParams
+    
     func buildSignaturePayload(
         encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol
@@ -511,6 +517,14 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
         calls = newCalls
         return self
     }
+    
+    public func batchingCalls(with metadata: RuntimeMetadataProtocol) throws -> Self {
+        let reducedCall = try prepareTransactionCall(for: metadata)
+        
+        calls = [reducedCall]
+        
+        return self
+    }
 
     public func getCalls() -> [JSON] {
         calls
@@ -577,6 +591,25 @@ extension ExtrinsicBuilder: ExtrinsicBuilderProtocol {
     ) throws -> Data {
         let implication = try prepareImplication(using: encodingFactory, metadata: metadata)
         return try prepareSignaturePayload(implication: implication, encodingFactory: encodingFactory)
+    }
+    
+    public func buildExtrinsicSignatureParams(
+        encodingFactory: DynamicScaleEncodingFactoryProtocol,
+        metadata: RuntimeMetadataProtocol
+    ) throws -> ExtrinsicSignatureParams {
+        let implication = try prepareImplication(using: encodingFactory, metadata: metadata)
+        
+        let encodedCall = try implication.encodeCall(using: encodingFactory)
+        
+        let includedInExtrinsicExtra = try implication.encodeExplicits(using: encodingFactory)
+        
+        let includedInSignatureExtra = try implication.encodeImplicits(using: encodingFactory)
+        
+        return ExtrinsicSignatureParams(
+            encodedCall: encodedCall,
+            includedInExtrinsicExtra: includedInExtrinsicExtra,
+            includedInSignatureExtra: includedInSignatureExtra
+        )
     }
 
     public func build(
