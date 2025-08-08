@@ -173,8 +173,9 @@ enum Resources {
             ]
         case .hdkd:
             paths = [
-                "../Resources/BIP32HDKD.json",
-                "../Resources/BIP32HDKDEtalon.json",
+                "../Resources/BIP32Secp256HDKD.json",
+                "../Resources/BIP32Secp256HDKDEtalon.json",
+                "../Resources/BIP32Ed25519HDKDEtalon.json",
                 "../Resources/ecdsaHDKD.json",
                 "../Resources/ed25519HDKD.json",
                 "../Resources/sr25519HDKD.json"

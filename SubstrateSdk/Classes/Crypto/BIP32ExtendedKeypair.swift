@@ -2,13 +2,16 @@ import NovaCrypto
 
 public class BIP32ExtendedKeypair {
     let keypair: IRCryptoKeypairProtocol
+    let nextSeed: Data
     let chaincode: Data
 
     init(
         keypair: IRCryptoKeypairProtocol,
+        nextSeed: Data,
         chaincode: Data
     ) {
         self.keypair = keypair
+        self.nextSeed = nextSeed
         self.chaincode = chaincode
     }
 }
