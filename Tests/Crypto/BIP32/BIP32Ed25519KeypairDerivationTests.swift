@@ -20,8 +20,28 @@ final class BIP32Ed25519KeypairDerivationTests: XCTestCase {
         }
     }
     
+    func testSoftDerivationNotSupported() throws {
+        let factory = BIP32Ed25519KeyFactory()
+        
+        let junction = try BIP32JunctionFactory().parse(path: "/0")
+        
+        let seed = try Data(hexString: "000102030405060708090a0b0c0d0e0f")
+        
+        XCTAssertThrowsError(
+            try factory.createKeypairFromSeed(seed, chaincodeList: junction.chaincodes),
+            "Error is expected"
+        ) { error in
+            guard let bip32Error = error as? BIP32KeypairFactoryError else {
+                XCTFail("Keypair derivation error is expected")
+                return
+            }
+            
+            XCTAssert(bip32Error == .unsupportedSoftDerivation)
+        }
+    }
+    
     // SLIP-0010 Official Test Vectors: https://github.com/satoshilabs/slips/blob/master/slip-0010.md
-    func testBIP32Ed25519DerivationFromSeed() throws {
+    func testDerivationFromSeed() throws {
         try performTest(filename: "BIP32Ed25519HDKDEtalon", keypairFactory: BIP32Ed25519KeyFactory())
     }
     
