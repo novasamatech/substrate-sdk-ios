@@ -18,13 +18,13 @@ public final class BIP32Ed25519KeyFactory: BIP32KeypairFactory {
         let privateKeySeed = hmacResult[...31]
         let chainCode = hmacResult[32...]
 
-        let keypair = try internalFactory.derive(fromSeed: privateKeySeed)
+        // we are returning seed as private key as both further derivation and signature requires it
+        let publicKey = try internalFactory.derive(fromSeed: privateKeySeed).publicKey()
+        let secretKey = try EDPrivateKey(rawData: privateKeySeed)
+        
+        let keypair = IRCryptoKeypair(publicKey: publicKey, privateKey: secretKey)
 
-        return BIP32ExtendedKeypair(
-            keypair: keypair,
-            nextSeed: privateKeySeed,
-            chaincode: chainCode
-        )
+        return BIP32ExtendedKeypair(keypair: keypair, chaincode: chainCode)
     }
 
     override func createKeypairFrom(
@@ -35,8 +35,9 @@ public final class BIP32Ed25519KeyFactory: BIP32KeypairFactory {
             switch chaincode.type {
             case .hard:
                 let padding = Data(repeating: 0, count: 1)
+                let privateKeyData = parentKeypair.privateKey().rawData()
 
-                return padding + parentKeypair.nextSeed + chaincode.data
+                return padding + privateKeyData + chaincode.data
 
             case .soft:
                 throw BIP32KeypairFactoryError.unsupportedSoftDerivation
@@ -50,12 +51,13 @@ public final class BIP32Ed25519KeyFactory: BIP32KeypairFactory {
 
         let childPrivateKeySeed = hmacResult[...31]
         let childChaincode = hmacResult[32...]
-        let keypair = try internalFactory.derive(fromSeed: childPrivateKeySeed)
+        
+        // we are returning seed as private key as both further derivation and signature requires it
+        let publicKey = try internalFactory.derive(fromSeed: childPrivateKeySeed).publicKey()
+        let secretKey = try EDPrivateKey(rawData: childPrivateKeySeed)
 
-        return BIP32ExtendedKeypair(
-            keypair: keypair,
-            nextSeed: childPrivateKeySeed,
-            chaincode: childChaincode
-        )
+        let keypair = IRCryptoKeypair(publicKey: publicKey, privateKey: secretKey)
+        
+        return BIP32ExtendedKeypair(keypair: keypair, chaincode: childChaincode)
     }
 }

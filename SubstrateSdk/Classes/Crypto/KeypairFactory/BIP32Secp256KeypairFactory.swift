@@ -16,16 +16,19 @@ public final class BIP32Secp256KeypairFactory: BIP32KeypairFactory {
         )
 
         let privateKeyData = hmacResult[...31]
+        
+        let privateKeyInt = BigUInt(privateKeyData)
+
+        guard privateKeyInt < .secp256k1CurveOrder, privateKeyInt > 0 else {
+            throw BIP32KeypairFactoryError.invalidMasterKey
+        }
+        
         let privateKey = try SECPrivateKey(rawData: privateKeyData)
         let chainCode = hmacResult[32...]
 
         let keypair = try internalFactory.derive(fromPrivateKey: privateKey)
 
-        return BIP32ExtendedKeypair(
-            keypair: keypair,
-            nextSeed: privateKeyData,
-            chaincode: chainCode
-        )
+        return BIP32ExtendedKeypair(keypair: keypair, chaincode: chainCode)
     }
 
     override func createKeypairFrom(
@@ -36,8 +39,9 @@ public final class BIP32Secp256KeypairFactory: BIP32KeypairFactory {
             switch chaincode.type {
             case .hard:
                 let padding = Data(repeating: 0, count: 1)
-
-                return padding + parentKeypair.nextSeed + chaincode.data
+                let privateKeyData = parentKeypair.privateKey().rawData()
+                
+                return padding + privateKeyData + chaincode.data
 
             case .soft:
                 return parentKeypair.publicKey().rawData() + chaincode.data
@@ -58,7 +62,7 @@ public final class BIP32Secp256KeypairFactory: BIP32KeypairFactory {
             throw BIP32KeypairFactoryError.invalidChildKey
         }
 
-        privateKeyInt += BigUInt(parentKeypair.nextSeed)
+        privateKeyInt += BigUInt(parentKeypair.privateKey().rawData())
         privateKeyInt %= .secp256k1CurveOrder
 
         guard privateKeyInt > 0 else {
@@ -82,7 +86,6 @@ public final class BIP32Secp256KeypairFactory: BIP32KeypairFactory {
 
         return BIP32ExtendedKeypair(
             keypair: keypair,
-            nextSeed: privateKeyData,
             chaincode: childChaincode
         )
     }

@@ -79,9 +79,17 @@ final class BIP32Ed25519KeypairDerivationTests: XCTestCase {
 
                 let keypair = try keypairFactory.createKeypairFromSeed(seed, chaincodeList: result.chaincodes)
 
+                let expectedPrivateKey = try Data(hexString: item.privateKey)
                 let expectedPublicKey = try item.getPublicKeyWithoutPrefix()
-
+                
+                let actualPrivateKey = keypair.privateKey().rawData()
                 let actualPublicKey = keypair.publicKey().rawData()
+                
+                XCTAssertEqual(
+                    expectedPrivateKey,
+                    actualPrivateKey,
+                    "Expected private key \(expectedPrivateKey.toHex()) but received \(actualPrivateKey.toHex())"
+                )
                 
                 XCTAssertEqual(
                     expectedPublicKey,
