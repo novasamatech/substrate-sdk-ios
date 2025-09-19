@@ -12,7 +12,7 @@ let package = Package(
             targets: ["SubstrateSdk"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/novasamatech/Crypto-iOS", branch: "fix/scrypt-spm"),
+        .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.3.0"),
         .package(url: "https://github.com/novasamatech/Operation-iOS", exact: "2.1.1"),
         .package(url: "https://github.com/ashleymills/Reachability.swift", exact: "5.2.4"),
         .package(url: "https://github.com/novasamatech/Starscream.git", exact: "4.0.13"),
