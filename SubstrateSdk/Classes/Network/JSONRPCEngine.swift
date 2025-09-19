@@ -43,6 +43,12 @@ public struct JSONRPCRequest: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool { lhs.requestId == rhs.requestId }
 }
 
+extension JSONRPCRequest: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        "JSONRPCRequest id: \(requestId), data: " + (String(data: data, encoding: .utf8) ?? "null")
+    }
+}
+
 struct JSONRPCResponseHandler<T: Decodable>: JSONRPCResponseHandling {
     public let completionClosure: (Result<T, Error>) -> Void
 
