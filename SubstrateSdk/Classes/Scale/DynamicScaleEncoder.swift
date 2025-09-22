@@ -2,7 +2,7 @@ import Foundation
 import BigInt
 
 public final class DynamicScaleEncoder {
-    private var encoder: ScaleEncoder = ScaleEncoder()
+    private var encoder = ScaleEncoder()
 
     private var modifiers: [ScaleCodingModifier] = []
 
@@ -13,7 +13,7 @@ public final class DynamicScaleEncoder {
         self.registry = registry
         self.version = version
     }
-    
+
     private func handleCommonOption(isNull: Bool) {
         if isNull {
             encoder.appendRaw(data: Data([0]))
@@ -85,7 +85,7 @@ public final class DynamicScaleEncoder {
         if modifiers.last == .compact {
             modifiers.removeLast()
 
-           try encodeCompact(value: json)
+            try encodeCompact(value: json)
         } else {
             try encodeFixedInt(value: json, byteLength: byteLength)
         }
@@ -164,11 +164,11 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
 
         encoder.appendRaw(data: data)
     }
-    
+
     public func appendRawData(_ data: Data) throws {
         encoder.appendRaw(data: data)
     }
-    
+
     public func appendCommonOption(isNull: Bool) throws {
         handleCommonOption(isNull: isNull)
     }
@@ -243,6 +243,20 @@ extension DynamicScaleEncoder: DynamicScaleEncoding {
 
     public func newEncoder() -> DynamicScaleEncoding {
         DynamicScaleEncoder(registry: registry, version: version)
+    }
+
+    public func canEncodeOptional(for type: String) -> Bool {
+        guard let node = registry.node(for: type, version: version) else {
+            return false
+        }
+
+        if let proxyNode = node as? ProxyNode {
+            return canEncodeOptional(for: proxyNode.typeName)
+        } else if let aliasNode = node as? AliasNode {
+            return canEncodeOptional(for: aliasNode.underlyingTypeName)
+        } else {
+            return node is OptionNode
+        }
     }
 
     public func encode() throws -> Data {

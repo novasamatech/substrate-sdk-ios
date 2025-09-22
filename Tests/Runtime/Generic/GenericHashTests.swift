@@ -1,5 +1,5 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
 
 class GenericHashTests: BaseCodingTests {
     func testH160() {

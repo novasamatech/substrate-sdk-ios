@@ -15,12 +15,14 @@ public class StructNode: Node {
         }
 
         guard typeMapping.count == mapping.count else {
-            let fieldNames = typeMapping.map { $0.name }
-            throw DynamicScaleEncoderError.unexpectedStructFields(json: value,
-                                                                  expectedFields: fieldNames)
+            let fieldNames = typeMapping.map(\.name)
+            throw DynamicScaleEncoderError.unexpectedStructFields(
+                json: value,
+                expectedFields: fieldNames
+            )
         }
 
-        for index in 0..<typeMapping.count {
+        for index in 0 ..< typeMapping.count {
             guard let child = mapping[typeMapping[index].name] else {
                 throw DynamicScaleCoderError.unresolverType(name: typeMapping[index].name)
             }
@@ -30,7 +32,7 @@ public class StructNode: Node {
     }
 
     public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        let dictJson = try typeMapping.reduce(into: [String: JSON]()) { (result, item) in
+        let dictJson = try typeMapping.reduce(into: [String: JSON]()) { result, item in
             let json = try decoder.read(type: item.node.typeName)
             result[item.name] = json
         }

@@ -1,12 +1,15 @@
 import Foundation
+import Scrypt
 import NovaCrypto
 import TweetNacl
 
 public class KeystoreExtractor: KeystoreExtracting {
     public init() {}
 
-    public func extractFromDefinition(_ info: KeystoreDefinition,
-                                      password: String?) throws -> KeystoreData {
+    public func extractFromDefinition(
+        _ info: KeystoreDefinition,
+        password: String?
+    ) throws -> KeystoreData {
         guard let data = Data(base64Encoded: info.encoded) else {
             throw KeystoreExtractorError.invalidBase64
         }
@@ -34,18 +37,21 @@ public class KeystoreExtractor: KeystoreExtracting {
             } else {
                 scryptData = Data()
             }
-
-            let encryptionKey = try IRScryptKeyDeriviation()
-                .deriveKey(from: scryptData,
-                           salt: scryptParameters.salt,
-                           scryptN: UInt(scryptParameters.scryptN),
-                           scryptP: UInt(scryptParameters.scryptP),
-                           scryptR: UInt(scryptParameters.scryptR),
-                           length: UInt(KeystoreConstants.encryptionKeyLength))
+            
+            let encryptionKeyBytes = try Scrypt.scrypt(
+                password: Array(scryptData),
+                salt: Array(scryptParameters.salt),
+                length: KeystoreConstants.encryptionKeyLength,
+                N: UInt64(scryptParameters.scryptN),
+                r: scryptParameters.scryptR,
+                p: scryptParameters.scryptP
+            )
+            
+            let encryptionKey = Data(encryptionKeyBytes)
 
             let nonceStart = ScryptParameters.encodedLength
             let nonceEnd = ScryptParameters.encodedLength + KeystoreConstants.nonceLength
-            let nonce = Data(data[nonceStart..<nonceEnd])
+            let nonce = Data(data[nonceStart ..< nonceEnd])
             let encryptedData = Data(data[nonceEnd...])
 
             encodedData = try NaclSecretBox.open(box: encryptedData, nonce: nonce, key: encryptionKey)
@@ -76,7 +82,7 @@ public class KeystoreExtractor: KeystoreExtracting {
         let secretStart = KeystoreConstants.pkcs8Header.count
         let secretEnd = dividerRange.startIndex
 
-        let importedSecretData = Data(data[secretStart..<secretEnd])
+        let importedSecretData = Data(data[secretStart ..< secretEnd])
 
         let secretKeyData: Data
         switch info.secretType {
@@ -93,9 +99,11 @@ public class KeystoreExtractor: KeystoreExtracting {
         let publicStart = dividerRange.endIndex
         let publicKeyData = Data(data[publicStart...])
 
-        return KeystoreData(address: definition.address,
-                            secretKeyData: secretKeyData,
-                            publicKeyData: publicKeyData,
-                            secretType: info.secretType)
+        return KeystoreData(
+            address: definition.address,
+            secretKeyData: secretKeyData,
+            publicKeyData: publicKeyData,
+            secretType: info.secretType
+        )
     }
 }

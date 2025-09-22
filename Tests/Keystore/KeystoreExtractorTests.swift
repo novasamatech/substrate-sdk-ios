@@ -1,10 +1,20 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
 import NovaCrypto
+#if canImport(TestHelpers)
+import TestHelpers
+#endif
+
 
 class KeystoreExtractorTests: XCTestCase {
     func testOnSr25519Json() {
-        guard let url = Bundle(for: KeystoreExtractorTests.self)
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: KeystoreExtractorTests.self)
+#endif
+        guard let url = bundle
             .url(forResource: "keystore-sr25519", withExtension: "json") else {
             XCTFail("Can't find resource")
             return
@@ -41,7 +51,13 @@ class KeystoreExtractorTests: XCTestCase {
     }
 
     func testOnEd25519Json() {
-        guard let url = Bundle(for: KeystoreExtractorTests.self)
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: KeystoreExtractorTests.self)
+#endif
+        guard let url = bundle
             .url(forResource: "keystore-ed25519", withExtension: "json") else {
             XCTFail("Can't find resource")
             return
@@ -74,7 +90,13 @@ class KeystoreExtractorTests: XCTestCase {
     }
 
     func testOnEcdsaJson() {
-        guard let url = Bundle(for: KeystoreExtractorTests.self)
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: KeystoreExtractorTests.self)
+#endif
+        guard let url = bundle
             .url(forResource: "keystore-ecdsa", withExtension: "json") else {
             XCTFail("Can't find resource")
             return
@@ -117,7 +139,13 @@ class KeystoreExtractorTests: XCTestCase {
     // MARK: Private
 
     private func performEthereumTest(for filename: String, password: String) {
-        guard let url = Bundle(for: KeystoreExtractorTests.self)
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: KeystoreExtractorTests.self)
+#endif
+        guard let url = bundle
             .url(forResource: filename, withExtension: "json") else {
             XCTFail("Can't find resource")
             return

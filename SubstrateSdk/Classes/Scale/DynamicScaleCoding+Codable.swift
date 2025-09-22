@@ -1,6 +1,6 @@
 import Foundation
 
-public class HexCodingStrategy {
+public enum HexCodingStrategy {
     static func encoding(data: Data, encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         let hex = data.toHex(includePrefix: true)
@@ -64,7 +64,7 @@ public extension Encodable {
 }
 
 public extension JSON {
-    func map<T: Decodable>(to type: T.Type, with context: [CodingUserInfoKey: Any]? = nil) throws -> T {
+    func map<T: Decodable>(to _: T.Type, with context: [CodingUserInfoKey: Any]? = nil) throws -> T {
         let encoder = JSONEncoder.scaleCompatible(with: context)
         let encodingContainer = JsonContainer(value: self)
         let data = try encoder.encode(encodingContainer)

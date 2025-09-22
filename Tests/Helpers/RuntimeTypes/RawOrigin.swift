@@ -1,11 +1,12 @@
 import Foundation
+import NovaCrypto
 
-enum RawOrigin: Codable, Equatable {
+public enum RawOrigin: Codable, Equatable {
     case root
     case signed(accountId: Data)
     case none
 
-    func encode(to encoder: Encoder) throws {
+    public func encode(to encoder: Encoder) throws {
         var container = encoder.unkeyedContainer()
 
         switch self {
@@ -21,7 +22,7 @@ enum RawOrigin: Codable, Equatable {
         }
     }
 
-    init(from decoder: Decoder) throws {
+    public init(from decoder: Decoder) throws {
         var container = try decoder.unkeyedContainer()
 
         let type = try container.decode(String.self)

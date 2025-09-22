@@ -2,7 +2,12 @@ import Foundation
 import SubstrateSdk
 import BigInt
 
-struct ValidatorPrefs: Codable, Equatable {
-    @StringCodable var commission: BigUInt
-    let blocked: Bool
+public struct ValidatorPrefs: Codable, Equatable {
+    @StringCodable public var commission: BigUInt
+    public let blocked: Bool
+    
+    public init(commission: BigUInt, blocked: Bool) {
+        self.commission = commission
+        self.blocked = blocked
+    }
 }

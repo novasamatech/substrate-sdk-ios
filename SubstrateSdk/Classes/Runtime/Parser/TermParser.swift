@@ -4,8 +4,10 @@ public class TermParser: TypeParser {
     public let preprocessor: ParserPreproccessing?
     public let postprocessor: ParserPostprocessing?
 
-    public init(preprocessor: ParserPreproccessing?,
-                postprocessor: ParserPostprocessing?) {
+    public init(
+        preprocessor: ParserPreproccessing?,
+        postprocessor: ParserPostprocessing?
+    ) {
         self.preprocessor = preprocessor
         self.postprocessor = postprocessor
     }
@@ -23,11 +25,13 @@ public class TermParser: TypeParser {
     }
 }
 
-extension TermParser {
-    public static func generic() -> TermParser {
+public extension TermParser {
+    static func generic() -> TermParser {
         let trim = TrimProcessor(charset: .whitespaces)
 
-        return TermParser(preprocessor: trim,
-                          postprocessor: trim)
+        return TermParser(
+            preprocessor: trim,
+            postprocessor: trim
+        )
     }
 }

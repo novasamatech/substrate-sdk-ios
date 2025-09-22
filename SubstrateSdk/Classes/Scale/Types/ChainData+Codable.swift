@@ -9,8 +9,10 @@ extension ChainData: Codable {
             self = .none
         } else {
             guard let data = try container.decode([Data].self).first else {
-                throw DecodingError.dataCorruptedError(in: container,
-                                                       debugDescription: "expected array of single data item")
+                throw DecodingError.dataCorruptedError(
+                    in: container,
+                    debugDescription: "expected array of single data item"
+                )
             }
 
             switch type {
@@ -25,8 +27,10 @@ extension ChainData: Codable {
             case 5:
                 self = .shaThree256(data: H256(value: data))
             default:
-                throw DecodingError.dataCorruptedError(in: container,
-                                                       debugDescription: "unexpected type found: \(type)")
+                throw DecodingError.dataCorruptedError(
+                    in: container,
+                    debugDescription: "unexpected type found: \(type)"
+                )
             }
         }
     }
@@ -37,19 +41,19 @@ extension ChainData: Codable {
         switch self {
         case .none:
             try container.encode(UInt8(0))
-        case .raw(let data):
+        case let .raw(data):
             try container.encode(UInt8(1))
             try container.encode([data])
-        case .blakeTwo256(let hash):
+        case let .blakeTwo256(hash):
             try container.encode(UInt8(2))
             try container.encode([hash.value])
-        case .sha256(let hash):
+        case let .sha256(hash):
             try container.encode(UInt8(3))
             try container.encode([hash.value])
-        case .keccak256(let hash):
+        case let .keccak256(hash):
             try container.encode(UInt8(4))
             try container.encode([hash.value])
-        case .shaThree256(let hash):
+        case let .shaThree256(hash):
             try container.encode(UInt8(5))
             try container.encode([hash.value])
         }

@@ -8,10 +8,10 @@ enum ScryptParametersError: Error {
 struct ScryptParameters {
     static let saltLength = 32
     static let encodedLength = 44
-    static let saltRange = 0..<Self.saltLength
-    static let scryptNRange = Self.saltLength..<(Self.saltLength+4)
-    static let scryptPRange = (Self.saltLength+4)..<(Self.saltLength+8)
-    static let scryptRRange = (Self.saltLength+8)..<(Self.saltLength+12)
+    static let saltRange = 0 ..< Self.saltLength
+    static let scryptNRange = Self.saltLength ..< (Self.saltLength + 4)
+    static let scryptPRange = (Self.saltLength + 4) ..< (Self.saltLength + 8)
+    static let scryptRRange = (Self.saltLength + 8) ..< (Self.saltLength + 12)
 
     let salt: Data
     let scryptN: UInt32
@@ -35,20 +35,20 @@ struct ScryptParameters {
     }
 
     init(data: Data) throws {
-        guard data.count >= Self.encodedLength  else {
+        guard data.count >= Self.encodedLength else {
             throw ScryptParametersError.invalidDataLength
         }
 
-        self.salt = Data(data[Self.saltRange])
+        salt = Data(data[Self.saltRange])
 
         let valueN: UInt32 = data[Self.scryptNRange].withUnsafeBytes { $0.pointee }
-        self.scryptN = valueN.littleEndian
+        scryptN = valueN.littleEndian
 
         let valueP: UInt32 = data[Self.scryptPRange].withUnsafeBytes { $0.pointee }
-        self.scryptP = valueP.littleEndian
+        scryptP = valueP.littleEndian
 
         let valueR: UInt32 = data[Self.scryptRRange].withUnsafeBytes { $0.pointee }
-        self.scryptR = valueR.littleEndian
+        scryptR = valueR.littleEndian
     }
 
     func encode() -> Data {

@@ -5,8 +5,8 @@ public class NullNode: Node {
 
     public init() {}
 
-    public func accept(encoder: DynamicScaleEncoding, value: JSON) throws {}
-    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
-        return .null
+    public func accept(encoder _: DynamicScaleEncoding, value _: JSON) throws {}
+    public func accept(decoder _: DynamicScaleDecoding) throws -> JSON {
+        .null
     }
 }

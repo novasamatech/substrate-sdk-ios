@@ -1,9 +1,9 @@
 import Foundation
 
-public struct BasisNodes {
+public enum BasisNodes {
     public static func allNodes(
         for runtimeMetadata: RuntimeMetadataProtocol,
-        customExtensions: [ExtrinsicSignedExtensionCoding]
+        customExtensions: [TransactionExtensionCoding]
     ) -> [Node] {
         supportedBaseNodes() + supportedGenericNodes(for: runtimeMetadata, customExtensions: customExtensions)
     }
@@ -29,7 +29,7 @@ public struct BasisNodes {
 
     public static func supportedGenericNodes(
         for runtimeMetadata: RuntimeMetadataProtocol,
-        customExtensions: [ExtrinsicSignedExtensionCoding]
+        customExtensions: [TransactionExtensionCoding]
     ) -> [Node] {
         [
             GenericAccountIdNode(),
@@ -66,5 +66,4 @@ public struct BasisNodes {
             AliasNode(typeName: GenericType.voteWeight.rawValue, underlyingTypeName: PrimitiveType.u64.rawValue)
         ]
     }
-
 }

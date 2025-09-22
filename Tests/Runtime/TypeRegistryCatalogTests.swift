@@ -1,5 +1,9 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
+#if canImport(TestHelpers)
+import TestHelpers
+#endif
+
 
 class TypeRegistryCatalogTests: XCTestCase {
 

@@ -1,17 +1,23 @@
 import Foundation
 
 public extension TypeRegistry {
-    static func createFromTypesDefinition(data: Data,
-                                          additionalNodes: [Node]) throws -> TypeRegistry {
+    static func createFromTypesDefinition(
+        data: Data,
+        additionalNodes: [Node]
+    ) throws -> TypeRegistry {
         let jsonDecoder = JSONDecoder()
         let json = try jsonDecoder.decode(JSON.self, from: data)
 
-        return try createFromTypesDefinition(json: json,
-                                             additionalNodes: additionalNodes)
+        return try createFromTypesDefinition(
+            json: json,
+            additionalNodes: additionalNodes
+        )
     }
 
-    static func createFromTypesDefinition(json: JSON,
-                                          additionalNodes: [Node]) throws -> TypeRegistry {
+    static func createFromTypesDefinition(
+        json: JSON,
+        additionalNodes: [Node]
+    ) throws -> TypeRegistry {
         guard let types = json.types else {
             throw TypeRegistryError.unexpectedJson
         }
@@ -36,9 +42,11 @@ public extension TypeRegistry {
             RegexReplaceResolver.genericsFilter()
         ]
 
-        return try TypeRegistry(json: types,
-                                nodeFactory: OneOfTypeNodeFactory(children: factories),
-                                typeResolver: OneOfTypeResolver(children: resolvers),
-                                additionalNodes: additionalNodes)
+        return try TypeRegistry(
+            json: types,
+            nodeFactory: OneOfTypeNodeFactory(children: factories),
+            typeResolver: OneOfTypeResolver(children: resolvers),
+            additionalNodes: additionalNodes
+        )
     }
 }

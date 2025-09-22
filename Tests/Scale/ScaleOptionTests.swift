@@ -1,5 +1,5 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
 
 class ScaleOptionTests: XCTestCase {
     func testOptionString() {

@@ -1,19 +1,29 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
 import NovaCrypto
+#if canImport(TestHelpers)
+import TestHelpers
+#endif
 
-class BIP32KeypairDeriviationTests: XCTestCase {
 
-    func testBIP32DerivationPath() throws {
-        try performTest(filename: "BIP32HDKD", keypairFactory: BIP32KeypairFactory())
+class BIP32Secp256KeypairDerivationTests: XCTestCase {
+
+    func testBIP32Secp256DerivationFromMnemonic() throws {
+        try performTest(filename: "BIP32Secp256HDKD", keypairFactory: BIP32Secp256KeypairFactory())
     }
 
-    func testBIP32DerivationPathForEtalonTestVectors() throws {
-        try performSeedTestForVectorsFrom(filename: "BIP32HDKDEtalon", keypairFactory: BIP32KeypairFactory())
+    func testBIP32Secp256DerivationFromSeed() throws {
+        try performSeedTestForVectorsFrom(filename: "BIP32Secp256HDKDEtalon", keypairFactory: BIP32Secp256KeypairFactory())
     }
 
     private func performTest(filename: String, keypairFactory: KeypairFactoryProtocol) throws {
-        guard let url = Bundle(for: KeypairDeriviationTests.self)
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: KeypairDeriviationTests.self)
+#endif
+        guard let url = bundle
             .url(forResource: filename, withExtension: "json") else {
             XCTFail("Can't find resource")
             return
@@ -55,7 +65,13 @@ class BIP32KeypairDeriviationTests: XCTestCase {
     }
 
     private func performSeedTestForVectorsFrom(filename: String, keypairFactory: KeypairFactoryProtocol) throws {
-        guard let url = Bundle(for: KeypairDeriviationTests.self)
+        let bundle: Bundle
+#if SWIFT_PACKAGE
+        bundle = Bundle.module
+#else
+        bundle = Bundle(for: KeypairDeriviationTests.self)
+#endif
+        guard let url = bundle
             .url(forResource: filename, withExtension: "json") else {
             XCTFail("Can't find resource")
             return

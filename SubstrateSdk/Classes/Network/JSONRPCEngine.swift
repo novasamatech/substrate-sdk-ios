@@ -43,10 +43,16 @@ public struct JSONRPCRequest: Equatable {
     public static func == (lhs: Self, rhs: Self) -> Bool { lhs.requestId == rhs.requestId }
 }
 
+extension JSONRPCRequest: CustomDebugStringConvertible {
+    public var debugDescription: String {
+        "JSONRPCRequest id: \(requestId), data: " + (String(data: data, encoding: .utf8) ?? "null")
+    }
+}
+
 struct JSONRPCResponseHandler<T: Decodable>: JSONRPCResponseHandling {
     public let completionClosure: (Result<T, Error>) -> Void
 
-    func handle(data: Data, for identifier: UInt16) {
+    func handle(data: Data, for _: UInt16) {
         do {
             let decoder = JSONDecoder()
             let response = try decoder.decode(JSONRPCData<T>.self, from: data)
@@ -58,7 +64,7 @@ struct JSONRPCResponseHandler<T: Decodable>: JSONRPCResponseHandling {
         }
     }
 
-    func handle(error: Error, for identifier: UInt16) {
+    func handle(error: Error, for _: UInt16) {
         completionClosure(.failure(error))
     }
 }

@@ -1,13 +1,19 @@
 import XCTest
-import SubstrateSdk
+@testable import SubstrateSdk
+#if canImport(TestHelpers)
+import TestHelpers
+#endif
+
 
 class BaseCodingTests: XCTestCase {
-    func performTest<T: Codable & Equatable>(value: T,
-                                                     type: String,
-                                                     baseRegistryName: String = "default",
-                                                     networkName: String = "westend",
-                                                     runtimeMetadataName: String = "westend-metadata",
-                                                     version: UInt64 = 48) {
+    func performTest<T: Codable & Equatable>(
+        value: T,
+        type: String,
+        baseRegistryName: String = "default",
+        networkName: String = "westend",
+        runtimeMetadataName: String = "westend-metadata",
+        version: UInt64 = 48
+    ) {
         do {
             let catalog = try RuntimeHelper.createTypeRegistryCatalog(from: baseRegistryName,
                                                                       networkName: networkName,
@@ -67,9 +73,9 @@ class BaseCodingTests: XCTestCase {
             let registry: TypeRegistryCatalog
             
             if shouldUseDefaultVersioning {
-                registry = try ScaleInfoHelper.createTypeRegistry(from: runtimeFilename)
+                registry = try PostV14RuntimeHelper.createTypeRegistry(from: runtimeFilename)
             } else {
-                registry = try ScaleInfoHelper.createTypeRegistryWithoutVersioning(from: runtimeFilename)
+                registry = try PostV14RuntimeHelper.createTypeRegistryWithoutVersioning(from: runtimeFilename)
             }
             
             let encoder = DynamicScaleEncoder(registry: registry, version: 0)

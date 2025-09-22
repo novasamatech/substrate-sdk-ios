@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0C0387782D08B52E000A2F24 /* westend-v15-metadata in Resources */ = {isa = PBXBuildFile; fileRef = 0C0387772D08B52E000A2F24 /* westend-v15-metadata */; };
+		0C03877A2D08B5AD000A2F24 /* ExtrinsicBuilderV5Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C0387792D08B5AD000A2F24 /* ExtrinsicBuilderV5Tests.swift */; };
 		0CE840E92BFBFB60003C2B7A /* polkadot-v15 in Resources */ = {isa = PBXBuildFile; fileRef = 0CE840E82BFBFB60003C2B7A /* polkadot-v15 */; };
 		0CE840FA2BFCA0F3003C2B7A /* RuntimeMetadataV15Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CE840F92BFCA0F3003C2B7A /* RuntimeMetadataV15Tests.swift */; };
 		0CE92A6F2B2C5906009A21E9 /* kusama-v14-metadata-latest in Resources */ = {isa = PBXBuildFile; fileRef = 0CE92A6E2B2C5906009A21E9 /* kusama-v14-metadata-latest */; };
@@ -81,7 +83,7 @@
 		84AF376A271A3A8E007408D6 /* polkadot-v14-metadata in Resources */ = {isa = PBXBuildFile; fileRef = 84AF3767271A3A8D007408D6 /* polkadot-v14-metadata */; };
 		84AF376B271A3A8E007408D6 /* westend-v14-metadata in Resources */ = {isa = PBXBuildFile; fileRef = 84AF3768271A3A8D007408D6 /* westend-v14-metadata */; };
 		84AF376D271A3AE5007408D6 /* RuntimeMetadataV14Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF376C271A3AE5007408D6 /* RuntimeMetadataV14Tests.swift */; };
-		84AF3776271DA665007408D6 /* ScaleInfoHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF3775271DA665007408D6 /* ScaleInfoHelpers.swift */; };
+		84AF3776271DA665007408D6 /* PostV14RuntimeHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF3775271DA665007408D6 /* PostV14RuntimeHelper.swift */; };
 		84AF377A271DA9A2007408D6 /* ScaleRegistryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF3779271DA9A2007408D6 /* ScaleRegistryTests.swift */; };
 		84AF377F271DE550007408D6 /* ScaleInfoMappingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF377E271DE550007408D6 /* ScaleInfoMappingTests.swift */; };
 		84AF378527215DB4007408D6 /* ValidatorPrefs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84AF378427215DB4007408D6 /* ValidatorPrefs.swift */; };
@@ -118,13 +120,12 @@
 		84F43B4625DE800F00AEDA56 /* ExtrinsicBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F43B4525DE800F00AEDA56 /* ExtrinsicBuilderTests.swift */; };
 		84F43B7025DE90EC00AEDA56 /* TransferArgs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F43B6F25DE90EC00AEDA56 /* TransferArgs.swift */; };
 		84F4A847254CAD73000CF0A3 /* KeystoreBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84F4A846254CAD73000CF0A3 /* KeystoreBuilderTests.swift */; };
-		84FACC0425F799A900F32ED4 /* ChainDataCodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FACC0325F799A900F32ED4 /* ChainDataCodingTests.swift */; };
-		84FACC0825F79C5200F32ED4 /* BaseCodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FACC0725F79C5200F32ED4 /* BaseCodingTests.swift */; };
-		84FACC0C25F79D8600F32ED4 /* GenericHashTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 84FACC0B25F79D8600F32ED4 /* GenericHashTests.swift */; };
 		AE425FB626D363F500547303 /* BIP32JunctionFactoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE425FB526D363F500547303 /* BIP32JunctionFactoryTests.swift */; };
 		AE425FBA26D3726900547303 /* BIP32KeypairDerivationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE425FB926D3726900547303 /* BIP32KeypairDerivationTests.swift */; };
 		AE4B521426CBA71B00A66D2C /* BIP32HDKDEtalon.json in Resources */ = {isa = PBXBuildFile; fileRef = AE4B521326CBA71B00A66D2C /* BIP32HDKDEtalon.json */; };
 		AE4B521826CE127200A66D2C /* BIP32HDKD.json in Resources */ = {isa = PBXBuildFile; fileRef = AE4B521726CE127200A66D2C /* BIP32HDKD.json */; };
+		B58963B72D3FDA83008793ED /* BaseCodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58963B52D3FDA83008793ED /* BaseCodingTests.swift */; };
+		B58963B82D3FDA83008793ED /* ChainDataCodingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B58963B62D3FDA83008793ED /* ChainDataCodingTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -140,6 +141,8 @@
 /* Begin PBXFileReference section */
 		069A839D9A83C1D20293529A /* Pods-SubstrateSdkAll-SubstrateSdkExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdkAll-SubstrateSdkExample.debug.xcconfig"; path = "Target Support Files/Pods-SubstrateSdkAll-SubstrateSdkExample/Pods-SubstrateSdkAll-SubstrateSdkExample.debug.xcconfig"; sourceTree = "<group>"; };
 		09BC7EB7C9803A0197349CF7 /* Pods_SubstrateSdkTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SubstrateSdkTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0C0387772D08B52E000A2F24 /* westend-v15-metadata */ = {isa = PBXFileReference; lastKnownFileType = text; path = "westend-v15-metadata"; sourceTree = "<group>"; };
+		0C0387792D08B5AD000A2F24 /* ExtrinsicBuilderV5Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrinsicBuilderV5Tests.swift; sourceTree = "<group>"; };
 		0CE840E82BFBFB60003C2B7A /* polkadot-v15 */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "polkadot-v15"; sourceTree = "<group>"; };
 		0CE840F92BFCA0F3003C2B7A /* RuntimeMetadataV15Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeMetadataV15Tests.swift; sourceTree = "<group>"; };
 		0CE92A6E2B2C5906009A21E9 /* kusama-v14-metadata-latest */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "kusama-v14-metadata-latest"; sourceTree = "<group>"; };
@@ -220,7 +223,7 @@
 		84AF3767271A3A8D007408D6 /* polkadot-v14-metadata */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "polkadot-v14-metadata"; sourceTree = "<group>"; };
 		84AF3768271A3A8D007408D6 /* westend-v14-metadata */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "westend-v14-metadata"; sourceTree = "<group>"; };
 		84AF376C271A3AE5007408D6 /* RuntimeMetadataV14Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RuntimeMetadataV14Tests.swift; sourceTree = "<group>"; };
-		84AF3775271DA665007408D6 /* ScaleInfoHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleInfoHelpers.swift; sourceTree = "<group>"; };
+		84AF3775271DA665007408D6 /* PostV14RuntimeHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostV14RuntimeHelper.swift; sourceTree = "<group>"; };
 		84AF3779271DA9A2007408D6 /* ScaleRegistryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleRegistryTests.swift; sourceTree = "<group>"; };
 		84AF377E271DE550007408D6 /* ScaleInfoMappingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScaleInfoMappingTests.swift; sourceTree = "<group>"; };
 		84AF378427215DB4007408D6 /* ValidatorPrefs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatorPrefs.swift; sourceTree = "<group>"; };
@@ -258,14 +261,13 @@
 		84F43B4525DE800F00AEDA56 /* ExtrinsicBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtrinsicBuilderTests.swift; sourceTree = "<group>"; };
 		84F43B6F25DE90EC00AEDA56 /* TransferArgs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferArgs.swift; sourceTree = "<group>"; };
 		84F4A846254CAD73000CF0A3 /* KeystoreBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeystoreBuilderTests.swift; sourceTree = "<group>"; };
-		84FACC0325F799A900F32ED4 /* ChainDataCodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainDataCodingTests.swift; sourceTree = "<group>"; };
-		84FACC0725F79C5200F32ED4 /* BaseCodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCodingTests.swift; sourceTree = "<group>"; };
-		84FACC0B25F79D8600F32ED4 /* GenericHashTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenericHashTests.swift; sourceTree = "<group>"; };
 		AE425FB526D363F500547303 /* BIP32JunctionFactoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP32JunctionFactoryTests.swift; sourceTree = "<group>"; };
 		AE425FB926D3726900547303 /* BIP32KeypairDerivationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BIP32KeypairDerivationTests.swift; sourceTree = "<group>"; };
 		AE4B521326CBA71B00A66D2C /* BIP32HDKDEtalon.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BIP32HDKDEtalon.json; sourceTree = "<group>"; };
 		AE4B521726CE127200A66D2C /* BIP32HDKD.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = BIP32HDKD.json; sourceTree = "<group>"; };
 		B1CEC5492F8F9CA59EE22706 /* Pods-SubstrateSdk-SubstrateSdkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdk-SubstrateSdkTests.release.xcconfig"; path = "Target Support Files/Pods-SubstrateSdk-SubstrateSdkTests/Pods-SubstrateSdk-SubstrateSdkTests.release.xcconfig"; sourceTree = "<group>"; };
+		B58963B52D3FDA83008793ED /* BaseCodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCodingTests.swift; sourceTree = "<group>"; };
+		B58963B62D3FDA83008793ED /* ChainDataCodingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainDataCodingTests.swift; sourceTree = "<group>"; };
 		C1E349D5D6C43FCAEA7F0E58 /* Pods-SubstrateSdkExample-SubstrateSdkTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdkExample-SubstrateSdkTests.release.xcconfig"; path = "Target Support Files/Pods-SubstrateSdkExample-SubstrateSdkTests/Pods-SubstrateSdkExample-SubstrateSdkTests.release.xcconfig"; sourceTree = "<group>"; };
 		D001BA2CA89E91B69692B8CB /* Pods-SubstrateSdkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdkExample.release.xcconfig"; path = "Target Support Files/Pods-SubstrateSdkExample/Pods-SubstrateSdkExample.release.xcconfig"; sourceTree = "<group>"; };
 		D51045ADB2A00AA4D676850C /* Pods-SubstrateSdk-SubstrateSdkExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SubstrateSdk-SubstrateSdkExample.debug.xcconfig"; path = "Target Support Files/Pods-SubstrateSdk-SubstrateSdkExample/Pods-SubstrateSdk-SubstrateSdkExample.debug.xcconfig"; sourceTree = "<group>"; };
@@ -375,6 +377,8 @@
 				84AF376C271A3AE5007408D6 /* RuntimeMetadataV14Tests.swift */,
 				0CE840F92BFCA0F3003C2B7A /* RuntimeMetadataV15Tests.swift */,
 				84AF3779271DA9A2007408D6 /* ScaleRegistryTests.swift */,
+				B58963B52D3FDA83008793ED /* BaseCodingTests.swift */,
+				B58963B62D3FDA83008793ED /* ChainDataCodingTests.swift */,
 			);
 			path = Runtime;
 			sourceTree = "<group>";
@@ -382,6 +386,7 @@
 		8429C7FB25C432DA0086D7F6 /* Runtime */ = {
 			isa = PBXGroup;
 			children = (
+				0C0387772D08B52E000A2F24 /* westend-v15-metadata */,
 				0CE840E82BFBFB60003C2B7A /* polkadot-v15 */,
 				0CE92A6E2B2C5906009A21E9 /* kusama-v14-metadata-latest */,
 				84AF3766271A3A8D007408D6 /* kusama-v14-metadata */,
@@ -422,7 +427,7 @@
 				842D1E6F24CFF2FB00C30A7A /* KeypairDeriviation.swift */,
 				841D52E925C6DDF800DFA15B /* JSONHelpers.swift */,
 				84452A8125D1577100F47EC5 /* RuntimeHelpers.swift */,
-				84AF3775271DA665007408D6 /* ScaleInfoHelpers.swift */,
+				84AF3775271DA665007408D6 /* PostV14RuntimeHelper.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -460,9 +465,6 @@
 			children = (
 				842D1E2224C98CEA00C30A7A /* StorageKeyFactoryTests.swift */,
 				8467FD2724E72CCD005D486C /* HSLColorTests.swift */,
-				84FACC0325F799A900F32ED4 /* ChainDataCodingTests.swift */,
-				84FACC0725F79C5200F32ED4 /* BaseCodingTests.swift */,
-				84FACC0B25F79D8600F32ED4 /* GenericHashTests.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -631,6 +633,7 @@
 			children = (
 				84F43B4525DE800F00AEDA56 /* ExtrinsicBuilderTests.swift */,
 				84DEE70A2798145E00B9A39E /* ExtrinsicExtensionsTests.swift */,
+				0C0387792D08B5AD000A2F24 /* ExtrinsicBuilderV5Tests.swift */,
 			);
 			path = ExtrinsicBuilder;
 			sourceTree = "<group>";
@@ -674,6 +677,7 @@
 				607FACCC1AFB9204008FA782 /* Sources */,
 				607FACCD1AFB9204008FA782 /* Frameworks */,
 				607FACCE1AFB9204008FA782 /* Resources */,
+				0C28DF0C2D19BD270016DB8E /* Swift Format */,
 				30CB266525F9200100EDAE1C /* SwiftLint */,
 				6C1C296CB44E1B79432D0436 /* [CP] Embed Pods Frameworks */,
 			);
@@ -783,6 +787,7 @@
 				84DEE7062798116700B9A39E /* statemine.json in Resources */,
 				84F4394225DBAAA200AEDA56 /* test-metadata in Resources */,
 				8429C81D25C434E70086D7F6 /* kusama.json in Resources */,
+				0C0387782D08B52E000A2F24 /* westend-v15-metadata in Resources */,
 				84AF376A271A3A8E007408D6 /* polkadot-v14-metadata in Resources */,
 				8467F4C726B285EC00C5B6F4 /* statemine-metadata in Resources */,
 				84DEE708279811CE00B9A39E /* statemine-v14-metadata in Resources */,
@@ -795,6 +800,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		0C28DF0C2D19BD270016DB8E /* Swift Format */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Format";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/SwiftFormat/CommandLineTool/swiftformat\" \"$SRCROOT/../SubstrateSdk\"\n";
+		};
 		2D82DD0BC2E5119EFF21E55B /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -926,11 +949,12 @@
 				84DA3B4524C8CE5A00B5E27F /* ScaleUInt8Tests.swift in Sources */,
 				84C41F3A28EE157600DB1CD3 /* SignedIntNodeTests.swift in Sources */,
 				84F43A6125DC701F00AEDA56 /* Reasons.swift in Sources */,
+				B58963B72D3FDA83008793ED /* BaseCodingTests.swift in Sources */,
+				B58963B82D3FDA83008793ED /* ChainDataCodingTests.swift in Sources */,
 				84AF377A271DA9A2007408D6 /* ScaleRegistryTests.swift in Sources */,
 				84F43B4625DE800F00AEDA56 /* ExtrinsicBuilderTests.swift in Sources */,
 				84DA3B3D24C8CE5900B5E27F /* ScaleCompactIntTests.swift in Sources */,
 				849E0A7425C9458F00B33506 /* StructNodeFactoryTests.swift in Sources */,
-				84FACC0825F79C5200F32ED4 /* BaseCodingTests.swift in Sources */,
 				849E0A2125C81DB500B33506 /* FixedArrayParserTests.swift in Sources */,
 				84F43A3B25DC44D400AEDA56 /* AccountInfo.swift in Sources */,
 				84F43A5825DC652C00AEDA56 /* RawOrigin.swift in Sources */,
@@ -944,7 +968,6 @@
 				8459EA162657987D006BBF9E /* LastContribution.swift in Sources */,
 				84452B0325D27BDB00F47EC5 /* DataNodeTests.swift in Sources */,
 				84F30E4725FC05BE00039D09 /* SessionKeysPolkadot.swift in Sources */,
-				84FACC0425F799A900F32ED4 /* ChainDataCodingTests.swift in Sources */,
 				84F43A3425DC44A000AEDA56 /* BindingTests.swift in Sources */,
 				84F43A2425DC124600AEDA56 /* TypeRegistryCatalogTests.swift in Sources */,
 				842D1E6A24CF800400C30A7A /* SubstrateJunctionFactoryTests.swift in Sources */,
@@ -962,10 +985,9 @@
 				849E0A7E25C95C7F00B33506 /* EnumValuesFactoryTests.swift in Sources */,
 				842D1E2324C98CEA00C30A7A /* StorageKeyFactoryTests.swift in Sources */,
 				8459EA122657963C006BBF9E /* MultiSigner.swift in Sources */,
-				84AF3776271DA665007408D6 /* ScaleInfoHelpers.swift in Sources */,
+				84AF3776271DA665007408D6 /* PostV14RuntimeHelper.swift in Sources */,
 				AE425FBA26D3726900547303 /* BIP32KeypairDerivationTests.swift in Sources */,
 				8467FD2824E72CCD005D486C /* HSLColorTests.swift in Sources */,
-				84FACC0C25F79D8600F32ED4 /* GenericHashTests.swift in Sources */,
 				842D1E2724C9B63300C30A7A /* ScaleOptionTests.swift in Sources */,
 				84ED725C254A0233006102DF /* SubstrateQRDecoderTests.swift in Sources */,
 				84F439BC25DBF8D600AEDA56 /* TypeRegistryNetworkValidationTests.swift in Sources */,
@@ -995,6 +1017,7 @@
 				84452D9325D48FC100F47EC5 /* ExtrinsicNodeTests.swift in Sources */,
 				841D532425C727FC00DFA15B /* TermParserTests.swift in Sources */,
 				841D52E625C6DD1E00DFA15B /* TypeMappingParserTests.swift in Sources */,
+				0C03877A2D08B5AD000A2F24 /* ExtrinsicBuilderV5Tests.swift in Sources */,
 				845D80ED24C8D91A00EC2540 /* SeedFactoryTests.swift in Sources */,
 				84DA3B3C24C8CE5900B5E27F /* ScaleUInt32Tests.swift in Sources */,
 				84F43B7025DE90EC00AEDA56 /* TransferArgs.swift in Sources */,
@@ -1129,6 +1152,7 @@
 			baseConfigurationReference = F1DFAE04C5FF8ABD1496FDF5 /* Pods-SubstrateSdkExample.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
 				INFOPLIST_FILE = SubstrateSdk/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14;
@@ -1146,6 +1170,7 @@
 			baseConfigurationReference = D001BA2CA89E91B69692B8CB /* Pods-SubstrateSdkExample.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = YLWWUD25VZ;
 				INFOPLIST_FILE = SubstrateSdk/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14;

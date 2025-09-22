@@ -74,7 +74,7 @@ public final class HTTPEngine {
         }
 
         self.urls = urls
-        self.requestFactory = JSONRPCRequestFactory(version: version)
+        requestFactory = JSONRPCRequestFactory(version: version)
         self.completionQueue = completionQueue ?? JSONRPCEngineShared.processingQueue
         self.customNodeSwitcher = customNodeSwitcher
         self.resendStrategy = resendStrategy
@@ -93,7 +93,7 @@ public final class HTTPEngine {
 
         mutex.lock()
 
-        self.urls = newUrls
+        urls = newUrls
         selectedURLIndex = 0
 
         logger?.debug("(\(chainName)) Did set new urls: \(newUrls)")
@@ -163,7 +163,7 @@ public final class HTTPEngine {
     func generateRequestId() -> UInt16 {
         let pendingItems = inProgressRequests.keys
         let partialBatches = partialBatches.values.flatMap { batch in
-            batch.map { $0.requestId }
+            batch.map(\.requestId)
         }
 
         let existingIds: Set<UInt16> = Set(pendingItems + partialBatches)

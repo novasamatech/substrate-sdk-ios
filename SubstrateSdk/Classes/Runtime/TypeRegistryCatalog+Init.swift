@@ -1,12 +1,14 @@
 import Foundation
 
 public extension TypeRegistryCatalog {
-    static func createFromTypeDefinition(_ definitionData: Data,
-                                         versioningData: Data,
-                                         runtimeMetadata: RuntimeMetadata,
-                                         customNodes: [Node] = [],
-                                         customExtensions: [ExtrinsicSignedExtensionCoding] = [])
-    throws -> TypeRegistryCatalog {
+    static func createFromTypeDefinition(
+        _ definitionData: Data,
+        versioningData: Data,
+        runtimeMetadata: RuntimeMetadata,
+        customNodes: [Node] = [],
+        customExtensions: [TransactionExtensionCoding] = []
+    )
+        throws -> TypeRegistryCatalog {
         let versionedJsons = try prepareVersionedJsons(from: versioningData)
 
         return try createFromTypeDefinition(
@@ -22,7 +24,7 @@ public extension TypeRegistryCatalog {
         _ definitionData: Data,
         runtimeMetadata: RuntimeMetadata,
         customNodes: [Node] = [],
-        customExtensions: [ExtrinsicSignedExtensionCoding] = []
+        customExtensions: [TransactionExtensionCoding] = []
     ) throws -> TypeRegistryCatalog {
         try createFromTypeDefinition(
             definitionData,
@@ -33,17 +35,21 @@ public extension TypeRegistryCatalog {
         )
     }
 
-    static func createFromTypeDefinition(_ definitionData: Data,
-                                         versionedJsons: [UInt64: JSON],
-                                         runtimeMetadata: RuntimeMetadata,
-                                         customNodes: [Node],
-                                         customExtensions: [ExtrinsicSignedExtensionCoding])
-    throws -> TypeRegistryCatalog {
+    static func createFromTypeDefinition(
+        _ definitionData: Data,
+        versionedJsons: [UInt64: JSON],
+        runtimeMetadata: RuntimeMetadata,
+        customNodes: [Node],
+        customExtensions: [TransactionExtensionCoding]
+    )
+        throws -> TypeRegistryCatalog {
         let allNodes = BasisNodes.allNodes(for: runtimeMetadata, customExtensions: customExtensions)
         let additonalNodes = allNodes + customNodes
         let baseRegistry = try TypeRegistry
-            .createFromTypesDefinition(data: definitionData,
-                                       additionalNodes: additonalNodes)
+            .createFromTypesDefinition(
+                data: definitionData,
+                additionalNodes: additonalNodes
+            )
 
         let versionedRegistries = try versionedJsons.mapValues {
             try TypeRegistry.createFromTypesDefinition(json: $0, additionalNodes: [])
@@ -57,20 +63,24 @@ public extension TypeRegistryCatalog {
         ])
 
         let runtimeMetadataRegistry = try TypeRegistry
-            .createFromRuntimeMetadata(runtimeMetadata,
-                                       additionalTypes: RuntimeTypes.known)
+            .createFromRuntimeMetadata(
+                runtimeMetadata,
+                additionalTypes: RuntimeTypes.known
+            )
 
-        return TypeRegistryCatalog(baseRegistry: baseRegistry,
-                                   versionedRegistries: versionedRegistries,
-                                   runtimeMetadataRegistry: runtimeMetadataRegistry,
-                                   typeResolver: typeResolver)
+        return TypeRegistryCatalog(
+            baseRegistry: baseRegistry,
+            versionedRegistries: versionedRegistries,
+            runtimeMetadataRegistry: runtimeMetadataRegistry,
+            typeResolver: typeResolver
+        )
     }
 
     static func createFromSiDefinition(
         versioningData: Data,
         runtimeMetadata: PostV14RuntimeMetadataProtocol,
         additionalNodes: [Node] = [],
-        customExtensions: [ExtrinsicSignedExtensionCoding] = [],
+        customExtensions: [TransactionExtensionCoding] = [],
         customTypeMapper: SiTypeMapping? = nil,
         customNameMapper: SiNameMapping? = nil
     ) throws -> TypeRegistryCatalog {
@@ -90,11 +100,11 @@ public extension TypeRegistryCatalog {
         runtimeMetadata: PostV14RuntimeMetadataProtocol,
         versionedJsons: [UInt64: JSON] = [:],
         additionalNodes: [Node] = [],
-        customExtensions: [ExtrinsicSignedExtensionCoding] = [],
+        customExtensions: [TransactionExtensionCoding] = [],
         customTypeMapper: SiTypeMapping? = nil,
         customNameMapper: SiNameMapping? = nil
     ) throws -> TypeRegistryCatalog {
-        let runtimeRegistry: SiTypeRegistry = SiTypeRegistry.createFromTypesLookup(
+        let runtimeRegistry = SiTypeRegistry.createFromTypesLookup(
             runtimeMetadata,
             additionalNodes: additionalNodes,
             customExtensions: customExtensions,
@@ -133,7 +143,7 @@ public extension TypeRegistryCatalog {
 
         let initDict = [currentVersion: JSON.dictionaryValue([typeKey: types])]
 
-        return versioning.reduce(into: initDict) { (result, versionedJson) in
+        return versioning.reduce(into: initDict) { result, versionedJson in
             guard
                 let version = versionedJson.runtime_range?.arrayValue?.first?.unsignedIntValue,
                 let definitionDic = versionedJson.types?.dictValue else {
@@ -141,7 +151,7 @@ public extension TypeRegistryCatalog {
             }
 
             if let oldDefinitionDic = result[version]?.types?.dictValue {
-                let mapping = oldDefinitionDic.merging(definitionDic) { (v1, _) in v1 }
+                let mapping = oldDefinitionDic.merging(definitionDic) { v1, _ in v1 }
                 result[version] = .dictionaryValue([typeKey: .dictionaryValue(mapping)])
             } else {
                 result[version] = .dictionaryValue([typeKey: .dictionaryValue(definitionDic)])
