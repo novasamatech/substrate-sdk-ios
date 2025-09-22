@@ -1,4 +1,5 @@
 import Foundation
+import Scrypt
 import NovaCrypto
 import TweetNacl
 
@@ -30,16 +31,17 @@ extension KeystoreBuilder: KeystoreBuilding {
         let scryptParameters = try ScryptParameters()
 
         let scryptData: Data = try scryptData(from: password)
-
-        let encryptionKey = try IRScryptKeyDeriviation()
-            .deriveKey(
-                from: scryptData,
-                salt: scryptParameters.salt,
-                scryptN: UInt(scryptParameters.scryptN),
-                scryptP: UInt(scryptParameters.scryptP),
-                scryptR: UInt(scryptParameters.scryptR),
-                length: UInt(KeystoreConstants.encryptionKeyLength)
-            )
+        
+        let encryptionKeyBytes = try Scrypt.scrypt(
+            password: Array(scryptData),
+            salt: Array(scryptParameters.salt),
+            length: KeystoreConstants.encryptionKeyLength,
+            N: UInt64(scryptParameters.scryptN),
+            r: scryptParameters.scryptR,
+            p: scryptParameters.scryptP
+        )
+        
+        let encryptionKey = Data(encryptionKeyBytes)
 
         let nonce = try Data.generateRandomBytes(of: KeystoreConstants.nonceLength)
 

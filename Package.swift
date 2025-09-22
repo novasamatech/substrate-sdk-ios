@@ -12,7 +12,7 @@ let package = Package(
             targets: ["SubstrateSdk"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.2.0"),
+        .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.3.0"),
         .package(url: "https://github.com/novasamatech/Operation-iOS", exact: "2.1.1"),
         .package(url: "https://github.com/ashleymills/Reachability.swift", exact: "5.2.4"),
         .package(url: "https://github.com/novasamatech/Starscream.git", exact: "4.0.13"),
@@ -20,6 +20,7 @@ let package = Package(
         .package(url: "https://github.com/attaswift/BigInt", exact: "5.5.1"),
         .package(url: "https://github.com/daisuke-t-jp/xxHash-Swift", exact: "1.1.1"),
         .package(url: "https://github.com/novasamatech/keccak.c", exact: "0.1.3"),
+        .package(url: "https://github.com/novasamatech/swift-scrypt", exact: "1.0.3"),
     ],
     targets: [
         .target(
@@ -32,7 +33,8 @@ let package = Package(
                 .product(name: "TweetNacl", package: "tweetnacl-swiftwrap"),
                 .product(name: "BigInt", package: "BigInt"),
                 .product(name: "xxHash-Swift", package: "xxHash-Swift"),
-                .product(name: "keccak", package: "keccak.c")
+                .product(name: "keccak", package: "keccak.c"),
+                .product(name: "Scrypt", package: "swift-scrypt"),
             ],
             path: "SubstrateSdk/Classes"
         ),

@@ -1,4 +1,5 @@
 import Foundation
+import Scrypt
 import NovaCrypto
 import TweetNacl
 
@@ -36,16 +37,17 @@ public class KeystoreExtractor: KeystoreExtracting {
             } else {
                 scryptData = Data()
             }
-
-            let encryptionKey = try IRScryptKeyDeriviation()
-                .deriveKey(
-                    from: scryptData,
-                    salt: scryptParameters.salt,
-                    scryptN: UInt(scryptParameters.scryptN),
-                    scryptP: UInt(scryptParameters.scryptP),
-                    scryptR: UInt(scryptParameters.scryptR),
-                    length: UInt(KeystoreConstants.encryptionKeyLength)
-                )
+            
+            let encryptionKeyBytes = try Scrypt.scrypt(
+                password: Array(scryptData),
+                salt: Array(scryptParameters.salt),
+                length: KeystoreConstants.encryptionKeyLength,
+                N: UInt64(scryptParameters.scryptN),
+                r: scryptParameters.scryptR,
+                p: scryptParameters.scryptP
+            )
+            
+            let encryptionKey = Data(encryptionKeyBytes)
 
             let nonceStart = ScryptParameters.encodedLength
             let nonceEnd = ScryptParameters.encodedLength + KeystoreConstants.nonceLength
