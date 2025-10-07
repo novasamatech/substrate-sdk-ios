@@ -13,7 +13,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.3.0"),
-        .package(url: "https://github.com/novasamatech/Operation-iOS", exact: "2.2.0"),
+        // TODO: - Temp solution for Operation-iOS, to be updated before merge
+        .package(
+            url: "https://github.com/novasamatech/Operation-iOS",
+            revision: "b32d53abbac2f12462737dba4e516d135f9efb2d"
+        ),
         .package(url: "https://github.com/ashleymills/Reachability.swift", exact: "5.2.4"),
         .package(url: "https://github.com/novasamatech/Starscream.git", exact: "4.0.13"),
         .package(url: "https://github.com/bitmark-inc/tweetnacl-swiftwrap", exact: "1.1.0"),

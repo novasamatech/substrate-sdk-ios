@@ -1,4 +1,5 @@
 import Foundation
+import Operation_iOS
 import Starscream
 
 public protocol WebSocketConnectionProtocol: WebSocketClient {
