@@ -8,7 +8,7 @@ public protocol SDKLoggerProtocol {
     func error(message: String, file: String, function: String, line: Int)
 }
 
-extension SDKLoggerProtocol {
+public extension SDKLoggerProtocol {
     func verbose(_ message: String, file: String = #file, function: String = #function, line: Int = #line) {
         verbose(message: message, file: file, function: function, line: line)
     }
