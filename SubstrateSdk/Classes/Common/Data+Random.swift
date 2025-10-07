@@ -4,17 +4,23 @@ enum RandomDataError: Error {
     case generatorFailed
 }
 
-extension Data {
-    static func generateRandomBytes(of length: Int) throws -> Data {
-        var data = Data(count: length)
-        let result = data.withUnsafeMutableBytes {
-            SecRandomCopyBytes(kSecRandomDefault, length, $0.baseAddress!)
-        }
+public extension Data {
+    static func random(of size: Int) -> Data? {
+        var bytes = [UInt8](repeating: 0, count: size)
+        let status = SecRandomCopyBytes(kSecRandomDefault, size, &bytes)
 
-        guard result == errSecSuccess else {
+        if status == errSecSuccess {
+            return Data(bytes)
+        } else {
+            return nil
+        }
+    }
+    
+    static func randomOrError(of size: Int) throws -> Data {
+        guard let data = random(of: size) else {
             throw RandomDataError.generatorFailed
         }
-
+        
         return data
     }
 }

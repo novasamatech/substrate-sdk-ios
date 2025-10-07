@@ -1,0 +1,65 @@
+import Foundation
+
+public struct StorageUpdate: Decodable {
+    public enum CodingKeys: String, CodingKey {
+        case blockHash = "block"
+        case changes
+    }
+
+    let blockHash: String?
+    let changes: [[String?]]?
+}
+
+public struct StorageUpdateData {
+    public struct StorageUpdateChangeData {
+        let key: Data
+        let value: Data?
+
+        init?(change: [String?]) {
+            guard change.count == 2 else {
+                return nil
+            }
+
+            guard let keyString = change[0], let keyData = try? Data(hexString: keyString) else {
+                return nil
+            }
+
+            key = keyData
+
+            if let valueString = change[1], let valueData = try? Data(hexString: valueString) {
+                value = valueData
+            } else {
+                value = nil
+            }
+        }
+    }
+
+    let blockHash: Data?
+    let changes: [StorageUpdateChangeData]
+
+    public init(update: StorageUpdate) {
+        if
+            let blockHashString = update.blockHash,
+            let blockHashData = try? Data(hexString: blockHashString) {
+            blockHash = blockHashData
+        } else {
+            blockHash = nil
+        }
+
+        changes = update.changes?.compactMap { StorageUpdateChangeData(change: $0) } ?? []
+    }
+
+    func getChangesOrdered(by keys: [Data]) -> [StorageUpdateChangeData] {
+        let keyedChanges = changes.reduce(into: [Data: StorageUpdateChangeData]()) { accum, change in
+            accum[change.key] = change
+        }
+
+        return keys.reduce([StorageUpdateChangeData]()) { accum, key in
+            guard let change = keyedChanges[key] else {
+                return accum
+            }
+
+            return accum + [change]
+        }
+    }
+}

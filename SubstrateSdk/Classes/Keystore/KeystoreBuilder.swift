@@ -43,7 +43,7 @@ extension KeystoreBuilder: KeystoreBuilding {
         
         let encryptionKey = Data(encryptionKeyBytes)
 
-        let nonce = try Data.generateRandomBytes(of: KeystoreConstants.nonceLength)
+        let nonce = try Data.randomOrError(of: KeystoreConstants.nonceLength)
 
         let secretKeyData: Data
         switch data.secretType {
