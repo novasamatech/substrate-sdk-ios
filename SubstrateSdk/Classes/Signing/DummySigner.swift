@@ -4,7 +4,7 @@ import NovaCrypto
 public final class DummySigner {
     let defaultSigner: DefaultSigningWrapper
     
-    public init(seed: Data = Data(repeating: 1, count: 32)) throws {
+    public init(seed: Data = Data(repeating: 1, count: 32)) {
         defaultSigner = DefaultSigningWrapper(secretProvider: seed)
     }
 }
