@@ -14,23 +14,23 @@ public protocol MetadataHashOperationFactoryProtocol {
 
 public final class MetadataHashOperationFactory {
     let operationQueue: OperationQueue
-    let metadataRepositoryFactory: RuntimeMetadataRepositoryFactoryProtocol
+    let metadataItemProvider: RuntimeMetadataItemProviding
 
     let cache: InMemoryCache<ChainId, Data>
 
     public init(
-        metadataRepositoryFactory: RuntimeMetadataRepositoryFactoryProtocol,
+        metadataItemProvider: RuntimeMetadataItemProviding,
         operationQueue: OperationQueue
     ) {
-        self.metadataRepositoryFactory = metadataRepositoryFactory
+        self.metadataItemProvider = metadataItemProvider
         self.operationQueue = operationQueue
         cache = InMemoryCache()
     }
 
     private func createRuntimeVersionOperation(
         for connection: JSONRPCEngine
-    ) -> BaseOperation<RuntimeVersionFull> {
-        JSONRPCOperation<[String], RuntimeVersionFull>(
+    ) -> BaseOperation<RuntimeVersion> {
+        JSONRPCOperation<[String], RuntimeVersion>(
             engine: connection,
             method: RPCMethod.getRuntimeVersion,
             timeout: 3600
@@ -41,15 +41,12 @@ public final class MetadataHashOperationFactory {
         for chain: ChainProtocol,
         connection: JSONRPCEngine
     ) -> CompoundOperationWrapper<Data?> {
-        let rawMetadataOperation = metadataRepositoryFactory.createRepository().fetchOperation(
-            by: { chain.chainId },
-            options: RepositoryFetchOptions()
-        )
+        let rawMetadataWrapper = metadataItemProvider.createFetchWrapper(for: chain.chainId)
 
         let runtimeVersionOperation = createRuntimeVersionOperation(for: connection)
 
         let generateAndCacheOperation = ClosureOperation<Data?> {
-            guard let rawMetadata = try rawMetadataOperation.extractNoCancellableResultData() else {
+            guard let rawMetadata = try rawMetadataWrapper.targetOperation.extractNoCancellableResultData() else {
                 throw CommonMetadataShortenerError.metadataMissing
             }
 
@@ -88,11 +85,11 @@ public final class MetadataHashOperationFactory {
         }
 
         generateAndCacheOperation.addDependency(runtimeVersionOperation)
-        generateAndCacheOperation.addDependency(rawMetadataOperation)
+        generateAndCacheOperation.addDependency(rawMetadataWrapper.targetOperation)
 
         return CompoundOperationWrapper(
             targetOperation: generateAndCacheOperation,
-            dependencies: [rawMetadataOperation, runtimeVersionOperation]
+            dependencies: rawMetadataWrapper.allOperations + [runtimeVersionOperation]
         )
     }
 }
