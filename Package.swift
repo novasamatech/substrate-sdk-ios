@@ -10,6 +10,12 @@ let package = Package(
         .library(
             name: "SubstrateSdk",
             targets: ["SubstrateSdk"]),
+        .library(
+            name: "SubstrateStorageQuery",
+            targets: ["StorageQuery"]),
+        .library(
+            name: "SubstrateMetadataHash",
+            targets: ["MetadataHash"]),
     ],
     dependencies: [
         .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.3.0"),
@@ -25,6 +31,8 @@ let package = Package(
         .package(url: "https://github.com/daisuke-t-jp/xxHash-Swift", exact: "1.1.1"),
         .package(url: "https://github.com/novasamatech/keccak.c", exact: "0.1.3"),
         .package(url: "https://github.com/novasamatech/swift-scrypt", exact: "1.0.3"),
+        .package(url: "https://github.com/novasamatech/metadata-shortener-ios", exact: "0.2.1"),
+        .package(url: "https://github.com/novasamatech/Foundation-iOS", revision: "c25a33f6ff1720c775223e10d5ceaaa04e21c4b9"),
     ],
     targets: [
         .target(
@@ -41,6 +49,25 @@ let package = Package(
                 .product(name: "Scrypt", package: "swift-scrypt"),
             ],
             path: "SubstrateSdk/Classes"
+        ),
+        .target(
+            name: "MetadataHash",
+            dependencies: [
+                "SubstrateSdk",
+                .product(name: "Operation-iOS", package: "operation-ios"),
+                .product(name: "Foundation-iOS", package: "Foundation-iOS"),
+                .product(name: "MetadataShortenerApi", package: "metadata-shortener-ios"),
+            ],
+            path: "MetadataHash"
+        ),
+        .target(
+            name: "StorageQuery",
+            dependencies: [
+                "SubstrateSdk",
+                .product(name: "Operation-iOS", package: "operation-ios"),
+                .product(name: "Foundation-iOS", package: "Foundation-iOS")
+            ],
+            path: "StorageQuery"
         ),
         .target(
             name: "TestHelpers",

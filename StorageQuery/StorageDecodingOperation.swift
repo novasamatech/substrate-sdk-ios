@@ -1,5 +1,6 @@
 import Foundation
 import Operation_iOS
+import SubstrateSdk
 
 public enum StorageDecodingOperationError: Error {
     case missingRequiredParams

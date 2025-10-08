@@ -1,5 +1,7 @@
 import Foundation
 import Operation_iOS
+import SubstrateSdk
+import Foundation_iOS
 
 typealias JSONRPCQueryOperation = JSONRPCOperation<StorageQuery, [StorageUpdate]>
 

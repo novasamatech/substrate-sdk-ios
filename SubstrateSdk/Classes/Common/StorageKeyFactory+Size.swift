@@ -1,5 +1,4 @@
 import Foundation
-import SubstrateSdk
 
 public extension StorageKeyFactory {
     static var keyModuleStoragePrefixSize: Int { 32 }

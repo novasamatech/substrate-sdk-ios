@@ -1,4 +1,6 @@
 import Foundation
+import SubstrateSdk
+import Foundation_iOS
 
 public final class StorageKeySuffixMapper<T: Decodable>: Mapping {
     public typealias InputType = Data
