@@ -12,10 +12,10 @@ let package = Package(
             targets: ["SubstrateSdk"]),
         .library(
             name: "SubstrateStorageQuery",
-            targets: ["StorageQuery"]),
+            targets: ["SubstrateStorageQuery"]),
         .library(
             name: "SubstrateMetadataHash",
-            targets: ["MetadataHash"]),
+            targets: ["SubstrateMetadataHash"]),
     ],
     dependencies: [
         .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.3.0"),
@@ -51,7 +51,7 @@ let package = Package(
             path: "SubstrateSdk/Classes"
         ),
         .target(
-            name: "MetadataHash",
+            name: "SubstrateMetadataHash",
             dependencies: [
                 "SubstrateSdk",
                 .product(name: "Operation-iOS", package: "operation-ios"),
@@ -61,7 +61,7 @@ let package = Package(
             path: "MetadataHash"
         ),
         .target(
-            name: "StorageQuery",
+            name: "SubstrateStorageQuery",
             dependencies: [
                 "SubstrateSdk",
                 .product(name: "Operation-iOS", package: "operation-ios"),
