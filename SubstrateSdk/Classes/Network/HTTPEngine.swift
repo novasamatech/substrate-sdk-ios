@@ -373,7 +373,7 @@ public final class HTTPEngine {
 }
 
 extension HTTPEngine: SchedulerDelegate {
-    func didTrigger(scheduler: SchedulerProtocol) {
+    public func didTrigger(scheduler: SchedulerProtocol) {
         mutex.lock()
 
         defer {

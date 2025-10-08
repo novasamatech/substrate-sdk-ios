@@ -97,7 +97,7 @@ public class JSONRPCOperation<P: Encodable, T: Decodable>: BaseOperation<T> {
 }
 
 extension JSONRPCOperation: SchedulerDelegate {
-    func didTrigger(scheduler _: SchedulerProtocol) {
+    public func didTrigger(scheduler _: SchedulerProtocol) {
         mutex.lock()
 
         scheduler = nil

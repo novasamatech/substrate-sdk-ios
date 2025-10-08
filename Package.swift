@@ -10,10 +10,16 @@ let package = Package(
         .library(
             name: "SubstrateSdk",
             targets: ["SubstrateSdk"]),
+        .library(
+            name: "SubstrateStorageQuery",
+            targets: ["SubstrateStorageQuery"]),
+        .library(
+            name: "SubstrateMetadataHash",
+            targets: ["SubstrateMetadataHash"]),
     ],
     dependencies: [
         .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.3.0"),
-        .package(url: "https://github.com/novasamatech/Operation-iOS", exact: "2.1.2"),
+        .package(url: "https://github.com/novasamatech/Operation-iOS", exact: "2.3.0"),
         .package(url: "https://github.com/ashleymills/Reachability.swift", exact: "5.2.4"),
         .package(url: "https://github.com/novasamatech/Starscream.git", exact: "4.0.13"),
         .package(url: "https://github.com/bitmark-inc/tweetnacl-swiftwrap", exact: "1.1.0"),
@@ -21,6 +27,8 @@ let package = Package(
         .package(url: "https://github.com/daisuke-t-jp/xxHash-Swift", exact: "1.1.1"),
         .package(url: "https://github.com/novasamatech/keccak.c", exact: "0.1.3"),
         .package(url: "https://github.com/novasamatech/swift-scrypt", exact: "1.0.3"),
+        .package(url: "https://github.com/novasamatech/metadata-shortener-ios", exact: "0.2.1"),
+        .package(url: "https://github.com/novasamatech/Foundation-iOS", exact: "1.3.0"),
     ],
     targets: [
         .target(
@@ -37,6 +45,25 @@ let package = Package(
                 .product(name: "Scrypt", package: "swift-scrypt"),
             ],
             path: "SubstrateSdk/Classes"
+        ),
+        .target(
+            name: "SubstrateMetadataHash",
+            dependencies: [
+                "SubstrateSdk",
+                .product(name: "Operation-iOS", package: "operation-ios"),
+                .product(name: "Foundation-iOS", package: "Foundation-iOS"),
+                .product(name: "MetadataShortenerApi", package: "metadata-shortener-ios"),
+            ],
+            path: "MetadataHash"
+        ),
+        .target(
+            name: "SubstrateStorageQuery",
+            dependencies: [
+                "SubstrateSdk",
+                .product(name: "Operation-iOS", package: "operation-ios"),
+                .product(name: "Foundation-iOS", package: "Foundation-iOS")
+            ],
+            path: "StorageQuery"
         ),
         .target(
             name: "TestHelpers",

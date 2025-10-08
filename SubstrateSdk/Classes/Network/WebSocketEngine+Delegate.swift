@@ -1,4 +1,5 @@
 import Foundation
+import Operation_iOS
 import Starscream
 
 extension WebSocketEngine: WebSocketDelegate {
@@ -161,7 +162,7 @@ extension WebSocketEngine: ReachabilityListenerDelegate {
 }
 
 extension WebSocketEngine: SchedulerDelegate {
-    func didTrigger(scheduler: SchedulerProtocol) {
+    public func didTrigger(scheduler: SchedulerProtocol) {
         mutex.lock()
 
         if scheduler === pingScheduler {
