@@ -1,5 +1,4 @@
 import Foundation
-import SubstrateSdk
 
 public enum Phase: Decodable {
     static let extrinsicField = "ApplyExtrinsic"

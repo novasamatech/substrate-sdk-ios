@@ -1,6 +1,5 @@
 import Foundation
 import Operation_iOS
-import SubstrateSdk
 
 public protocol NonceOperationFactoryProtocol {
     func createWrapper(

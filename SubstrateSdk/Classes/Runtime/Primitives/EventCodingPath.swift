@@ -1,5 +1,4 @@
 import Foundation
-import SubstrateSdk
 
 public struct EventCodingPath: Equatable, Hashable {
     let moduleName: String

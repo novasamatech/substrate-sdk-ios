@@ -1,5 +1,4 @@
 import Foundation
-import SubstrateSdk
 
 public struct Event: Decodable {
     public let moduleIndex: UInt8

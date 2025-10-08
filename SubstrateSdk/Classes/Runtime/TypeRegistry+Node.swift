@@ -1,5 +1,4 @@
 import Foundation
-import SubstrateSdk
 
 public extension TypeRegistryCatalogProtocol {
     func nodeMatches(closure: (Node) -> Bool, typeName: String, version: UInt64) -> Bool {

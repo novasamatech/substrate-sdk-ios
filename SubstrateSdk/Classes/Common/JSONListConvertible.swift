@@ -1,5 +1,4 @@
 import Foundation
-import SubstrateSdk
 
 public enum JSONListConvertibleError: Error {
     case unexpectedNumberOfItems(expected: Int, actual: Int)

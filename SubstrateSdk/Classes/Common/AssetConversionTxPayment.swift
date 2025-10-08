@@ -1,6 +1,5 @@
 import Foundation
 import BigInt
-import SubstrateSdk
 
 public class AssetConversionTxPayment<AssetId: Codable>: Codable, OnlyExplicitTransactionExtending {
     public var txExtensionId: String { "ChargeAssetTxPayment" }

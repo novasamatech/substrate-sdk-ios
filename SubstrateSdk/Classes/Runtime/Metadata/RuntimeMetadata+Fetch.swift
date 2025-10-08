@@ -1,5 +1,4 @@
 import Foundation
-import SubstrateSdk
 
 public enum RuntimeMetadataInternalError: Error {
     case runtimeApiNotFound(moduleName: String, methodName: String)

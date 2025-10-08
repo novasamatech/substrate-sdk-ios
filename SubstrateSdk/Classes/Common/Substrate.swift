@@ -1,5 +1,4 @@
 import Foundation
-import SubstrateSdk
 import BigInt
 
 public enum Substrate {

@@ -19,11 +19,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.3.0"),
-        // TODO: - Temp solution for Operation-iOS, to be updated before merge
-        .package(
-            url: "https://github.com/novasamatech/Operation-iOS",
-            revision: "b32d53abbac2f12462737dba4e516d135f9efb2d"
-        ),
+        .package(url: "https://github.com/novasamatech/Operation-iOS", exact: "2.3.0"),
         .package(url: "https://github.com/ashleymills/Reachability.swift", exact: "5.2.4"),
         .package(url: "https://github.com/novasamatech/Starscream.git", exact: "4.0.13"),
         .package(url: "https://github.com/bitmark-inc/tweetnacl-swiftwrap", exact: "1.1.0"),
@@ -32,7 +28,7 @@ let package = Package(
         .package(url: "https://github.com/novasamatech/keccak.c", exact: "0.1.3"),
         .package(url: "https://github.com/novasamatech/swift-scrypt", exact: "1.0.3"),
         .package(url: "https://github.com/novasamatech/metadata-shortener-ios", exact: "0.2.1"),
-        .package(url: "https://github.com/novasamatech/Foundation-iOS", revision: "c25a33f6ff1720c775223e10d5ceaaa04e21c4b9"),
+        .package(url: "https://github.com/novasamatech/Foundation-iOS", exact: "1.3.0"),
     ],
     targets: [
         .target(
