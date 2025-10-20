@@ -50,5 +50,6 @@ public protocol ChainAssetIdProtocol {
 }
 
 public protocol ChainAssetProtocol {
-    
+    var chain: ChainProtocol { get }
+    var asset: AssetProtocol { get }
 }
