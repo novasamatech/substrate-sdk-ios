@@ -32,6 +32,14 @@ public extension ChainProtocol {
         
         return asset(for: utilityChainAssetId.assetId)
     }
+    
+    func utilityChainAsset() -> ChainAssetProtocol? {
+        guard let utilityChainAssetId = utilityChainAssetId() else {
+            return nil
+        }
+        
+        return chainAsset(for: utilityChainAssetId.assetId)
+    }
 }
 
 public protocol AssetProtocol {
