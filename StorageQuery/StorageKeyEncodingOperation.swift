@@ -8,8 +8,8 @@ public enum StorageKeyEncodingOperationError: Error {
     case invalidStoragePath
 }
 
-class UnkeyedEncodingOperation: BaseOperation<Data> {
-    var codingFactory: RuntimeCoderFactoryProtocol?
+public class UnkeyedEncodingOperation: BaseOperation<Data> {
+    public var codingFactory: RuntimeCoderFactoryProtocol?
 
     let path: StorageCodingPath
     let storageKeyFactory: StorageKeyFactoryProtocol
@@ -21,7 +21,7 @@ class UnkeyedEncodingOperation: BaseOperation<Data> {
         super.init()
     }
 
-    override func performAsync(_ callback: @escaping (Result<Data, Error>) -> Void) throws {
+    override public func performAsync(_ callback: @escaping (Result<Data, Error>) -> Void) throws {
         guard let factory = codingFactory else {
             throw StorageKeyEncodingOperationError.missingRequiredParams
         }
@@ -39,10 +39,10 @@ class UnkeyedEncodingOperation: BaseOperation<Data> {
     }
 }
 
-class MapKeyEncodingOperation<T: Encodable>: BaseOperation<[Data]> {
-    var keyParams: [T]?
-    var codingFactory: RuntimeCoderFactoryProtocol?
-    var paramEncoder: ((T) throws -> Data)?
+public class MapKeyEncodingOperation<T: Encodable>: BaseOperation<[Data]> {
+    public var keyParams: [T]?
+    public var codingFactory: RuntimeCoderFactoryProtocol?
+    public var paramEncoder: ((T) throws -> Data)?
 
     let path: StorageCodingPath
     let storageKeyFactory: StorageKeyFactoryProtocol
@@ -61,7 +61,7 @@ class MapKeyEncodingOperation<T: Encodable>: BaseOperation<[Data]> {
         super.init()
     }
 
-    override func performAsync(_ callback: @escaping (Result<[Data], Error>) -> Void) throws {
+    override public func performAsync(_ callback: @escaping (Result<[Data], Error>) -> Void) throws {
         guard let factory = codingFactory, let keyParams = keyParams else {
             throw StorageKeyEncodingOperationError.missingRequiredParams
         }
@@ -131,10 +131,10 @@ class MapKeyEncodingOperation<T: Encodable>: BaseOperation<[Data]> {
     }
 }
 
-class DoubleMapKeyEncodingOperation<T1: Encodable, T2: Encodable>: BaseOperation<[Data]> {
-    var keyParams1: [T1]?
-    var keyParams2: [T2]?
-    var codingFactory: RuntimeCoderFactoryProtocol?
+public class DoubleMapKeyEncodingOperation<T1: Encodable, T2: Encodable>: BaseOperation<[Data]> {
+    public var keyParams1: [T1]?
+    public var keyParams2: [T2]?
+    public var codingFactory: RuntimeCoderFactoryProtocol?
 
     let path: StorageCodingPath
     let storageKeyFactory: StorageKeyFactoryProtocol
@@ -160,7 +160,7 @@ class DoubleMapKeyEncodingOperation<T1: Encodable, T2: Encodable>: BaseOperation
         super.init()
     }
 
-    override func performAsync(_ callback: @escaping (Result<[Data], Error>) -> Void) throws {
+    override public func performAsync(_ callback: @escaping (Result<[Data], Error>) -> Void) throws {
         guard let factory = codingFactory,
               let keyParams1 = keyParams1,
               let keyParams2 = keyParams2,

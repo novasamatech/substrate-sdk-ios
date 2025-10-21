@@ -59,6 +59,11 @@ public extension Substrate {
     struct WeightV2: Codable, Equatable {
         @StringCodable public var refTime: BigUInt
         @StringCodable public var proofSize: BigUInt
+        
+        public init(refTime: BigUInt, proofSize: BigUInt) {
+            self.refTime = refTime
+            self.proofSize = proofSize
+        }
     }
 
     typealias Weight = WeightV2
