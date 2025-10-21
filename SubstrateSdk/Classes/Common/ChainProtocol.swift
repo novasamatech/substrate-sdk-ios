@@ -18,6 +18,7 @@ public protocol ChainProtocol {
     func asset(for assetId: AssetId) -> AssetProtocol?
     
     func chainAsset(for assetId: AssetId) -> ChainAssetProtocol?
+    func chainAssets() -> [ChainAssetProtocol]
     
     func address(for accountId: AccountId) throws -> AccountAddress
     
