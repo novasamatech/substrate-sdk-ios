@@ -15,6 +15,8 @@ public protocol ChainProtocol {
     
     var base58Prefix: UInt16 { get }
     
+    var isRelaychain: Bool { get }
+    
     func asset(for assetId: AssetId) -> AssetProtocol?
     
     func chainAsset(for assetId: AssetId) -> ChainAssetProtocol?
@@ -22,7 +24,7 @@ public protocol ChainProtocol {
     
     func address(for accountId: AccountId) throws -> AccountAddress
     
-    func utilityChainAssetId() -> ChainAssetIdProtocol?
+    func utilityChainAssetId() -> ChainAssetId?
 }
 
 public extension ChainProtocol {
@@ -53,13 +55,20 @@ public protocol AssetProtocol {
     var symbol: String { get }
 }
 
-public protocol ChainAssetIdProtocol {
-    var chainId: ChainId { get }
-    var assetId: AssetId { get }
+public struct ChainAssetId: Equatable, Codable, Hashable {
+    public let chainId: ChainId
+    public let assetId: AssetId
+
+    public var stringValue: String { "\(chainId)-\(assetId)" }
+
+    public init(chainId: ChainId, assetId: AssetId) {
+        self.chainId = chainId
+        self.assetId = assetId
+    }
 }
 
 public protocol ChainAssetProtocol {
     var chain: ChainProtocol { get }
     var asset: AssetProtocol { get }
-    var chainAssetId: ChainAssetIdProtocol { get }
+    var chainAssetId: ChainAssetId { get }
 }
