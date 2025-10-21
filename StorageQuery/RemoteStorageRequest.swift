@@ -13,6 +13,10 @@ public protocol RemoteStorageRequestProtocol {
 
 public struct UnkeyedRemoteStorageRequest: RemoteStorageRequestProtocol {
     public let storagePath: StorageCodingPath
+    
+    public init(storagePath: StorageCodingPath) {
+        self.storagePath = storagePath
+    }
 
     public func createKeyEncodingWrapper(
         using storageKeyFactory: StorageKeyFactoryProtocol,
@@ -34,6 +38,11 @@ public struct UnkeyedRemoteStorageRequest: RemoteStorageRequestProtocol {
 public struct MapRemoteStorageRequest<T: Encodable>: RemoteStorageRequestProtocol {
     public let storagePath: StorageCodingPath
     let keyParamClosure: () throws -> T
+    
+    public init(storagePath: StorageCodingPath, keyParamClosure: @escaping () throws -> T) {
+        self.storagePath = storagePath
+        self.keyParamClosure = keyParamClosure
+    }
 
     public func createKeyEncodingWrapper(
         using storageKeyFactory: StorageKeyFactoryProtocol,
@@ -70,6 +79,18 @@ public struct DoubleMapRemoteStorageRequest<T1: Encodable, T2: Encodable>: Remot
     let keyParamClosure: () throws -> (T1, T2)
     let param1Encoder: ((T1) throws -> Data)?
     let param2Encoder: ((T2) throws -> Data)?
+    
+    public init(
+        storagePath: StorageCodingPath,
+        keyParamClosure: @escaping () throws -> (T1, T2),
+        param1Encoder: ((T1) throws -> Data)? = nil,
+        param2Encoder: ((T2) throws -> Data)? = nil
+    ) {
+        self.storagePath = storagePath
+        self.keyParamClosure = keyParamClosure
+        self.param1Encoder = param1Encoder
+        self.param2Encoder = param2Encoder
+    }
 
     public func createKeyEncodingWrapper(
         using storageKeyFactory: StorageKeyFactoryProtocol,
