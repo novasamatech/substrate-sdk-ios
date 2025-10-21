@@ -17,6 +17,8 @@ public protocol ChainProtocol {
     
     var isRelaychain: Bool { get }
     
+    var isEthereumBased: Bool { get }
+    
     func asset(for assetId: AssetId) -> AssetProtocol?
     
     func chainAsset(for assetId: AssetId) -> ChainAssetProtocol?

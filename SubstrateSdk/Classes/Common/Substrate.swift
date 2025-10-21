@@ -28,7 +28,7 @@ public enum Substrate {
             }
         }
 
-        var isOk: Bool {
+        public var isOk: Bool {
             switch self {
             case .success:
                 return true
@@ -38,7 +38,7 @@ public enum Substrate {
         }
 
         @discardableResult
-        func ensureOkOrError(_ closure: (E) -> Error) throws -> T {
+        public func ensureOkOrError(_ closure: (E) -> Error) throws -> T {
             switch self {
             case let .success(model):
                 return model
