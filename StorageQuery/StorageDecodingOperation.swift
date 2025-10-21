@@ -25,11 +25,11 @@ public extension StorageDecodable {
     }
 }
 
-protocol StorageModifierHandling {
+public protocol StorageModifierHandling {
     func handleModifier(at path: StorageCodingPath, codingFactory: RuntimeCoderFactoryProtocol) throws -> JSON?
 }
 
-extension StorageModifierHandling {
+public extension StorageModifierHandling {
     func handleModifier(at path: StorageCodingPath, codingFactory: RuntimeCoderFactoryProtocol) throws -> JSON? {
         guard let entry = codingFactory.metadata.getStorageMetadata(
             in: path.moduleName,
@@ -48,11 +48,11 @@ extension StorageModifierHandling {
     }
 }
 
-class StorageJSONDecodingOperation: BaseOperation<JSON>, StorageDecodable {
-    var data: Data?
-    var codingFactory: RuntimeCoderFactoryProtocol?
+public class StorageJSONDecodingOperation: BaseOperation<JSON>, StorageDecodable {
+    public var data: Data?
+    public var codingFactory: RuntimeCoderFactoryProtocol?
 
-    let path: StorageCodingPath
+    public let path: StorageCodingPath
 
     public init(path: StorageCodingPath, data: Data? = nil) {
         self.path = path
@@ -61,7 +61,7 @@ class StorageJSONDecodingOperation: BaseOperation<JSON>, StorageDecodable {
         super.init()
     }
 
-    override func performAsync(_ callback: @escaping (Result<JSON, Error>) -> Void) throws {
+    override public func performAsync(_ callback: @escaping (Result<JSON, Error>) -> Void) throws {
         do {
             guard let data = data, let factory = codingFactory else {
                 throw StorageDecodingOperationError.missingRequiredParams
