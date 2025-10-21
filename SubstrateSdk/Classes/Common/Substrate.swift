@@ -54,6 +54,10 @@ public extension Substrate {
 
     struct WeightV1P5: Codable, Equatable {
         @StringCodable public var refTime: BigUInt
+        
+        public init(refTime: BigUInt) {
+            self.refTime = refTime
+        }
     }
 
     struct WeightV2: Codable, Equatable {
