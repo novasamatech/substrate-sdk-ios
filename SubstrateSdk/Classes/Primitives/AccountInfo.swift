@@ -5,7 +5,7 @@ public struct AccountInfo: Codable, Equatable {
     @StringCodable public var nonce: UInt32
     @OptionStringCodable public var consumers: UInt32?
     @OptionStringCodable public var providers: UInt32?
-    let data: AccountData
+    public let data: AccountData
 
     public var hasConsumers: Bool {
         (consumers ?? 0) > 0
