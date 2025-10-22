@@ -14,6 +14,9 @@ let package = Package(
             name: "SubstrateStorageQuery",
             targets: ["SubstrateStorageQuery"]),
         .library(
+            name: "SubstrateStorageSubscription",
+            targets: ["SubstrateStorageSubscription"]),
+        .library(
             name: "SubstrateMetadataHash",
             targets: ["SubstrateMetadataHash"]),
     ],
@@ -64,6 +67,15 @@ let package = Package(
                 .product(name: "Foundation-iOS", package: "Foundation-iOS")
             ],
             path: "StorageQuery"
+        ),
+        .target(
+            name: "SubstrateStorageSubscription",
+            dependencies: [
+                "SubstrateSdk",
+                "SubstrateStorageQuery",
+                .product(name: "Operation-iOS", package: "operation-ios")
+            ],
+            path: "StorageSubscription"
         ),
         .target(
             name: "TestHelpers",

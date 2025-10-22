@@ -1,0 +1,5 @@
+import Foundation
+import SubstrateSdk
+import SubstrateStorageQuery
+
+public typealias StorageSubscriptionUpdate = JSONRPCSubscriptionUpdate<StorageUpdate>
