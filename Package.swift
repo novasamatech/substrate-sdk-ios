@@ -34,7 +34,7 @@ let package = Package(
         .package(url: "https://github.com/novasamatech/keccak.c", exact: "0.1.3"),
         .package(url: "https://github.com/novasamatech/swift-scrypt", exact: "1.0.3"),
         .package(url: "https://github.com/novasamatech/metadata-shortener-ios", exact: "0.2.1"),
-        .package(url: "https://github.com/novasamatech/Foundation-iOS", revision: "ef3d17b3c1ad1177d8de274d609e3196bb0b5aa5"),
+        .package(url: "https://github.com/novasamatech/Foundation-iOS", revision: "edcae610fc79a087d3ccc04b5991616f38e5642f"),
     ],
     targets: [
         .target(
