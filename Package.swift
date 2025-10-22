@@ -17,12 +17,15 @@ let package = Package(
             name: "SubstrateStorageSubscription",
             targets: ["SubstrateStorageSubscription"]),
         .library(
+            name: "SubstrateStateCall",
+            targets: ["SubstrateStateCall"]),
+        .library(
             name: "SubstrateMetadataHash",
             targets: ["SubstrateMetadataHash"]),
     ],
     dependencies: [
         .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.3.0"),
-        .package(url: "https://github.com/novasamatech/Operation-iOS", exact: "2.3.0"),
+        .package(url: "https://github.com/novasamatech/Operation-iOS", revision: "61d8d059c9c02ccde1afc35ed1023fd704808091"),
         .package(url: "https://github.com/ashleymills/Reachability.swift", exact: "5.2.4"),
         .package(url: "https://github.com/novasamatech/Starscream.git", exact: "4.0.13"),
         .package(url: "https://github.com/bitmark-inc/tweetnacl-swiftwrap", exact: "1.1.0"),
@@ -31,7 +34,7 @@ let package = Package(
         .package(url: "https://github.com/novasamatech/keccak.c", exact: "0.1.3"),
         .package(url: "https://github.com/novasamatech/swift-scrypt", exact: "1.0.3"),
         .package(url: "https://github.com/novasamatech/metadata-shortener-ios", exact: "0.2.1"),
-        .package(url: "https://github.com/novasamatech/Foundation-iOS", exact: "1.3.0"),
+        .package(url: "https://github.com/novasamatech/Foundation-iOS", revision: "ef3d17b3c1ad1177d8de274d609e3196bb0b5aa5"),
     ],
     targets: [
         .target(
@@ -73,9 +76,18 @@ let package = Package(
             dependencies: [
                 "SubstrateSdk",
                 "SubstrateStorageQuery",
-                .product(name: "Operation-iOS", package: "operation-ios")
+                .product(name: "Operation-iOS", package: "operation-ios"),
+                .product(name: "Foundation-iOS", package: "Foundation-iOS")
             ],
             path: "StorageSubscription"
+        ),
+        .target(
+            name: "SubstrateStateCall",
+            dependencies: [
+                "SubstrateSdk",
+                .product(name: "Operation-iOS", package: "operation-ios")
+            ],
+            path: "StateCall"
         ),
         .target(
             name: "TestHelpers",
