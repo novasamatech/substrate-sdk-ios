@@ -2,6 +2,7 @@ import Foundation
 import BigInt
 
 public typealias BlockHash = String
+public typealias BlockHashData = Data
 public typealias ExtrinsicHash = String
 public typealias ExtrinsicIndex = UInt32
 public typealias AccountId = Data
