@@ -203,12 +203,11 @@ public final class CallbackBatchStorageSubscription<T: BatchStorageSubscriptionR
         previousOperation = mergeOperation
 
         mergeOperation.completionBlock = { [weak self] in
-            do {
-                let value = try mergeOperation.extractNoCancellableResultData()
-                self?.notify(result: .success(value))
-            } catch {
-                self?.notify(result: .failure(error))
+            let result = Result {
+                try mergeOperation.extractNoCancellableResultData()
             }
+            
+            self?.notify(result: result)
         }
 
         let operations = [codingFactoryOperation] + decodingOperations + [mergeOperation]

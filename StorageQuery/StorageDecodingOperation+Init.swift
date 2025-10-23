@@ -67,12 +67,10 @@ public extension PrimitiveConstantOperation {
         let mappingOperation = ClosureOperation<T?> {
             do {
                 return try fetchWrapper.targetOperation.extractNoCancellableResultData()
+            } catch StorageDecodingOperationError.invalidStoragePath {
+                return nil
             } catch {
-                if let storageError = error as? StorageDecodingOperationError, storageError == .invalidStoragePath {
-                    return nil
-                } else {
-                    throw error
-                }
+                throw error
             }
         }
 
