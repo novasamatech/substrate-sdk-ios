@@ -1,8 +1,11 @@
 import Foundation
 import Operation_iOS
 import SubstrateSdk
+import SubstrateStorageQuery
 
-public protocol RemoteStorageRequestProtocol {
+public protocol SubscriptionRequestProtocol {
+    var localKey: String { get }
+
     var storagePath: StorageCodingPath { get }
 
     func createKeyEncodingWrapper(
@@ -11,11 +14,13 @@ public protocol RemoteStorageRequestProtocol {
     ) -> CompoundOperationWrapper<Data>
 }
 
-public struct UnkeyedRemoteStorageRequest: RemoteStorageRequestProtocol {
+public struct UnkeyedSubscriptionRequest: SubscriptionRequestProtocol {
     public let storagePath: StorageCodingPath
+    public let localKey: String
     
-    public init(storagePath: StorageCodingPath) {
+    public init(storagePath: StorageCodingPath, localKey: String) {
         self.storagePath = storagePath
+        self.localKey = localKey
     }
 
     public func createKeyEncodingWrapper(
@@ -35,20 +40,34 @@ public struct UnkeyedRemoteStorageRequest: RemoteStorageRequestProtocol {
     }
 }
 
-public struct MapRemoteStorageRequest<T: Encodable>: RemoteStorageRequestProtocol {
+public struct MapSubscriptionRequest<T: Encodable>: SubscriptionRequestProtocol {
     public let storagePath: StorageCodingPath
-    let keyParamClosure: () throws -> T
-    
-    public init(storagePath: StorageCodingPath, keyParamClosure: @escaping () throws -> T) {
+    public let localKey: String
+    public let keyParamClosure: () throws -> T
+    public let paramEncoder: ((T) throws -> Data)?
+
+    public init(
+        storagePath: StorageCodingPath,
+        localKey: String,
+        keyParamClosure: @escaping () throws -> T,
+        paramEncoder: ((T) throws -> Data)? = nil
+    ) {
         self.storagePath = storagePath
+        self.localKey = localKey
         self.keyParamClosure = keyParamClosure
+        self.paramEncoder = paramEncoder
     }
 
     public func createKeyEncodingWrapper(
         using storageKeyFactory: StorageKeyFactoryProtocol,
         codingFactoryClosure: @escaping () throws -> RuntimeCoderFactoryProtocol
     ) -> CompoundOperationWrapper<Data> {
-        let encodingOperation = MapKeyEncodingOperation<T>(path: storagePath, storageKeyFactory: storageKeyFactory)
+        let encodingOperation = MapKeyEncodingOperation<T>(
+            path: storagePath,
+            storageKeyFactory: storageKeyFactory,
+            paramEncoder: paramEncoder
+        )
+
         encodingOperation.configurationBlock = {
             do {
                 let keyParam = try keyParamClosure()
@@ -74,19 +93,22 @@ public struct MapRemoteStorageRequest<T: Encodable>: RemoteStorageRequestProtoco
     }
 }
 
-public struct DoubleMapRemoteStorageRequest<T1: Encodable, T2: Encodable>: RemoteStorageRequestProtocol {
+public struct DoubleMapSubscriptionRequest<T1: Encodable, T2: Encodable>: SubscriptionRequestProtocol {
     public let storagePath: StorageCodingPath
-    let keyParamClosure: () throws -> (T1, T2)
-    let param1Encoder: ((T1) throws -> Data)?
-    let param2Encoder: ((T2) throws -> Data)?
-    
+    public let localKey: String
+    public let keyParamClosure: () throws -> (T1, T2)
+    public let param1Encoder: ((T1) throws -> Data)?
+    public let param2Encoder: ((T2) throws -> Data)?
+
     public init(
         storagePath: StorageCodingPath,
+        localKey: String,
         keyParamClosure: @escaping () throws -> (T1, T2),
         param1Encoder: ((T1) throws -> Data)? = nil,
         param2Encoder: ((T2) throws -> Data)? = nil
     ) {
         self.storagePath = storagePath
+        self.localKey = localKey
         self.keyParamClosure = keyParamClosure
         self.param1Encoder = param1Encoder
         self.param2Encoder = param2Encoder

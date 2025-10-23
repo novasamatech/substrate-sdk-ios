@@ -11,9 +11,9 @@ public protocol NMapKeyStorageKeyProtocol {
 }
 
 public final class NMapKeyEncodingOperation: BaseOperation<[Data]> {
-    var keys: [NMapKeyStorageKeyProtocol]?
+    public var keys: [NMapKeyStorageKeyProtocol]?
 
-    var codingFactory: RuntimeCoderFactoryProtocol?
+    public var codingFactory: RuntimeCoderFactoryProtocol?
 
     let path: StorageCodingPath
     let storageKeyFactory: StorageKeyFactoryProtocol

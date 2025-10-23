@@ -6,16 +6,21 @@ public struct StorageUpdate: Decodable {
         case changes
     }
 
-    let blockHash: String?
-    let changes: [[String?]]?
+    public let blockHash: String?
+    public let changes: [[String?]]?
+    
+    public init(blockHash: String?, changes: [[String?]]?) {
+        self.blockHash = blockHash
+        self.changes = changes
+    }
 }
 
 public struct StorageUpdateData {
     public struct StorageUpdateChangeData {
-        let key: Data
-        let value: Data?
+        public let key: Data
+        public let value: Data?
 
-        init?(change: [String?]) {
+        public init?(change: [String?]) {
             guard change.count == 2 else {
                 return nil
             }
@@ -34,8 +39,8 @@ public struct StorageUpdateData {
         }
     }
 
-    let blockHash: Data?
-    let changes: [StorageUpdateChangeData]
+    public let blockHash: Data?
+    public let changes: [StorageUpdateChangeData]
 
     public init(update: StorageUpdate) {
         if
@@ -49,7 +54,7 @@ public struct StorageUpdateData {
         changes = update.changes?.compactMap { StorageUpdateChangeData(change: $0) } ?? []
     }
 
-    func getChangesOrdered(by keys: [Data]) -> [StorageUpdateChangeData] {
+    public func getChangesOrdered(by keys: [Data]) -> [StorageUpdateChangeData] {
         let keyedChanges = changes.reduce(into: [Data: StorageUpdateChangeData]()) { accum, change in
             accum[change.key] = change
         }

@@ -8,8 +8,8 @@ enum StorageKeysRPCMethod {
     public static let getStorageKeys = "state_getKeys"
 }
 
-final class StorageKeysQueryService<T>: Longrunable {
-    typealias ResultType = [T]
+public final class StorageKeysQueryService<T>: Longrunable {
+    public typealias ResultType = [T]
 
     enum State {
         case none
@@ -35,7 +35,7 @@ final class StorageKeysQueryService<T>: Longrunable {
     private weak var currentOperation: Operation?
     private var mutex = NSLock()
 
-    init(
+    public init(
         connection: JSONRPCEngine,
         operationManager: OperationManagerProtocol,
         prefixKeyClosure: @escaping () throws -> Data,
@@ -154,7 +154,7 @@ final class StorageKeysQueryService<T>: Longrunable {
         closure?(.failure(error))
     }
 
-    func start(with completionClosure: @escaping (Result<ResultType, Error>) -> Void) {
+    public func start(with completionClosure: @escaping (Result<ResultType, Error>) -> Void) {
         mutex.lock()
 
         defer {
@@ -172,7 +172,7 @@ final class StorageKeysQueryService<T>: Longrunable {
         loadNext()
     }
 
-    func cancel() {
+    public func cancel() {
         mutex.lock()
 
         defer {
@@ -188,7 +188,7 @@ final class StorageKeysQueryService<T>: Longrunable {
 }
 
 extension StorageKeysQueryService {
-    func longrunOperation() -> LongrunOperation<[T]> {
+    public func longrunOperation() -> LongrunOperation<[T]> {
         LongrunOperation(longrun: AnyLongrun(longrun: self))
     }
 }
