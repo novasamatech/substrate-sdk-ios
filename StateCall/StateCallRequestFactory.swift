@@ -21,6 +21,10 @@ public struct StateCallResultFromTypeNameDecoder<T: Decodable>: StateCallResultD
     public typealias Result = T
 
     let typeName: String
+    
+    public init(typeName: String) {
+        self.typeName = typeName
+    }
 
     public func decode(data: Data, using codingFactory: RuntimeCoderFactoryProtocol) throws -> T {
         let decoder = try codingFactory.createDecoder(from: data)
@@ -35,6 +39,8 @@ public struct StateCallResultFromTypeNameDecoder<T: Decodable>: StateCallResultD
 public struct StateCallResultFromScaleTypeDecoder<T: ScaleCodable>: StateCallResultDecoding, StateCallStaticResultDecoding {
     public typealias Result = T
 
+    public init() {}
+    
     public func decode(data: Data, using codingFactory: RuntimeCoderFactoryProtocol) throws -> T {
         let decoder = try codingFactory.createDecoder(from: data)
 
@@ -50,6 +56,8 @@ public struct StateCallResultFromScaleTypeDecoder<T: ScaleCodable>: StateCallRes
 public struct StateCallRawDataDecoder: StateCallResultDecoding, StateCallStaticResultDecoding {
     public typealias Result = Data
 
+    public init() {}
+    
     public func decode(data: Data, using _: RuntimeCoderFactoryProtocol) throws -> Data {
         data
     }
