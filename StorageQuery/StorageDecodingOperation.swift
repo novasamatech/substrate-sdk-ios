@@ -76,10 +76,10 @@ public class StorageJSONDecodingOperation: BaseOperation<JSON>, StorageDecodable
 }
 
 public final class StorageDecodingOperation<T: Decodable>: BaseOperation<T>, StorageDecodable {
-    var data: Data?
-    var codingFactory: RuntimeCoderFactoryProtocol?
+    public var data: Data?
+    public var codingFactory: RuntimeCoderFactoryProtocol?
 
-    let path: StorageCodingPath
+    public let path: StorageCodingPath
 
     public init(path: StorageCodingPath, data: Data? = nil) {
         self.path = path
@@ -104,10 +104,10 @@ public final class StorageDecodingOperation<T: Decodable>: BaseOperation<T>, Sto
 
 public final class StorageFallbackDecodingOperation<T: Decodable>: BaseOperation<T?>,
     StorageDecodable, StorageModifierHandling {
-    var data: Data?
-    var codingFactory: RuntimeCoderFactoryProtocol?
+    public var data: Data?
+    public var codingFactory: RuntimeCoderFactoryProtocol?
 
-    let path: StorageCodingPath
+    public let path: StorageCodingPath
 
     public init(path: StorageCodingPath, data: Data? = nil) {
         self.path = path
@@ -137,10 +137,10 @@ public final class StorageFallbackDecodingOperation<T: Decodable>: BaseOperation
 }
 
 public final class StorageDecodingListOperation<T: Decodable>: BaseOperation<[T]>, StorageDecodable {
-    var dataList: [Data]?
-    var codingFactory: RuntimeCoderFactoryProtocol?
+    public var dataList: [Data]?
+    public var codingFactory: RuntimeCoderFactoryProtocol?
 
-    let path: StorageCodingPath
+    public let path: StorageCodingPath
 
     public init(path: StorageCodingPath, dataList: [Data]? = nil) {
         self.path = path
@@ -168,11 +168,11 @@ public final class StorageDecodingListOperation<T: Decodable>: BaseOperation<[T]
 
 public final class StorageFallbackDecodingListOperation<T: Decodable>: BaseOperation<[T?]>,
     StorageDecodable, StorageModifierHandling {
-    var dataList: [Data?]?
-    var codingFactory: RuntimeCoderFactoryProtocol?
-    var ignoresFailedItems: Bool
+    public var dataList: [Data?]?
+    public var codingFactory: RuntimeCoderFactoryProtocol?
+    public var ignoresFailedItems: Bool
 
-    let path: StorageCodingPath
+    public let path: StorageCodingPath
 
     public init(path: StorageCodingPath, dataList: [Data?]? = nil, ignoresFailedItems: Bool = false) {
         self.path = path
@@ -230,9 +230,9 @@ extension ConstantDecodable {
 public final class StorageConstantOperation<T: Decodable>: BaseOperation<T>, ConstantDecodable {
     public var codingFactory: RuntimeCoderFactoryProtocol?
 
-    let path: ConstantCodingPath
+    public let path: ConstantCodingPath
 
-    let fallbackValue: T?
+    public let fallbackValue: T?
 
     public init(path: ConstantCodingPath, fallbackValue: T? = nil) {
         self.path = path
@@ -265,9 +265,9 @@ public final class StorageConstantOperation<T: Decodable>: BaseOperation<T>, Con
 public final class PrimitiveConstantOperation<T: LosslessStringConvertible & Equatable>: BaseOperation<T>, ConstantDecodable {
     public var codingFactory: RuntimeCoderFactoryProtocol?
 
-    let oneOfPaths: [ConstantCodingPath]
+    public let oneOfPaths: [ConstantCodingPath]
 
-    let fallbackValue: T?
+    public let fallbackValue: T?
 
     public init(path: ConstantCodingPath, fallbackValue: T? = nil) {
         oneOfPaths = [path]
@@ -308,10 +308,10 @@ public final class PrimitiveConstantOperation<T: LosslessStringConvertible & Equ
 }
 
 public final class StorageDecodingOptionalListOperation<T: Decodable>: BaseOperation<[T?]>, StorageDecodable {
-    var dataList: [Data?]
-    var codingFactory: RuntimeCoderFactoryProtocol?
+    public var dataList: [Data?]
+    public var codingFactory: RuntimeCoderFactoryProtocol?
 
-    let path: StorageCodingPath
+    public let path: StorageCodingPath
 
     public init(path: StorageCodingPath, dataList: [Data?]) {
         self.path = path
