@@ -90,7 +90,7 @@ public protocol AssetProtocol {
     
     var isUtility: Bool { get }
     
-    var decimalPrecision: UInt16 { get }
+    var decimalPrecision: Int16 { get }
     
     var symbol: String { get }
 }
