@@ -1,7 +1,7 @@
 import Foundation
 
 public enum SystemPallet {
-    static let name = "System"
+    public static let name = "System"
 }
 
 public extension SystemPallet {
@@ -25,5 +25,9 @@ public extension SystemPallet {
 
     static var accountPath: StorageCodingPath {
         StorageCodingPath(moduleName: name, itemName: "Account")
+    }
+    
+    static var blockHashCount: ConstantCodingPath {
+        ConstantCodingPath(moduleName: name, constantName: "BlockHashCount")
     }
 }
