@@ -8,7 +8,7 @@ public final class DefaultSigningWrapperFactory {
     }
 }
 
-extension DefaultSigningWrapper: SigningWrapperFactoryProtocol {
+extension DefaultSigningWrapperFactory: SigningWrapperFactoryProtocol {
     public func createSigningWrapper(for account: AccountProtocol) -> SigningWrapperProtocol {
         DefaultSigningWrapper(secretProvider: secretProvider)
     }
