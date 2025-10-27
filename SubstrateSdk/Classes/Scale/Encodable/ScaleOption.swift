@@ -4,7 +4,7 @@ public enum ScaleOption<T: ScaleCodable> {
     case none
     case some(value: T)
 
-    init(value: T?) {
+    public init(value: T?) {
         if let value = value {
             self = .some(value: value)
         } else {
@@ -12,7 +12,7 @@ public enum ScaleOption<T: ScaleCodable> {
         }
     }
 
-    var value: T? {
+    public var value: T? {
         switch self {
         case .none:
             return nil
