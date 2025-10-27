@@ -23,11 +23,11 @@ public protocol ChainProtocol {
     
     var isEthereumBased: Bool { get }
     
-    func asset(for assetId: AssetId) -> AssetProtocol?
+    func assetInteface(for assetId: AssetId) -> AssetProtocol?
     
-    func chainAsset(for assetId: AssetId) -> ChainAssetProtocol?
+    func chainAssetInterface(for assetId: AssetId) -> ChainAssetProtocol?
     
-    func chainAssets() -> [ChainAssetProtocol]
+    func chainAssetsInterface() -> [ChainAssetProtocol]
     
     func address(for accountId: AccountId) throws -> AccountAddress
     
@@ -35,40 +35,40 @@ public protocol ChainProtocol {
 }
 
 public extension ChainProtocol {
-    func utilityAsset() -> AssetProtocol? {
+    func utilityAssetInterface() -> AssetProtocol? {
         guard let utilityChainAssetId = utilityChainAssetId() else {
             return nil
         }
         
-        return asset(for: utilityChainAssetId.assetId)
+        return assetInteface(for: utilityChainAssetId.assetId)
     }
     
-    func utilityChainAsset() -> ChainAssetProtocol? {
+    func utilityChainAssetInterface() -> ChainAssetProtocol? {
         guard let utilityChainAssetId = utilityChainAssetId() else {
             return nil
         }
         
-        return chainAsset(for: utilityChainAssetId.assetId)
+        return chainAssetInterface(for: utilityChainAssetId.assetId)
     }
     
     var accountIdSize: Int {
         isEthereumBased ? 20 : 32
     }
 
-    func chainAssetForSymbol(_ symbol: String) -> ChainAssetProtocol? {
-        chainAssets().first { $0.asset.symbol == symbol }
+    func chainAssetInterfaceForSymbol(_ symbol: String) -> ChainAssetProtocol? {
+        chainAssetsInterface().first { $0.assetInterface.symbol == symbol }
     }
 
-    func chainAssetOrError(for assetId: AssetId) throws -> ChainAssetProtocol {
-        guard let chainAsset = chainAsset(for: assetId) else {
+    func chainAssetInterfaceOrError(for assetId: AssetId) throws -> ChainAssetProtocol {
+        guard let chainAsset = chainAssetInterface(for: assetId) else {
             throw ChainError.noAsset(assetId: assetId)
         }
 
         return chainAsset
     }
 
-    func utilityChainAssetOrError() throws -> ChainAssetProtocol {
-        guard let nativeAsset = utilityChainAsset() else {
+    func utilityChainAssetInterfaceOrError() throws -> ChainAssetProtocol {
+        guard let nativeAsset = utilityChainAssetInterface() else {
             throw ChainError.noUtilityAsset
         }
 
@@ -108,7 +108,7 @@ public struct ChainAssetId: Equatable, Codable, Hashable {
 }
 
 public protocol ChainAssetProtocol {
-    var chain: ChainProtocol { get }
-    var asset: AssetProtocol { get }
+    var chainInterface: ChainProtocol { get }
+    var assetInterface: AssetProtocol { get }
     var chainAssetId: ChainAssetId { get }
 }

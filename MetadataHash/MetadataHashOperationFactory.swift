@@ -59,7 +59,7 @@ public final class MetadataHashOperationFactory {
                 )
             }
 
-            guard let utilityAsset = chain.utilityAsset() else {
+            guard let utilityAsset = chain.utilityAssetInterface() else {
                 throw CommonMetadataShortenerError.missingNativeAsset
             }
 
