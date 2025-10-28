@@ -1,6 +1,7 @@
 import Foundation
 import Operation_iOS
 import Starscream
+import SDKLogger
 
 public protocol WebSocketConnectionProtocol: WebSocketClient {
     var callbackQueue: DispatchQueue { get }

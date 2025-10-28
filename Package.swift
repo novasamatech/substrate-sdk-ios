@@ -35,6 +35,7 @@ let package = Package(
         .package(url: "https://github.com/novasamatech/swift-scrypt", exact: "1.0.3"),
         .package(url: "https://github.com/novasamatech/metadata-shortener-ios", exact: "0.2.1"),
         .package(url: "https://github.com/novasamatech/Foundation-iOS", exact: "1.3.1"),
+        .package(url: "https://github.com/novasamatech/logger-ios", revision: "cafece8626141b4430ddc8d5288d3444abd122de")
     ],
     targets: [
         .target(
@@ -49,6 +50,7 @@ let package = Package(
                 .product(name: "xxHash-Swift", package: "xxHash-Swift"),
                 .product(name: "keccak", package: "keccak.c"),
                 .product(name: "Scrypt", package: "swift-scrypt"),
+                .product(name: "SDKLogger", package: "logger-ios")
             ],
             path: "SubstrateSdk/Classes"
         ),
@@ -59,6 +61,7 @@ let package = Package(
                 .product(name: "Operation-iOS", package: "operation-ios"),
                 .product(name: "Foundation-iOS", package: "Foundation-iOS"),
                 .product(name: "MetadataShortenerApi", package: "metadata-shortener-ios"),
+                .product(name: "SDKLogger", package: "logger-ios")
             ],
             path: "MetadataHash"
         ),
@@ -67,7 +70,8 @@ let package = Package(
             dependencies: [
                 "SubstrateSdk",
                 .product(name: "Operation-iOS", package: "operation-ios"),
-                .product(name: "Foundation-iOS", package: "Foundation-iOS")
+                .product(name: "Foundation-iOS", package: "Foundation-iOS"),
+                .product(name: "SDKLogger", package: "logger-ios")
             ],
             path: "StorageQuery"
         ),
@@ -77,7 +81,8 @@ let package = Package(
                 "SubstrateSdk",
                 "SubstrateStorageQuery",
                 .product(name: "Operation-iOS", package: "operation-ios"),
-                .product(name: "Foundation-iOS", package: "Foundation-iOS")
+                .product(name: "Foundation-iOS", package: "Foundation-iOS"),
+                .product(name: "SDKLogger", package: "logger-ios")
             ],
             path: "StorageSubscription"
         ),
@@ -85,7 +90,8 @@ let package = Package(
             name: "SubstrateStateCall",
             dependencies: [
                 "SubstrateSdk",
-                .product(name: "Operation-iOS", package: "operation-ios")
+                .product(name: "Operation-iOS", package: "operation-ios"),
+                .product(name: "SDKLogger", package: "logger-ios")
             ],
             path: "StateCall"
         ),
