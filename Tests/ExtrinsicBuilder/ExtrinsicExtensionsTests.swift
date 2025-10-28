@@ -11,7 +11,7 @@ class ExtrinsicExtensionsTests: XCTestCase {
     func testChargeAssetExtension() throws {
         let expected = "0x45028400fdc41550fb5186d71cae699c31731b3e1baa10680c7bd6b3831a6d222cf4d1680045ba1f9d291fff7dddf36f7ec060405d5e87ac8fab8832cfcc66858e6975141748ce89c41bda6c3a84204d3c6f929b928702168ca38bbed69b172044b599a10ab5038800000a0000bcc5ecf679ebd776866a04c212a4ec5dc45cefab57d7aa858c389844e212693f0700e40b5402"
 
-        let extrinsicExtension = TransactionExtension.ChargeAssetTxPayment()
+        let extrinsicExtension = TransactionExtension.ChargeAssetTxPayment<JSON>()
         let extensionCoder = DefaultTransactionExtensionCoder(
             txExtensionId: extrinsicExtension.txExtensionId,
             extensionExplicitType: "pallet_asset_tx_payment.ChargeAssetTxPayment"

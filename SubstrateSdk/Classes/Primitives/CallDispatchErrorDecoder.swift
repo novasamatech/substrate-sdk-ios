@@ -1,4 +1,5 @@
 import Foundation
+import SDKLogger
 
 public protocol CallDispatchErrorDecoding {
     func decode(
