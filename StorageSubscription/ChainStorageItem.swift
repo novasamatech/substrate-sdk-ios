@@ -2,7 +2,7 @@ import Foundation
 import Operation_iOS
 
 public struct ChainStorageItem: Codable, Identifiable, Equatable {
-    enum CodingKeys: String, CodingKey {
+    public enum CodingKeys: String, CodingKey {
         case identifier
         case data
     }

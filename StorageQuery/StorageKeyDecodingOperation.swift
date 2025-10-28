@@ -10,10 +10,10 @@ public enum StorageKeyDecodingError: Error {
 }
 
 public final class StorageKeyDecodingOperation<T: JSONListConvertible>: BaseOperation<[T]> {
-    let path: StorageCodingPath
+    public let path: StorageCodingPath
 
-    var codingFactory: RuntimeCoderFactoryProtocol?
-    var dataList: [Data]?
+    public var codingFactory: RuntimeCoderFactoryProtocol?
+    public var dataList: [Data]?
 
     public init(
         path: StorageCodingPath,

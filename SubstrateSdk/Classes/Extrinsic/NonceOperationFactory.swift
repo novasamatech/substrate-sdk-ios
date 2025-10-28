@@ -12,7 +12,7 @@ public final class SubstrateNonceOperationFactory {
     let connection: JSONRPCEngine
     let timeout: Int
 
-    init(chain: ChainProtocol, connection: JSONRPCEngine, timeout: Int) {
+    public init(chain: ChainProtocol, connection: JSONRPCEngine, timeout: Int) {
         self.chain = chain
         self.connection = connection
         self.timeout = timeout
