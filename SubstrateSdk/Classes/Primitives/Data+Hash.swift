@@ -42,8 +42,16 @@ public extension Data {
     func blake2b16() throws -> Data {
         try (self as NSData).blake2b(16)
     }
+    
+    func blake2b16WithKey(_ key: Data) throws -> Data {
+        try (self as NSData).blake2b(16, key: key)
+    }
 
     func blake2b32() throws -> Data {
         try (self as NSData).blake2b(32)
+    }
+    
+    func blake2b32WithKey(_ key: Data) throws -> Data {
+        try (self as NSData).blake2b(32, key: key)
     }
 }
