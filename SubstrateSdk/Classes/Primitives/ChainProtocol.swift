@@ -95,7 +95,7 @@ public protocol AssetProtocol {
     var symbol: String { get }
 }
 
-public struct ChainAssetId: Equatable, Codable, Hashable {
+public struct ChainAssetId: Equatable, Codable, Hashable, Sendable {
     public let chainId: ChainId
     public let assetId: AssetId
 

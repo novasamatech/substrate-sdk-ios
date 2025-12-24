@@ -5,7 +5,7 @@ public enum ScaleBoolOption: CaseIterable {
     case valueTrue
     case valueFalse
 
-    init(value: Bool?) {
+    public init(value: Bool?) {
         if let value = value {
             self = value ? .valueTrue : .valueFalse
         } else {
@@ -13,7 +13,7 @@ public enum ScaleBoolOption: CaseIterable {
         }
     }
 
-    var value: Bool? {
+    public var value: Bool? {
         switch self {
         case .none:
             return nil
