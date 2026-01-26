@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol AccountProtocol {
+public protocol AccountProtocol: SignerProviding {
     var accountId: AccountId { get }
     var publicKey: Data { get }
     var signatureFormat: ExtrinsicSignatureFormat { get }
@@ -8,4 +8,10 @@ public protocol AccountProtocol {
     var signatureType: CryptoType { get }
     
     func toAddress() throws -> AccountAddress
+}
+
+public extension AccountProtocol {
+    var account: AccountProtocol? {
+        self
+    }
 }
