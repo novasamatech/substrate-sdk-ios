@@ -3,8 +3,8 @@ import Foundation
 public extension Substrate {
     enum DispatchCallError: Error {
         public struct ModuleRawError {
-            let moduleIndex: UInt8
-            let error: Data
+            public let moduleIndex: UInt8
+            public let error: Data
             
             public init(moduleIndex: UInt8, error: Data) {
                 self.moduleIndex = moduleIndex
@@ -13,8 +13,8 @@ public extension Substrate {
         }
 
         public struct ModuleDisplayError {
-            let moduleName: String
-            let errorName: String
+            public let moduleName: String
+            public let errorName: String
             
             public init(moduleName: String, errorName: String) {
                 self.moduleName = moduleName
@@ -23,8 +23,8 @@ public extension Substrate {
         }
 
         public struct ModuleError {
-            let raw: ModuleRawError
-            let display: ModuleDisplayError
+            public let raw: ModuleRawError
+            public let display: ModuleDisplayError
             
             public init(raw: ModuleRawError, display: ModuleDisplayError) {
                 self.raw = raw
@@ -33,8 +33,8 @@ public extension Substrate {
         }
 
         public struct Other {
-            let module: String
-            let reason: String?
+            public let module: String
+            public let reason: String?
             
             public init(module: String, reason: String?) {
                 self.module = module
