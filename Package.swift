@@ -24,7 +24,7 @@ let package = Package(
             targets: ["SubstrateMetadataHash"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.4.0"),
+        .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.4.1"),
         .package(url: "https://github.com/novasamatech/Operation-iOS", exact: "2.4.0"),
         .package(url: "https://github.com/ashleymills/Reachability.swift", exact: "5.2.4"),
         .package(url: "https://github.com/novasamatech/Starscream.git", exact: "4.0.13"),

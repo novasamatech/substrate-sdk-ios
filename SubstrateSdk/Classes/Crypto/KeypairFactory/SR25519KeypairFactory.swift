@@ -18,6 +18,17 @@ public struct SR25519KeypairFactory: DerivableKeypairFactoryProtocol {
         )
         return try deriveChildKeypairFromParent(parentKeypair, chaincodeList: chaincodeList)
     }
+    
+    public func createKeypairFromSecret(_ secret: Data) throws -> SNKeypairProtocol {
+        let publicKey = try createPublicKeyFromSecret(secret)
+        let privateKey = try SNPrivateKey(rawData: secret)
+        
+        return SNKeypair(privateKey: privateKey, publicKey: publicKey)
+    }
+    
+    public func createPublicKeyFromSecret(_ secret: Data) throws -> SNPublicKey {
+        try internalFactory.createPublicKey(fromSecret: secret)
+    }
 
     public func deriveChildKeypairFromParent(
         _ keypair: IRCryptoKeypairProtocol,
