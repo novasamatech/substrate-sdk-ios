@@ -8,7 +8,7 @@ extension BigUInt: LosslessStringConvertible {
 }
 
 @propertyWrapper
-public struct BytesCodable: Codable, Equatable {
+public struct BytesCodable: Codable, Hashable {
     public var wrappedValue: Data
 
     public init(wrappedValue: Data) {
@@ -34,7 +34,7 @@ public struct BytesCodable: Codable, Equatable {
 }
 
 @propertyWrapper
-public struct StringCodable<T: LosslessStringConvertible & Equatable>: Codable, Equatable {
+public struct StringCodable<T: LosslessStringConvertible & Hashable>: Codable, Hashable {
     public var wrappedValue: T
 
     public init(wrappedValue: T) {
@@ -60,7 +60,7 @@ public struct StringCodable<T: LosslessStringConvertible & Equatable>: Codable, 
 }
 
 @propertyWrapper
-public struct OptionStringCodable<T: LosslessStringConvertible & Equatable>: Codable, Equatable {
+public struct OptionStringCodable<T: LosslessStringConvertible & Hashable>: Codable, Hashable {
     public var wrappedValue: T?
 
     public init(wrappedValue: T?) {
@@ -138,3 +138,5 @@ public struct NullCodable<T: Codable>: Codable {
 }
 
 extension NullCodable: Equatable where T: Equatable {}
+
+extension NullCodable: Hashable where T: Hashable {}
