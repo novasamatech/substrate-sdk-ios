@@ -121,7 +121,11 @@ class JSONRPCRequestFactory {
         var targetId = (1 ... UInt16.max).randomElement() ?? 1
 
         while existingIds.contains(targetId) {
-            targetId += 1
+            if targetId == UInt16.max {
+                targetId = 1
+            } else {
+                targetId += 1
+            }
         }
 
         return targetId

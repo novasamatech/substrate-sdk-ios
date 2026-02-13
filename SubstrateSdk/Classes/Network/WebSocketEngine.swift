@@ -481,7 +481,10 @@ extension WebSocketEngine {
     }
 
     func generateRequestId() -> UInt16 {
-        let pendingItems = pendingRequests.flatMap(\.requestId.itemIds) + inProgressRequests.map(\.key)
+        let pendingItems = pendingRequests.flatMap(\.requestId.itemIds) +
+            inProgressRequests.map(\.key) +
+            Array(subscriptions.keys)
+        
         let partialBatches = partialBatches.values.flatMap { batch in
             batch.map(\.requestId)
         }
