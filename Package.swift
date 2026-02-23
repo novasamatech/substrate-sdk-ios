@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "SubstrateSdk",
-    platforms: [.iOS(.v14)],
+    platforms: [.iOS(.v15)],
     products: [
         .library(
             name: "SubstrateSdk",
@@ -25,7 +25,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.4.1"),
-        .package(url: "https://github.com/novasamatech/Operation-iOS", exact: "2.4.0"),
+        .package(url: "https://github.com/novasamatech/Operation-iOS", branch: "feature/history-tracking"),
         .package(url: "https://github.com/ashleymills/Reachability.swift", exact: "5.2.4"),
         .package(url: "https://github.com/novasamatech/Starscream.git", exact: "4.0.13"),
         .package(url: "https://github.com/bitmark-inc/tweetnacl-swiftwrap", exact: "1.1.0"),
