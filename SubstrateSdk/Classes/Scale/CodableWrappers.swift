@@ -34,6 +34,36 @@ public struct BytesCodable: Codable, Hashable {
 }
 
 @propertyWrapper
+public struct OptionalBytesCodable: Codable, Hashable {
+    public var wrappedValue: Data?
+    
+    public init(wrappedValue: Data?) {
+        self.wrappedValue = wrappedValue
+    }
+    
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if container.decodeNil() {
+            wrappedValue = nil
+        } else if let byteArray = try? container.decode([StringScaleMapper<UInt8>].self) {
+            wrappedValue = Data(byteArray.map(\.value))
+        } else {
+            wrappedValue = try container.decode(Data.self)
+        }
+    }
+    
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        if let data = wrappedValue {
+            let bytes = data.map { StringScaleMapper(value: $0) }
+            try container.encode(bytes)
+        } else {
+            try container.encodeNil()
+        }
+    }
+}
+
+@propertyWrapper
 public struct StringCodable<T: LosslessStringConvertible & Hashable>: Codable, Hashable {
     public var wrappedValue: T
 
