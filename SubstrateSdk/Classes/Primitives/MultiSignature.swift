@@ -83,12 +83,12 @@ extension MultiSignature: ScaleCodable {
         let index = try UInt8(scaleDecoder: scaleDecoder)
 
         switch index {
-        case Self.sr25519Index:
-            let data = try scaleDecoder.readAndConfirm(count: Self.sr25519Length)
-            self = .sr25519(data: data)
         case Self.ed25519Index:
             let data = try scaleDecoder.readAndConfirm(count: Self.ed25519Length)
             self = .ed25519(data: data)
+        case Self.sr25519Index:
+            let data = try scaleDecoder.readAndConfirm(count: Self.sr25519Length)
+            self = .sr25519(data: data)
         case Self.ecdsaIndex:
             let data = try scaleDecoder.readAndConfirm(count: Self.ecdsaLength)
             self = .ecdsa(data: data)
