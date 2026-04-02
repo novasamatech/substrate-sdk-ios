@@ -1,5 +1,6 @@
 import XCTest
 @testable import SubstrateSdk
+import BigInt
 
 class ScaleStringTests: XCTestCase {
     private struct TestExample {
@@ -27,5 +28,16 @@ class ScaleStringTests: XCTestCase {
 
             XCTAssertEqual(value, test.value)
         }
+    }
+
+    func testMaliciousStringLengthExceedingIntMaxThrowsError() throws {
+        // Compact-encoded BigUInt = 2^64 (exceeds Int.max)
+        // Mode 0b11: header = (9 - 4) << 2 | 0b11 = 23
+        // Followed by 9 bytes in little-endian representing 2^64
+        let maliciousData = Data([23, 0, 0, 0, 0, 0, 0, 0, 0, 1])
+
+        let decoder = try ScaleDecoder(data: maliciousData)
+
+        XCTAssertThrowsError(try String(scaleDecoder: decoder))
     }
 }
