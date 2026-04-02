@@ -13,7 +13,13 @@ extension Array: ScaleEncodable where Element: ScaleEncodable {
 
 extension Array: ScaleDecodable where Element: ScaleDecodable {
     public init(scaleDecoder: ScaleDecoding) throws {
-        let count = UInt(try BigUInt(scaleDecoder: scaleDecoder))
+        let bigCount = try BigUInt(scaleDecoder: scaleDecoder)
+
+        guard bigCount <= Int.max else {
+            throw ScaleCodingError.unexpectedDecodedValue
+        }
+
+        let count = Int(bigCount)
 
         self = try (0 ..< count).map { _ in try Element(scaleDecoder: scaleDecoder) }
     }
