@@ -17,7 +17,7 @@ public enum MultiSigner: Hashable {
     case sr25519(_ pubKey: Data)
     case ecdsa(_ pubKey: Data)
 
-    public func getAccountId() throws -> Data {
+    public func getAccountId() throws -> AccountId {
         switch self {
         case let .ed25519(pubKey):
             pubKey
