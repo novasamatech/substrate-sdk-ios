@@ -9,6 +9,14 @@ public enum MultiSignature: Codable {
     static let ed25519Field = "Ed25519"
     static let ecdsaField = "Ecdsa"
 
+    static let ed25519Index: UInt8 = 0
+    static let sr25519Index: UInt8 = 1
+    static let ecdsaIndex: UInt8 = 2
+
+    static let sr25519Length = 64
+    static let ed25519Length = 64
+    static let ecdsaLength = 65
+
     case sr25519(data: Data)
     case ed25519(data: Data)
     case ecdsa(data: Data)
@@ -52,6 +60,40 @@ public enum MultiSignature: Codable {
         case let .ecdsa(data):
             try container.encode(Self.ecdsaField)
             try container.encode(data)
+        }
+    }
+}
+
+extension MultiSignature: ScaleCodable {
+    public func encode(scaleEncoder: ScaleEncoding) throws {
+        switch self {
+        case let .ed25519(data):
+            try Self.ed25519Index.encode(scaleEncoder: scaleEncoder)
+            scaleEncoder.appendRaw(data: data)
+        case let .sr25519(data):
+            try Self.sr25519Index.encode(scaleEncoder: scaleEncoder)
+            scaleEncoder.appendRaw(data: data)
+        case let .ecdsa(data):
+            try Self.ecdsaIndex.encode(scaleEncoder: scaleEncoder)
+            scaleEncoder.appendRaw(data: data)
+        }
+    }
+
+    public init(scaleDecoder: ScaleDecoding) throws {
+        let index = try UInt8(scaleDecoder: scaleDecoder)
+
+        switch index {
+        case Self.sr25519Index:
+            let data = try scaleDecoder.readAndConfirm(count: Self.sr25519Length)
+            self = .sr25519(data: data)
+        case Self.ed25519Index:
+            let data = try scaleDecoder.readAndConfirm(count: Self.ed25519Length)
+            self = .ed25519(data: data)
+        case Self.ecdsaIndex:
+            let data = try scaleDecoder.readAndConfirm(count: Self.ecdsaLength)
+            self = .ecdsa(data: data)
+        default:
+            throw MultiSignatureError.unexpectedType
         }
     }
 }
