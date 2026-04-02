@@ -17,7 +17,13 @@ extension String: ScaleCodable {
     }
 
     public init(scaleDecoder: ScaleDecoding) throws {
-        let count = Int(try BigUInt(scaleDecoder: scaleDecoder))
+        let bigCount = try BigUInt(scaleDecoder: scaleDecoder)
+
+        guard bigCount <= Int.max else {
+            throw ScaleCodingError.unexpectedDecodedValue
+        }
+
+        let count = Int(bigCount)
         let data = try scaleDecoder.read(count: count)
         try scaleDecoder.confirm(count: count)
 
