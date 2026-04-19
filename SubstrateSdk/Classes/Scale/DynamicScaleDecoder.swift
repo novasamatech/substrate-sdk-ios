@@ -113,6 +113,10 @@ extension DynamicScaleDecoder: DynamicScaleDecoding {
         }
 
         let length = try BigUInt(scaleDecoder: decoder)
+        
+        guard length <= Int.max else {
+            throw DynamicScaleDecoderError.invalidVectorLength
+        }
 
         let jsons = try (0 ..< length).map { _ in try node.accept(decoder: self) }
 
