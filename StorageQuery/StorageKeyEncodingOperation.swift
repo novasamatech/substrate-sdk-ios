@@ -175,8 +175,28 @@ public class DoubleMapKeyEncodingOperation<T1: Encodable, T2: Encodable>: BaseOp
         ) else {
             throw StorageKeyEncodingOperationError.invalidStoragePath
         }
-
-        guard case let .doubleMap(doubleMapEntry) = entry.type else {
+        
+        let key1Type: String
+        let key1Hasher: StorageHasher
+        let key2Type: String
+        let key2Hasher: StorageHasher
+        
+        switch entry.type {
+        case let .doubleMap(doubleMapEntry):
+            key1Type = doubleMapEntry.key1
+            key1Hasher = doubleMapEntry.hasher
+            key2Type = doubleMapEntry.key2
+            key2Hasher = doubleMapEntry.key2Hasher
+        case let .nMap(nMapEntry):
+            guard nMapEntry.keyVec.count >= 2, nMapEntry.hashers.count >= 2 else {
+                throw StorageKeyEncodingOperationError.incompatibleStorageType
+            }
+            
+            key1Type = nMapEntry.keyVec[0]
+            key1Hasher = nMapEntry.hashers[0]
+            key2Type = nMapEntry.keyVec[1]
+            key2Hasher = nMapEntry.hashers[1]
+        case .plain, .map:
             throw StorageKeyEncodingOperationError.incompatibleStorageType
         }
 
@@ -189,7 +209,7 @@ public class DoubleMapKeyEncodingOperation<T1: Encodable, T2: Encodable>: BaseOp
                 encodedParam1 = try encodeParam(
                     param.0,
                     factory: factory,
-                    type: doubleMapEntry.key1
+                    type: key1Type
                 )
             }
 
@@ -201,7 +221,7 @@ public class DoubleMapKeyEncodingOperation<T1: Encodable, T2: Encodable>: BaseOp
                 encodedParam2 = try encodeParam(
                     param.1,
                     factory: factory,
-                    type: doubleMapEntry.key2
+                    type: key2Type
                 )
             }
 
@@ -209,9 +229,9 @@ public class DoubleMapKeyEncodingOperation<T1: Encodable, T2: Encodable>: BaseOp
                 moduleName: path.moduleName,
                 storageName: path.itemName,
                 key1: encodedParam1,
-                hasher1: doubleMapEntry.hasher,
+                hasher1: key1Hasher,
                 key2: encodedParam2,
-                hasher2: doubleMapEntry.key2Hasher
+                hasher2: key2Hasher
             )
         }
 
