@@ -29,4 +29,5 @@ public enum DynamicScaleDecoderError: Error {
     case unexpectedOption(byte: UInt8)
     case unexpectedEnumCase
     case invalidEnumCase(value: Int, count: Int)
+    case invalidVectorLength
 }
