@@ -12,20 +12,11 @@ extension String: ScaleCodable {
             throw ScaleStringError.unexpectedEncoding
         }
 
-        try BigUInt(data.count).encode(scaleEncoder: scaleEncoder)
-        scaleEncoder.appendRaw(data: data)
+        try data.encode(scaleEncoder: scaleEncoder)
     }
 
     public init(scaleDecoder: ScaleDecoding) throws {
-        let bigCount = try BigUInt(scaleDecoder: scaleDecoder)
-
-        guard bigCount <= Int.max else {
-            throw ScaleCodingError.unexpectedDecodedValue
-        }
-
-        let count = Int(bigCount)
-        let data = try scaleDecoder.read(count: count)
-        try scaleDecoder.confirm(count: count)
+        let data = try Data(scaleDecoder: scaleDecoder)
 
         guard let result = String(data: data, encoding: .utf8) else {
             throw ScaleStringError.unexpectedDecoding

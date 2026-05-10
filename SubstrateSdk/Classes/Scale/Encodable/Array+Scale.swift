@@ -26,12 +26,6 @@ extension Array: ScaleDecodable where Element: ScaleDecodable {
             throw ScaleCodingError.unexpectedDecodedValue
         }
 
-        // allocate memory only if en element is successfully decoded
-        var result = [Element]()
-        for _ in 0 ..< count {
-            result.append(try Element(scaleDecoder: scaleDecoder))
-        }
-        
-        self = result
+        self = try (0 ..< count).map { _ in try Element(scaleDecoder: scaleDecoder) }
     }
 }
