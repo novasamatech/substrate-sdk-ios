@@ -45,6 +45,23 @@ class ScaleArrayTests: XCTestCase {
         XCTAssertEqual(decoded, original)
     }
 
+    func testArrayCountExceedingRemainedBytesThrowsError() throws {
+        let encoder = ScaleEncoder()
+        try BigUInt(1_000_000_000).encode(scaleEncoder: encoder)
+
+        var data = encoder.encode()
+        data.append(contentsOf: [0x01, 0x02])
+
+        let decoder = try ScaleDecoder(data: data)
+
+        XCTAssertThrowsError(try [UInt8](scaleDecoder: decoder)) { error in
+            XCTAssertTrue(
+                error is ScaleCodingError,
+                "Expected ScaleCodingError but got \(error)"
+            )
+        }
+    }
+
     func testMaliciousArrayLengthExceedingUIntMaxThrowsError() throws {
         // Construct compact-encoded BigUInt = 2^64 (UInt.max + 1 on 64-bit)
         // Mode 0b11 (big integer): header = (byteCount - 4) << 2 | 0b11
