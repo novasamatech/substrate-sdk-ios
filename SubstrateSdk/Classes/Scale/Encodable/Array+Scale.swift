@@ -21,6 +21,11 @@ extension Array: ScaleDecodable where Element: ScaleDecodable {
 
         let count = Int(bigCount)
 
+        // we should have at least `count` bytes remained otherwise the data is malicious
+        guard count <= scaleDecoder.remained else {
+            throw ScaleCodingError.unexpectedDecodedValue
+        }
+
         self = try (0 ..< count).map { _ in try Element(scaleDecoder: scaleDecoder) }
     }
 }

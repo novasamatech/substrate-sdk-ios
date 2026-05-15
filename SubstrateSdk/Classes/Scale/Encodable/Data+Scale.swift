@@ -1,14 +1,21 @@
 import Foundation
+import BigInt
 
 extension Data: ScaleCodable {
     public init(scaleDecoder: ScaleDecoding) throws {
-        let byteArray = try [UInt8](scaleDecoder: scaleDecoder)
-        self = Data(byteArray)
+        let bigCount = try BigUInt(scaleDecoder: scaleDecoder)
+
+        guard bigCount <= Int.max else {
+            throw ScaleCodingError.unexpectedDecodedValue
+        }
+
+        let count = Int(bigCount)
+        self = try scaleDecoder.readAndConfirm(count: count)
     }
 
     public func encode(scaleEncoder: ScaleEncoding) throws {
-        let byteArray: [UInt8] = map { $0 }
-        try byteArray.encode(scaleEncoder: scaleEncoder)
+        try BigUInt(count).encode(scaleEncoder: scaleEncoder)
+        scaleEncoder.appendRaw(data: self)
     }
 }
 
