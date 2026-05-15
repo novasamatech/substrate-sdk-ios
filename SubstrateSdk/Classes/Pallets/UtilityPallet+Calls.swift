@@ -18,7 +18,11 @@ public extension UtilityPallet {
     }
 
     struct Call: Codable {
-        let calls: [AnyRuntimeCall]
+        public let calls: [AnyRuntimeCall]
+        
+        public init(calls: [AnyRuntimeCall]) {
+            self.calls = calls
+        }
     }
 
     struct DispatchAs<T: Codable>: Codable {
@@ -27,10 +31,15 @@ public extension UtilityPallet {
             case call
         }
 
-        let asOrigin: RuntimeCallOrigin
-        let call: RuntimeCall<T>
+        public let asOrigin: RuntimeCallOrigin
+        public let call: RuntimeCall<T>
+        
+        public init(asOrigin: RuntimeCallOrigin, call: RuntimeCall<T>) {
+            self.asOrigin = asOrigin
+            self.call = call
+        }
 
-        func runtimeCall() -> RuntimeCall<Self> {
+        public func runtimeCall() -> RuntimeCall<Self> {
             RuntimeCall(
                 moduleName: UtilityPallet.name,
                 callName: "dispatch_as",
