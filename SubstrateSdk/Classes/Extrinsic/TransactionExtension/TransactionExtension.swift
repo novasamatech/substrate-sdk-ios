@@ -6,6 +6,12 @@ public enum TransactionExtension {
         let value: JSON
         let customEncoder: TransactionExtensionCoding
 
+        public init(extensionId: String, value: JSON, customEncoder: TransactionExtensionCoding) {
+            self.extensionId = extensionId
+            self.value = value
+            self.customEncoder = customEncoder
+        }
+        
         func encode(to encoder: DynamicScaleEncoding) throws {
             try customEncoder.encodeIncludedInExtrinsic(
                 from: [extensionId: value],
