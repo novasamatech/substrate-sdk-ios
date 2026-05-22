@@ -59,6 +59,8 @@ extension TransactionExtension.CheckMetadataHash: TransactionExtending {
 
 public final class CheckMetadataHashCoder: TransactionExtensionCoding {
     public var txExtensionId: String { Extrinsic.TransactionExtensionId.checkMetadataHash }
+    
+    public init() {}
 
     public func encodeIncludedInExtrinsic(from extra: ExtrinsicExtra, encoder: DynamicScaleEncoding) throws {
         guard let index = extra[txExtensionId] else {
