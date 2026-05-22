@@ -56,3 +56,11 @@ public extension KeyedDecodingContainer {
         return OptionHexCodable(wrappedValue: nil)
     }
 }
+
+extension HexCodable: Equatable where T: Equatable {}
+
+extension HexCodable: Hashable where T: Hashable {}
+
+extension OptionHexCodable: Equatable where T: Equatable {}
+
+extension OptionHexCodable: Hashable where T: Hashable {}
