@@ -36,7 +36,7 @@ public class GenericCallNode: Node {
                 throw GenericCallNodeError.unexpectedParams
             }
 
-            guard let args = callInfo.args.dictValue, call.arguments.count == args.count else {
+            guard let args = callInfo.args.dictValue else {
                 throw GenericCallNodeError.unexpectedParams
             }
 
