@@ -8,7 +8,7 @@ public final class ParitySignerSignaturePayloadFactory {
     }
 }
 
-extension ParitySignerSignaturePayloadFactory: ExtrinsicSignaturePayloadFactoryProtocol {
+extension ParitySignerSignaturePayloadFactory: ImplicationSignaturePayloadFactoryProtocol {
     public func createPayload(
         from implication: TransactionExtension.Implication,
         using encodingFactory: DynamicScaleEncodingFactoryProtocol

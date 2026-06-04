@@ -1,21 +1,43 @@
 import Foundation
 
-public protocol ExtrinsicSignaturePayloadFactoryProtocol {
+public protocol ImplicationSignaturePayloadFactoryProtocol {
     func createPayload(
         from implication: TransactionExtension.Implication,
         using encodingFactory: DynamicScaleEncodingFactoryProtocol
     ) throws -> Data
 }
 
-public final class ExtrinsicSignaturePayloadFactory {
+public final class ImplicationSignaturePayloadFactory {
+    // New tx pipeline always requires version byte
+    // This is a fallback for v4 extrinsics
+    static let v4ExtrinsicVersion: UInt8 = 0
+    
+    public enum Mode {
+        case txExtensionPipeline
+        case extrinsicSignature
+    }
+    
     let extrinsicVersion: Extrinsic.Version
+    let mode: Mode
 
-    public init(extrinsicVersion: Extrinsic.Version) {
+    public init(extrinsicVersion: Extrinsic.Version, mode: Mode = .txExtensionPipeline) {
         self.extrinsicVersion = extrinsicVersion
+        self.mode = mode
     }
 }
 
-extension ExtrinsicSignaturePayloadFactory: ExtrinsicSignaturePayloadFactoryProtocol {
+private extension ImplicationSignaturePayloadFactory {
+    func appendV4VersionIfNeeded(into encoder: DynamicScaleEncoding) throws {
+        switch mode {
+        case .txExtensionPipeline:
+            try encoder.append(encodable: Self.v4ExtrinsicVersion)
+        case .extrinsicSignature:
+            break
+        }
+    }
+}
+
+extension ImplicationSignaturePayloadFactory: ImplicationSignaturePayloadFactoryProtocol {
     public func createPayload(
         from implication: TransactionExtension.Implication,
         using encodingFactory: DynamicScaleEncodingFactoryProtocol
@@ -26,7 +48,7 @@ extension ExtrinsicSignaturePayloadFactory: ExtrinsicSignaturePayloadFactoryProt
         case let .V5(extensionVersion):
             try encoder.append(encodable: extensionVersion)
         case .V4:
-            break
+            try appendV4VersionIfNeeded(into: encoder)
         }
 
         try encoder.append(json: implication.call, type: GenericType.call.name)
