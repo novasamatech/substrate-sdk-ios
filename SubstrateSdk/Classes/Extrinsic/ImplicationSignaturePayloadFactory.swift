@@ -1,13 +1,13 @@
 import Foundation
 
-public protocol ExtrinsicSignaturePayloadFactoryProtocol {
+public protocol ImplicationSignaturePayloadFactoryProtocol {
     func createPayload(
         from implication: TransactionExtension.Implication,
         using encodingFactory: DynamicScaleEncodingFactoryProtocol
     ) throws -> Data
 }
 
-public final class ExtrinsicSignaturePayloadFactory {
+public final class ImplicationSignaturePayloadFactory {
     // New tx pipeline always requires version byte
     // This is a fallback for v4 extrinsics
     static let v4ExtrinsicVersion: UInt8 = 0
@@ -20,13 +20,13 @@ public final class ExtrinsicSignaturePayloadFactory {
     let extrinsicVersion: Extrinsic.Version
     let mode: Mode
 
-    public init(extrinsicVersion: Extrinsic.Version, mode: Mode) {
+    public init(extrinsicVersion: Extrinsic.Version, mode: Mode = .txExtensionPipeline) {
         self.extrinsicVersion = extrinsicVersion
         self.mode = mode
     }
 }
 
-private extension ExtrinsicSignaturePayloadFactory {
+private extension ImplicationSignaturePayloadFactory {
     func appendV4VersionIfNeeded(into encoder: DynamicScaleEncoding) throws {
         switch mode {
         case .txExtensionPipeline:
@@ -37,7 +37,7 @@ private extension ExtrinsicSignaturePayloadFactory {
     }
 }
 
-extension ExtrinsicSignaturePayloadFactory: ExtrinsicSignaturePayloadFactoryProtocol {
+extension ImplicationSignaturePayloadFactory: ImplicationSignaturePayloadFactoryProtocol {
     public func createPayload(
         from implication: TransactionExtension.Implication,
         using encodingFactory: DynamicScaleEncodingFactoryProtocol

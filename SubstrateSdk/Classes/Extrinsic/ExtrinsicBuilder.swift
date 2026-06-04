@@ -300,7 +300,7 @@ private extension ExtrinsicBuilder {
         implication: TransactionExtension.Implication,
         encodingFactory: DynamicScaleEncodingFactoryProtocol
     ) throws -> Data {
-        let signaturePayloadFactory: ExtrinsicSignaturePayloadFactoryProtocol = ExtrinsicSignaturePayloadFactory(
+        let signaturePayloadFactory = ImplicationSignaturePayloadFactory(
             extrinsicVersion: extrinsicVersion,
             mode: .extrinsicSignature
         )

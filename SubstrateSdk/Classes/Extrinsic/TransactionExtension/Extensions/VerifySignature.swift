@@ -3,17 +3,14 @@ import Foundation
 public extension TransactionExtension {
     final class VerifySignature {
         public let usability: VerifySignature.Usability
-        public let signaturePayloadFactory: ExtrinsicSignaturePayloadFactoryProtocol
+        public let signaturePayloadFactory: ImplicationSignaturePayloadFactoryProtocol
 
         public init(
             extrinsicVersion: Extrinsic.Version,
             usability: Usability
         ) {
             self.usability = usability
-            signaturePayloadFactory = ExtrinsicSignaturePayloadFactory(
-                extrinsicVersion: extrinsicVersion,
-                mode: .txExtensionPipeline
-            )
+            signaturePayloadFactory = ImplicationSignaturePayloadFactory(extrinsicVersion: extrinsicVersion)
         }
     }
 }
