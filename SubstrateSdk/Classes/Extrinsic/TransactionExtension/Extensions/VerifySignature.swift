@@ -10,7 +10,10 @@ public extension TransactionExtension {
             usability: Usability
         ) {
             self.usability = usability
-            signaturePayloadFactory = ExtrinsicSignaturePayloadFactory(extrinsicVersion: extrinsicVersion)
+            signaturePayloadFactory = ExtrinsicSignaturePayloadFactory(
+                extrinsicVersion: extrinsicVersion,
+                mode: .txExtensionPipeline
+            )
         }
     }
 }
