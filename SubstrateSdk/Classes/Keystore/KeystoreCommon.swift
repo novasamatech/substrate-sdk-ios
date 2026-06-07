@@ -31,6 +31,7 @@ public enum KeystoreExtractorError: Error {
 
 public enum KeystoreBuilderError: Error {
     case invalidPasswordFormat
+    case invalidSecretKey
 }
 
 enum KeystoreEncodingType: String {
