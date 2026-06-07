@@ -48,7 +48,11 @@ extension KeystoreBuilder: KeystoreBuilding {
         let secretKeyData: Data
         switch data.secretType {
         case .sr25519:
-            secretKeyData = try SNPrivateKey(rawData: data.secretKeyData).toEd25519Data()
+            guard let ed25519Data = try SNPrivateKey(rawData: data.secretKeyData).toEd25519Data() else {
+                throw KeystoreBuilderError.invalidSecretKey
+            }
+            
+            secretKeyData = ed25519Data
         case .ed25519:
             secretKeyData = data.secretKeyData
         case .ecdsa:
