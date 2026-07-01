@@ -98,7 +98,8 @@ let package = Package(
         .target(
             name: "TestHelpers",
             dependencies: [
-                "SubstrateSdk"
+                "SubstrateSdk",
+                .product(name: "Starscream", package: "Starscream")
             ],
             path: "Tests/Helpers",
             resources: Resources.runtimes()
@@ -160,6 +161,7 @@ let package = Package(
             name: "NetworkTests",
             dependencies: [
                 "SubstrateSdk",
+                "TestHelpers",
             ],
             path: "Tests/Network"
         ),
