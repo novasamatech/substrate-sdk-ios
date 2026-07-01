@@ -336,14 +336,11 @@ extension WebSocketEngine {
         connection.delegate = self
     }
 
-    /// In-flight requests and subscriptions cancelled by a disconnect (rather than replayed).
     struct CancelledEntities {
         let requests: [JSONRPCRequest]
         let subscriptions: [JSONRPCSubscribing]
     }
 
-    /// Clears the in-flight state, returning the requests and subscriptions that were cancelled
-    /// (rather than replayed) so the caller can `notify` them with the appropriate error.
     func resetInProgress() -> CancelledEntities {
         // we can have batches decomposed by single requests
         let inProgressWithoutDuplicates = inProgressRequests.values.reduce(into: [JSONRPCRequestId: JSONRPCRequest]()) {
@@ -366,9 +363,6 @@ extension WebSocketEngine {
         return CancelledEntities(requests: notifiableRequests, subscriptions: cancelledSubscriptions)
     }
 
-    /// Re-queues idempotent, already-acknowledged subscriptions to resubscribe after reconnect and
-    /// removes non-idempotent ones (which must not be replayed), returning them so the caller can
-    /// notify their subscribers that they won't be restored.
     func resetActiveSubscriptions() -> [JSONRPCSubscribing] {
         let allSubscriptions = Array(subscriptions.values)
 
@@ -378,8 +372,7 @@ extension WebSocketEngine {
             subscriptions.removeValue(forKey: subscription.requestId)
         }
 
-        // Idempotent, already-acknowledged subscriptions are re-queued to resubscribe after reconnect.
-        // Not-yet-acknowledged ones ride their in-flight (idempotent) subscribe request.
+        // remoteId != nil ⇒ acknowledged; not-yet-acked subs resubscribe via their in-flight request
         let resendableSubscriptions = allSubscriptions.filter {
             $0.requestOptions.resendOnReconnect && $0.remoteId != nil
         }

@@ -122,7 +122,6 @@ struct WebSocketEngineTests {
             options: JSONRPCOptions()
         ) { (_: Result<Int, Error>) in }
 
-        // still connecting → nothing written yet, request is pending
         #expect(harness.transport.sentRequests.isEmpty)
         #expect(harness.engine.pendingRequests.count == 1)
 
@@ -206,11 +205,9 @@ struct WebSocketEngineTests {
             failureClosure: { _, _ in }
         )
 
-        // node acknowledges the subscription with its remote id
         harness.receiveText(resultResponse(id: localId, result: "\"REMOTE_1\""))
         #expect(harness.engine.subscriptions[localId]?.remoteId == "REMOTE_1")
 
-        // an update addressed to that remote id reaches the closure
         harness.receiveText(
             #"{"jsonrpc":"2.0","method":"state_storage","params":{"subscription":"REMOTE_1","result":"0xdeadbeef"}}"#
         )
@@ -236,7 +233,6 @@ struct WebSocketEngineTests {
         harness.drain()
 
         #expect(harness.engine.subscriptions[localId] == nil)
-        // an unsubscribe request was written
         #expect(harness.transport.sentRequests.count == requestsBefore + 1)
     }
 
@@ -257,16 +253,13 @@ struct WebSocketEngineTests {
         harness.receiveText(resultResponse(id: localId, result: "\"REMOTE_1\""))
         let requestsAfterSubscribe = harness.transport.sentRequests.count
 
-        // socket drops while connected
         harness.serverDisconnect()
 
         #expect(harness.engine.state == .waitingReconnection(url: Self.url1))
-        // subscription is retained, remote id cleared, and re-queued for replay
         #expect(harness.engine.subscriptions[localId] != nil)
         #expect(harness.engine.subscriptions[localId]?.remoteId == nil)
         #expect(harness.engine.pendingRequests.contains { $0.requestId.itemIds.contains(localId) })
 
-        // reconnect and confirm the subscribe request is re-sent
         harness.engine.connectIfNeeded()
         harness.drain()
         harness.connect()
@@ -293,15 +286,12 @@ struct WebSocketEngineTests {
 
         let requestsAfterSubscribe = harness.transport.sentRequests.count
 
-        // socket drops while connected
         harness.serverDisconnect()
 
-        // subscription is cancelled (not re-queued) and the subscriber is notified it ended
         #expect(harness.engine.subscriptions[localId] == nil)
         #expect(!harness.engine.pendingRequests.contains { $0.requestId.itemIds.contains(localId) })
         #expect(failure?.unsubscribed == true)
 
-        // reconnecting must not resend it
         harness.engine.connectIfNeeded()
         harness.drain()
         harness.connect()

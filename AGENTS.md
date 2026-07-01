@@ -60,6 +60,9 @@ Verify scheme names with `xcodebuild -list`.
 running the relevant `Tests/<Subsystem>` target. When adding a new test resource,
 register it in the `Resources` enum in `Package.swift`.
 
+Running SPM (`swift build`/`swift test`) creates a `.build/` directory (git-ignored,
+hundreds of MB). Delete it when done — `rm -rf .build` — don't leave it in the tree.
+
 **New tests use Swift Testing**; existing XCTest stays and is migrated
 opportunistically. See `.claude/docs/tests.md`.
 
@@ -83,6 +86,10 @@ downstream Nova Wallet review history):
 - **Match surrounding style.** Files are grouped by subsystem with `+`-suffixed
   extension files (e.g. `RuntimeCall+JSON.swift`, `CallMetadata+TypeCheck.swift`).
   New generic helpers belong in the subsystem they extend.
+- **Keep comments minimal — code should be self-descriptive.** Prefer clear names
+  over narration; don't restate what the code does or describe behavior that tests
+  already cover. Reserve comments for non-obvious *why* (rationale, invariants,
+  gotchas).
 
 ## PRs
 

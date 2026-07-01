@@ -22,6 +22,7 @@ DerivedData
 # SPM
 
 .swiftpm
+.build/
 Package.resolved
 
 # Bundler

@@ -236,7 +236,6 @@ public extension JSONRPCEngine {
         )
     }
 
-    /// Backward-compatible overload: subscribes with default options (replayed on reconnect).
     func subscribe<P: Encodable, T: Decodable>(
         _ method: String,
         params: P?,
@@ -254,8 +253,6 @@ public extension JSONRPCEngine {
         )
     }
 
-    /// Default unsubscribe method, explicit options (e.g. `resendOnReconnect: false` to prevent
-    /// a non-idempotent subscription from being replayed on reconnect).
     func subscribe<P: Encodable, T: Decodable>(
         _ method: String,
         params: P?,
