@@ -6,6 +6,9 @@ not an app that consumes it. It provides SCALE codec, runtime metadata parsing,
 JSON-RPC networking, storage queries/subscriptions, extrinsic building/signing,
 crypto/keystore, and QR/identicon utilities.
 
+Deeper per-subsystem docs live in `.claude/docs/` — see `.claude/docs/README.md`
+for the routing table (lazy-load: read the index, then open only what the task needs).
+
 ## Layout
 
 Distributed as an SPM package only (`Package.swift`, swift-tools 6.0, Swift 5
