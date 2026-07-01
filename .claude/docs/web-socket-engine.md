@@ -126,10 +126,16 @@ and reconnects immediately.
 
 ## Resetting in-flight work on a drop (`resetInProgress`)
 
-On any disconnect/error/cancel while connected:
+On any disconnect/error/cancel while connected, `resetInProgress()` clears the in-flight
+state and returns a `(requests, subscriptions)` tuple of what was **cancelled** (not
+replayed); the caller passes it to `notify(cancelled:error:)`, which delivers the
+context-appropriate error (`clientCancelled` / `remoteCancelled` / `unknownError`) to both.
+
 - Requests with `resendOnReconnect: true` (idempotent) are moved back to `pendingRequests` to be replayed.
-- Requests with `resendOnReconnect: false` that have a response handler are returned as *notifiable* and failed with an error (`clientCancelled` / `remoteCancelled` / `unknownError` depending on cause).
-- `rescheduleActiveSubscriptions()` clears each active subscription's `remoteId` and re-queues its original subscribe request, so subscriptions transparently re-establish after reconnect. **Subscriptions always use `resendOnReconnect: true`.**
+- Requests with `resendOnReconnect: false` that have a response handler are returned in the tuple and failed.
+- `resetActiveSubscriptions()` handles subscriptions by their `requestOptions.resendOnReconnect`:
+  - **Idempotent (`resendOnReconnect: true`, the default)** — clears `remoteId` and re-queues the original subscribe request, so the subscription transparently re-establishes after reconnect. (Not-yet-acked ones ride their in-flight subscribe request.)
+  - **Non-idempotent (`resendOnReconnect: false`)** — is **not** replayed (replaying e.g. `author_submitAndWatchExtrinsic` would resubmit the extrinsic). It is removed and returned in the tuple; `notify(cancelled:error:)` then invokes its failure closure with `unsubscribed: true` and the disconnect error, so the subscriber learns it won't be restored. Set this via the `options:` parameter on `subscribe(...)`.
 
 ## Health checks / ping
 
@@ -169,8 +175,9 @@ and keeps parallel tests isolated.
 
 Covered behaviors: nil init on empty urls, autoconnect, connect/queue/flush,
 success & error result delivery, subscription remote-id capture + update routing,
-unsubscribe on cancel, subscription replay across reconnect, give-up failing
-pending requests, node switching via `JSONRPCNodeSwitching`, graceful disconnect,
+unsubscribe on cancel, idempotent subscription replay across reconnect,
+non-idempotent subscription cancellation on reconnect, give-up failing pending
+requests, node switching via `JSONRPCNodeSwitching`, graceful disconnect,
 inbound ping→pong.
 
 ## Extending / gotchas

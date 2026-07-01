@@ -5,6 +5,7 @@ extension HTTPEngine: JSONRPCEngine {
         _: String,
         params _: P?,
         unsubscribeMethod _: String,
+        options _: JSONRPCOptions,
         updateClosure _: @escaping (T) -> Void,
         failureClosure _: @escaping (Error, Bool) -> Void
     ) throws -> UInt16 where P: Encodable, T: Decodable {

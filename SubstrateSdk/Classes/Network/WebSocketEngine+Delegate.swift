@@ -38,7 +38,7 @@ extension WebSocketEngine: WebSocketDelegate {
             let attempt = reconnectionAttempts[selectedURL] ?? 0
             scheduleReconnectionOrDisconnect(attempt + 1)
         case .connected:
-            let cancelledRequests = resetInProgress()
+            let cancelled = resetInProgress()
 
             pingScheduler.cancel()
 
@@ -46,7 +46,7 @@ extension WebSocketEngine: WebSocketDelegate {
             scheduleReconnectionOrDisconnect(1)
 
             notify(
-                requests: cancelledRequests,
+                cancelled: cancelled,
                 error: JSONRPCEngineError.clientCancelled
             )
         default:
@@ -63,7 +63,7 @@ extension WebSocketEngine: WebSocketDelegate {
 
         switch state {
         case .connected:
-            let cancelledRequests = resetInProgress()
+            let cancelled = resetInProgress()
 
             pingScheduler.cancel()
 
@@ -71,7 +71,7 @@ extension WebSocketEngine: WebSocketDelegate {
             startConnecting(0)
 
             notify(
-                requests: cancelledRequests,
+                cancelled: cancelled,
                 error: JSONRPCEngineError.unknownError
             )
         case .connecting:
@@ -119,14 +119,14 @@ extension WebSocketEngine: WebSocketDelegate {
             let attempt = reconnectionAttempts[selectedURL] ?? 0
             scheduleReconnectionOrDisconnect(attempt + 1)
         case .connected:
-            let cancelledRequests = resetInProgress()
+            let cancelled = resetInProgress()
 
             pingScheduler.cancel()
 
             scheduleReconnectionOrDisconnect(1)
 
             notify(
-                requests: cancelledRequests,
+                cancelled: cancelled,
                 error: JSONRPCEngineError.remoteCancelled
             )
         default:

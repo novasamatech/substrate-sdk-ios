@@ -39,6 +39,11 @@ These terms carry specific meaning across the SDK. Use them precisely:
 
 Most recent substantive doc-affecting changes. Older entries fall off as new ones land.
 
+- **2026-07-01** — `subscribe(...)` gained an `options: JSONRPCOptions` parameter.
+  `resendOnReconnect: false` marks a subscription non-idempotent so it is cancelled
+  (not replayed) on reconnect — the subscriber is notified `unsubscribed: true`.
+  Default stays `true`; existing call sites unchanged. See `web-socket-engine.md`.
+
 - **2026-07-01** — Added reusable mocks under `Tests/Helpers/Mocks/`
   (`MockWebSocketTransport` — a Starscream `Engine` mock — plus connection
   factory, engine delegate, reconnection stub) and

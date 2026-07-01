@@ -274,6 +274,40 @@ struct WebSocketEngineTests {
         #expect(harness.transport.sentRequests.count > requestsAfterSubscribe)
     }
 
+    @Test("does not replay a non-idempotent subscription on reconnect")
+    func nonIdempotentSubscriptionCancelledOnReconnect() throws {
+        let harness = Harness(autoconnect: true)
+        harness.connect()
+
+        var failure: (error: Error, unsubscribed: Bool)?
+        let localId = try harness.engine.subscribe(
+            "author_submitAndWatchExtrinsic",
+            params: [String](),
+            unsubscribeMethod: "author_unwatchExtrinsic",
+            options: JSONRPCOptions(resendOnReconnect: false),
+            updateClosure: { (_: JSONRPCSubscriptionUpdate<String>) in },
+            failureClosure: { error, unsubscribed in failure = (error, unsubscribed) }
+        )
+        harness.receiveText(resultResponse(id: localId, result: "\"REMOTE_1\""))
+        #expect(harness.engine.subscriptions[localId]?.remoteId == "REMOTE_1")
+
+        let requestsAfterSubscribe = harness.transport.sentRequests.count
+
+        // socket drops while connected
+        harness.serverDisconnect()
+
+        // subscription is cancelled (not re-queued) and the subscriber is notified it ended
+        #expect(harness.engine.subscriptions[localId] == nil)
+        #expect(!harness.engine.pendingRequests.contains { $0.requestId.itemIds.contains(localId) })
+        #expect(failure?.unsubscribed == true)
+
+        // reconnecting must not resend it
+        harness.engine.connectIfNeeded()
+        harness.drain()
+        harness.connect()
+        #expect(harness.transport.sentRequests.count == requestsAfterSubscribe)
+    }
+
     @Test("fails pending requests when the reconnection strategy gives up")
     func givingUpFailsPendingRequests() throws {
         let harness = Harness(

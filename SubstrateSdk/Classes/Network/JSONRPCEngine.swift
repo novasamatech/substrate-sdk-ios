@@ -192,6 +192,7 @@ public protocol JSONRPCEngine: AnyObject {
         _ method: String,
         params: P?,
         unsubscribeMethod: String,
+        options: JSONRPCOptions,
         updateClosure: @escaping (T) -> Void,
         failureClosure: @escaping (Error, Bool) -> Void
     )
@@ -235,6 +236,43 @@ public extension JSONRPCEngine {
         )
     }
 
+    /// Backward-compatible overload: subscribes with default options (replayed on reconnect).
+    func subscribe<P: Encodable, T: Decodable>(
+        _ method: String,
+        params: P?,
+        unsubscribeMethod: String,
+        updateClosure: @escaping (T) -> Void,
+        failureClosure: @escaping (Error, Bool) -> Void
+    ) throws -> UInt16 {
+        try subscribe(
+            method,
+            params: params,
+            unsubscribeMethod: unsubscribeMethod,
+            options: JSONRPCOptions(),
+            updateClosure: updateClosure,
+            failureClosure: failureClosure
+        )
+    }
+
+    /// Default unsubscribe method, explicit options (e.g. `resendOnReconnect: false` to prevent
+    /// a non-idempotent subscription from being replayed on reconnect).
+    func subscribe<P: Encodable, T: Decodable>(
+        _ method: String,
+        params: P?,
+        options: JSONRPCOptions,
+        updateClosure: @escaping (T) -> Void,
+        failureClosure: @escaping (Error, Bool) -> Void
+    ) throws -> UInt16 {
+        try subscribe(
+            method,
+            params: params,
+            unsubscribeMethod: RPCMethod.storageUnsubscribe,
+            options: options,
+            updateClosure: updateClosure,
+            failureClosure: failureClosure
+        )
+    }
+
     func subscribe<P: Encodable, T: Decodable>(
         _ method: String,
         params: P?,
@@ -245,6 +283,7 @@ public extension JSONRPCEngine {
             method,
             params: params,
             unsubscribeMethod: RPCMethod.storageUnsubscribe,
+            options: JSONRPCOptions(),
             updateClosure: updateClosure,
             failureClosure: failureClosure
         )

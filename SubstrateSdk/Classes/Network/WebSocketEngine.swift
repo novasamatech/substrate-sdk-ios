@@ -209,7 +209,7 @@ public final class WebSocketEngine {
         case .connected:
             state = .notConnected(url: selectedURL)
 
-            let cancelledRequests = resetInProgress()
+            let cancelled = resetInProgress()
 
             if force {
                 forceConnectionReset()
@@ -218,7 +218,7 @@ public final class WebSocketEngine {
             }
 
             notify(
-                requests: cancelledRequests,
+                cancelled: cancelled,
                 error: JSONRPCEngineError.clientCancelled
             )
 
@@ -336,7 +336,15 @@ extension WebSocketEngine {
         connection.delegate = self
     }
 
-    func resetInProgress() -> [JSONRPCRequest] {
+    /// In-flight requests and subscriptions cancelled by a disconnect (rather than replayed).
+    struct CancelledEntities {
+        let requests: [JSONRPCRequest]
+        let subscriptions: [JSONRPCSubscribing]
+    }
+
+    /// Clears the in-flight state, returning the requests and subscriptions that were cancelled
+    /// (rather than replayed) so the caller can `notify` them with the appropriate error.
+    func resetInProgress() -> CancelledEntities {
         // we can have batches decomposed by single requests
         let inProgressWithoutDuplicates = inProgressRequests.values.reduce(into: [JSONRPCRequestId: JSONRPCRequest]()) {
             $0[$1.requestId] = $1
@@ -353,30 +361,45 @@ extension WebSocketEngine {
         pendingRequests.append(contentsOf: idempotentRequests)
         inProgressRequests = [:]
 
-        rescheduleActiveSubscriptions()
+        let cancelledSubscriptions = resetActiveSubscriptions()
 
-        return notifiableRequests
+        return CancelledEntities(requests: notifiableRequests, subscriptions: cancelledSubscriptions)
     }
 
-    func rescheduleActiveSubscriptions() {
-        let activeSubscriptions = subscriptions.compactMap {
-            $1.remoteId != nil ? $1 : nil
+    /// Re-queues idempotent, already-acknowledged subscriptions to resubscribe after reconnect and
+    /// removes non-idempotent ones (which must not be replayed), returning them so the caller can
+    /// notify their subscribers that they won't be restored.
+    func resetActiveSubscriptions() -> [JSONRPCSubscribing] {
+        let allSubscriptions = Array(subscriptions.values)
+
+        let nonIdempotentSubscriptions = allSubscriptions.filter { !$0.requestOptions.resendOnReconnect }
+
+        for subscription in nonIdempotentSubscriptions {
+            subscriptions.removeValue(forKey: subscription.requestId)
         }
 
-        for subscription in activeSubscriptions {
+        // Idempotent, already-acknowledged subscriptions are re-queued to resubscribe after reconnect.
+        // Not-yet-acknowledged ones ride their in-flight (idempotent) subscribe request.
+        let resendableSubscriptions = allSubscriptions.filter {
+            $0.requestOptions.resendOnReconnect && $0.remoteId != nil
+        }
+
+        for subscription in resendableSubscriptions {
             subscription.remoteId = nil
         }
 
-        let subscriptionRequests: [JSONRPCRequest] = activeSubscriptions.enumerated().map {
+        let subscriptionRequests: [JSONRPCRequest] = resendableSubscriptions.map {
             JSONRPCRequest(
-                requestId: .single($1.requestId),
-                data: $1.requestData,
-                options: $1.requestOptions,
+                requestId: .single($0.requestId),
+                data: $0.requestData,
+                options: $0.requestOptions,
                 responseHandler: nil
             )
         }
 
         pendingRequests.append(contentsOf: subscriptionRequests)
+
+        return nonIdempotentSubscriptions
     }
 
     func process(data: Data) {
@@ -643,6 +666,16 @@ extension WebSocketEngine {
         }
     }
 
+    func notify(cancelled: CancelledEntities, error: Error) {
+        notify(requests: cancelled.requests, error: error)
+
+        cancelled.subscriptions.forEach { subscription in
+            completionQueue.async {
+                subscription.handle(error: error, unsubscribed: true)
+            }
+        }
+    }
+
     func notify(request: JSONRPCRequest, error: Error, identifier: UInt16) {
         completionQueue.async {
             request.responseHandler?.handle(error: error, for: identifier)
@@ -692,14 +725,14 @@ extension WebSocketEngine {
     }
 
     func resetRequestsAndSwitchNode() {
-        let cancelledRequests = resetInProgress()
+        let cancelled = resetInProgress()
 
         pingScheduler.cancel()
 
         let reconnectionAttempt = switchNode()
         startConnecting(reconnectionAttempt)
 
-        notify(requests: cancelledRequests, error: JSONRPCEngineError.unknownError)
+        notify(cancelled: cancelled, error: JSONRPCEngineError.unknownError)
     }
 
     func switchNode() -> Int {
