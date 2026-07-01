@@ -10,6 +10,7 @@
 | If the task involves...                                            | Load                     |
 |-------------------------------------------------------------------|--------------------------|
 | Overall layout, targets, build/test commands, conventions         | `../../AGENTS.md`        |
+| Writing/running tests, XCTest→Swift Testing policy, test targets, fixtures | `tests.md`      |
 | WebSocket connection lifecycle, JSON-RPC transport, reconnection, node switching, subscriptions, batching, health/ping | `web-socket-engine.md` |
 
 _As new subsystem docs are added (SCALE codec, runtime metadata, extrinsic
@@ -38,6 +39,15 @@ These terms carry specific meaning across the SDK. Use them precisely:
 
 Most recent substantive doc-affecting changes. Older entries fall off as new ones land.
 
+- **2026-07-01** — Added reusable mocks under `Tests/Helpers/Mocks/`
+  (`MockWebSocketTransport` — a Starscream `Engine` mock — plus connection
+  factory, engine delegate, reconnection stub) and
+  `Tests/Network/WebSocketEngineTests.swift` (Swift Testing, 15 cases). Mocks
+  policy: reuse/extend shared mocks in `TestHelpers` before writing new ones
+  (`tests.md` §Mocks). See `web-socket-engine.md` (Tests).
+- **2026-07-01** — Added `tests.md`. Test-framework policy: **new tests use
+  Swift Testing**, existing XCTest stays and is migrated opportunistically when a
+  file is otherwise changed.
 - **2026-07-01** — Added `web-socket-engine.md` documenting the `WebSocketEngine`
   transport (state machine, request/subscription/batch tracking, reconnection,
   node switching, health checks). Initial `.claude/docs/` index created.

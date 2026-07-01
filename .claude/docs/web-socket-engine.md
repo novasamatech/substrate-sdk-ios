@@ -145,6 +145,34 @@ While `connected`, `schedulePingIfNeeded()` arms `pingScheduler` every
 - `webSocketDidChangeState(_:from:to:)` — every state transition.
 - `webSocketDidSwitchURL(_:newUrl:)` — only when a switch happens and `urls.count > 1`.
 
+## Tests
+
+`Tests/Network/WebSocketEngineTests.swift` (Swift Testing) covers the engine
+end-to-end without a real socket. It mocks at the **correct seam**: Starscream's
+low-level `Engine` transport, not the whole `WebSocket`. The shared mocks live in
+`Tests/Helpers/Mocks/` (`TestHelpers` target):
+- `MockWebSocketTransport` implements Starscream's `Engine` — records outbound
+  frames (`sentRequests`, `pingCount`, `pongCount`) and lifecycle
+  (`startCount`, `stopCloseCodes`), and exposes `simulate…` helpers to push inbound events.
+- `MockWebSocketConnectionFactory` hands the SDK a **real** `WebSocket` built
+  around that transport, so the production `WebSocket` (state forwarding,
+  `callbackQueue` delivery) is exercised — only the wire is faked. It records
+  every connection in `transports` (use `latest` for the current one).
+- `MockWebSocketEngineDelegate`, `StubReconnectionStrategy` complete the wiring.
+
+**Synchronization:** the engine is built with a dedicated serial `processingQueue`.
+Pushing an event hops through the real `WebSocket` onto that queue and the engine
+re-dispatches completions onto it, so the `Harness` drains it with a few
+`queue.sync {}` passes before asserting. Passing your own queue (not the shared
+`JSONRPCEngineShared.processingQueue`) is what makes async delivery deterministic
+and keeps parallel tests isolated.
+
+Covered behaviors: nil init on empty urls, autoconnect, connect/queue/flush,
+success & error result delivery, subscription remote-id capture + update routing,
+unsubscribe on cancel, subscription replay across reconnect, give-up failing
+pending requests, node switching via `JSONRPCNodeSwitching`, graceful disconnect,
+inbound ping→pong.
+
 ## Extending / gotchas
 
 - **Hold `mutex`.** Public methods and delegate callbacks lock it; internal
