@@ -60,6 +60,9 @@ Verify scheme names with `xcodebuild -list`.
 running the relevant `Tests/<Subsystem>` target. When adding a new test resource,
 register it in the `Resources` enum in `Package.swift`.
 
+**New tests use Swift Testing**; existing XCTest stays and is migrated
+opportunistically. See `.claude/docs/tests.md`.
+
 ## Conventions & rules
 
 These reflect how the SDK is meant to be used and extended (distilled from
