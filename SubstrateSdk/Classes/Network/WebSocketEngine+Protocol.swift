@@ -91,6 +91,7 @@ extension WebSocketEngine: JSONRPCEngine {
         _ method: String,
         params: P?,
         unsubscribeMethod: String,
+        options: JSONRPCOptions,
         updateClosure: @escaping (T) -> Void,
         failureClosure: @escaping (Error, Bool) -> Void
     ) throws -> UInt16 {
@@ -106,7 +107,7 @@ extension WebSocketEngine: JSONRPCEngine {
         let request = try prepareRequest(
             method: method,
             params: params,
-            options: JSONRPCOptions(resendOnReconnect: true),
+            options: options,
             completion: completion,
             preGeneratedRequestId: requestId
         )

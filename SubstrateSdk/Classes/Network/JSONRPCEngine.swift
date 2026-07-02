@@ -192,6 +192,7 @@ public protocol JSONRPCEngine: AnyObject {
         _ method: String,
         params: P?,
         unsubscribeMethod: String,
+        options: JSONRPCOptions,
         updateClosure: @escaping (T) -> Void,
         failureClosure: @escaping (Error, Bool) -> Void
     )
@@ -238,6 +239,24 @@ public extension JSONRPCEngine {
     func subscribe<P: Encodable, T: Decodable>(
         _ method: String,
         params: P?,
+        unsubscribeMethod: String,
+        updateClosure: @escaping (T) -> Void,
+        failureClosure: @escaping (Error, Bool) -> Void
+    ) throws -> UInt16 {
+        try subscribe(
+            method,
+            params: params,
+            unsubscribeMethod: unsubscribeMethod,
+            options: JSONRPCOptions(),
+            updateClosure: updateClosure,
+            failureClosure: failureClosure
+        )
+    }
+
+    func subscribe<P: Encodable, T: Decodable>(
+        _ method: String,
+        params: P?,
+        options: JSONRPCOptions,
         updateClosure: @escaping (T) -> Void,
         failureClosure: @escaping (Error, Bool) -> Void
     ) throws -> UInt16 {
@@ -245,6 +264,23 @@ public extension JSONRPCEngine {
             method,
             params: params,
             unsubscribeMethod: RPCMethod.storageUnsubscribe,
+            options: options,
+            updateClosure: updateClosure,
+            failureClosure: failureClosure
+        )
+    }
+
+    func subscribe<P: Encodable, T: Decodable>(
+        _ method: String,
+        params: P?,
+        updateClosure: @escaping (T) -> Void,
+        failureClosure: @escaping (Error, Bool) -> Void
+    ) throws -> UInt16 {
+        try subscribe(
+            method,
+            params: params,
+            unsubscribeMethod: RPCMethod.storageUnsubscribe,
+            options: JSONRPCOptions(),
             updateClosure: updateClosure,
             failureClosure: failureClosure
         )
