@@ -20,7 +20,7 @@ Add the package in Xcode (File → Add Package Dependencies…) using
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/nova-wallet/substrate-sdk-ios.git", from: "4.5.1")
+    .package(url: "https://github.com/nova-wallet/substrate-sdk-ios.git", from: "5.8.0")
 ]
 ```
 
