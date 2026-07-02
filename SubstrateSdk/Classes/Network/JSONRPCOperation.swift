@@ -14,6 +14,7 @@ public class JSONRPCOperation<P: Encodable, T: Decodable>: BaseOperation<T> {
     public let engine: JSONRPCEngine
     public let method: String
     public var parameters: P?
+    public let options: JSONRPCOptions
     public let timeout: Int
 
     private let mutex = NSLock()
@@ -21,10 +22,17 @@ public class JSONRPCOperation<P: Encodable, T: Decodable>: BaseOperation<T> {
     private var pendingRequest: PendingRequest?
     private var scheduler: SchedulerProtocol?
 
-    public init(engine: JSONRPCEngine, method: String, parameters: P? = nil, timeout: Int = 10) {
+    public init(
+        engine: JSONRPCEngine,
+        method: String,
+        parameters: P? = nil,
+        options: JSONRPCOptions = JSONRPCOptions(),
+        timeout: Int = 10
+    ) {
         self.engine = engine
         self.method = method
         self.parameters = parameters
+        self.options = options
         self.timeout = timeout
 
         super.init()
@@ -37,7 +45,7 @@ public class JSONRPCOperation<P: Encodable, T: Decodable>: BaseOperation<T> {
             mutex.unlock()
         }
 
-        let requestId = try engine.callMethod(method, params: parameters) { (result: Result<T, Error>) in
+        let requestId = try engine.callMethod(method, params: parameters, options: options) { (result: Result<T, Error>) in
             self.mutex.lock()
 
             guard self.pendingRequest != nil else {
