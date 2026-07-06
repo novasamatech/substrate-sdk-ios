@@ -34,9 +34,9 @@ extension ScaleBoolOption: ScaleEncodable {
         switch self {
         case .none:
             scaleEncoder.appendRaw(data: Data([0]))
-        case .valueFalse:
-            scaleEncoder.appendRaw(data: Data([1]))
         case .valueTrue:
+            scaleEncoder.appendRaw(data: Data([1]))
+        case .valueFalse:
             scaleEncoder.appendRaw(data: Data([2]))
         }
     }
@@ -51,9 +51,9 @@ extension ScaleBoolOption: ScaleDecodable {
         case 0:
             self = .none
         case 1:
-            self = .valueFalse
-        case 2:
             self = .valueTrue
+        case 2:
+            self = .valueFalse
         default:
             throw ScaleOptionDecodingError.invalidPrefix
         }
