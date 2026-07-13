@@ -40,9 +40,13 @@ public final class MockWebSocketTransport: Engine {
     public func stop(closeCode: UInt16) { stopCloseCodes.append(closeCode) }
     public func forceStop() { forceStopCount += 1 }
 
+    public var onFrame: ((Frame) -> Void)?
+
     public func write(data: Data, opcode: FrameOpCode, completion: (() -> Void)?) {
-        sentFrames.append(Frame(data: data, opcode: opcode))
+        let frame = Frame(data: data, opcode: opcode)
+        sentFrames.append(frame)
         completion?()
+        onFrame?(frame)
     }
 
     public func write(string: String, completion: (() -> Void)?) {

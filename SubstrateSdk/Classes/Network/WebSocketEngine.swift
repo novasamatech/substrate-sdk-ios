@@ -44,6 +44,8 @@ public final class WebSocketEngine {
     public let processingQueue: DispatchQueue
     public let pingInterval: TimeInterval
     public let connectionTimeout: TimeInterval
+    public let pongTimeout: TimeInterval
+    public let viabilityTimeout: TimeInterval
 
     public private(set) var state: State = .notConnected(url: nil) {
         didSet {
@@ -84,6 +86,16 @@ public final class WebSocketEngine {
         return scheduler
     }()
 
+    private(set) lazy var pongTimeoutScheduler: SchedulerProtocol = {
+        let scheduler = Scheduler(with: self, callbackQueue: processingQueue)
+        return scheduler
+    }()
+
+    private(set) lazy var viabilityTimeoutScheduler: SchedulerProtocol = {
+        let scheduler = Scheduler(with: self, callbackQueue: processingQueue)
+        return scheduler
+    }()
+
     public var chainName: String { name ?? "unknown" }
 
     private(set) var pendingRequests: [JSONRPCRequest] = []
@@ -93,6 +105,9 @@ public final class WebSocketEngine {
     private(set) var pendingSubscriptionResponses: [String: [Data]] = [:]
     private(set) var selectedURLIndex: Int
     private(set) var reconnectionAttempts: [URL: Int] = [:]
+    private(set) var pendingBetterPathReconnect: Bool = false
+    private(set) var awaitingPong: Bool = false
+    private(set) var isPathViable: Bool = true
     public var selectedURL: URL { urls[selectedURLIndex] }
 
     public weak var delegate: WebSocketEngineDelegate?
@@ -109,6 +124,8 @@ public final class WebSocketEngine {
         autoconnect: Bool = true,
         connectionTimeout: TimeInterval = 10.0,
         pingInterval: TimeInterval = 30,
+        pongTimeout: TimeInterval = 10,
+        viabilityTimeout: TimeInterval = 2,
         name: String? = nil,
         logger: SDKLoggerProtocol? = nil
     ) {
@@ -125,6 +142,8 @@ public final class WebSocketEngine {
         self.processingQueue = processingQueue ?? JSONRPCEngineShared.processingQueue
         self.pingInterval = pingInterval
         self.connectionTimeout = connectionTimeout
+        self.pongTimeout = pongTimeout
+        self.viabilityTimeout = viabilityTimeout
         selectedURLIndex = 0
 
         guard let url = urls.first else {
@@ -222,7 +241,7 @@ public final class WebSocketEngine {
                 error: JSONRPCEngineError.clientCancelled
             )
 
-            pingScheduler.cancel()
+            stopHealthMonitoring()
 
             logger?.debug("(\(chainName):\(selectedURL)) Did start disconnect from socket")
         case .connecting:
@@ -443,6 +462,8 @@ extension WebSocketEngine {
                 logger?.error("(\(chainName):\(selectedURL)) Can't parse data")
             }
         }
+
+        completeBetterPathReconnectIfNeeded()
     }
 
     @discardableResult
@@ -720,7 +741,7 @@ extension WebSocketEngine {
     func resetRequestsAndSwitchNode() {
         let cancelled = resetInProgress()
 
-        pingScheduler.cancel()
+        stopHealthMonitoring()
 
         let reconnectionAttempt = switchNode()
         startConnecting(reconnectionAttempt)
@@ -765,6 +786,75 @@ extension WebSocketEngine {
         pingScheduler.notifyAfter(pingInterval)
     }
 
+    func schedulePongTimeoutIfNeeded() {
+        guard pongTimeout > 0.0, case .connected = state, !awaitingPong else {
+            return
+        }
+
+        awaitingPong = true
+        pongTimeoutScheduler.notifyAfter(pongTimeout)
+    }
+
+    func cancelPongTimeout() {
+        awaitingPong = false
+        pongTimeoutScheduler.cancel()
+    }
+
+    func updatePathViability(_ isViable: Bool) {
+        isPathViable = isViable
+
+        if isViable {
+            viabilityTimeoutScheduler.cancel()
+        } else if viabilityTimeout > 0.0, case .connected = state {
+            viabilityTimeoutScheduler.notifyAfter(viabilityTimeout)
+        }
+    }
+
+    func stopHealthMonitoring() {
+        pingScheduler.cancel()
+        cancelPongTimeout()
+
+        isPathViable = true
+        viabilityTimeoutScheduler.cancel()
+    }
+
+    func restartConnection() {
+        clearBetterPathReconnect()
+
+        let cancelled = resetInProgress()
+
+        stopHealthMonitoring()
+        forceConnectionReset()
+        startConnecting(0)
+
+        notify(cancelled: cancelled, error: JSONRPCEngineError.clientCancelled)
+    }
+
+    var hasNonResendableInFlight: Bool {
+        inProgressRequests.contains { !$0.value.options.resendOnReconnect } ||
+            subscriptions.contains { !$0.value.requestOptions.resendOnReconnect }
+    }
+
+    func scheduleBetterPathReconnect() {
+        pendingBetterPathReconnect = true
+    }
+
+    func clearBetterPathReconnect() {
+        pendingBetterPathReconnect = false
+    }
+
+    func completeBetterPathReconnectIfNeeded() {
+        guard pendingBetterPathReconnect, case .connected = state, !hasNonResendableInFlight else {
+            return
+        }
+
+        pendingBetterPathReconnect = false
+
+        logger?.debug("(\(chainName):\(selectedURL)) In-flight requests finished, reconnecting to better network path")
+
+        restartConnection()
+    }
+
     func sendPing() {
         guard case .connected = state else {
             logger?.warning("(\(chainName):\(selectedURL)) Tried to send ping but not connected")
@@ -781,6 +871,10 @@ extension WebSocketEngine {
                 sendWebsocketPing()
             }
         } catch {
+            mutex.lock()
+            cancelPongTimeout()
+            mutex.unlock()
+
             logger?.error("(\(chainName)) Did receive ping error: \(error)")
         }
     }
@@ -805,6 +899,10 @@ extension WebSocketEngine {
     }
 
     func handlePing(result: Result<SubstrateHealthResult, Error>) {
+        mutex.lock()
+        cancelPongTimeout()
+        mutex.unlock()
+
         switch result {
         case let .success(health):
             if health.isSyncing {
