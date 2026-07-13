@@ -135,6 +135,8 @@ extension WebSocketEngine: JSONRPCEngine {
             cancelRequestForLocalId(identifier)
         }
 
+        completeBetterPathReconnectIfNeeded()
+
         mutex.unlock()
     }
 }

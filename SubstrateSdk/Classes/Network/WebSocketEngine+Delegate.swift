@@ -17,11 +17,17 @@ extension WebSocketEngine: WebSocketDelegate {
             handleDisconnectedEvent(reason: reason, code: code)
         case let .ping(data):
             handlePing(data: data)
+        case let .pong(data):
+            handlePong(data: data)
+        case let .viabilityChanged(isViable):
+            handleViabilityChanged(isViable)
+        case let .reconnectSuggested(isSuggested):
+            handleReconnectSuggested(isSuggested)
         case let .error(error):
             handleErrorEvent(error)
         case .cancelled:
             handleCancelled()
-        default:
+        @unknown default:
             logger?.warning("(\(chainName):\(selectedURL)) Unhandled event \(event)")
         }
 
@@ -40,7 +46,7 @@ extension WebSocketEngine: WebSocketDelegate {
         case .connected:
             let cancelled = resetInProgress()
 
-            pingScheduler.cancel()
+            stopHealthMonitoring()
 
             forceConnectionReset()
             scheduleReconnectionOrDisconnect(1)
@@ -65,7 +71,7 @@ extension WebSocketEngine: WebSocketDelegate {
         case .connected:
             let cancelled = resetInProgress()
 
-            pingScheduler.cancel()
+            stopHealthMonitoring()
 
             connection.disconnect()
             startConnecting(0)
@@ -89,11 +95,16 @@ extension WebSocketEngine: WebSocketDelegate {
             logger?.debug("(\(chainName):\(selectedURL)) Did receive data: \(decodedString.prefix(1024))")
         }
 
+        cancelPongTimeout()
+
         process(data: data)
     }
 
     private func handleTextEvent(string: String) {
         logger?.debug("(\(chainName):\(selectedURL)) Did receive text: \(string.prefix(1024))")
+
+        cancelPongTimeout()
+
         if let data = string.data(using: .utf8) {
             process(data: data)
         } else {
@@ -103,6 +114,10 @@ extension WebSocketEngine: WebSocketDelegate {
 
     private func handleConnectedEvent() {
         logger?.debug("(\(chainName):\(selectedURL)) connection established")
+
+        cancelPongTimeout()
+        updatePathViability(true)
+        clearBetterPathReconnect()
 
         updateReconnectionAttempts(0, for: selectedURL)
         changeState(.connected(url: selectedURL))
@@ -121,7 +136,7 @@ extension WebSocketEngine: WebSocketDelegate {
         case .connected:
             let cancelled = resetInProgress()
 
-            pingScheduler.cancel()
+            stopHealthMonitoring()
 
             scheduleReconnectionOrDisconnect(1)
 
@@ -143,6 +158,40 @@ extension WebSocketEngine: WebSocketDelegate {
         default:
             logger?.warning("(\(chainName):\(selectedURL)) Ping data received but not connected")
         }
+    }
+
+    private func handlePong(data: Data?) {
+        logger?.debug("(\(chainName):\(selectedURL)) Did receive pong: \((data ?? Data()).toHex())")
+
+        cancelPongTimeout()
+    }
+
+    private func handleViabilityChanged(_ isViable: Bool) {
+        logger?.debug("(\(chainName):\(selectedURL)) Connection viability changed: \(isViable)")
+
+        updatePathViability(isViable)
+    }
+
+    private func handleReconnectSuggested(_ isSuggested: Bool) {
+        guard case .connected = state else {
+            return
+        }
+
+        guard isSuggested else {
+            clearBetterPathReconnect()
+            return
+        }
+
+        guard !hasNonResendableInFlight else {
+            logger?.debug("(\(chainName):\(selectedURL)) Better network path available, waiting for in-flight requests")
+
+            scheduleBetterPathReconnect()
+            return
+        }
+
+        logger?.debug("(\(chainName):\(selectedURL)) Better network path available, reconnecting")
+
+        restartConnection()
     }
 }
 
@@ -167,6 +216,10 @@ extension WebSocketEngine: SchedulerDelegate {
 
         if scheduler === pingScheduler {
             handlePing(scheduler: scheduler)
+        } else if scheduler === pongTimeoutScheduler {
+            handlePongTimeout()
+        } else if scheduler === viabilityTimeoutScheduler {
+            handleViabilityTimeout()
         } else {
             handleReconnection(scheduler: scheduler)
         }
@@ -189,5 +242,25 @@ extension WebSocketEngine: SchedulerDelegate {
         connection.callbackQueue.async {
             self.sendPing()
         }
+    }
+
+    private func handlePongTimeout() {
+        guard case .connected = state, awaitingPong else {
+            return
+        }
+
+        logger?.warning("(\(chainName):\(selectedURL)) No pong received in \(pongTimeout)s, restarting connection")
+
+        restartConnection()
+    }
+
+    private func handleViabilityTimeout() {
+        guard case .connected = state, !isPathViable else {
+            return
+        }
+
+        logger?.warning("(\(chainName):\(selectedURL)) Connection is no longer viable, restarting")
+
+        restartConnection()
     }
 }

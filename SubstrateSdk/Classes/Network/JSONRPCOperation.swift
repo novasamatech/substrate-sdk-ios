@@ -49,18 +49,12 @@ public class JSONRPCOperation<P: Encodable, T: Decodable>: BaseOperation<T> {
             self.mutex.lock()
 
             guard self.pendingRequest != nil else {
+                self.mutex.unlock()
                 return
             }
 
             self.pendingRequest = nil
             self.clearScheduler()
-
-            if
-                case let .failure(error) = result,
-                let jsonRPCEngineError = error as? JSONRPCEngineError,
-                jsonRPCEngineError == .clientCancelled {
-                return
-            }
 
             self.mutex.unlock()
 
