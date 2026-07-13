@@ -22,39 +22,36 @@ struct WebSocketEngineReconnectTests {
         #expect(harness.factory.latest.startCount == 1)
     }
 
-    @Test("viability recovery within the grace period keeps the connection")
-    func viabilityRecoveryKeepsConnection() async {
-        let harness = Harness()
+    @Test("viability recovery keeps the connection even if the grace timer fires late")
+    func viabilityRecoveryKeepsConnection() {
+        let harness = Harness(viabilityTimeout: 60)
 
         harness.connect()
         harness.transport.simulate(.viabilityChanged(false))
         harness.transport.simulate(.viabilityChanged(true))
-
-        let didReconnect = await harness.reconnectHappened(within: 0.5)
-        #expect(!didReconnect)
-
         harness.drain()
+
+        harness.engine.didTrigger(scheduler: harness.engine.viabilityTimeoutScheduler)
+        harness.drain()
+
         #expect(harness.factory.transports.count == 1)
         #expect(harness.engine.state == .connected(url: Self.url))
     }
 
     @Test("better path suggestion reconnects immediately when idle")
-    func betterPathTriggersImmediateReconnect() async {
+    func betterPathTriggersImmediateReconnect() {
         let harness = Harness()
 
         harness.connect()
         harness.transport.simulate(.reconnectSuggested(true))
-
-        let didReconnect = await harness.reconnectHappened()
-        #expect(didReconnect)
-
         harness.drain()
+
         #expect(harness.factory.transports.count == 2)
         #expect(harness.factory.latest.startCount == 1)
     }
 
     @Test("better path waits for a non-resendable in-flight request")
-    func betterPathWaitsForInFlight() async throws {
+    func betterPathWaitsForInFlight() throws {
         let harness = Harness()
 
         harness.connect()
@@ -63,25 +60,19 @@ struct WebSocketEngineReconnectTests {
         harness.drain()
 
         harness.transport.simulate(.reconnectSuggested(true))
-
-        let reconnectedEarly = await harness.reconnectHappened(within: 0.5)
-        #expect(!reconnectedEarly)
-
         harness.drain()
+
+        #expect(harness.factory.transports.count == 1)
         #expect(harness.engine.pendingBetterPathReconnect)
 
         harness.respond(to: requestId)
 
-        let didReconnect = await harness.reconnectHappened()
-        #expect(didReconnect)
-
-        harness.drain()
-        #expect(!harness.engine.pendingBetterPathReconnect)
         #expect(harness.factory.transports.count == 2)
+        #expect(!harness.engine.pendingBetterPathReconnect)
     }
 
     @Test("withdrawn better path suggestion cancels the deferred reconnect")
-    func withdrawnBetterPathCancelsDeferredReconnect() async throws {
+    func withdrawnBetterPathCancelsDeferredReconnect() throws {
         let harness = Harness()
 
         harness.connect()
@@ -94,11 +85,8 @@ struct WebSocketEngineReconnectTests {
 
         harness.respond(to: requestId)
 
-        let didReconnect = await harness.reconnectHappened(within: 0.5)
-        #expect(!didReconnect)
-
-        harness.drain()
         #expect(harness.factory.transports.count == 1)
+        #expect(!harness.engine.pendingBetterPathReconnect)
         #expect(harness.engine.state == .connected(url: Self.url))
     }
 
@@ -124,16 +112,13 @@ struct WebSocketEngineReconnectTests {
         harness.drain()
         harness.respond(to: requestId)
 
-        let reconnectedAgain = await harness.transportCountReached(3, within: 0.5)
-        #expect(!reconnectedAgain)
-
-        harness.drain()
+        #expect(harness.factory.transports.count == 2)
         #expect(harness.engine.state == .connected(url: Self.url))
     }
 
     @Test("late pong timeout after pong received does not restart the connection")
-    func latePongTimeoutAfterPongIsIgnored() async {
-        let harness = Harness(pongTimeout: 5)
+    func latePongTimeoutAfterPongIsIgnored() {
+        let harness = Harness(pongTimeout: 60)
 
         harness.connect()
 
@@ -145,23 +130,6 @@ struct WebSocketEngineReconnectTests {
         harness.drain()
 
         harness.engine.didTrigger(scheduler: harness.engine.pongTimeoutScheduler)
-        harness.drain()
-
-        #expect(harness.factory.transports.count == 1)
-        #expect(harness.engine.state == .connected(url: Self.url))
-    }
-
-    @Test("late viability timeout after recovery does not restart the connection")
-    func lateViabilityTimeoutAfterRecoveryIsIgnored() async {
-        let harness = Harness(viabilityTimeout: 5)
-
-        harness.connect()
-
-        harness.transport.simulate(.viabilityChanged(false))
-        harness.transport.simulate(.viabilityChanged(true))
-        harness.drain()
-
-        harness.engine.didTrigger(scheduler: harness.engine.viabilityTimeoutScheduler)
         harness.drain()
 
         #expect(harness.factory.transports.count == 1)
@@ -182,30 +150,9 @@ struct WebSocketEngineReconnectTests {
         #expect(harness.factory.transports.count == 2)
     }
 
-    @Test("inbound traffic keeps the connection alive without pongs")
-    func inboundTrafficSatisfiesPongTimeout() async {
-        let harness = Harness(pingInterval: 0.1, pongTimeout: 0.25)
-
-        let connection = harness.transport
-        connection.onFrame = { [weak connection] frame in
-            if frame.opcode == .ping {
-                connection?.simulateText("{\"jsonrpc\":\"2.0\",\"method\":\"noop\",\"params\":{}}")
-            }
-        }
-
-        harness.connect()
-
-        let didReconnect = await harness.reconnectHappened(within: 1)
-        #expect(!didReconnect)
-
-        harness.drain()
-        #expect(harness.factory.transports.count == 1)
-        #expect(harness.engine.state == .connected(url: Self.url))
-    }
-
     @Test("answered pings keep the connection alive")
-    func pongReceptionKeepsConnectionAlive() async {
-        let harness = Harness(pingInterval: 0.1, pongTimeout: 0.3)
+    func pongReceptionKeepsConnectionAlive() {
+        let harness = Harness(pongTimeout: 60)
 
         let connection = harness.transport
         connection.onFrame = { [weak connection] frame in
@@ -216,19 +163,48 @@ struct WebSocketEngineReconnectTests {
 
         harness.connect()
 
-        let didReconnect = await harness.reconnectHappened(within: 1)
-        #expect(!didReconnect)
+        for _ in 0 ..< 2 {
+            harness.engine.didTrigger(scheduler: harness.engine.pingScheduler)
+            harness.drain()
+        }
 
+        harness.engine.didTrigger(scheduler: harness.engine.pongTimeoutScheduler)
         harness.drain()
-        #expect(connection.pingCount >= 2)
+
+        #expect(connection.pingCount == 2)
+        #expect(harness.factory.transports.count == 1)
+        #expect(harness.engine.state == .connected(url: Self.url))
+    }
+
+    @Test("inbound traffic keeps the connection alive without pongs")
+    func inboundTrafficSatisfiesPongTimeout() {
+        let harness = Harness(pongTimeout: 60)
+
+        let connection = harness.transport
+        connection.onFrame = { [weak connection] frame in
+            if frame.opcode == .ping {
+                connection?.simulateText("{\"jsonrpc\":\"2.0\",\"method\":\"noop\",\"params\":{}}")
+            }
+        }
+
+        harness.connect()
+
+        harness.engine.didTrigger(scheduler: harness.engine.pingScheduler)
+        harness.drain()
+
+        harness.engine.didTrigger(scheduler: harness.engine.pongTimeoutScheduler)
+        harness.drain()
+
         #expect(harness.factory.transports.count == 1)
         #expect(harness.engine.state == .connected(url: Self.url))
     }
 }
 
 
-/// A reconnect always makes the engine request a fresh transport from the factory,
-/// so tests detect it by polling the number of created transports.
+/// A reconnect always makes the engine request a fresh transport from the factory.
+/// Event-driven flows are verified deterministically: `drain()` flushes the serial
+/// processing queue, and scheduler fires are injected via `didTrigger`. Only the two
+/// real-timer tests await wall-clock with a generous ceiling.
 private final class Harness {
     let engine: WebSocketEngine
     let delegate = MockWebSocketEngineDelegate()
@@ -269,7 +245,7 @@ private final class Harness {
     @discardableResult
     func submitNonResendableRequest() throws -> UInt16 {
         try engine.callMethod(
-            "extrinsic",
+            "author_submitExtrinsic",
             params: ["0x00"],
             options: JSONRPCOptions(resendOnReconnect: false)
         ) { (_: Result<String, Error>) in }
@@ -286,21 +262,17 @@ private final class Harness {
         return count
     }
 
-    func transportCountReached(_ expected: Int, within timeout: TimeInterval = 2) async -> Bool {
+    func reconnectHappened(within timeout: TimeInterval = 2) async -> Bool {
         let deadline = Date().addingTimeInterval(timeout)
 
         while Date() < deadline {
-            if transportCount() >= expected {
+            if transportCount() >= 2 {
                 return true
             }
 
             try? await Task.sleep(nanoseconds: 50_000_000)
         }
 
-        return transportCount() >= expected
-    }
-
-    func reconnectHappened(within timeout: TimeInterval = 2) async -> Bool {
-        await transportCountReached(2, within: timeout)
+        return transportCount() >= 2
     }
 }
