@@ -858,7 +858,20 @@ extension WebSocketEngine {
     }
 
     func sendPing() {
-        guard case .connected = state else {
+        mutex.lock()
+
+        let canSendPing: Bool
+
+        if case .connected = state {
+            schedulePongTimeoutIfNeeded()
+            canSendPing = true
+        } else {
+            canSendPing = false
+        }
+
+        mutex.unlock()
+
+        guard canSendPing else {
             logger?.warning("(\(chainName):\(selectedURL)) Tried to send ping but not connected")
             return
         }

@@ -238,7 +238,6 @@ extension WebSocketEngine: SchedulerDelegate {
 
     private func handlePing(scheduler _: SchedulerProtocol) {
         schedulePingIfNeeded()
-        schedulePongTimeoutIfNeeded()
 
         connection.callbackQueue.async {
             self.sendPing()
