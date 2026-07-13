@@ -186,14 +186,14 @@ struct WebSocketEngineReconnectTests {
     func pongReceptionKeepsConnectionAlive() async {
         let harness = Harness(pingInterval: 0.1, pongTimeout: 0.3)
 
-        harness.connect()
-
         let connection = harness.transport
         connection.onFrame = { [weak connection] frame in
             if frame.opcode == .ping {
                 connection?.simulate(.pong(nil))
             }
         }
+
+        harness.connect()
 
         let didReconnect = await harness.reconnectHappened(within: 1)
         #expect(!didReconnect)

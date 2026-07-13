@@ -171,6 +171,8 @@ public final class WebSocketEngine {
 
         reconnectionScheduler.cancel()
         pingScheduler.cancel()
+        pongTimeoutScheduler.cancel()
+        viabilityTimeoutScheduler.cancel()
     }
 
     public func changeUrls(_ newUrls: [URL]) {
@@ -827,7 +829,7 @@ extension WebSocketEngine {
         forceConnectionReset()
         startConnecting(0)
 
-        notify(cancelled: cancelled, error: JSONRPCEngineError.clientCancelled)
+        notify(cancelled: cancelled, error: JSONRPCEngineError.remoteCancelled)
     }
 
     var hasNonResendableInFlight: Bool {

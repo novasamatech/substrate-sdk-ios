@@ -18,8 +18,6 @@ public final class MockWebSocketConnectionFactory: WebSocketConnectionFactoryPro
         return transport
     }
 
-    public var onCreateConnection: ((MockWebSocketTransport) -> Void)?
-
     public init() {}
 
     public func createConnection(
@@ -29,7 +27,6 @@ public final class MockWebSocketConnectionFactory: WebSocketConnectionFactoryPro
     ) -> WebSocketConnectionProtocol {
         let transport = MockWebSocketTransport()
         transports.append(transport)
-        onCreateConnection?(transport)
 
         let request = URLRequest(url: url, timeoutInterval: connectionTimeout)
         let socket = WebSocket(request: request, engine: transport)
