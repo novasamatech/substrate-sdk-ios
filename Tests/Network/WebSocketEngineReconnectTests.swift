@@ -182,6 +182,27 @@ struct WebSocketEngineReconnectTests {
         #expect(harness.factory.transports.count == 2)
     }
 
+    @Test("inbound traffic keeps the connection alive without pongs")
+    func inboundTrafficSatisfiesPongTimeout() async {
+        let harness = Harness(pingInterval: 0.1, pongTimeout: 0.25)
+
+        let connection = harness.transport
+        connection.onFrame = { [weak connection] frame in
+            if frame.opcode == .ping {
+                connection?.simulateText("{\"jsonrpc\":\"2.0\",\"method\":\"noop\",\"params\":{}}")
+            }
+        }
+
+        harness.connect()
+
+        let didReconnect = await harness.reconnectHappened(within: 1)
+        #expect(!didReconnect)
+
+        harness.drain()
+        #expect(harness.factory.transports.count == 1)
+        #expect(harness.engine.state == .connected(url: Self.url))
+    }
+
     @Test("answered pings keep the connection alive")
     func pongReceptionKeepsConnectionAlive() async {
         let harness = Harness(pingInterval: 0.1, pongTimeout: 0.3)

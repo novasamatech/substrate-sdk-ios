@@ -901,10 +901,6 @@ extension WebSocketEngine {
     }
 
     func handlePing(result: Result<SubstrateHealthResult, Error>) {
-        mutex.lock()
-        cancelPongTimeout()
-        mutex.unlock()
-
         switch result {
         case let .success(health):
             if health.isSyncing {

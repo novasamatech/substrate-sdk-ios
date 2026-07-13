@@ -95,11 +95,16 @@ extension WebSocketEngine: WebSocketDelegate {
             logger?.debug("(\(chainName):\(selectedURL)) Did receive data: \(decodedString.prefix(1024))")
         }
 
+        cancelPongTimeout()
+
         process(data: data)
     }
 
     private func handleTextEvent(string: String) {
         logger?.debug("(\(chainName):\(selectedURL)) Did receive text: \(string.prefix(1024))")
+
+        cancelPongTimeout()
+
         if let data = string.data(using: .utf8) {
             process(data: data)
         } else {
