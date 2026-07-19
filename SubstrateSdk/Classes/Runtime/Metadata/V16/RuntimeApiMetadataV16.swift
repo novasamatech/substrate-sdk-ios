@@ -36,7 +36,13 @@ extension RuntimeApiMetadataV16: ScaleCodable {
         name = try String(scaleDecoder: scaleDecoder)
         methods = try [RuntimeApiMethodMetadataV16](scaleDecoder: scaleDecoder)
         docs = try [String](scaleDecoder: scaleDecoder)
-        version = try UInt32(BigUInt(scaleDecoder: scaleDecoder))
+        let rawVersion = try BigUInt(scaleDecoder: scaleDecoder)
+
+        guard let version = UInt32(exactly: rawVersion) else {
+            throw ScaleCodingError.unexpectedDecodedValue
+        }
+
+        self.version = version
         deprecationInfo = try ItemDeprecationInfoV16(scaleDecoder: scaleDecoder)
     }
 }

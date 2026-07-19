@@ -32,6 +32,10 @@ public struct PalletViewFunctionMetadataV16 {
 
 extension PalletViewFunctionMetadataV16: ScaleCodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
+        guard id.count == Self.idLength else {
+            throw ScaleCodingError.unexpectedEncodedValue
+        }
+
         scaleEncoder.appendRaw(data: id)
         try name.encode(scaleEncoder: scaleEncoder)
         try inputs.encode(scaleEncoder: scaleEncoder)

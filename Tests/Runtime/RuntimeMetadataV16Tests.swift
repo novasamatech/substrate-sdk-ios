@@ -28,6 +28,10 @@ final class RuntimeMetadataV16Tests: XCTestCase {
         XCTAssertEqual(query.function.name, "is_superset")
         XCTAssertEqual(query.function.inputs.count, 2)
         XCTAssertEqual(query.function.inputs.map(\.name), ["to_check", "against"])
+        XCTAssertTrue(
+            metadata.types.types.contains { $0.identifier == query.function.output },
+            "expected output type to resolve in types registry"
+        )
     }
 
     func testViewFunctionLookupReturnsNilForUnknownName() {
@@ -60,22 +64,25 @@ final class RuntimeMetadataV16Tests: XCTestCase {
     }
 
     func testCommonLookupsOnV16Metadata() {
-        guard let metadata = loadV16Metadata(filename: "polkadot-v16-metadata") else {
-            return
-        }
+        for filename in ["polkadot-v16-metadata", "westend-v16-metadata"] {
+            guard let metadata = loadV16Metadata(filename: filename) else {
+                return
+            }
 
-        XCTAssertNotNil(metadata.getCall(from: "Balances", with: "transfer_keep_alive"))
-        XCTAssertNotNil(metadata.getStorageMetadata(in: "System", storageName: "Account"))
-        XCTAssertNotNil(metadata.getConstant(in: "Balances", constantName: "ExistentialDeposit"))
-        XCTAssertNotNil(metadata.getRuntimeApiMethod(for: "Metadata", methodName: "metadata_at_version"))
-        XCTAssertNotNil(
-            metadata.getRuntimeApiMethod(
-                for: ViewFunctionQueryResult.executeApiName,
-                methodName: ViewFunctionQueryResult.executeMethodName
+            XCTAssertNotNil(metadata.getCall(from: "Balances", with: "transfer_keep_alive"), filename)
+            XCTAssertNotNil(metadata.getStorageMetadata(in: "System", storageName: "Account"), filename)
+            XCTAssertNotNil(metadata.getConstant(in: "Balances", constantName: "ExistentialDeposit"), filename)
+            XCTAssertNotNil(metadata.getRuntimeApiMethod(for: "Metadata", methodName: "metadata_at_version"), filename)
+            XCTAssertNotNil(
+                metadata.getRuntimeApiMethod(
+                    for: ViewFunctionQueryResult.executeApiName,
+                    methodName: ViewFunctionQueryResult.executeMethodName
+                ),
+                filename
             )
-        )
-        XCTAssertTrue(metadata.getSignedExtensions().contains("CheckNonce"))
-        XCTAssertNotNil(metadata.getSignedExtensionType(for: "CheckNonce"))
+            XCTAssertTrue(metadata.getSignedExtensions().contains("CheckNonce"), filename)
+            XCTAssertNotNil(metadata.getSignedExtensionType(for: "CheckNonce"), filename)
+        }
     }
 
     private func loadV16Metadata(filename: String) -> RuntimeMetadataV16? {

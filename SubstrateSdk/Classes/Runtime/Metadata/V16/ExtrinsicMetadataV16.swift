@@ -74,7 +74,13 @@ extension TransactionExtensionsVersionV16: ScaleCodable {
 
     public init(scaleDecoder: ScaleDecoding) throws {
         version = try UInt8(scaleDecoder: scaleDecoder)
-        extensionIndexes = try [BigUInt](scaleDecoder: scaleDecoder).map { UInt32($0) }
+        extensionIndexes = try [BigUInt](scaleDecoder: scaleDecoder).map { index in
+            guard let value = UInt32(exactly: index) else {
+                throw ScaleCodingError.unexpectedDecodedValue
+            }
+
+            return value
+        }
     }
 }
 
