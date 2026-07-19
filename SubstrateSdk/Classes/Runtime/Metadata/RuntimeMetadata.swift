@@ -19,9 +19,18 @@ public protocol RuntimeMetadataProtocol {
 
     func getRuntimeApiMethod(for runtimeApiName: String, methodName: String) -> RuntimeApiQueryResult?
 
+    func getViewFunction(for palletName: String, functionName: String) -> ViewFunctionQueryResult?
+
     func getSignedExtensions() -> [String]
 
     func getSignedExtensionType(for identifier: String) -> String?
+}
+
+public extension RuntimeMetadataProtocol {
+    // view functions are only available starting from v16 metadata
+    func getViewFunction(for _: String, functionName _: String) -> ViewFunctionQueryResult? {
+        nil
+    }
 }
 
 public struct RuntimeMetadata: RuntimeMetadataProtocol {

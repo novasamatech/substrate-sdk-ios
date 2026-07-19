@@ -6,6 +6,7 @@ public struct RuntimeMetadataContainer {
         case v13(_ metadata: RuntimeMetadata)
         case v14(_ metadata: RuntimeMetadataV14)
         case v15(_ metadata: RuntimeMetadataV15)
+        case v16(_ metadata: RuntimeMetadataV16)
     }
 
     public let metaReserved: UInt32
@@ -31,6 +32,8 @@ extension RuntimeMetadataContainer: ScaleCodable {
             try metadata.encode(scaleEncoder: scaleEncoder)
         case let .v15(metadata):
             try metadata.encode(scaleEncoder: scaleEncoder)
+        case let .v16(metadata):
+            try metadata.encode(scaleEncoder: scaleEncoder)
         }
     }
 
@@ -44,9 +47,12 @@ extension RuntimeMetadataContainer: ScaleCodable {
         } else if runtimeMetadataVersion == 14 {
             let metadata = try RuntimeMetadataV14(scaleDecoder: scaleDecoder)
             runtimeMetadata = .v14(metadata)
-        } else {
+        } else if runtimeMetadataVersion == 15 {
             let metadata = try RuntimeMetadataV15(scaleDecoder: scaleDecoder)
             runtimeMetadata = .v15(metadata)
+        } else {
+            let metadata = try RuntimeMetadataV16(scaleDecoder: scaleDecoder)
+            runtimeMetadata = .v16(metadata)
         }
     }
 }

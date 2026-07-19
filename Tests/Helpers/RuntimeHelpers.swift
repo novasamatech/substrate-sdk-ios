@@ -31,7 +31,7 @@ public final class RuntimeHelper {
         switch container.runtimeMetadata {
         case .v13(let metadata):
             return metadata
-        case .v14, .v15:
+        case .v14, .v15, .v16:
             throw RuntimeHelperError.unexpectedMetadata
         }
     }
