@@ -35,6 +35,8 @@ public final class PostV14RuntimeHelper {
             return metadata
         case .v15(let metadata):
             return metadata
+        case .v16(let metadata):
+            return metadata
         case .v13:
             throw RuntimeHelperError.unexpectedMetadata
         }
