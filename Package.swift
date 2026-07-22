@@ -214,6 +214,7 @@ enum Resources {
                 "../Resources/Runtime/polkadot-metadata",
                 "../Resources/Runtime/polkadot-v14-metadata",
                 "../Resources/Runtime/polkadot-v15",
+                "../Resources/Runtime/polkadot-v16-metadata",
                 "../Resources/Runtime/polkadot.json",
                 "../Resources/Runtime/statemine-metadata",
                 "../Resources/Runtime/statemine-v14-metadata",
@@ -222,6 +223,7 @@ enum Resources {
                 "../Resources/Runtime/westend-metadata",
                 "../Resources/Runtime/westend-v14-metadata",
                 "../Resources/Runtime/westend-v15-metadata",
+                "../Resources/Runtime/westend-v16-metadata",
                 "../Resources/Runtime/westend.json"
             ]
         case .keystore:

@@ -53,4 +53,8 @@ public extension RuntimeMetadataProtocol {
 
         return result
     }
+    
+    func getViewFunction(using path: ViewFunctionCodingPath) -> ViewFunctionQueryResult? {
+        getViewFunction(for: path.moduleName, functionName: path.functionName)
+    }
 }
