@@ -11,7 +11,6 @@ switching, and periodic health checks.
 - `WebSocketEngine+Delegate.swift` — Starscream `WebSocketDelegate`, reachability, and scheduler callbacks
 - `JSONRPCEngine.swift` — protocol, request/subscription/batch model types, `JSONRPCOptions`, errors
 - `JSONRPCSubscriptionId.swift` — wire-type-preserving subscription id (`number`/`string`)
-- `JSONRPCMessages.swift` — public Codable envelopes (`JSONRPCId`, request/response/error/notification) for adapters relaying a foreign id space; the engine's own wire types (`JSONRPCInfo`/`JSONRPCData`, `UInt16` ids) stay internal
 - `WebSocketConnectionFactory.swift` — builds the underlying Starscream `WebSocket`
 - `ReconnectionStrategy.swift` — `ExponentialReconnection`
 - `JSONRPCNodeSwitching.swift` — error-code-driven node switching
