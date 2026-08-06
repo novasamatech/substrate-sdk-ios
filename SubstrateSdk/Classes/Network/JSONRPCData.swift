@@ -1,6 +1,6 @@
 import Foundation
 
-public struct JSONRPCError: Error, Decodable {
+public struct JSONRPCError: Error, Codable {
     enum CodingKeys: String, CodingKey {
         case message
         case code
@@ -17,6 +17,14 @@ public struct JSONRPCError: Error, Decodable {
         message = try container.decode(String.self, forKey: .message)
         code = try container.decode(Int.self, forKey: .code)
         data = try? container.decode(String.self, forKey: .data)
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.container(keyedBy: CodingKeys.self)
+
+        try container.encode(message, forKey: .message)
+        try container.encode(code, forKey: .code)
+        try container.encodeIfPresent(data, forKey: .data)
     }
 
     public init(message: String, code: Int, data: String?) {
@@ -43,9 +51,9 @@ struct JSONRPCData<T: Decodable>: Decodable {
 public struct JSONRPCSubscriptionUpdate<T: Decodable>: Decodable {
     public struct Result: Decodable {
         public let result: T
-        @JSONRPCSubscriptionId public var subscription: String
+        public let subscription: JSONRPCSubscriptionId
 
-        public init(result: T, subscription: String) {
+        public init(result: T, subscription: JSONRPCSubscriptionId) {
             self.result = result
             self.subscription = subscription
         }
@@ -64,7 +72,7 @@ public struct JSONRPCSubscriptionUpdate<T: Decodable>: Decodable {
 
 struct JSONRPCSubscriptionBasicUpdate: Decodable {
     struct Result: Decodable {
-        @JSONRPCSubscriptionId var subscription: String
+        let subscription: JSONRPCSubscriptionId
     }
 
     let jsonrpc: String

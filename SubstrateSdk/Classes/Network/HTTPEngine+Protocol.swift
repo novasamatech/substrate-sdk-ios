@@ -6,6 +6,7 @@ extension HTTPEngine: JSONRPCEngine {
         params _: P?,
         unsubscribeMethod _: String,
         options _: JSONRPCOptions,
+        onSubscribed _: ((JSONRPCSubscriptionId) -> Void)?,
         updateClosure _: @escaping (T) -> Void,
         failureClosure _: @escaping (Error, Bool) -> Void
     ) throws -> UInt16 where P: Encodable, T: Decodable {
@@ -44,7 +45,7 @@ extension HTTPEngine: JSONRPCEngine {
         return requestId
     }
 
-    public func cancelForIdentifiers(_ identifiers: [UInt16]) {
+    public func cancelForIdentifiers(_ identifiers: [UInt16], sendUnsubscribe _: Bool) {
         mutex.lock()
 
         defer {
