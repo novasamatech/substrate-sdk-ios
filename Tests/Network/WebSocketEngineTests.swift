@@ -214,6 +214,94 @@ struct WebSocketEngineTests {
         #expect(updates == ["0xdeadbeef"])
     }
 
+    @Test("delivers the node-assigned id through onSubscribed, again after reconnect")
+    func onSubscribedRevealsIdAndRefiresAfterReconnect() throws {
+        let harness = Harness(autoconnect: true)
+        harness.connect()
+
+        var revealedIds: [JSONRPCSubscriptionId] = []
+        let localId = try harness.engine.subscribe(
+            "state_subscribeStorage",
+            params: [String](),
+            unsubscribeMethod: "state_unsubscribeStorage",
+            options: JSONRPCOptions(),
+            onSubscribed: { revealedIds.append($0) },
+            updateClosure: { (_: JSONRPCSubscriptionUpdate<String>) in },
+            failureClosure: { _, _ in }
+        )
+
+        harness.receiveText(resultResponse(id: localId, result: "\"REMOTE_1\""))
+        #expect(revealedIds == [.string("REMOTE_1")])
+
+        harness.serverDisconnect()
+        harness.engine.connectIfNeeded()
+        harness.drain()
+        harness.connect()
+
+        harness.receiveText(resultResponse(id: localId, result: "\"REMOTE_2\""))
+        #expect(revealedIds == [.string("REMOTE_1"), .string("REMOTE_2")])
+        #expect(harness.engine.subscriptions[localId]?.remoteId == "REMOTE_2")
+    }
+
+    @Test("preserves a numeric remote id end-to-end and unsubscribes with the numeric form")
+    func numericRemoteIdRoundTrip() throws {
+        let harness = Harness(autoconnect: true)
+        harness.connect()
+
+        var revealed: JSONRPCSubscriptionId?
+        var updates: [String] = []
+        let localId = try harness.engine.subscribe(
+            "state_subscribeStorage",
+            params: [String](),
+            unsubscribeMethod: "state_unsubscribeStorage",
+            options: JSONRPCOptions(),
+            onSubscribed: { revealed = $0 },
+            updateClosure: { (update: JSONRPCSubscriptionUpdate<String>) in
+                updates.append(update.params.result)
+            },
+            failureClosure: { _, _ in }
+        )
+
+        harness.receiveText(resultResponse(id: localId, result: "7"))
+        #expect(revealed == .number(7))
+        #expect(harness.engine.subscriptions[localId]?.remoteId == .number(7))
+
+        harness.receiveText(
+            #"{"jsonrpc":"2.0","method":"state_storage","params":{"subscription":7,"result":"0xdeadbeef"}}"#
+        )
+        #expect(updates == ["0xdeadbeef"])
+
+        harness.engine.cancelForIdentifier(localId)
+        harness.drain()
+
+        let lastFrame = try #require(harness.transport.sentRequests.last)
+        let lastFrameText = String(decoding: lastFrame, as: UTF8.self)
+        #expect(lastFrameText.contains(#""params":[7]"#))
+        #expect(!lastFrameText.contains(#""params":["7"]"#))
+    }
+
+    @Test("silent cancel drops the subscription without a wire unsubscribe")
+    func silentCancelSkipsWireUnsubscribe() throws {
+        let harness = Harness(autoconnect: true)
+        harness.connect()
+
+        let localId = try harness.engine.subscribe(
+            "state_subscribeStorage",
+            params: [String](),
+            unsubscribeMethod: "state_unsubscribeStorage",
+            updateClosure: { (_: JSONRPCSubscriptionUpdate<String>) in },
+            failureClosure: { _, _ in }
+        )
+        harness.receiveText(resultResponse(id: localId, result: "\"REMOTE_1\""))
+
+        let requestsBefore = harness.transport.sentRequests.count
+        harness.engine.cancelForIdentifiers([localId], sendUnsubscribe: false)
+        harness.drain()
+
+        #expect(harness.engine.subscriptions[localId] == nil)
+        #expect(harness.transport.sentRequests.count == requestsBefore)
+    }
+
     @Test("cancelling a subscription sends an unsubscribe and drops the handler")
     func cancelSubscriptionUnsubscribesAndRemoves() throws {
         let harness = Harness(autoconnect: true)

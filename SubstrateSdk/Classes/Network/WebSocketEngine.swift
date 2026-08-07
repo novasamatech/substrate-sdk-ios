@@ -102,7 +102,7 @@ public final class WebSocketEngine {
     private(set) var inProgressRequests: [UInt16: JSONRPCRequest] = [:]
     private(set) var partialBatches: [String: [JSONRPCBatchRequestItem]] = [:]
     private(set) var subscriptions: [UInt16: JSONRPCSubscribing] = [:]
-    private(set) var pendingSubscriptionResponses: [String: [Data]] = [:]
+    private(set) var pendingSubscriptionResponses: [JSONRPCSubscriptionId: [Data]] = [:]
     private(set) var selectedURLIndex: Int
     private(set) var reconnectionAttempts: [URL: Int] = [:]
     private(set) var pendingBetterPathReconnect: Bool = false
@@ -535,7 +535,7 @@ extension WebSocketEngine {
         return requestFactory.generateRequestId(skipping: existingIds)
     }
 
-    func cancelRequestForLocalId(_ identifier: UInt16) {
+    func cancelRequestForLocalId(_ identifier: UInt16, sendUnsubscribe: Bool = true) {
         if let index = pendingRequests.firstIndex(where: { $0.requestId.itemIds.contains(identifier) }) {
             let request = pendingRequests.remove(at: index)
 
@@ -555,13 +555,17 @@ extension WebSocketEngine {
         // check whether there is subscription for this id and send unsubscribe request
 
         if let subscription = subscriptions[identifier], let remoteId = subscription.remoteId {
-            unsubscribe(for: remoteId, method: subscription.unsubscribeMethod)
+            if sendUnsubscribe {
+                unsubscribe(for: remoteId, method: subscription.unsubscribeMethod)
+            } else {
+                pendingSubscriptionResponses[remoteId] = nil
+            }
         }
 
         subscriptions[identifier] = nil
     }
 
-    func unsubscribe(for remoteId: String, method: String) {
+    func unsubscribe(for remoteId: JSONRPCSubscriptionId, method: String) {
         pendingSubscriptionResponses[remoteId] = nil
 
         do {
@@ -579,7 +583,7 @@ extension WebSocketEngine {
         }
     }
 
-    func provideUnsubscriptionResult(_ result: Result<Bool, Error>, remoteId: String) {
+    func provideUnsubscriptionResult(_ result: Result<Bool, Error>, remoteId: JSONRPCSubscriptionId) {
         switch result {
         case let .success(isSuccess):
             logger?.debug("(\(chainName):\(selectedURL)) Unsubscription request completed \(remoteId): \(isSuccess)")
@@ -601,8 +605,15 @@ extension WebSocketEngine {
     func processSubscriptionResponse(_ identifier: UInt16, data: Data) {
         do {
             let response = try jsonDecoder.decode(JSONRPCData<JSONRPCSubscriptionId>.self, from: data)
-            let remoteId = response.result.wrappedValue
-            subscriptions[identifier]?.remoteId = remoteId
+            let remoteId = response.result
+
+            if let subscription = subscriptions[identifier] {
+                subscription.remoteId = remoteId
+
+                completionQueue.async {
+                    subscription.handle(subscribedId: remoteId)
+                }
+            }
 
             logger?.debug("(\(chainName):\(selectedURL)) Did receive subscription id: \(remoteId)")
 

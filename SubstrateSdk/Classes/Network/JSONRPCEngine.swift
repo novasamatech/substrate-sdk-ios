@@ -135,9 +135,10 @@ public protocol JSONRPCSubscribing: AnyObject {
     var requestId: UInt16 { get }
     var requestData: Data { get }
     var requestOptions: JSONRPCOptions { get }
-    var remoteId: String? { get set }
+    var remoteId: JSONRPCSubscriptionId? { get set }
     var unsubscribeMethod: String { get }
 
+    func handle(subscribedId: JSONRPCSubscriptionId)
     func handle(data: Data) throws
     func handle(error: Error, unsubscribed: Bool)
 }
@@ -146,11 +147,12 @@ public final class JSONRPCSubscription<T: Decodable>: JSONRPCSubscribing {
     public let requestId: UInt16
     public let requestData: Data
     public let requestOptions: JSONRPCOptions
-    public var remoteId: String?
+    public var remoteId: JSONRPCSubscriptionId?
     public let unsubscribeMethod: String
 
     private lazy var jsonDecoder = JSONDecoder()
 
+    public let onSubscribed: ((JSONRPCSubscriptionId) -> Void)?
     public let updateClosure: (T) -> Void
     public let failureClosure: (Error, Bool) -> Void
 
@@ -159,6 +161,7 @@ public final class JSONRPCSubscription<T: Decodable>: JSONRPCSubscribing {
         requestData: Data,
         requestOptions: JSONRPCOptions,
         unsubscribeMethod: String,
+        onSubscribed: ((JSONRPCSubscriptionId) -> Void)? = nil,
         updateClosure: @escaping (T) -> Void,
         failureClosure: @escaping (Error, Bool) -> Void
     ) {
@@ -166,8 +169,13 @@ public final class JSONRPCSubscription<T: Decodable>: JSONRPCSubscribing {
         self.requestData = requestData
         self.requestOptions = requestOptions
         self.unsubscribeMethod = unsubscribeMethod
+        self.onSubscribed = onSubscribed
         self.updateClosure = updateClosure
         self.failureClosure = failureClosure
+    }
+
+    public func handle(subscribedId: JSONRPCSubscriptionId) {
+        onSubscribed?(subscribedId)
     }
 
     public func handle(data: Data) throws {
@@ -188,17 +196,23 @@ public protocol JSONRPCEngine: AnyObject {
         completion closure: ((Result<T, Error>) -> Void)?
     ) throws -> UInt16
 
+    /// `onSubscribed` delivers the node-assigned subscription id once the subscribe
+    /// response arrives. It fires again after every reconnect resubscribe with the
+    /// NEW id — consumers tracking remote ids get the rebind signal for free.
     func subscribe<P: Encodable, T: Decodable>(
         _ method: String,
         params: P?,
         unsubscribeMethod: String,
         options: JSONRPCOptions,
+        onSubscribed: ((JSONRPCSubscriptionId) -> Void)?,
         updateClosure: @escaping (T) -> Void,
         failureClosure: @escaping (Error, Bool) -> Void
     )
         throws -> UInt16
 
-    func cancelForIdentifiers(_ identifiers: [UInt16])
+    /// `sendUnsubscribe: false` frees the subscription without emitting the wire
+    /// unsubscribe call — for streams the server already terminated.
+    func cancelForIdentifiers(_ identifiers: [UInt16], sendUnsubscribe: Bool)
 
     func addBatchCallMethod<P: Encodable>(
         _ method: String,
@@ -240,6 +254,25 @@ public extension JSONRPCEngine {
         _ method: String,
         params: P?,
         unsubscribeMethod: String,
+        options: JSONRPCOptions,
+        updateClosure: @escaping (T) -> Void,
+        failureClosure: @escaping (Error, Bool) -> Void
+    ) throws -> UInt16 {
+        try subscribe(
+            method,
+            params: params,
+            unsubscribeMethod: unsubscribeMethod,
+            options: options,
+            onSubscribed: nil,
+            updateClosure: updateClosure,
+            failureClosure: failureClosure
+        )
+    }
+
+    func subscribe<P: Encodable, T: Decodable>(
+        _ method: String,
+        params: P?,
+        unsubscribeMethod: String,
         updateClosure: @escaping (T) -> Void,
         failureClosure: @escaping (Error, Bool) -> Void
     ) throws -> UInt16 {
@@ -248,6 +281,7 @@ public extension JSONRPCEngine {
             params: params,
             unsubscribeMethod: unsubscribeMethod,
             options: JSONRPCOptions(),
+            onSubscribed: nil,
             updateClosure: updateClosure,
             failureClosure: failureClosure
         )
@@ -265,6 +299,7 @@ public extension JSONRPCEngine {
             params: params,
             unsubscribeMethod: RPCMethod.storageUnsubscribe,
             options: options,
+            onSubscribed: nil,
             updateClosure: updateClosure,
             failureClosure: failureClosure
         )
@@ -281,9 +316,14 @@ public extension JSONRPCEngine {
             params: params,
             unsubscribeMethod: RPCMethod.storageUnsubscribe,
             options: JSONRPCOptions(),
+            onSubscribed: nil,
             updateClosure: updateClosure,
             failureClosure: failureClosure
         )
+    }
+
+    func cancelForIdentifiers(_ identifiers: [UInt16]) {
+        cancelForIdentifiers(identifiers, sendUnsubscribe: true)
     }
 
     func cancelForIdentifier(_ identifier: UInt16) {

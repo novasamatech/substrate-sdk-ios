@@ -92,6 +92,7 @@ extension WebSocketEngine: JSONRPCEngine {
         params: P?,
         unsubscribeMethod: String,
         options: JSONRPCOptions,
+        onSubscribed: ((JSONRPCSubscriptionId) -> Void)?,
         updateClosure: @escaping (T) -> Void,
         failureClosure: @escaping (Error, Bool) -> Void
     ) throws -> UInt16 {
@@ -117,6 +118,7 @@ extension WebSocketEngine: JSONRPCEngine {
             requestData: request.data,
             requestOptions: request.options,
             unsubscribeMethod: unsubscribeMethod,
+            onSubscribed: onSubscribed,
             updateClosure: updateClosure,
             failureClosure: failureClosure
         )
@@ -128,11 +130,11 @@ extension WebSocketEngine: JSONRPCEngine {
         return requestId
     }
 
-    public func cancelForIdentifiers(_ identifiers: [UInt16]) {
+    public func cancelForIdentifiers(_ identifiers: [UInt16], sendUnsubscribe: Bool) {
         mutex.lock()
 
         identifiers.forEach { identifier in
-            cancelRequestForLocalId(identifier)
+            cancelRequestForLocalId(identifier, sendUnsubscribe: sendUnsubscribe)
         }
 
         completeBetterPathReconnectIfNeeded()
