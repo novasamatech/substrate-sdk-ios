@@ -43,3 +43,7 @@ Carthage/Build
 Pods/
 
 _Pods.xcodeproj
+
+# Planning tool for AI
+
+.lavish/
