@@ -24,12 +24,32 @@ public protocol RuntimeMetadataProtocol {
     func getSignedExtensions() -> [String]
 
     func getSignedExtensionType(for identifier: String) -> String?
+
+    func getSupportedFormatVersions() -> [UInt8]?
+
+    func getSupportedExtensionVersions() -> [UInt8]
+
+    func getSignedExtensions(forExtensionVersion version: UInt8) throws -> [String]
 }
 
 public extension RuntimeMetadataProtocol {
     // view functions are only available starting from v16 metadata
     func getViewFunction(for _: String, functionName _: String) -> ViewFunctionQueryResult? {
         nil
+    }
+
+    // pre-v16 runtimes don't enumerate supported format versions
+    func getSupportedFormatVersions() -> [UInt8]? { nil }
+
+    // pre-v16 runtimes expose a single extension version 0 that maps to the flat list
+    func getSupportedExtensionVersions() -> [UInt8] { [0] }
+
+    func getSignedExtensions(forExtensionVersion version: UInt8) throws -> [String] {
+        guard version == 0 else {
+            throw PostV14ExtrinsicMetadataError.unsupportedExtensionVersion(version)
+        }
+
+        return getSignedExtensions()
     }
 }
 

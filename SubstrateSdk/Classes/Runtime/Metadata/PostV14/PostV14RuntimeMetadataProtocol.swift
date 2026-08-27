@@ -132,6 +132,18 @@ public extension PostV14RuntimeMetadataProtocol {
         postV14Extrinsic.signedExtensions.map(\.identifier)
     }
 
+    func getSupportedFormatVersions() -> [UInt8]? {
+        postV14Extrinsic.supportedFormatVersions
+    }
+
+    func getSupportedExtensionVersions() -> [UInt8] {
+        postV14Extrinsic.supportedExtensionVersions
+    }
+
+    func getSignedExtensions(forExtensionVersion version: UInt8) throws -> [String] {
+        try postV14Extrinsic.signedExtensions(forExtensionVersion: version).map(\.identifier)
+    }
+
     func getSignedExtensionType(for identifier: String) -> String? {
         guard let signedExtension = postV14Extrinsic.signedExtensions.first(
             where: { $0.identifier == identifier }
