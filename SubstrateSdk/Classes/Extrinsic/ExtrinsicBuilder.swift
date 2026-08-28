@@ -232,6 +232,31 @@ private extension ExtrinsicBuilder {
         return try call.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
     }
 
+    private func requiredExtensionIds(
+        for metadata: RuntimeMetadataProtocol
+    ) throws -> [String] {
+        let formatVersion: UInt8
+        let extensionVersion: UInt8
+
+        switch extrinsicVersion {
+        case .V4:
+            // legacy signed extrinsics carry no extension-version byte; they use the base version 0 pipeline
+            formatVersion = ExtrinsicConstants.legacyExtrinsicFormatVersion
+            extensionVersion = ExtrinsicConstants.defaultExtensionVersion
+        case let .V5(version):
+            formatVersion = ExtrinsicConstants.extrinsicFormatVersion
+            extensionVersion = version
+        }
+
+        // only metadata that explicitly enumerates versions (v16) is authoritative here
+        if let supportedFormatVersions = metadata.getSupportedFormatVersions(),
+           !supportedFormatVersions.contains(formatVersion) {
+            throw PostV14ExtrinsicMetadataError.unsupportedFormatVersion(formatVersion)
+        }
+
+        return try metadata.getSignedExtensions(forExtensionVersion: extensionVersion)
+    }
+
     private func prepareImplication(
         using encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol
@@ -240,7 +265,7 @@ private extension ExtrinsicBuilder {
 
         let initialImplication = TransactionExtension.Implication(call: call, explicits: [], implicits: [])
 
-        let requiredExtensions = metadata.getSignedExtensions()
+        let requiredExtensions = try requiredExtensionIds(for: metadata)
 
         return try requiredExtensions.reversed().reduce(initialImplication) { implication, extensionId in
             if let transactionExtension = transactionExtensions[extensionId] {

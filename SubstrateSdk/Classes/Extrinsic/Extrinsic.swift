@@ -4,6 +4,8 @@ import BigInt
 public enum ExtrinsicConstants {
     static let extrinsicFormatVersion: UInt8 = 5
     static let legacyExtrinsicFormatVersion: UInt8 = 4
+    // legacy (v4) extrinsics and the base v5 pipeline both use transaction extension version 0
+    static let defaultExtensionVersion: UInt8 = 0
     static let signedExtrinsicType: UInt8 = 1 << 7
     static let generalExtrinsicType: UInt8 = 1 << 6
     static let bareExtrinsicType: UInt8 = 0

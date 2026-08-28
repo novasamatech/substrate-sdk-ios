@@ -32,6 +32,34 @@ extension ExtrinsicMetadataV16: PostV14ExtrinsicMetadataProtocol {
             SignedExtensionV14(identifier: $0.identifier, type: $0.type, additionalSigned: $0.implicit)
         }
     }
+
+    public var supportedFormatVersions: [UInt8]? {
+        versions
+    }
+
+    public var supportedExtensionVersions: [UInt8] {
+        transactionExtensionsByVersion.map(\.extensionVersion)
+    }
+
+    public func signedExtensions(forExtensionVersion version: UInt8) throws -> [SignedExtensionV14] {
+        guard let entry = transactionExtensionsByVersion.first(where: { $0.extensionVersion == version }) else {
+            throw PostV14ExtrinsicMetadataError.unsupportedExtensionVersion(version)
+        }
+
+        return try entry.extensionIndexes.map { index in
+            guard Int(index) < transactionExtensions.count else {
+                throw PostV14ExtrinsicMetadataError.invalidExtensionIndex(index)
+            }
+
+            let ext = transactionExtensions[Int(index)]
+
+            return SignedExtensionV14(
+                identifier: ext.identifier,
+                type: ext.type,
+                additionalSigned: ext.implicit
+            )
+        }
+    }
 }
 
 extension ExtrinsicMetadataV16: ScaleCodable {
@@ -54,26 +82,27 @@ extension ExtrinsicMetadataV16: ScaleCodable {
     }
 }
 
-/// An entry of the BTreeMap<u8, Vec<Compact<u32>>> mapping a supported extrinsic
-/// version to the indexes of the transaction extensions used by that version.
+/// An entry of the BTreeMap<u8, Vec<Compact<u32>>> mapping a supported *transaction
+/// extension* version (the byte a v5/general extrinsic encodes after the format byte)
+/// to the indexes of the transaction extensions used by that version.
 public struct TransactionExtensionsVersionV16 {
-    public let version: UInt8
+    public let extensionVersion: UInt8
     public let extensionIndexes: [UInt32]
 
-    public init(version: UInt8, extensionIndexes: [UInt32]) {
-        self.version = version
+    public init(extensionVersion: UInt8, extensionIndexes: [UInt32]) {
+        self.extensionVersion = extensionVersion
         self.extensionIndexes = extensionIndexes
     }
 }
 
 extension TransactionExtensionsVersionV16: ScaleCodable {
     public func encode(scaleEncoder: ScaleEncoding) throws {
-        try version.encode(scaleEncoder: scaleEncoder)
+        try extensionVersion.encode(scaleEncoder: scaleEncoder)
         try extensionIndexes.map { BigUInt($0) }.encode(scaleEncoder: scaleEncoder)
     }
 
     public init(scaleDecoder: ScaleDecoding) throws {
-        version = try UInt8(scaleDecoder: scaleDecoder)
+        extensionVersion = try UInt8(scaleDecoder: scaleDecoder)
         extensionIndexes = try [BigUInt](scaleDecoder: scaleDecoder).map { index in
             guard let value = UInt32(exactly: index) else {
                 throw ScaleCodingError.unexpectedDecodedValue
