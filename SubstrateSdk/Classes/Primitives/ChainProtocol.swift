@@ -6,7 +6,9 @@ public typealias AssetId = UInt64
 
 public protocol ChainProtocol {
     var chainId: ChainId { get }
-    
+
+    var genesisHash: ChainId { get }
+
     var name: String { get }
 
     var parentId: ChainId? { get }
@@ -35,6 +37,8 @@ public protocol ChainProtocol {
 }
 
 public extension ChainProtocol {
+    var genesisHash: ChainId { chainId }
+
     func utilityAssetInterface() -> AssetProtocol? {
         guard let utilityChainAssetId = utilityChainAssetId() else {
             return nil
