@@ -10,7 +10,7 @@ public protocol NMapKeyStorageKeyProtocol {
     ) throws
 }
 
-public final class NMapKeyEncodingOperation: BaseOperation<[Data]> {
+public final class NMapKeyEncodingOperation: BaseOperation<[Data]>, @unchecked Sendable {
     public var keys: [NMapKeyStorageKeyProtocol]?
 
     public var codingFactory: RuntimeCoderFactoryProtocol?

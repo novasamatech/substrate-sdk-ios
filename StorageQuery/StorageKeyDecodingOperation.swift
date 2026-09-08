@@ -9,7 +9,7 @@ public enum StorageKeyDecodingError: Error {
     case incompatibleHasher
 }
 
-public final class StorageKeyDecodingOperation<T: JSONListConvertible>: BaseOperation<[T]> {
+public final class StorageKeyDecodingOperation<T: JSONListConvertible>: BaseOperation<[T]>, @unchecked Sendable {
     public let path: StorageCodingPath
 
     public var codingFactory: RuntimeCoderFactoryProtocol?

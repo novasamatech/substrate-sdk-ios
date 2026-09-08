@@ -1,7 +1,7 @@
 import Foundation
 import BigInt
 
-extension BigUInt: LosslessStringConvertible {
+extension BigUInt: @retroactive LosslessStringConvertible {
     public init?(_ description: String) {
         self.init(description, radix: 10)
     }

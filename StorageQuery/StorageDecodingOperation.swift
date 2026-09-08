@@ -48,7 +48,7 @@ public extension StorageModifierHandling {
     }
 }
 
-public class StorageJSONDecodingOperation: BaseOperation<JSON>, StorageDecodable {
+public class StorageJSONDecodingOperation: BaseOperation<JSON>, StorageDecodable, @unchecked Sendable {
     public var data: Data?
     public var codingFactory: RuntimeCoderFactoryProtocol?
 
@@ -75,7 +75,7 @@ public class StorageJSONDecodingOperation: BaseOperation<JSON>, StorageDecodable
     }
 }
 
-public final class StorageDecodingOperation<T: Decodable>: BaseOperation<T>, StorageDecodable {
+public final class StorageDecodingOperation<T: Decodable>: BaseOperation<T>, StorageDecodable, @unchecked Sendable {
     public var data: Data?
     public var codingFactory: RuntimeCoderFactoryProtocol?
 
@@ -103,7 +103,7 @@ public final class StorageDecodingOperation<T: Decodable>: BaseOperation<T>, Sto
 }
 
 public final class StorageFallbackDecodingOperation<T: Decodable>: BaseOperation<T?>,
-    StorageDecodable, StorageModifierHandling {
+    StorageDecodable, StorageModifierHandling, @unchecked Sendable {
     public var data: Data?
     public var codingFactory: RuntimeCoderFactoryProtocol?
 
@@ -136,7 +136,7 @@ public final class StorageFallbackDecodingOperation<T: Decodable>: BaseOperation
     }
 }
 
-public final class StorageDecodingListOperation<T: Decodable>: BaseOperation<[T]>, StorageDecodable {
+public final class StorageDecodingListOperation<T: Decodable>: BaseOperation<[T]>, StorageDecodable, @unchecked Sendable {
     public var dataList: [Data]?
     public var codingFactory: RuntimeCoderFactoryProtocol?
 
@@ -167,7 +167,7 @@ public final class StorageDecodingListOperation<T: Decodable>: BaseOperation<[T]
 }
 
 public final class StorageFallbackDecodingListOperation<T: Decodable>: BaseOperation<[T?]>,
-    StorageDecodable, StorageModifierHandling {
+    StorageDecodable, StorageModifierHandling, @unchecked Sendable {
     public var dataList: [Data?]?
     public var codingFactory: RuntimeCoderFactoryProtocol?
     public var ignoresFailedItems: Bool
@@ -227,7 +227,7 @@ extension ConstantDecodable {
     }
 }
 
-public final class StorageConstantOperation<T: Decodable>: BaseOperation<T>, ConstantDecodable {
+public final class StorageConstantOperation<T: Decodable>: BaseOperation<T>, ConstantDecodable, @unchecked Sendable {
     public var codingFactory: RuntimeCoderFactoryProtocol?
 
     public let path: ConstantCodingPath
@@ -262,7 +262,7 @@ public final class StorageConstantOperation<T: Decodable>: BaseOperation<T>, Con
     }
 }
 
-public final class PrimitiveConstantOperation<T: LosslessStringConvertible & Equatable>: BaseOperation<T>, ConstantDecodable {
+public final class PrimitiveConstantOperation<T: LosslessStringConvertible & Equatable>: BaseOperation<T>, ConstantDecodable, @unchecked Sendable {
     public var codingFactory: RuntimeCoderFactoryProtocol?
 
     public let oneOfPaths: [ConstantCodingPath]
@@ -307,7 +307,7 @@ public final class PrimitiveConstantOperation<T: LosslessStringConvertible & Equ
     }
 }
 
-public final class StorageDecodingOptionalListOperation<T: Decodable>: BaseOperation<[T?]>, StorageDecodable {
+public final class StorageDecodingOptionalListOperation<T: Decodable>: BaseOperation<[T?]>, StorageDecodable, @unchecked Sendable {
     public var dataList: [Data?]
     public var codingFactory: RuntimeCoderFactoryProtocol?
 
