@@ -8,7 +8,7 @@ public enum StorageKeyEncodingOperationError: Error {
     case invalidStoragePath
 }
 
-public class UnkeyedEncodingOperation: BaseOperation<Data> {
+public class UnkeyedEncodingOperation: BaseOperation<Data>, @unchecked Sendable {
     public var codingFactory: RuntimeCoderFactoryProtocol?
 
     let path: StorageCodingPath
@@ -39,7 +39,7 @@ public class UnkeyedEncodingOperation: BaseOperation<Data> {
     }
 }
 
-public class MapKeyEncodingOperation<T: Encodable>: BaseOperation<[Data]> {
+public class MapKeyEncodingOperation<T: Encodable>: BaseOperation<[Data]>, @unchecked Sendable {
     public var keyParams: [T]?
     public var codingFactory: RuntimeCoderFactoryProtocol?
     public var paramEncoder: ((T) throws -> Data)?
@@ -131,7 +131,7 @@ public class MapKeyEncodingOperation<T: Encodable>: BaseOperation<[Data]> {
     }
 }
 
-public class DoubleMapKeyEncodingOperation<T1: Encodable, T2: Encodable>: BaseOperation<[Data]> {
+public class DoubleMapKeyEncodingOperation<T1: Encodable, T2: Encodable>: BaseOperation<[Data]>, @unchecked Sendable {
     public var keyParams1: [T1]?
     public var keyParams2: [T2]?
     public var codingFactory: RuntimeCoderFactoryProtocol?

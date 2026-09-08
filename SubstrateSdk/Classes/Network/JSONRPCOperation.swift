@@ -5,7 +5,7 @@ public enum JSONRPCOperationError: Error {
     case timeout
 }
 
-public class JSONRPCOperation<P: Encodable, T: Decodable>: BaseOperation<T> {
+public class JSONRPCOperation<P: Encodable, T: Decodable>: BaseOperation<T>, @unchecked Sendable {
     struct PendingRequest {
         let requestId: UInt16
         let callback: (Result<T, Error>) -> Void
@@ -114,4 +114,4 @@ extension JSONRPCOperation: SchedulerDelegate {
     }
 }
 
-public final class JSONRPCListOperation<T: Decodable>: JSONRPCOperation<[String], T> {}
+public final class JSONRPCListOperation<T: Decodable>: JSONRPCOperation<[String], T>, @unchecked Sendable {}

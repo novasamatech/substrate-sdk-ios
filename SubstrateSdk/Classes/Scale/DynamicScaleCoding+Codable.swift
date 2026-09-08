@@ -1,13 +1,13 @@
 import Foundation
 
 public enum HexCodingStrategy {
-    static func encoding(data: Data, encoder: Encoder) throws {
+    @Sendable static func encoding(data: Data, encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         let hex = data.toHex(includePrefix: true)
         try container.encode(hex)
     }
 
-    static func decoding(with decoder: Decoder) throws -> Data {
+    @Sendable static func decoding(with decoder: Decoder) throws -> Data {
         let container = try decoder.singleValueContainer()
         let hex = try container.decode(String.self)
         return try Data(hexString: hex)
