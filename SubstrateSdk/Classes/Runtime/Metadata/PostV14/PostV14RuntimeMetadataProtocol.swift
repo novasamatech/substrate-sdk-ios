@@ -154,6 +154,13 @@ public extension PostV14RuntimeMetadataProtocol {
         return String(signedExtension.type)
     }
 
+    // a v16 extension identifier may map to different types across versions, so resolve within the version
+    func getSignedExtensionType(for identifier: String, extensionVersion version: UInt8) throws -> String? {
+        try postV14Extrinsic.signedExtensions(forExtensionVersion: version)
+            .first { $0.identifier == identifier }
+            .map { String($0.type) }
+    }
+
     private func convert(call: RuntimeTypeVariantItem) -> CallMetadata {
         let name = call.name
         let docs = call.docs

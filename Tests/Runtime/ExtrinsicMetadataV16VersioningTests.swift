@@ -79,7 +79,7 @@ struct ExtrinsicMetadataV16VersioningTests {
         }
     }
 
-    // The flat signedExtensions (used by the V4 path / back-compat) still returns the whole pool.
+    // The flat signedExtensions (back-compat) still returns the whole pool.
     @Test func flatSignedExtensionsReturnsWholePool() {
         let metadata = makeMetadata()
 

@@ -232,20 +232,24 @@ private extension ExtrinsicBuilder {
         return try call.toScaleCompatibleJSON(with: runtimeJsonContext?.toRawContext())
     }
 
-    private func requiredExtensionIds(
-        for metadata: RuntimeMetadataProtocol
-    ) throws -> [String] {
-        let formatVersion: UInt8
-        let extensionVersion: UInt8
-
+    private var transactionExtensionVersion: UInt8 {
         switch extrinsicVersion {
         case .V4:
             // legacy signed extrinsics carry no extension-version byte; they use the base version 0 pipeline
-            formatVersion = ExtrinsicConstants.legacyExtrinsicFormatVersion
-            extensionVersion = ExtrinsicConstants.defaultExtensionVersion
+            ExtrinsicConstants.defaultExtensionVersion
         case let .V5(version):
-            formatVersion = ExtrinsicConstants.extrinsicFormatVersion
-            extensionVersion = version
+            version
+        }
+    }
+
+    private func requiredExtensionIds(
+        for metadata: RuntimeMetadataProtocol
+    ) throws -> [String] {
+        let formatVersion: UInt8 = switch extrinsicVersion {
+        case .V4:
+            ExtrinsicConstants.legacyExtrinsicFormatVersion
+        case .V5:
+            ExtrinsicConstants.extrinsicFormatVersion
         }
 
         // only metadata that explicitly enumerates versions (v16) is authoritative here
@@ -254,7 +258,7 @@ private extension ExtrinsicBuilder {
             throw PostV14ExtrinsicMetadataError.unsupportedFormatVersion(formatVersion)
         }
 
-        return try metadata.getSignedExtensions(forExtensionVersion: extensionVersion)
+        return try metadata.getSignedExtensions(forExtensionVersion: transactionExtensionVersion)
     }
 
     private func prepareImplication(
@@ -289,12 +293,18 @@ private extension ExtrinsicBuilder {
                 let coder = encodingFactory.createEncoder()
 
                 if
-                    let extensionType = metadata.getSignedExtensionType(for: extensionId),
+                    let extensionType = try metadata.getSignedExtensionType(
+                        for: extensionId,
+                        extensionVersion: transactionExtensionVersion
+                    ),
                     coder.canEncodeOptional(for: extensionType) {
-                    let explicit = try TransactionExtension.Explicit(
-                        from: JSON.null,
-                        txExtensionId: extensionId,
-                        metadata: metadata
+                    let explicit = TransactionExtension.Explicit(
+                        extensionId: extensionId,
+                        value: JSON.null,
+                        customEncoder: DefaultTransactionExtensionCoder(
+                            txExtensionId: extensionId,
+                            extensionExplicitType: extensionType
+                        )
                     )
 
                     return implication.adding(explicit: explicit, implicit: nil)
