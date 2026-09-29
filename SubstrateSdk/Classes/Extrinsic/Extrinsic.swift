@@ -73,6 +73,21 @@ public extension Extrinsic {
     enum Version: Hashable {
         case V4
         case V5(extensionVersion: UInt8)
+
+        public var formatVersion: FormatVersion {
+            switch self {
+            case .V4:
+                .V4
+            case .V5:
+                .V5
+            }
+        }
+    }
+
+    // the extension version is carried by the implication, so consumers of the implication only need the format
+    enum FormatVersion: Hashable {
+        case V4
+        case V5
     }
 }
 

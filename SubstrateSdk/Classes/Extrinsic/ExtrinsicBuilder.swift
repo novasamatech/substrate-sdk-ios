@@ -164,7 +164,7 @@ public final class ExtrinsicBuilder {
             ),
             Extrinsic.TransactionExtensionId.checkMetadataHash: TransactionExtension.CheckMetadataHash(mode: .disabled),
             Extrinsic.TransactionExtensionId.verifySignature: TransactionExtension.VerifySignature(
-                extrinsicVersion: extrinsicVersion,
+                formatVersion: extrinsicVersion.formatVersion,
                 usability: .disabled
             )
         ]
@@ -281,6 +281,7 @@ private extension ExtrinsicBuilder {
                 let implicit = try transactionExtension.implicit(
                     using: encodingFactory,
                     metadata: metadata,
+                    extensionVersion: implication.extensionVersion,
                     context: runtimeJsonContext
                 )
 
@@ -303,10 +304,9 @@ private extension ExtrinsicBuilder {
                         extensionVersion: transactionExtensionVersion
                     ),
                     coder.canEncodeOptional(for: extensionType) {
-                    let explicit = try TransactionExtension.Explicit(
+                    let explicit = TransactionExtension.Explicit(
                         from: JSON.null,
                         txExtensionId: extensionId,
-                        extensionVersion: implication.extensionVersion,
                         metadata: metadata
                     )
 
@@ -322,7 +322,9 @@ private extension ExtrinsicBuilder {
         implication: TransactionExtension.Implication,
         encodingFactory: DynamicScaleEncodingFactoryProtocol
     ) throws -> Data {
-        let signaturePayloadFactory = ParitySignerSignaturePayloadFactory(extrinsicVersion: extrinsicVersion)
+        let signaturePayloadFactory = ParitySignerSignaturePayloadFactory(
+            formatVersion: extrinsicVersion.formatVersion
+        )
         return try signaturePayloadFactory.createPayload(from: implication, using: encodingFactory)
     }
 
@@ -339,7 +341,7 @@ private extension ExtrinsicBuilder {
         encodingFactory: DynamicScaleEncodingFactoryProtocol
     ) throws -> Data {
         let signaturePayloadFactory = ImplicationSignaturePayloadFactory(
-            extrinsicVersion: extrinsicVersion,
+            formatVersion: extrinsicVersion.formatVersion,
             mode: .extrinsicSignature
         )
 
@@ -419,7 +421,7 @@ private extension ExtrinsicBuilder {
             )
 
             let verifySignature = TransactionExtension.VerifySignature(
-                extrinsicVersion: extrinsicVersion,
+                formatVersion: extrinsicVersion.formatVersion,
                 usability: .toSign(signatureFactory, signingParams)
             )
 

@@ -53,7 +53,7 @@ public class ExtrinsicExtraNode: Node {
 
         for extensionId in try runtimeMetadata.getSignedExtensions(forExtensionVersion: extensionVersion) {
             if let coder = coders[extensionId] {
-                try coder.encodeIncludedInExtrinsic(from: extra, encoder: encoder)
+                try coder.encodeIncludedInExtrinsic(from: extra, extensionVersion: extensionVersion, encoder: encoder)
                 continue
             }
 
@@ -79,7 +79,7 @@ public class ExtrinsicExtraNode: Node {
             into: ExtrinsicExtra()
         ) { result, extensionId in
             if let coder = coders[extensionId] {
-                try coder.decodeIncludedInExtrinsic(to: &result, decoder: decoder)
+                try coder.decodeIncludedInExtrinsic(to: &result, extensionVersion: extensionVersion, decoder: decoder)
             } else if let type = try runtimeMetadata.getSignedExtensionType(
                 for: extensionId,
                 extensionVersion: extensionVersion

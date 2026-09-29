@@ -6,11 +6,11 @@ public extension TransactionExtension {
         public let signaturePayloadFactory: ImplicationSignaturePayloadFactoryProtocol
 
         public init(
-            extrinsicVersion: Extrinsic.Version,
+            formatVersion: Extrinsic.FormatVersion,
             usability: Usability
         ) {
             self.usability = usability
-            signaturePayloadFactory = ImplicationSignaturePayloadFactory(extrinsicVersion: extrinsicVersion)
+            signaturePayloadFactory = ImplicationSignaturePayloadFactory(formatVersion: formatVersion)
         }
     }
 }
@@ -81,6 +81,7 @@ extension TransactionExtension.VerifySignature: TransactionExtending {
     public func implicit(
         using _: DynamicScaleEncodingFactoryProtocol,
         metadata _: RuntimeMetadataProtocol,
+        extensionVersion _: UInt8,
         context _: RuntimeJsonContext?
     ) throws -> Data? {
         nil
@@ -96,10 +97,9 @@ extension TransactionExtension.VerifySignature: TransactionExtending {
         case .disabled:
             let value = try Mode.disabled.toScaleCompatibleJSON(with: context?.toRawContext())
 
-            return try TransactionExtension.Explicit(
+            return TransactionExtension.Explicit(
                 from: value,
                 txExtensionId: txExtensionId,
-                extensionVersion: implication.extensionVersion,
                 metadata: metadata
             )
         case let .toSign(signer, signingParams):
@@ -116,10 +116,9 @@ extension TransactionExtension.VerifySignature: TransactionExtending {
                 .signed(.init(signature: signature, account: signingParams.account))
                 .toScaleCompatibleJSON(with: context?.toRawContext())
 
-            return try TransactionExtension.Explicit(
+            return TransactionExtension.Explicit(
                 from: value,
                 txExtensionId: txExtensionId,
-                extensionVersion: implication.extensionVersion,
                 metadata: metadata
             )
         }

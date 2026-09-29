@@ -1,10 +1,10 @@
 import Foundation
 
 public final class ParitySignerSignaturePayloadFactory {
-    let extrinsicVersion: Extrinsic.Version
+    let formatVersion: Extrinsic.FormatVersion
 
-    public init(extrinsicVersion: Extrinsic.Version) {
-        self.extrinsicVersion = extrinsicVersion
+    public init(formatVersion: Extrinsic.FormatVersion) {
+        self.formatVersion = formatVersion
     }
 }
 
@@ -15,9 +15,9 @@ extension ParitySignerSignaturePayloadFactory: ImplicationSignaturePayloadFactor
     ) throws -> Data {
         let encoder = encodingFactory.createEncoder()
 
-        switch extrinsicVersion {
-        case let .V5(extensionVersion):
-            try encoder.append(encodable: extensionVersion)
+        switch formatVersion {
+        case .V5:
+            try encoder.append(encodable: implication.extensionVersion)
         case .V4:
             break
         }
@@ -30,7 +30,7 @@ extension ParitySignerSignaturePayloadFactory: ImplicationSignaturePayloadFactor
         try encoder.append(encodable: encodedCall)
 
         try implication.explicits.forEach { explicit in
-            try explicit.encode(to: encoder)
+            try explicit.encode(to: encoder, extensionVersion: implication.extensionVersion)
         }
 
         try implication.implicits.forEach { implicit in

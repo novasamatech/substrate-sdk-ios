@@ -15,6 +15,7 @@ public extension TransactionExtension {
         public func implicit(
             using encodingFactory: DynamicScaleEncodingFactoryProtocol,
             metadata _: RuntimeMetadataProtocol,
+            extensionVersion _: UInt8,
             context _: RuntimeJsonContext?
         ) throws -> Data? {
             let encoder = encodingFactory.createEncoder()

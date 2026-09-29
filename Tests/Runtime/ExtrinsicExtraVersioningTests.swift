@@ -212,4 +212,68 @@ struct ExtrinsicExtraVersioningTests {
 
         #expect(signatureParams.includedInExtrinsicExtra == Data([0x0a, 0, 0, 0, 0, 0, 0, 0]))
     }
+
+    @Test func versionedCoderUsesShapeOfRequestedVersion() throws {
+        let fixture = try makeFixture()
+        let coder = DefaultVersionedTransactionExtensionCoder(txExtensionId: "ExtB", metadata: fixture.metadata)
+
+        for (extensionVersion, expected) in [(UInt8(0), Data([0x0a, 0, 0, 0])), (1, Data([0x0a, 0, 0, 0, 0, 0, 0, 0]))] {
+            let encoder = DynamicScaleEncoder(registry: fixture.catalog, version: 0)
+            try coder.encodeIncludedInExtrinsic(from: extra, extensionVersion: extensionVersion, encoder: encoder)
+            #expect(try encoder.encode() == expected)
+
+            var decoded = ExtrinsicExtra()
+            let decoder = try DynamicScaleDecoder(data: expected, registry: fixture.catalog, version: 0)
+            try coder.decodeIncludedInExtrinsic(to: &decoded, extensionVersion: extensionVersion, decoder: decoder)
+            #expect(number(decoded["ExtB"]) == 10)
+            #expect(decoder.remained == 0)
+        }
+    }
+
+    @Test func versionedCoderThrowsWhenExtensionIsNotInRequestedVersion() throws {
+        let fixture = try makeFixture()
+        let coder = DefaultVersionedTransactionExtensionCoder(txExtensionId: "ExtC", metadata: fixture.metadata)
+
+        #expect(throws: TransactionExtensionError.self) {
+            let encoder = DynamicScaleEncoder(registry: fixture.catalog, version: 0)
+            try coder.encodeIncludedInExtrinsic(from: ["ExtC": .stringValue("1")], extensionVersion: 0, encoder: encoder)
+        }
+
+        #expect(throws: TransactionExtensionError.self) {
+            var decoded = ExtrinsicExtra()
+            let decoder = try DynamicScaleDecoder(data: Data([0x01]), registry: fixture.catalog, version: 0)
+            try coder.decodeIncludedInExtrinsic(to: &decoded, extensionVersion: 0, decoder: decoder)
+        }
+    }
+
+    @Test func v5SignaturePayloadStartsWithImplicationExtensionVersion() throws {
+        let fixture = try makeFixture()
+
+        let encodingFactory = WrappedDynamicScaleEncoderFactory(
+            encoder: DynamicScaleEncoder(registry: fixture.catalog, version: 0)
+        )
+
+        let call = try RuntimeCall(
+            moduleName: "Balances",
+            callName: "transfer_allow_death",
+            args: TransferArgs(dest: .accoundId(Data(repeating: 1, count: 32)), value: 1)
+        ).toScaleCompatibleJSON()
+
+        let implication = TransactionExtension.Implication(
+            extensionVersion: 1,
+            call: call,
+            explicits: [],
+            implicits: []
+        )
+
+        let factories: [ImplicationSignaturePayloadFactoryProtocol] = [
+            ImplicationSignaturePayloadFactory(formatVersion: .V5),
+            ParitySignerSignaturePayloadFactory(formatVersion: .V5)
+        ]
+
+        for factory in factories {
+            let payload = try factory.createPayload(from: implication, using: encodingFactory)
+            #expect(payload.first == 1)
+        }
+    }
 }

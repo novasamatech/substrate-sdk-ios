@@ -41,6 +41,7 @@ extension TransactionExtension.CheckMetadataHash: TransactionExtending {
     public func implicit(
         using encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata _: RuntimeMetadataProtocol,
+        extensionVersion _: UInt8,
         context _: RuntimeJsonContext?
     ) throws -> Data? {
         let encoder = encodingFactory.createEncoder()
@@ -62,7 +63,11 @@ public final class CheckMetadataHashCoder: TransactionExtensionCoding {
     
     public init() {}
 
-    public func encodeIncludedInExtrinsic(from extra: ExtrinsicExtra, encoder: DynamicScaleEncoding) throws {
+    public func encodeIncludedInExtrinsic(
+        from extra: ExtrinsicExtra,
+        extensionVersion _: UInt8,
+        encoder: DynamicScaleEncoding
+    ) throws {
         guard let index = extra[txExtensionId] else {
             return
         }
@@ -71,7 +76,11 @@ public final class CheckMetadataHashCoder: TransactionExtensionCoding {
         try encoder.appendU8(json: index)
     }
 
-    public func decodeIncludedInExtrinsic(to extraStore: inout ExtrinsicExtra, decoder: DynamicScaleDecoding) throws {
+    public func decodeIncludedInExtrinsic(
+        to extraStore: inout ExtrinsicExtra,
+        extensionVersion _: UInt8,
+        decoder: DynamicScaleDecoding
+    ) throws {
         let isEnabled = try decoder.readU8()
         extraStore[txExtensionId] = isEnabled
     }
