@@ -9,7 +9,11 @@ public enum ExtrinsicNodeError: Error {
 public class ExtrinsicNode: Node {
     public var typeName: String { GenericType.extrinsic.name }
 
-    public init() {}
+    public let extraNode: ExtrinsicExtraNode
+
+    public init(extraNode: ExtrinsicExtraNode) {
+        self.extraNode = extraNode
+    }
 
     private func appendSigned(_ signed: Extrinsic.Signed, encoder: DynamicScaleEncoding) throws {
         let version: UInt8 = ExtrinsicConstants.legacyExtrinsicFormatVersion | ExtrinsicConstants.signedExtrinsicType
@@ -22,7 +26,7 @@ public class ExtrinsicNode: Node {
         let version: UInt8 = ExtrinsicConstants.extrinsicFormatVersion | ExtrinsicConstants.generalExtrinsicType
         try encoder.append(encodable: version)
         try encoder.append(encodable: general.extensionVersion)
-        try encoder.append(general.explicits, ofType: GenericType.extrinsicExtra.name)
+        try extraNode.encode(general.explicits, extensionVersion: general.extensionVersion, encoder: encoder)
         try encoder.append(json: general.call, type: KnownType.call.name)
     }
 
@@ -40,7 +44,7 @@ public class ExtrinsicNode: Node {
 
     private func decodeGeneral(from decoder: DynamicScaleDecoding) throws -> Extrinsic.General {
         let extensionVersion: UInt8 = try decoder.read()
-        let explicits: ExtrinsicExtra = try decoder.read(of: GenericType.extrinsicExtra.name)
+        let explicits = try extraNode.decode(extensionVersion: extensionVersion, decoder: decoder)
         let call = try decoder.read(type: KnownType.call.name)
 
         return Extrinsic.General(

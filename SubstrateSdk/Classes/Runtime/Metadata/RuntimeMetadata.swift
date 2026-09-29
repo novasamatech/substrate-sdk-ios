@@ -30,6 +30,8 @@ public protocol RuntimeMetadataProtocol {
     func getSupportedExtensionVersions() -> [UInt8]
 
     func getSignedExtensions(forExtensionVersion version: UInt8) throws -> [String]
+
+    func getSignedExtensionType(for identifier: String, extensionVersion version: UInt8) throws -> String?
 }
 
 public extension RuntimeMetadataProtocol {
@@ -50,6 +52,14 @@ public extension RuntimeMetadataProtocol {
         }
 
         return getSignedExtensions()
+    }
+
+    func getSignedExtensionType(for identifier: String, extensionVersion version: UInt8) throws -> String? {
+        guard version == 0 else {
+            throw PostV14ExtrinsicMetadataError.unsupportedExtensionVersion(version)
+        }
+
+        return getSignedExtensionType(for: identifier)
     }
 }
 

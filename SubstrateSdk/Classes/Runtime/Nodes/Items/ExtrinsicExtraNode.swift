@@ -35,34 +35,57 @@ public class ExtrinsicExtraNode: Node {
             throw DynamicScaleEncoderError.dictExpected(json: value)
         }
 
+        try encode(params, extensionVersion: ExtrinsicConstants.defaultExtensionVersion, encoder: encoder)
+    }
+
+    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+        let extra = try decode(extensionVersion: ExtrinsicConstants.defaultExtensionVersion, decoder: decoder)
+
+        return .dictionaryValue(extra)
+    }
+
+    public func encode(
+        _ extra: ExtrinsicExtra,
+        extensionVersion: UInt8,
+        encoder: DynamicScaleEncoding
+    ) throws {
         let coders = getCoders()
 
-        for checkString in runtimeMetadata.getSignedExtensions() {
-            if let includer = coders[checkString] {
-                try includer.encodeIncludedInExtrinsic(from: params, encoder: encoder)
-            } else if
-                let extensionParams = params[checkString],
-                let type = runtimeMetadata.getSignedExtensionType(for: checkString) {
+        for extensionId in try runtimeMetadata.getSignedExtensions(forExtensionVersion: extensionVersion) {
+            if let coder = coders[extensionId] {
+                try coder.encodeIncludedInExtrinsic(from: extra, encoder: encoder)
+                continue
+            }
+
+            guard let type = try runtimeMetadata.getSignedExtensionType(
+                for: extensionId,
+                extensionVersion: extensionVersion
+            ) else {
+                continue
+            }
+
+            if let extensionParams = extra[extensionId] {
                 try encoder.append(json: extensionParams, type: type)
-            } else if
-                let type = runtimeMetadata.getSignedExtensionType(for: checkString),
-                encoder.canEncodeOptional(for: type) {
+            } else if encoder.canEncodeOptional(for: type) {
                 try encoder.append(json: JSON.null, type: type)
             }
         }
     }
 
-    public func accept(decoder: DynamicScaleDecoding) throws -> JSON {
+    public func decode(extensionVersion: UInt8, decoder: DynamicScaleDecoding) throws -> ExtrinsicExtra {
         let coders = getCoders()
 
-        let extra = try runtimeMetadata.getSignedExtensions().reduce(into: [String: JSON]()) { result, item in
-            if let coder = coders[item] {
+        return try runtimeMetadata.getSignedExtensions(forExtensionVersion: extensionVersion).reduce(
+            into: ExtrinsicExtra()
+        ) { result, extensionId in
+            if let coder = coders[extensionId] {
                 try coder.decodeIncludedInExtrinsic(to: &result, decoder: decoder)
-            } else if let type = runtimeMetadata.getSignedExtensionType(for: item) {
-                result[item] = try decoder.read(type: type)
+            } else if let type = try runtimeMetadata.getSignedExtensionType(
+                for: extensionId,
+                extensionVersion: extensionVersion
+            ) {
+                result[extensionId] = try decoder.read(type: type)
             }
         }
-
-        return .dictionaryValue(extra)
     }
 }

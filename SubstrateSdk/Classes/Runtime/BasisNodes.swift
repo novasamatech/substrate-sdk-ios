@@ -31,7 +31,9 @@ public enum BasisNodes {
         for runtimeMetadata: RuntimeMetadataProtocol,
         customExtensions: [TransactionExtensionCoding]
     ) -> [Node] {
-        [
+        let extrinsicExtraNode = ExtrinsicExtraNode(runtimeMetadata: runtimeMetadata, customExtensions: customExtensions)
+
+        return [
             GenericAccountIdNode(),
             NullNode(),
             GenericBlockNode(),
@@ -56,9 +58,9 @@ public enum BasisNodes {
             GenericEventNode(runtimeMetadata: runtimeMetadata),
             EventRecordNode(),
             AccountIdAddressNode(),
-            ExtrinsicNode(),
+            ExtrinsicNode(extraNode: extrinsicExtraNode),
             ExtrinsicSignatureNode(),
-            ExtrinsicExtraNode(runtimeMetadata: runtimeMetadata, customExtensions: customExtensions),
+            extrinsicExtraNode,
             MappingNode.consensus,
             MappingNode.seal,
             MappingNode.sealv0,

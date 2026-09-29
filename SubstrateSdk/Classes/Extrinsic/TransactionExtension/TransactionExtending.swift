@@ -69,7 +69,7 @@ public extension OnlyExplicitTransactionExtending {
 
 public extension OnlyExplicitTransactionExtending where Self: Codable {
     func explicit(
-        for _: TransactionExtension.Implication,
+        for implication: TransactionExtension.Implication,
         encodingFactory _: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol,
         context: RuntimeJsonContext?
@@ -79,6 +79,7 @@ public extension OnlyExplicitTransactionExtending where Self: Codable {
         return try TransactionExtension.Explicit(
             from: value,
             txExtensionId: txExtensionId,
+            extensionVersion: implication.extensionVersion,
             metadata: metadata
         )
     }
