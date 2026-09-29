@@ -21,6 +21,7 @@ public struct RawTransactionExtension: TransactionExtending {
     public func implicit(
         using _: DynamicScaleEncodingFactoryProtocol,
         metadata _: RuntimeMetadataProtocol,
+        extensionVersion _: UInt8,
         context _: RuntimeJsonContext?
     ) throws -> Data? {
         guard let rawImplicit, !rawImplicit.isEmpty else {
@@ -34,6 +35,7 @@ public struct RawTransactionExtension: TransactionExtending {
         for _: TransactionExtension.Implication,
         encodingFactory _: DynamicScaleEncodingFactoryProtocol,
         metadata _: RuntimeMetadataProtocol,
+        extensionVersion _: UInt8,
         context _: RuntimeJsonContext?
     ) throws -> TransactionExtension.Explicit? {
         guard let json = decodedExplicit else { return nil }

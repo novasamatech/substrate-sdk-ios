@@ -281,6 +281,7 @@ private extension ExtrinsicBuilder {
                 let implicit = try transactionExtension.implicit(
                     using: encodingFactory,
                     metadata: metadata,
+                    extensionVersion: implication.extensionVersion,
                     context: runtimeJsonContext
                 )
 
@@ -288,6 +289,7 @@ private extension ExtrinsicBuilder {
                     for: implication,
                     encodingFactory: encodingFactory,
                     metadata: metadata,
+                    extensionVersion: implication.extensionVersion,
                     context: runtimeJsonContext
                 )
 

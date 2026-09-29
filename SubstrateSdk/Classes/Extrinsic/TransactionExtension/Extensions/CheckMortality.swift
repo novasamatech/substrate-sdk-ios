@@ -15,6 +15,7 @@ public extension TransactionExtension {
         public func implicit(
             using encodingFactory: DynamicScaleEncodingFactoryProtocol,
             metadata _: RuntimeMetadataProtocol,
+            extensionVersion _: UInt8,
             context _: RuntimeJsonContext?
         ) throws -> Data? {
             let encoder = encodingFactory.createEncoder()
@@ -26,6 +27,7 @@ public extension TransactionExtension {
             for _: TransactionExtension.Implication,
             encodingFactory _: DynamicScaleEncodingFactoryProtocol,
             metadata _: RuntimeMetadataProtocol,
+            extensionVersion _: UInt8,
             context: RuntimeJsonContext?
         ) throws -> TransactionExtension.Explicit? {
             let value = try era.toScaleCompatibleJSON(with: context?.toRawContext())

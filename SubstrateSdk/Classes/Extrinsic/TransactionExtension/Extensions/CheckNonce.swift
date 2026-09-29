@@ -14,6 +14,7 @@ public extension TransactionExtension {
             for _: TransactionExtension.Implication,
             encodingFactory _: DynamicScaleEncodingFactoryProtocol,
             metadata _: RuntimeMetadataProtocol,
+            extensionVersion _: UInt8,
             context: RuntimeJsonContext?
         ) throws -> TransactionExtension.Explicit? {
             let value = try StringScaleMapper(value: nonce).toScaleCompatibleJSON(with: context?.toRawContext())

@@ -22,6 +22,7 @@ extension TransactionExtension.CheckMetadataHash: TransactionExtending {
         for _: TransactionExtension.Implication,
         encodingFactory _: DynamicScaleEncodingFactoryProtocol,
         metadata _: RuntimeMetadataProtocol,
+        extensionVersion _: UInt8,
         context _: RuntimeJsonContext?
     ) throws -> TransactionExtension.Explicit? {
         let value: JSON = switch mode {
@@ -41,6 +42,7 @@ extension TransactionExtension.CheckMetadataHash: TransactionExtending {
     public func implicit(
         using encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata _: RuntimeMetadataProtocol,
+        extensionVersion _: UInt8,
         context _: RuntimeJsonContext?
     ) throws -> Data? {
         let encoder = encodingFactory.createEncoder()

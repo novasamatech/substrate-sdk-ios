@@ -44,6 +44,7 @@ public protocol TransactionExtending {
     func implicit(
         using encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol,
+        extensionVersion: UInt8,
         context: RuntimeJsonContext?
     ) throws -> Data?
 
@@ -51,6 +52,7 @@ public protocol TransactionExtending {
         for implication: TransactionExtension.Implication,
         encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol,
+        extensionVersion: UInt8,
         context: RuntimeJsonContext?
     ) throws -> TransactionExtension.Explicit?
 }
@@ -61,6 +63,7 @@ public extension OnlyExplicitTransactionExtending {
     func implicit(
         using _: DynamicScaleEncodingFactoryProtocol,
         metadata _: RuntimeMetadataProtocol,
+        extensionVersion _: UInt8,
         context _: RuntimeJsonContext?
     ) throws -> Data? {
         nil
@@ -69,9 +72,10 @@ public extension OnlyExplicitTransactionExtending {
 
 public extension OnlyExplicitTransactionExtending where Self: Codable {
     func explicit(
-        for implication: TransactionExtension.Implication,
+        for _: TransactionExtension.Implication,
         encodingFactory _: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol,
+        extensionVersion: UInt8,
         context: RuntimeJsonContext?
     ) throws -> TransactionExtension.Explicit? {
         let value = try toScaleCompatibleJSON(with: context?.toRawContext())
@@ -79,7 +83,7 @@ public extension OnlyExplicitTransactionExtending where Self: Codable {
         return try TransactionExtension.Explicit(
             from: value,
             txExtensionId: txExtensionId,
-            extensionVersion: implication.extensionVersion,
+            extensionVersion: extensionVersion,
             metadata: metadata
         )
     }
@@ -92,6 +96,7 @@ public extension OnlyImplicitTransactionExtending {
         for _: TransactionExtension.Implication,
         encodingFactory _: DynamicScaleEncodingFactoryProtocol,
         metadata _: RuntimeMetadataProtocol,
+        extensionVersion _: UInt8,
         context _: RuntimeJsonContext?
     ) throws -> TransactionExtension.Explicit? {
         nil
