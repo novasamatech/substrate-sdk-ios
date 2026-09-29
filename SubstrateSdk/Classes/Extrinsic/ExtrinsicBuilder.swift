@@ -267,7 +267,12 @@ private extension ExtrinsicBuilder {
     ) throws -> TransactionExtension.Implication {
         let call = try prepareTransactionCall(for: metadata)
 
-        let initialImplication = TransactionExtension.Implication(call: call, explicits: [], implicits: [])
+        let initialImplication = TransactionExtension.Implication(
+            extensionVersion: transactionExtensionVersion,
+            call: call,
+            explicits: [],
+            implicits: []
+        )
 
         let requiredExtensions = try requiredExtensionIds(for: metadata)
 
@@ -298,13 +303,11 @@ private extension ExtrinsicBuilder {
                         extensionVersion: transactionExtensionVersion
                     ),
                     coder.canEncodeOptional(for: extensionType) {
-                    let explicit = TransactionExtension.Explicit(
-                        extensionId: extensionId,
-                        value: JSON.null,
-                        customEncoder: DefaultTransactionExtensionCoder(
-                            txExtensionId: extensionId,
-                            extensionExplicitType: extensionType
-                        )
+                    let explicit = try TransactionExtension.Explicit(
+                        from: JSON.null,
+                        txExtensionId: extensionId,
+                        extensionVersion: implication.extensionVersion,
+                        metadata: metadata
                     )
 
                     return implication.adding(explicit: explicit, implicit: nil)

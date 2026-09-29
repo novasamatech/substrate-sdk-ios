@@ -99,6 +99,7 @@ extension TransactionExtension.VerifySignature: TransactionExtending {
             return try TransactionExtension.Explicit(
                 from: value,
                 txExtensionId: txExtensionId,
+                extensionVersion: implication.extensionVersion,
                 metadata: metadata
             )
         case let .toSign(signer, signingParams):
@@ -118,6 +119,7 @@ extension TransactionExtension.VerifySignature: TransactionExtending {
             return try TransactionExtension.Explicit(
                 from: value,
                 txExtensionId: txExtensionId,
+                extensionVersion: implication.extensionVersion,
                 metadata: metadata
             )
         }

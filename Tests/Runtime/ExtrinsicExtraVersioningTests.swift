@@ -7,6 +7,17 @@ import TestHelpers
 #endif
 
 struct ExtrinsicExtraVersioningTests {
+    private struct ExtBExtension: OnlyExplicitTransactionExtending, Codable {
+        var txExtensionId: String { "ExtB" }
+
+        let value: UInt64
+
+        func encode(to encoder: Encoder) throws {
+            var container = encoder.singleValueContainer()
+            try container.encode(String(value))
+        }
+    }
+
     private struct Fixture {
         let metadata: RuntimeMetadataV16
         let catalog: TypeRegistryCatalog
@@ -174,5 +185,31 @@ struct ExtrinsicExtraVersioningTests {
         #expect(decodedGeneral.extensionVersion == 1)
         #expect(number(decodedGeneral.explicits["ExtA"]) == 1)
         #expect(number(decodedGeneral.explicits["ExtB"]) == 10)
+    }
+
+    @Test func builderSignsExplicitsWithShapeOfItsExtensionVersion() throws {
+        let fixture = try makeFixture()
+
+        let encodingFactory = WrappedDynamicScaleEncoderFactory(
+            encoder: DynamicScaleEncoder(registry: fixture.catalog, version: 0)
+        )
+
+        let signatureParams = try ExtrinsicBuilder(
+            extrinsicVersion: .V5(extensionVersion: 1),
+            specVersion: 1,
+            transactionVersion: 1,
+            genesisHash: Data(repeating: 0, count: 32).toHex()
+        )
+        .adding(transactionExtension: ExtBExtension(value: 10))
+        .adding(
+            call: RuntimeCall(
+                moduleName: "Balances",
+                callName: "transfer_allow_death",
+                args: TransferArgs(dest: .accoundId(Data(repeating: 1, count: 32)), value: 1)
+            )
+        )
+        .buildExtrinsicSignatureParams(encodingFactory: encodingFactory, metadata: fixture.metadata)
+
+        #expect(signatureParams.includedInExtrinsicExtra == Data([0x0a, 0, 0, 0, 0, 0, 0, 0]))
     }
 }

@@ -23,6 +23,7 @@ public enum TransactionExtension {
     public typealias Implicit = Data
 
     public struct Implication {
+        public let extensionVersion: UInt8
         let call: JSON
         let explicits: [Explicit]
         let implicits: [Implicit]
@@ -75,7 +76,12 @@ extension TransactionExtension.Implication {
         let newExplicits = explicit.map { [$0] + explicits } ?? explicits
         let newImplicits = implicit.map { [$0] + implicits } ?? implicits
 
-        return TransactionExtension.Implication(call: call, explicits: newExplicits, implicits: newImplicits)
+        return TransactionExtension.Implication(
+            extensionVersion: extensionVersion,
+            call: call,
+            explicits: newExplicits,
+            implicits: newImplicits
+        )
     }
 }
 
@@ -83,9 +89,13 @@ public extension TransactionExtension.Explicit {
     init(
         from value: JSON,
         txExtensionId: String,
+        extensionVersion: UInt8,
         metadata: RuntimeMetadataProtocol
     ) throws {
-        guard let extensionExplicitType = metadata.getSignedExtensionType(for: txExtensionId) else {
+        guard let extensionExplicitType = try metadata.getSignedExtensionType(
+            for: txExtensionId,
+            extensionVersion: extensionVersion
+        ) else {
             throw TransactionExtensionError.typeNotFound(txExtensionId)
         }
 
