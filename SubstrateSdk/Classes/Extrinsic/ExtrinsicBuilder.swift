@@ -289,7 +289,6 @@ private extension ExtrinsicBuilder {
                     for: implication,
                     encodingFactory: encodingFactory,
                     metadata: metadata,
-                    extensionVersion: implication.extensionVersion,
                     context: runtimeJsonContext
                 )
 

@@ -91,7 +91,6 @@ extension TransactionExtension.VerifySignature: TransactionExtending {
         for implication: TransactionExtension.Implication,
         encodingFactory: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol,
-        extensionVersion: UInt8,
         context: RuntimeJsonContext?
     ) throws -> TransactionExtension.Explicit? {
         switch usability {
@@ -101,7 +100,7 @@ extension TransactionExtension.VerifySignature: TransactionExtending {
             return try TransactionExtension.Explicit(
                 from: value,
                 txExtensionId: txExtensionId,
-                extensionVersion: extensionVersion,
+                extensionVersion: implication.extensionVersion,
                 metadata: metadata
             )
         case let .toSign(signer, signingParams):
@@ -121,7 +120,7 @@ extension TransactionExtension.VerifySignature: TransactionExtending {
             return try TransactionExtension.Explicit(
                 from: value,
                 txExtensionId: txExtensionId,
-                extensionVersion: extensionVersion,
+                extensionVersion: implication.extensionVersion,
                 metadata: metadata
             )
         }
