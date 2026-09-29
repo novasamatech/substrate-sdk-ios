@@ -12,9 +12,10 @@ public enum TransactionExtension {
             self.customEncoder = customEncoder
         }
         
-        func encode(to encoder: DynamicScaleEncoding) throws {
+        func encode(to encoder: DynamicScaleEncoding, extensionVersion: UInt8) throws {
             try customEncoder.encodeIncludedInExtrinsic(
                 from: [extensionId: value],
+                extensionVersion: extensionVersion,
                 encoder: encoder
             )
         }
@@ -46,7 +47,7 @@ public enum TransactionExtension {
             let encoder = encodingFactory.createEncoder()
             
             for explicit in explicits {
-                try explicit.encode(to: encoder)
+                try explicit.encode(to: encoder, extensionVersion: extensionVersion)
             }
             
             return try encoder.encode()
@@ -89,21 +90,13 @@ public extension TransactionExtension.Explicit {
     init(
         from value: JSON,
         txExtensionId: String,
-        extensionVersion: UInt8,
         metadata: RuntimeMetadataProtocol
-    ) throws {
-        guard let extensionExplicitType = try metadata.getSignedExtensionType(
-            for: txExtensionId,
-            extensionVersion: extensionVersion
-        ) else {
-            throw TransactionExtensionError.typeNotFound(txExtensionId)
-        }
-
+    ) {
         extensionId = txExtensionId
         self.value = value
-        customEncoder = DefaultTransactionExtensionCoder(
+        customEncoder = DefaultVersionedTransactionExtensionCoder(
             txExtensionId: txExtensionId,
-            extensionExplicitType: extensionExplicitType
+            metadata: metadata
         )
     }
 }

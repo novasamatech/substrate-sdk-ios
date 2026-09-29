@@ -71,17 +71,16 @@ public extension OnlyExplicitTransactionExtending {
 
 public extension OnlyExplicitTransactionExtending where Self: Codable {
     func explicit(
-        for implication: TransactionExtension.Implication,
+        for _: TransactionExtension.Implication,
         encodingFactory _: DynamicScaleEncodingFactoryProtocol,
         metadata: RuntimeMetadataProtocol,
         context: RuntimeJsonContext?
     ) throws -> TransactionExtension.Explicit? {
         let value = try toScaleCompatibleJSON(with: context?.toRawContext())
 
-        return try TransactionExtension.Explicit(
+        return TransactionExtension.Explicit(
             from: value,
             txExtensionId: txExtensionId,
-            extensionVersion: implication.extensionVersion,
             metadata: metadata
         )
     }
@@ -103,6 +102,15 @@ public extension OnlyImplicitTransactionExtending {
 public protocol TransactionExtensionCoding: AnyObject {
     var txExtensionId: String { get }
 
-    func decodeIncludedInExtrinsic(to extraStore: inout ExtrinsicExtra, decoder: DynamicScaleDecoding) throws
-    func encodeIncludedInExtrinsic(from extra: ExtrinsicExtra, encoder: DynamicScaleEncoding) throws
+    func decodeIncludedInExtrinsic(
+        to extraStore: inout ExtrinsicExtra,
+        extensionVersion: UInt8,
+        decoder: DynamicScaleDecoding
+    ) throws
+
+    func encodeIncludedInExtrinsic(
+        from extra: ExtrinsicExtra,
+        extensionVersion: UInt8,
+        encoder: DynamicScaleEncoding
+    ) throws
 }

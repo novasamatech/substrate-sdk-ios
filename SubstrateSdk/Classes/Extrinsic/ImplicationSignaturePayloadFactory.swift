@@ -17,11 +17,11 @@ public final class ImplicationSignaturePayloadFactory {
         case extrinsicSignature
     }
     
-    let extrinsicVersion: Extrinsic.Version
+    let formatVersion: Extrinsic.FormatVersion
     let mode: Mode
 
-    public init(extrinsicVersion: Extrinsic.Version, mode: Mode = .txExtensionPipeline) {
-        self.extrinsicVersion = extrinsicVersion
+    public init(formatVersion: Extrinsic.FormatVersion, mode: Mode = .txExtensionPipeline) {
+        self.formatVersion = formatVersion
         self.mode = mode
     }
 }
@@ -44,9 +44,9 @@ extension ImplicationSignaturePayloadFactory: ImplicationSignaturePayloadFactory
     ) throws -> Data {
         let encoder = encodingFactory.createEncoder()
 
-        switch extrinsicVersion {
-        case let .V5(extensionVersion):
-            try encoder.append(encodable: extensionVersion)
+        switch formatVersion {
+        case .V5:
+            try encoder.append(encodable: implication.extensionVersion)
         case .V4:
             try appendV4VersionIfNeeded(into: encoder)
         }
@@ -54,7 +54,7 @@ extension ImplicationSignaturePayloadFactory: ImplicationSignaturePayloadFactory
         try encoder.append(json: implication.call, type: GenericType.call.name)
 
         try implication.explicits.forEach { explicit in
-            try explicit.encode(to: encoder)
+            try explicit.encode(to: encoder, extensionVersion: implication.extensionVersion)
         }
 
         try implication.implicits.forEach { implicit in
