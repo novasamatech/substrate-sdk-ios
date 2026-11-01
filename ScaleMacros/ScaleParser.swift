@@ -7,10 +7,15 @@ enum ScaleParser {
     /// Returns nil when the declaration is invalid; diagnostics are already emitted.
     static func parse(
         _ declaration: some DeclGroupSyntax,
+        attribute: AttributeSyntax,
         in context: some MacroExpansionContext
     ) -> ScaleTypeModel? {
         let accessModifier = accessModifier(of: declaration.modifiers)
         let genericParameters = declaration.genericParameterNames
+
+        guard let maxDepth = parseMaxDepth(of: attribute, in: context) else {
+            return nil
+        }
 
         if let structDecl = declaration.as(StructDeclSyntax.self) {
             guard let fields = parseFields(of: structDecl, in: context) else {
@@ -20,18 +25,50 @@ enum ScaleParser {
             return ScaleTypeModel(
                 accessModifier: accessModifier,
                 genericParameters: genericParameters,
+                maxDepth: maxDepth.value,
                 kind: .structure(fields)
             )
         }
 
         if let enumDecl = declaration.as(EnumDeclSyntax.self) {
             return parseEnum(enumDecl, in: context).map {
-                ScaleTypeModel(accessModifier: accessModifier, genericParameters: genericParameters, kind: $0)
+                ScaleTypeModel(
+                    accessModifier: accessModifier,
+                    genericParameters: genericParameters,
+                    maxDepth: maxDepth.value,
+                    kind: $0
+                )
             }
         }
 
         context.diagnose(Diagnostic(node: declaration, message: ScaleDiagnostic.unsupportedDeclaration))
         return nil
+    }
+
+    private struct MaxDepth {
+        let value: String?
+    }
+
+    /// Returns nil when the argument is invalid; diagnostics are already emitted.
+    private static func parseMaxDepth(
+        of attribute: AttributeSyntax,
+        in context: some MacroExpansionContext
+    ) -> MaxDepth? {
+        guard
+            case let .argumentList(arguments) = attribute.arguments,
+            let argument = arguments.first(where: { $0.label?.text == "maxDepth" })
+        else {
+            return MaxDepth(value: nil)
+        }
+
+        if let literal = argument.expression.as(IntegerLiteralExprSyntax.self),
+           let limit = Int(literal.literal.text.filter { $0 != "_" }),
+           limit <= 0 {
+            context.diagnose(Diagnostic(node: attribute, message: ScaleDiagnostic.nonPositiveMaxDepth))
+            return nil
+        }
+
+        return MaxDepth(value: argument.expression.trimmedDescription)
     }
 
     private static let rawValueTypes: Set<String> = [

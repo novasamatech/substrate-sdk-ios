@@ -15,7 +15,7 @@ enum ScaleCodeGenerator {
         let access = model.accessModifier.map { "\($0) " } ?? ""
 
         let encodeBody: String
-        let decodeBody: String
+        var decodeBody: String
 
         switch model.kind {
         case let .structure(fields):
@@ -32,6 +32,15 @@ enum ScaleCodeGenerator {
             }
             self = value
             """
+        }
+
+        if let maxDepth = model.maxDepth {
+            decodeBody = """
+            try SubstrateScaleCodable.ScaleDecodingDepth.enter(Self.self, limit: \(maxDepth))
+            defer {
+                SubstrateScaleCodable.ScaleDecodingDepth.leave(Self.self)
+            }
+            """ + (decodeBody.isEmpty ? "" : "\n" + decodeBody)
         }
 
         let whereClause = model.genericParameters.isEmpty

@@ -15,6 +15,7 @@ enum ScaleDiagnostic: DiagnosticMessage {
     case nonPositiveFixedLength
     case nestedOptional
     case ambiguousBytes(String)
+    case nonPositiveMaxDepth
 
     var message: String {
         switch self {
@@ -46,6 +47,8 @@ enum ScaleDiagnostic: DiagnosticMessage {
             "Nested optionals are not supported"
         case let .ambiguousBytes(token):
             "'\(token)' encodes as length-prefixed Vec<u8>; mark it @ScaleVec or @ScaleFixed(n)"
+        case .nonPositiveMaxDepth:
+            "maxDepth must be positive"
         }
     }
 
@@ -65,6 +68,7 @@ enum ScaleDiagnostic: DiagnosticMessage {
         case .nonPositiveFixedLength: "nonPositiveFixedLength"
         case .nestedOptional: "nestedOptional"
         case .ambiguousBytes: "ambiguousBytes"
+        case .nonPositiveMaxDepth: "nonPositiveMaxDepth"
         }
 
         return MessageID(domain: "SubstrateScaleMacros", id: id)

@@ -9,6 +9,8 @@ struct ScaleTypeModel {
 
     let accessModifier: String?
     let genericParameters: [String]
+    /// Limit expression as written; nil when depth isn't guarded.
+    let maxDepth: String?
     let kind: Kind
 }
 

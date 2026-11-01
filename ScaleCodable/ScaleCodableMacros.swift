@@ -10,6 +10,19 @@ public macro ScaleCodable() = #externalMacro(
     type: "ScaleCodableMacro"
 )
 
+/// Same as `@ScaleCodable`, but decoding throws once this type is nested deeper than `maxDepth`
+/// on the current thread. Use it on recursive types fed untrusted input: unbounded recursion
+/// overflows the stack after a few hundred levels.
+@attached(
+    extension,
+    conformances: ScaleEncodable, ScaleDecodable,
+    names: named(encode(scaleEncoder:)), named(init(scaleDecoder:))
+)
+public macro ScaleCodable(maxDepth: Int) = #externalMacro(
+    module: "SubstrateScaleMacrosPlugin",
+    type: "ScaleCodableMacro"
+)
+
 /// Wire index of an enum case. Either every case of an enum has it, or none does
 /// (then indices follow declaration order).
 @attached(peer)

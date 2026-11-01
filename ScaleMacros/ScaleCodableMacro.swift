@@ -11,7 +11,7 @@ public struct ScaleCodableMacro: ExtensionMacro {
     ) throws -> [ExtensionDeclSyntax] {
         guard
             !protocols.isEmpty,
-            let model = ScaleParser.parse(declaration, in: context)
+            let model = ScaleParser.parse(declaration, attribute: node, in: context)
         else {
             return []
         }
