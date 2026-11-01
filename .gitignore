@@ -21,7 +21,14 @@ DerivedData
 
 # SPM
 
-.swiftpm
+.swiftpm/*
+!.swiftpm/xcode/
+.swiftpm/xcode/*
+!.swiftpm/xcode/xcshareddata/
+.swiftpm/xcode/xcshareddata/*
+!.swiftpm/xcode/xcshareddata/xcschemes/
+.swiftpm/xcode/xcshareddata/xcschemes/*
+!.swiftpm/xcode/xcshareddata/xcschemes/ScaleMacrosPluginTests.xcscheme
 .build/
 Package.resolved
 

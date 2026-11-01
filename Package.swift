@@ -1,11 +1,12 @@
 // swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
+import CompilerPluginSupport
 import PackageDescription
 
 let package = Package(
     name: "SubstrateSdk",
-    platforms: [.iOS(.v14)],
+    platforms: [.iOS(.v14), .macOS(.v10_15)],
     products: [
         .library(
             name: "SubstrateSdk",
@@ -22,6 +23,9 @@ let package = Package(
         .library(
             name: "SubstrateMetadataHash",
             targets: ["SubstrateMetadataHash"]),
+        .library(
+            name: "SubstrateScaleCodable",
+            targets: ["SubstrateScaleCodable"]),
     ],
     dependencies: [
         .package(url: "https://github.com/novasamatech/Crypto-iOS", exact: "0.5.0"),
@@ -35,7 +39,8 @@ let package = Package(
         .package(url: "https://github.com/novasamatech/swift-scrypt", exact: "1.0.3"),
         .package(url: "https://github.com/novasamatech/metadata-shortener-ios", exact: "0.2.1"),
         .package(url: "https://github.com/novasamatech/Foundation-iOS", exact: "1.5.0"),
-        .package(url: "https://github.com/novasamatech/logger-ios", exact: "0.1.0")
+        .package(url: "https://github.com/novasamatech/logger-ios", exact: "0.1.0"),
+        .package(url: "https://github.com/swiftlang/swift-syntax", "600.0.0"..<"700.0.0")
     ],
     targets: [
         .target(
@@ -94,6 +99,26 @@ let package = Package(
                 .product(name: "SDKLogger", package: "logger-ios")
             ],
             path: "StateCall"
+        ),
+        .macro(
+            name: "SubstrateScaleMacrosPlugin",
+            dependencies: [
+                .product(name: "SwiftSyntax", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxBuilder", package: "swift-syntax"),
+                .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+                .product(name: "SwiftDiagnostics", package: "swift-syntax"),
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+            ],
+            path: "ScaleMacros"
+        ),
+        .target(
+            name: "SubstrateScaleCodable",
+            dependencies: [
+                "SubstrateSdk",
+                "SubstrateScaleMacrosPlugin",
+                .product(name: "BigInt", package: "BigInt")
+            ],
+            path: "ScaleCodable"
         ),
         .target(
             name: "TestHelpers",
@@ -189,6 +214,22 @@ let package = Package(
                 "TestHelpers",
             ],
             path: "Tests/Scale"
+        ),
+        .testTarget(
+            name: "ScaleCodableTests",
+            dependencies: [
+                "SubstrateScaleCodable",
+                .product(name: "BigInt", package: "BigInt")
+            ],
+            path: "Tests/ScaleCodable"
+        ),
+        .testTarget(
+            name: "ScaleMacrosPluginTests",
+            dependencies: [
+                "SubstrateScaleMacrosPlugin",
+                .product(name: "SwiftSyntaxMacrosGenericTestSupport", package: "swift-syntax")
+            ],
+            path: "Tests/ScaleMacrosPlugin"
         )
     ],
     swiftLanguageModes: [.v5]

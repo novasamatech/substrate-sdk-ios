@@ -11,6 +11,7 @@
 |-------------------------------------------------------------------|--------------------------|
 | Overall layout, targets, build/test commands, conventions         | `../../AGENTS.md`        |
 | Writing/running tests, XCTest→Swift Testing policy, test targets, fixtures | `tests.md`      |
+| `@ScaleCodable` macros: markers, generated code, diagnostics, adding a feature | `scale-macros.md` |
 | WebSocket connection lifecycle, JSON-RPC transport, reconnection, node switching, subscriptions, batching, health/ping | `web-socket-engine.md` |
 
 _As new subsystem docs are added (SCALE codec, runtime metadata, extrinsic

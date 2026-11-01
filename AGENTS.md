@@ -12,7 +12,7 @@ for the routing table (lazy-load: read the index, then open only what the task n
 ## Layout
 
 Distributed as an SPM package only (`Package.swift`, swift-tools 6.0, Swift 5
-language mode, iOS 14+). CocoaPods is no longer supported. Five products, each a
+language mode, iOS 14+). CocoaPods is no longer supported. Six products, each a
 top-level directory / SPM target:
 
 | Target (product)                | Path                 | Depends on                          | Purpose |
@@ -22,6 +22,7 @@ top-level directory / SPM target:
 | `SubstrateStorageSubscription`  | `StorageSubscription`| `SubstrateSdk`, `SubstrateStorageQuery` | Batched storage subscriptions (`CallbackBatchStorageSubscription`) |
 | `SubstrateStateCall`            | `StateCall`          | `SubstrateSdk`                      | Runtime API (`state_call`) execution |
 | `SubstrateMetadataHash`         | `MetadataHash`       | `SubstrateSdk`, metadata-shortener | CheckMetadataHash / metadata shortening |
+| `SubstrateScaleCodable`         | `ScaleCodable`       | `SubstrateSdk`, `SubstrateScaleMacrosPlugin` (`ScaleMacros`, swift-syntax) | Opt-in `@ScaleCodable` macros synthesizing static SCALE coding (see `.claude/docs/scale-macros.md`) |
 
 Core (`SubstrateSdk/Classes`) subsystems:
 - **Scale/** — `DynamicScaleEncoder`/`DynamicScaleDecoder`, `ScaleCodable`, per-type
@@ -46,7 +47,8 @@ via the `Resources` enum at the bottom of `Package.swift`.
 ## Build & test
 
 iOS-only package, so use `xcodebuild` against a simulator (plain `swift test`
-won't work — there is no macOS platform):
+won't work — the core doesn't build for macOS; the `.macOS(.v10_15)` minimum exists only
+for the host-built macro plugin):
 
 ```bash
 # SPM (scheme `SubstrateSdk`; `SubstrateMetadataHash` is a separate scheme)
@@ -54,7 +56,10 @@ xcodebuild test -scheme SubstrateSdk \
   -destination 'platform=iOS Simulator,name=iPhone 15'
 ```
 
-Verify scheme names with `xcodebuild -list`.
+Verify scheme names with `xcodebuild -list`. Macro expansion tests are host-only and
+run through their own scheme: `xcodebuild test -scheme ScaleMacrosPluginTests
+-destination 'platform=macOS' -skipMacroValidation`. Add `-skipMacroValidation` to
+any command line build that compiles `SubstrateScaleCodable`.
 
 `swift build` may succeed for dependency resolution, but validate real changes by
 running the relevant `Tests/<Subsystem>` target. When adding a new test resource,

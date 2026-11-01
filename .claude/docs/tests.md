@@ -28,6 +28,8 @@ under `Tests/`:
 | `QRTests`               | `Tests/QR`               | —                             |
 | `RuntimeTests`          | `Tests/Runtime`          | runtime metadata blobs        |
 | `ScaleTests`            | `Tests/Scale`            | —                             |
+| `ScaleCodableTests`     | `Tests/ScaleCodable`     | — (macro behaviour, iOS)      |
+| `ScaleMacrosPluginTests`| `Tests/ScaleMacrosPlugin`| — (macro expansion, **macOS only**) |
 
 `TestHelpers` (`Tests/Helpers`) is a **library target, not a test target** —
 shared fixtures and helpers (`RuntimeHelpers`, `KeypairDeriviation`,
@@ -55,6 +57,16 @@ xcodebuild test -scheme SubstrateSdk \
 xcodebuild test -scheme SubstrateSdk \
   -destination 'platform=iOS Simulator,name=iPhone 15' \
   -only-testing:ScaleTests/FixedArrayTests
+```
+
+Macro expansion tests (`ScaleMacrosPluginTests`) need the host-built plugin, so
+they run on macOS through a dedicated shared scheme that contains only that
+target. Their sources are wrapped in `#if canImport(SubstrateScaleMacrosPlugin)`
+so the target compiles to nothing in iOS runs:
+
+```bash
+xcodebuild test -scheme ScaleMacrosPluginTests \
+  -destination 'platform=macOS' -skipMacroValidation
 ```
 
 There is no CI workflow in this repo yet (`.github/` holds only the PR
