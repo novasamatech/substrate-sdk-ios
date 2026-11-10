@@ -466,17 +466,14 @@ public final class StorageRequestFactory: StorageRequestFactoryProtocol {
             codingFactoryClosure: factory
         )
 
-        let blockHash = options.atBlock
-        let pageSize: UInt32? = blockHash == nil ? 1000 : nil
-
         let keysFetchOperation = StorageKeysQueryService(
             connection: engine,
             operationManager: operationManager,
             prefixKeyClosure: {
                 try prefixKeyWrapper.targetOperation.extractNoCancellableResultData()
-            }, mapper: AnyMapper(mapper: IdentityMapper()),
-            pageSize: pageSize,
-            blockHash: blockHash
+            },
+            mapper: AnyMapper(mapper: IdentityMapper()),
+            blockHash: options.atBlock
         ).longrunOperation()
 
         keysFetchOperation.addDependency(prefixKeyWrapper.targetOperation)

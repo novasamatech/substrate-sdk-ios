@@ -3,11 +3,6 @@ import Operation_iOS
 import SubstrateSdk
 import Foundation_iOS
 
-enum StorageKeysRPCMethod {
-    public static let getStorageKeysPaged = "state_getKeysPaged"
-    public static let getStorageKeys = "state_getKeys"
-}
-
 public final class StorageKeysQueryService<T>: Longrunable {
     public typealias ResultType = [T]
 
@@ -24,7 +19,7 @@ public final class StorageKeysQueryService<T>: Longrunable {
 
     let connection: JSONRPCEngine
     let operationManager: OperationManagerProtocol
-    let pageSize: UInt32?
+    let pageSize: UInt32
     let prefixKeyClosure: () throws -> Data
     let mapper: AnyMapper<Data, T>
     let blockHash: Data?
@@ -40,7 +35,7 @@ public final class StorageKeysQueryService<T>: Longrunable {
         operationManager: OperationManagerProtocol,
         prefixKeyClosure: @escaping () throws -> Data,
         mapper: AnyMapper<Data, T>,
-        pageSize: UInt32? = 1000,
+        pageSize: UInt32 = 1000,
         blockHash: Data? = nil,
         timeout: Int = 60
     ) {
@@ -61,27 +56,16 @@ public final class StorageKeysQueryService<T>: Longrunable {
         do {
             let prefixKey = try prefixKeyClosure()
 
-            let offset: String?
-            let method: String
-
-            if pageSize != nil {
-                offset = lastKey
-                method = StorageKeysRPCMethod.getStorageKeysPaged
-            } else {
-                offset = nil
-                method = StorageKeysRPCMethod.getStorageKeys
-            }
-
             let request = PagedKeysRequest(
                 key: prefixKey.toHex(includePrefix: true),
                 count: pageSize,
-                offset: offset,
+                offset: lastKey,
                 blockHash: blockHash
             )
 
             let operation = JSONRPCOperation<PagedKeysRequest, [String]>(
                 engine: connection,
-                method: method,
+                method: RPCMethod.getStorageKeysPaged,
                 parameters: request,
                 timeout: timeout
             )
@@ -125,7 +109,7 @@ public final class StorageKeysQueryService<T>: Longrunable {
 
             let resultItems = oldItems + mappedItems
 
-            if let pageSize = pageSize, mappedItems.count >= pageSize {
+            if mappedItems.count >= pageSize {
                 state = .inProgress(partialResult: resultItems, lastKey: response.last)
                 loadNext()
             } else {

@@ -28,6 +28,7 @@ under `Tests/`:
 | `QRTests`               | `Tests/QR`               | —                             |
 | `RuntimeTests`          | `Tests/Runtime`          | runtime metadata blobs        |
 | `ScaleTests`            | `Tests/Scale`            | —                             |
+| `StorageQueryTests`     | `Tests/StorageQuery`     | runtime metadata (via `TestHelpers`) |
 
 `TestHelpers` (`Tests/Helpers`) is a **library target, not a test target** —
 shared fixtures and helpers (`RuntimeHelpers`, `KeypairDeriviation`,
@@ -120,6 +121,10 @@ can use them.
   high-level object. That keeps the real code paths under test.
 - Keep mocks dumb: record inputs and expose simple accessors / `simulate…`
   helpers; put behavior/assertions in the test, not the mock.
+- `MockJSONRPCEngine` records every `callMethod` (method, params decoded to `JSON`,
+  options) and answers through a `Responder` closure on a separate queue. It must
+  reply off the caller's thread: `JSONRPCOperation` registers the pending request
+  only after `callMethod` returns and holds a non-recursive lock while calling in.
 
 ## Test-data conventions
 
