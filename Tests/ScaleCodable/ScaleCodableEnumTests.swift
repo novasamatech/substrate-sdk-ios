@@ -59,3 +59,30 @@ struct ScaleCodableEnumTests {
         }
     }
 }
+
+private enum Namespace {}
+
+extension Namespace {
+    @ScaleCodable
+    struct Leaf: Equatable {
+        let value: UInt8
+    }
+
+    // payload types are siblings in `Namespace`, invisible from a file-scope `extension Namespace.Wrapper`
+    @ScaleCodable
+    enum Wrapper: Equatable {
+        case leaf(Leaf)
+        case pair(first: Leaf, second: Leaf?)
+    }
+}
+
+struct ScaleCodableNestedEnumTests {
+    @Test func decodesPayloadsDeclaredAsSiblingTypes() throws {
+        let value = Namespace.Wrapper.pair(first: .init(value: 1), second: nil)
+
+        let encoded = try value.scaleEncoded()
+
+        #expect(encoded == Data([0x01, 0x01, 0x00]))
+        #expect(try Namespace.Wrapper(scaleDecoder: ScaleDecoder(data: encoded)) == value)
+    }
+}

@@ -175,7 +175,7 @@ enum ScaleParser {
 
                 let payload: [ScalePayloadModel] = parameters.map { parameter in
                     let label = parameter.firstName.flatMap { $0.tokenKind == .wildcard ? nil : $0.text }
-                    return ScalePayloadModel(label: label, type: parameter.type.trimmed)
+                    return ScalePayloadModel(label: label)
                 }
 
                 cases.append(ScaleCaseModel(name: name, index: elementIndex, payload: payload))

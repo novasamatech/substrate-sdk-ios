@@ -117,19 +117,18 @@ enum ScaleCodeGenerator {
     }
 
     private static func enumDecodeBody(_ cases: [ScaleCaseModel]) -> String {
+        // Payload types are inferred from the case, not copied: a type spelled relative to the
+        // enum's enclosing scope wouldn't resolve inside the file-scope extension.
         let branches = cases.map { scaleCase in
-            let decodes = scaleCase.payload.enumerated().map { offset, payload in
-                "let p\(offset): \(payload.type.trimmedDescription) = try \(field).decode(from: scaleDecoder)"
-            }
-            let arguments = scaleCase.payload.enumerated().map { offset, payload in
-                payload.label.map { "\($0): p\(offset)" } ?? "p\(offset)"
+            let arguments = scaleCase.payload.map { payload in
+                let decode = "\(field).decode(from: scaleDecoder)"
+                return payload.label.map { "\($0): \(decode)" } ?? decode
             }
             let construction = arguments.isEmpty
                 ? "self = .\(scaleCase.name)"
-                : "self = .\(scaleCase.name)(\(arguments.joined(separator: ", ")))"
+                : "self = try .\(scaleCase.name)(\(arguments.joined(separator: ", ")))"
 
-            return (["case \(scaleCase.index):"] + (decodes + [construction]).map { "    " + $0 })
-                .joined(separator: "\n")
+            return ["case \(scaleCase.index):", "    " + construction].joined(separator: "\n")
         }
 
         let defaultBranch = ["default:", "    throw \(unexpectedValue)"]

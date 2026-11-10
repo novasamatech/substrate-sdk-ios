@@ -34,5 +34,4 @@ struct ScaleCaseModel {
 
 struct ScalePayloadModel {
     let label: String?
-    let type: TypeSyntax
 }

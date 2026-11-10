@@ -38,14 +38,11 @@ struct EnumExpansionTests {
                 init(scaleDecoder: any SubstrateSdk.ScaleDecoding) throws {
                     switch try UInt8(scaleDecoder: scaleDecoder) {
                     case 0:
-                        let p0: String = try SubstrateScaleCodable.ScaleField.decode(from: scaleDecoder)
-                        self = .text(p0)
+                        self = try .text(SubstrateScaleCodable.ScaleField.decode(from: scaleDecoder))
                     case 3:
                         self = .added
                     case 7:
-                        let p0: String = try SubstrateScaleCodable.ScaleField.decode(from: scaleDecoder)
-                        let p1: String = try SubstrateScaleCodable.ScaleField.decode(from: scaleDecoder)
-                        self = .reaction(messageId: p0, emoji: p1)
+                        self = try .reaction(messageId: SubstrateScaleCodable.ScaleField.decode(from: scaleDecoder), emoji: SubstrateScaleCodable.ScaleField.decode(from: scaleDecoder))
                     default:
                         throw SubstrateSdk.ScaleCodingError.unexpectedDecodedValue
                     }
