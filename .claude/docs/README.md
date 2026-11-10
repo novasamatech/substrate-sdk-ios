@@ -39,6 +39,13 @@ These terms carry specific meaning across the SDK. Use them precisely:
 
 Most recent substantive doc-affecting changes. Older entries fall off as new ones land.
 
+- **2026-11-10** — `SubstrateStorageQuery` no longer calls `state_getKeys` (unsafe +
+  deprecated since polkadot-sdk #13485). `StorageKeysQueryService` always pages via
+  `state_getKeysPaged`, `pageSize` is non-optional (`UInt32 = 1000`, node max 1000) and
+  `PagedKeysRequest` encodes all four positional params with explicit `null`s so `at`
+  never shifts into `start_key`. New `StorageQueryTests` target + `MockJSONRPCEngine`
+  (`tests.md`).
+
 - **2026-07-01** — `subscribe(...)` gained an `options: JSONRPCOptions` parameter.
   `resendOnReconnect: false` marks a subscription non-idempotent so it is cancelled
   (not replayed) on reconnect — the subscriber is notified `unsubscribed: true`.

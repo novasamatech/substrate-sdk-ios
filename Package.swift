@@ -189,6 +189,17 @@ let package = Package(
                 "TestHelpers",
             ],
             path: "Tests/Scale"
+        ),
+        .testTarget(
+            name: "StorageQueryTests",
+            dependencies: [
+                "SubstrateSdk",
+                "SubstrateStorageQuery",
+                "TestHelpers",
+                .product(name: "Operation-iOS", package: "operation-ios"),
+                .product(name: "Foundation-iOS", package: "Foundation-iOS")
+            ],
+            path: "Tests/StorageQuery"
         )
     ],
     swiftLanguageModes: [.v5]
